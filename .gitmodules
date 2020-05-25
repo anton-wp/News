@@ -1,0 +1,3 @@
+[submodule "server"]
+	path = server
+	url = git@gitlab.com:bad-room/verdict-2.0-api.git
