@@ -13,7 +13,7 @@
     "api:init": "git submodule update --init --recursive && cd ./server && npm install",
     "api:schema:sync": "cd ./server && typeorm schema:sync",
     "api:migrate": "cd ./server && typeorm migration:run",
-    "api:build": "npm run api:schema:sync && npm run api:migrate && cd ./server && npm run build-dev"
+    "api:build": " cd ./server && npm run build-dev &&  cd .. &&  npm run api:schema:sync && npm run api:migrate"
   },
   "dependencies": {
     "@nuxtjs/axios": "^5.3.6",
