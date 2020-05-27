@@ -8,6 +8,9 @@
       <h2 class="subtitle">
         My kickass Nuxt.js project
       </h2>
+      <nuxt-link to="/singlePost">
+        fsdjkhgdfvgjhksdfgjhk
+      </nuxt-link>
       <div class="links">
         <a
           href="https://nuxtjs.org/"
