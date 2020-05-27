@@ -232,11 +232,10 @@
               </div>
             </div>
           </div>
-          <!-- <div class="col-lg-4">
-
-            <vrd-fbc [post]="true"></vrd-fbc>
-
-          </div> -->
+          <div class="col-lg-4">
+            <follow />
+            <!-- <vrd-fbc [post]="true"></vrd-fbc> -->
+          </div>
         </div>
       </div>
     </div>
@@ -245,10 +244,12 @@
 
 <script>
 import PrevNext from '~/components/singlePost/prevNext.vue'
+import Follow from '~/components/universal-components/followBlock.vue'
 
 export default {
   components: {
-    PrevNext
+    PrevNext,
+    Follow
   }
 }
 </script>
