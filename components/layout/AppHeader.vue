@@ -1,0 +1,382 @@
+<template>
+  <header>
+    <template class="wrapper-header">
+      <div class="main-header container">
+        <div class="burger-icon d-lg-none">
+          Icon
+        </div>
+        <div class="main-logo">
+          <nuxt-link to="/">
+            <img class="main-logo-img" src="/image/logo.svg" alt="Verdict - Main Logo"></img>
+          </nuxt-link>
+        </div>
+        <ul id="menu" class="nav-item-list d-none d-sm-none d-md-none d-lg-flex">
+          <li class="nav-item">
+            <a class="general-nav-item-link">U.S.</a>
+          </li>
+          <li class="nav-item">
+            <a class="general-nav-item-link">POLITICS</a>
+          </li>
+          <li class="nav-item">
+            <a class="general-nav-item-link">ENTERTAINMENT</a>
+          </li>
+          <li class="nav-item">
+            <a class="general-nav-item-link">LIFESTYLE</a>
+          </li>
+          <li class="nav-item">
+            <a class="general-nav-item-link">TECH</a>
+          </li>
+          <li class="nav-item">
+            <a class="general-nav-item-link">SPORTS</a>
+          </li>
+          <li id="link" class="nav-item more">
+            <span id="more" class="general-nav-item-link">More</span>
+            <span class="shevron">
+              <svg width="12" height="15">
+                <use xlink:href="#chevron-down" />
+              </svg>
+            </span>
+            <div class="popup-more">
+              <ul>
+                <li class="nav-item">
+                  <a class="nav-item-link">item.title</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-item-link">item.title</a>
+                </li>
+              </ul>
+            </div>
+          </li>
+        </ul>
+        <div class="nav-signup">
+          <button class="signup-btn d-none d-md-block">
+            Sign Up
+          </button>
+        </div>
+      </div>
+      <!-- <div class="c_modal">
+        <div id="c-modal-verify-phone-modal" class="c_modal-wrapper opened">
+          <div class="c_modal-reveal verify-form-wrap ">
+            <button class="close-modal" (click)="modalClose()">×</button>
+            <div class="c_modal-content">
+              <div class="verify-form-wrap" id="verify-phone-modal">
+                <p>To add your own posts
+                  <a [routerLink]="['/profile/']" (click)="modalClose()" title="Verify">
+                    <u>verify your account by adding a
+                      phone number
+                    </u>
+                  </a>.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <template>
+          <div class="background05"></div>
+              <div id="side-menu" class="side-menu" (click)="disabledSideBarMenu()">
+                <div class="close-sidemenu-icon">
+                  <fa-icon (click)="disabledSideBarMenu()" [icon]="faTimes"></fa-icon>
+                </div>
+                <vrd-smc></vrd-smc>
+              </div>
+      </template> -->
+    </template>
+  </header>
+</template>
+
+<style lang="scss" scoped>
+@import "../../assets/utils/variables";
+header {
+  position: fixed;
+  background-color: $white;
+  top: 0;
+  z-index: 1000;
+  width: 100%;
+  border: solid 1px $secondary-bgcolor;
+}
+
+.main-header {
+  display: grid;
+  grid-gap: 24px;
+  max-width: $global-width;
+  margin: 0 auto;
+  margin-left: 0;
+  padding: 7px 10px 11px 15px;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  left: 50%;
+  transform: translate(-50%);
+  position: relative;
+  .burger-icon {
+    cursor: pointer;
+    transition: color .25s;
+    &:hover {
+      color: #6d6d6d;
+    }
+    .ng-fa-icon {
+      font-size: 36px;
+      -webkit-text-stroke: 2px $white;
+    }
+  }
+}
+.close-sidemenu-icon {
+  position: absolute;
+  left: 25px;
+  top: 25px;
+  .ng-fa-icon {
+    color: $primary_color;
+    font-size: 36px;
+  }
+}
+
+.main-logo {
+  .main-logo-img {
+    width: 177px;
+  }
+}
+
+.popup-more {
+  position: absolute;
+  background-color: $white;
+  z-index: 100;
+  top: 22px;
+  left: -18px;
+  width: 180px;
+  padding: .5em .45em;
+  box-shadow: 2px 4px 16px 0 rgba(35,36,40,.26);
+  animation: popupMore linear 0.2s;
+  .nav-item {
+    margin: 0;
+  }
+
+  @keyframes popupMore{
+    0% {
+      opacity: 0;
+      // transform: translateY(20px);
+      // transform: rotateX(100deg);
+    }
+    100% {
+      opacity: 1;
+      // transform: translateY(0px);
+      // transform: rotateY(0deg);
+    }
+  }
+  ul {
+    list-style: none;
+    padding-left: 0;
+    li {
+      border-top: none;
+
+       a {
+        line-height: 28px;
+        color: $black;
+        text-decoration: none;
+        text-transform: uppercase;
+        font-weight: 700;
+        padding-left: 10px;
+        // padding: 5.6px 5.6px 5.6px 13.6px;
+      }
+    }
+      li:hover {
+      border-color: transparent;
+      border-top: none;
+      a {
+        cursor: pointer;
+        color: $hover_color;
+        text-decoration: none;
+      }
+    }
+  }
+}
+
+.nav-item-list {
+  display: grid;
+  grid-template-columns: auto;
+  grid-auto-flow: column;
+  font-size: 14px;
+  margin: 0 0;
+  padding-left: 25px;
+}
+.more {
+  border-color: white !important;
+}
+.nav-item {
+  list-style: none;
+  position: relative;
+  border-bottom: solid 4px $coralRed;
+  border-top: solid 4px white;
+  transition: all linear .3s;
+  margin: 0 1em;
+  &:hover {
+    border-bottom: solid 4px $primary_color;
+    border-top: solid 4px white;
+    .general-nav-item-link {
+      user-select: none;
+      cursor: pointer;
+      color: $hover_color;
+    }
+  }
+  .shevron {
+    // margin-left: 5px;
+    svg {
+      width: 20px;
+      height: 20px;
+      margin-top: -4px;
+    }
+  }
+  .general-nav-item-link {
+    color: $black;
+    text-decoration: none;
+    text-transform: uppercase;
+    font-weight: 700;
+    line-height: 42px;
+    padding: 18px 0 10px 0;
+  }
+}
+
+.nav-signup {
+  display: flex;
+  align-items: center;
+  margin-right: 3px;
+  .signup-btn {
+    background-color: $primary_color;
+    color: $white;
+    cursor: pointer;
+    height: 40px;
+    padding: 0 21px;
+    font-weight: 700;
+    font-size: .9rem;
+    letter-spacing: .8px;
+    text-transform: uppercase;
+    border: none;
+    -webkit-appearance: none;
+    font-family: "Open Sans";
+    &:hover {
+      background-color: $hover_color;
+    }
+  }
+}
+
+.side-menu {
+  position: absolute;
+  z-index: 2000;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: -1000px;
+  transition: 0.3s;
+};
+.background05 {
+  background-color: $black03;
+  position: fixed;
+  z-index: 1000;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 0;
+}
+
+@media (min-width: 992px) {
+  .nav-item-list {
+    padding-left: 0;
+  }
+}
+@media (max-width: 480px) {
+  .nav-signup {
+    margin-right: 15px;
+  }
+  .main-header {
+    grid-template-columns: auto 1fr auto;
+    .main-logo {
+      .main-logo-img {
+        width: 150px;
+      }
+    }
+  }
+}
+
+.c_modal {
+  font-size: 100%;
+  font-weight: 400;
+  line-height: 1.5;
+  color: #0a0a0a;
+  -webkit-font-smoothing: antialiased;
+  font-family: open sans,Helvetica Neue,Helvetica,Roboto,Arial,sans-serif;
+  box-sizing: inherit;
+  position: fixed;
+  top: 0!important;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 900;
+  background-color: rgba(40,40,40,.8);
+  transition: opacity .25s .2s,visibility .25s .2s;
+  opacity: 1;
+  visibility: visible;
+  pointer-events: all;
+  display: flex;
+  justify-content: center;
+  .opened{
+    min-height: 120px;
+    margin-top: 88px;
+    border-radius: 8px;
+    position: relative;
+    overflow: hidden;
+    background: #fff;
+    width: 95%;
+    max-width: 32rem;
+    pointer-events: all;
+    box-sizing: inherit;
+    display: flex;
+    -webkit-box-pack: center;
+    justify-content: center;
+    -webkit-box-align: start;
+    align-items: flex-start;
+    opacity: 1;
+    transition: none;
+    max-height: 80px;
+    display: flex;
+    align-items: center;
+    .close-modal{
+      -webkit-font-smoothing: antialiased;
+      pointer-events: all;
+      box-sizing: inherit;
+      margin: 0;
+      overflow: visible;
+      text-transform: none;
+      padding: 0;
+      -webkit-appearance: none;
+      border-radius: 0;
+      font-family: inherit;
+      font-size: 2.5rem;
+      line-height: 1;
+      background: 0 0;
+      border: none;
+      outline: none;
+      position: absolute;
+      top: 5px;
+      right: 11px;
+      color: #ff4242;
+      font-weight: 700;
+      cursor: pointer;
+      z-index: 20;
+    }
+  }
+  .c_modal-content {
+    pointer-events: all;
+    box-sizing: inherit;
+    padding: 1.2rem;
+    .verify-form-wrap{
+      box-sizing: inherit;
+      p {
+        // margin-top: auto;
+        margin-bottom: 0px;
+        a {
+          color: #0a0a0a;
+        }
+      }
+    }
+  }
+}
+</style>
