@@ -1,4 +1,5 @@
 <template>
+<<<<<<< HEAD
   <div class="container">
     <div>
       <logo />
@@ -29,17 +30,15 @@
       </div>
     </div>
   </div>
+=======
+  <div />
+>>>>>>> eb0765b8044d4e8a0ab3ae027d071347fc3fe059
 </template>
 
 <script>
-import Logo from '~/components/Logo.vue'
-
-export default {
-  components: {
-    Logo
-  }
-}
+export default {}
 </script>
+<<<<<<< HEAD
 
 <style scoped>
 
@@ -74,3 +73,5 @@ export default {
   padding-top: 15px;
 }
 </style>
+=======
+>>>>>>> eb0765b8044d4e8a0ab3ae027d071347fc3fe059
