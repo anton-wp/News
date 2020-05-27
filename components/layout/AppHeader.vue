@@ -20,15 +20,6 @@
           <li class="nav-item">
             <a class="general-nav-item-link">ENTERTAINMENT</a>
           </li>
-          <li class="nav-item">
-            <a class="general-nav-item-link">LIFESTYLE</a>
-          </li>
-          <li class="nav-item">
-            <a class="general-nav-item-link">TECH</a>
-          </li>
-          <li class="nav-item">
-            <a class="general-nav-item-link">SPORTS</a>
-          </li>
           <li id="link" class="nav-item more">
             <span id="more" class="general-nav-item-link">More</span>
             <span class="shevron">
@@ -39,10 +30,19 @@
             <div class="popup-more">
               <ul>
                 <li class="nav-item">
-                  <a class="nav-item-link">item.title</a>
+                  <a class="nav-item-link">LIFESTYLE</a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-item-link">item.title</a>
+                  <a class="nav-item-link">TECH</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-item-link">SPORTS</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-item-link">WORLD</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-item-link">HEALTH</a>
                 </li>
               </ul>
             </div>
