@@ -1,0 +1,25 @@
+i.icons {
+  position: relative;
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+
+  svg {
+    width: 100%;
+    height:100%;
+  }
+
+  &.lg {
+    width: 35px;
+    height: 35px;
+  }
+
+  &.color-primary {
+    color: $primary_color;
+    fill: $primary_color;
+  }
+
+  &.color-black {
+    fill: #000;
+  }
+}

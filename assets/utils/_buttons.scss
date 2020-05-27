@@ -1,0 +1,212 @@
+button.link-button {
+  text-decoration: underline;
+  appearance: none;
+  cursor: pointer;
+  display: inline;
+}
+
+.button {
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: $button-letter-spacing;
+  user-select: none;
+  padding: 0.85em 1.4em 0.8em 1.4em;
+
+  &.disabled,
+  &[disabled] {
+    pointer-events: none;
+  }
+
+
+  &.large {
+    font-size: 0.95rem;
+    padding: 1.15em 2.8em;
+  }
+
+  &.decorated {
+    position: relative;
+
+    &::after {
+      content: '';
+      position: absolute;
+      height: 3px;
+      width: 17%;
+      right: 16%;
+      bottom: 0.7em;
+      background-color: rgba(255, 255, 255, 0.3);
+    }
+
+    &.loading {
+
+      &::after {
+        animation: pulse-loading 1.7s infinite;
+      }
+    }
+  }
+
+  &.with-loading {
+    position: relative;
+
+    &::before,
+    span {
+      transition: opacity .25s, transform .2s;
+    }
+
+    &::before {
+      content: 'LOADING';
+      // @include absolute-center();
+      color: #fff;
+      opacity: 0;
+      transform: translate(-50%, -50%) scale(0.4);
+    }
+
+    &.loading {
+      color: transparent;
+
+      span {
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(0.4);
+      }
+
+      &::before {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1);
+      }
+    }
+  }
+
+  &.loading {
+    background-color: $button-hover-background;
+    cursor: default;
+    pointer-events: none;
+    user-select: none;
+  }
+
+  &:not(.secondary) {
+    &:hover {
+      background-color: $button-hover-background;
+    }
+  }
+
+  &.secondary {
+    &:hover {
+      background-color: #606060;
+    }
+  }
+
+  &.hollow {
+    background: none;
+    border: 1px solid;
+
+    &:hover {
+      color: #fff;
+    }
+
+    &.secondary {
+      &:hover {
+        color: #fff;
+      }
+    }
+  }
+
+  &.wide {
+    padding: 0.85em 2.65em;
+  }
+
+  &.follow-button {
+    font-size: 0.75rem;
+    padding: 0.55em 1.4em;
+    text-transform: none;
+    letter-spacing: 0.9px;
+    border-radius: 5px;
+    vertical-align: text-top;
+    margin-bottom: 0;
+    font-weight: 400;
+    pointer-events: all;
+
+    & > *{
+      pointer-events: none;
+    }
+  }
+
+  &.tiny {
+    padding: 0.35em 0.9em;
+    border-radius: 3px;
+    margin: 0;
+  }
+
+  .icons {
+    vertical-align: middle;
+    width: 15px;
+    height: 15px;
+  }
+
+  span {
+    vertical-align: middle;
+  }
+
+  &.button-with-icon {
+    padding: 0.5em 1.4em 0.5em 0.6em;
+    text-transform: none;
+    letter-spacing: 0.6px;
+
+    .icons {
+      width: 21px;
+      height: 21px;
+    }
+  }
+
+  &.with-icon {
+    .icons {
+      margin-right: 0.5em;
+    }
+  }
+
+  &.facebook-button {
+    background-color: $facebook-color;
+
+    &.inactive {
+      background-color: get-color(secondary);
+    }
+
+    &:hover {
+      background-color: darken($facebook-color, 10);
+    }
+  }
+
+  &.google-button {
+    background-color: $google-plus-color;
+
+    &.inactive {
+      background-color: get-color(secondary);
+    }
+
+    &:hover {
+      background-color: darken($google-plus-color, 10);
+    }
+  }
+
+  &.twitter-button {
+    background-color: $twitter-color;
+
+    &.inactive {
+      background-color: get-color(secondary);
+    }
+
+    &:hover {
+      background-color: darken($twitter-color, 10);
+    }
+  }
+
+  &.linkedin-button {
+    background-color: $linkedin-color;
+
+    &.inactive {
+      background-color: get-color(secondary);
+    }
+
+    &:hover {
+      background-color: darken($linkedin-color, 10);
+    }
+  }
+}

@@ -1,0 +1,70 @@
+@import "./colors";
+
+$global-width: 1310px;
+
+$small-breackpoint: 320px;
+$middle-breackpoint: 640px;
+$tablet-breackpoint: 769px;
+$large-breackpoint: 1024;
+$xlarge-breackpoint: 1280;
+$xxlarge-breackpoint: 1440px;
+
+$breakpoints: (
+  small: 0,
+  medium: 640px,
+  tablet: 769px,
+  large: 1024px,
+  xlarge: 1200px,
+  xxlarge: 1440px,
+);
+$print-breakpoint: large;
+$breakpoint-classes: (small medium tablet large);
+$dropdown-shadow: 2px 4px 16px 0 rgba(35, 36, 40, 0.26);
+
+$grid-row-width: $global-width;
+$grid-column-count: 12;
+$grid-column-gutter: (
+  small: 20px,
+  medium: 30px,
+);
+
+
+$max-site-width: 1280px;
+
+
+$transition-color: color .25s;
+$transition-animation: all linear .25s;
+
+$global-radius: 0;
+
+// modal window
+
+// search modal
+$search-modal-width: 842px;
+
+// 11. Button
+// ----------
+
+$button-font-family: inherit;
+$button-padding: 0.85em 1.4em;
+$button-letter-spacing: 0.8px;
+$button-fill: solid;
+$button-background: $primary-color;
+$button-color: $white;
+$button-color-alt: $white;
+$button-radius: $global-radius;
+$button-hollow-border-width: 1px;
+$button-sizes: (
+  tiny: 0.6rem,
+  small: 0.75rem,
+  default: 0.9rem,
+  large: 1.25rem,
+);
+$button-palette: $foundation-palette;
+$button-opacity-disabled: 0.25;
+$button-background-hover-lightness: 60%;
+$button-hollow-hover-lightness: -50%;
+$button-transition: background-color 0.25s ease-out, color 0.25s ease-out;
+$button-responsive-expanded: false;
+
+$default-font-family: 'Open Sans';
