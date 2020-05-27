@@ -3,7 +3,9 @@
     <template class="wrapper-header">
       <div class="main-header container">
         <div class="burger-icon d-lg-none">
-          Icon
+          <svg width="30" height="35">
+            <use xlink:href="#burger-menu-icon" />
+          </svg>
         </div>
         <div class="main-logo">
           <nuxt-link to="/">
@@ -49,6 +51,7 @@
           </li>
         </ul>
         <div class="nav-signup">
+          <user-profile />
           <button class="signup-btn d-none d-md-block">
             Sign Up
           </button>
@@ -85,6 +88,15 @@
   </header>
 </template>
 
+<script>
+import UserProfile from '~/components/user/UserProfile'
+export default {
+  components: {
+    UserProfile
+  }
+}
+</script>
+
 <style lang="scss" scoped>
 @import "../../assets/utils/variables";
 header {
@@ -114,9 +126,8 @@ header {
     &:hover {
       color: #6d6d6d;
     }
-    .ng-fa-icon {
-      font-size: 36px;
-      -webkit-text-stroke: 2px $white;
+    svg {
+      fill: rgb(33, 37, 41);
     }
   }
 }
