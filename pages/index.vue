@@ -9,7 +9,7 @@
         My kickass Nuxt.js project
       </h2>
       <nuxt-link to="/singlePost">
-        fsdjkhgdfvgjhksdfgjhk
+        single Post
       </nuxt-link>
       <div class="links">
         <a
@@ -41,7 +41,8 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
+
 .container {
   margin: 0 auto;
   min-height: 100vh;
