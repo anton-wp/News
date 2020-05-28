@@ -29,7 +29,7 @@
                 <use xlink:href="#chevron-down" />
               </svg>
             </span>
-            <div class="popup-more">
+            <!-- <div class="popup-more">
               <ul>
                 <li class="nav-item">
                   <a class="nav-item-link">LIFESTYLE</a>
@@ -47,7 +47,7 @@
                   <a class="nav-item-link">HEALTH</a>
                 </li>
               </ul>
-            </div>
+            </div> -->
           </li>
         </ul>
         <div class="nav-signup">

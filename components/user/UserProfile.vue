@@ -1,6 +1,6 @@
 <template>
   <div id="wrapper-default-avatar" class="wrapper-default-avatar">
-    <img class="default-avatar" src="/image/default-avatar-original.png" />
+    <img class="default-avatar" src="/image/default-avatar-original.png">
     <div class="icon">
       <svg width="12" height="15">
         <use xlink:href="#chevron-down" />
@@ -8,8 +8,12 @@
     </div>
     <div id="sign-popup" class="sign-popup">
       <ul class="sign-popup-ul">
-        <li class="sign-popup-ul-item">Log In</li>
-        <li class="sign-popup-ul-item">Sign Up</li>
+        <li class="sign-popup-ul-item">
+          Log In
+        </li>
+        <li class="sign-popup-ul-item">
+          Sign Up
+        </li>
       </ul>
     </div>
   </div>

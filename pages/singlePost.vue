@@ -6,33 +6,7 @@
           <div class="col-12 col-lg-8">
             <div class="container pad0">
               <div class="row">
-                <div class="col-12 blockHead">
-                  <h5 class="category-name">
-                    POLITICS
-                  </h5>
-                  <div class="blockAction">
-                    <a class="action">
-                      <!-- <fa-icon [icon]="faTrashAlt"></fa-icon> -->
-                      img
-                      review
-                    </a>
-                    <a class="action">
-                      <!-- <fa-icon [icon]="faTrashAlt"></fa-icon> -->
-                      img
-                      remove
-                    </a>
-                    <a class="action">
-                      <!-- <fa-icon [icon]="faTrashAlt"></fa-icon> -->
-                      img
-                      delete
-                    </a>
-                    <a class="action">
-                      <!-- <fa-icon [icon]="faPencilAlt"></fa-icon> -->
-                      img
-                      edit
-                    </a>
-                  </div>
-                </div>
+                <button-block-head />
                 <div class="col-lg-12">
                   <h1 class="post-page-title">
                     California Not Above Enacting Martial Law—Will This Only Serve to Create A Slippery Slope?
@@ -40,90 +14,19 @@
                 </div>
                 <div class="col-lg-12">
                   <div class="container">
-                    <div class="row" style="margin-bottom: 2.1em;">
+                    <div class="row" style="margin-bottom: 3.1em;">
                       <div class="col-lg-6">
-                        <div class="about-user-in-post">
-                          <div class="element photo">
-                            <img src="https://verdict.org/assets/img/default/default-avatar-original.png" class="user-profile-info">
-                          </div>
-                          <div class="element information">
-                            <div>
-                              <div class="user-popup">
-                                xd
-                                <!-- <ng-container >
-                                  <vrd-poi></vrd-poi>
-                                </ng-container> -->
-                              </div>
-                              <span class="name">
-                                Tracy Few
-                              </span>
-                            </div>
-                            <div>
-                              <!-- <span class="role">
-                                role
-                              </span> -->
-                              <span class="role">
-                                Member if
-                              </span>
-                            </div>
-                            <div>
-                              <time class="date-created">
-                                December 10
-                              </time>
-                            </div>
-                          </div>
-                          <div class="element follow-me">
-                            <button class="click-for-follow follow">
-                              Follow
-                            </button>
-                            <button class="click-for-follow unfollow">
-                              Unfollow
-                            </button>
-                          </div>
-                        </div>
-                        userInfo
+                        <author-block />
                       </div>
                       <div class="col-lg-6">
-                        <div class="marks">
-                          <span class="mark-news">
-                            img
-                            <!-- <fa-icon [icon]="faComment"></fa-icon> -->
-                            <!-- <span class="text">
-                            </span> -->
-                          </span>
-                          <span class="mark-news">
-                            img
-                            <!-- <fa-icon [icon]="faCheckSquare"></fa-icon> -->
-                            <!-- TODO go to single post page -->
-                            <!-- <span class="text">
-                            </span> -->
-                          </span>
-                          <span class="mark-news">
-                            img
-                            <!-- <fa-icon [icon]="faEye"></fa-icon>
-                            TODO go to single post page -->
-                            <span class="text">
-                              <a class="reviews-link dark" href="#">
-                                viewsCount
-                              </a>
-                            </span>
-                          </span>
-                          <span class="bookmark-news">
-                            <!-- add function add this post to save -->
-                            <button class="bookmark">
-                              img
-                              img
-                              <!-- <fa-icon *ngIf="!store.bookmarked" [icon]="faBookmark"></fa-icon> -->
-                              <!-- <fa-icon *ngIf="store.bookmarked" [icon]="farBookmark"></fa-icon> -->
-                            </button>
-                          </span>
-                        </div>
+                        <marks />
                       </div>
                     </div>
                   </div>
                 </div>
-                social-block
-                <!-- <social-block class="col-lg-12" [(fontSize)]="bodySize"></social-block> -->
+                <div class="col-12">
+                  <social-block />
+                </div>
                 <div class="col-lg-12">
                   <div class="image-wrapper">
                     <img class="post-image" src="https://verdict.org/uploads/media/2020/05/a346d47e581577c7a67419c9f4cc3922_1592_featured.jpg">
@@ -145,9 +48,11 @@
                     Are we sure that martial law is the best answer for California?
                   </p>
                 </div>
-                social-block
+                <div class="col-12">
+                  <social-block />
+                </div>
                 <!-- <social-block [(fontSize)]="bodySize" class="col-lg-12"></social-block> -->
-                <div class="col-lg-12">
+                <div class="col-lg-12" style="margin-top: 25px;">
                   <div class="linked-title">
                     <span>
                       linked
@@ -159,12 +64,15 @@
                       <a class="tag-name">tags</a>
                       <!-- <a [routerLink]="['/l'] + tag.slug"><span class="tag-name">{{ tag.name }}</span></a> -->
                     </div>
+                    <div class="tag-wrapper">
+                      <!-- <span class="tag-name">{{ tag.name }}</span> -->
+                      <a class="tag-name">tags</a>
+                      <!-- <a [routerLink]="['/l'] + tag.slug"><span class="tag-name">{{ tag.name }}</span></a> -->
+                    </div>
                   </div>
                 </div>
                 <div class="col-lg-12">
-                  prev-next-block
                   <prev-next />
-                  <!-- <prev-next-block></prev-next-block> -->
                 </div>
                 <div class="col-lg-12">
                   <div class="related-title">
@@ -244,12 +152,20 @@
 
 <script>
 import PrevNext from '~/components/singlePost/prevNext.vue'
+import AuthorBlock from '~/components/singlePost/authorBlock.vue'
+import Marks from '~/components/singlePost/marks.vue'
+import SocialBlock from '~/components/singlePost/socialBlock.vue'
+import ButtonBlockHead from '~/components/singlePost/buttonBlockHead.vue'
 import Follow from '~/components/universal-components/followBlock.vue'
 
 export default {
   components: {
     PrevNext,
-    Follow
+    Follow,
+    ButtonBlockHead,
+    AuthorBlock,
+    Marks,
+    SocialBlock
   }
 }
 </script>
@@ -261,44 +177,6 @@ export default {
   .background {
     background-color: $secondary-bgcolor;
   }
-
-  .blockHead {
-  display: flex;
-  align-items: center;
-
-  .blockAction {
-    display: inline-block;
-    margin-left: auto;
-
-    .action{
-      cursor: pointer;
-      text-decoration: none;
-      padding: 4px 9px;
-      margin: 0 0.9375rem;
-      border: 1px solid;
-      border-color: $primary_color;
-      color: $primary_color;
-      border-radius: 4px;
-      vertical-align: middle;
-      align-items: center;
-      letter-spacing: .8px;
-      font-weight: 700;
-      font-size: 10px;
-      text-transform: uppercase;
-
-      &:hover{
-        color: $white;
-        background-color: $button-hover-background;
-        border-color: $button-hover-background;
-      }
-
-      fa-icon {
-        font-size: 11px;
-        margin-right: 5px;
-      }
-    }
-  }
-}
 
 .blockCheckbox{
   text-align: center;
@@ -429,66 +307,6 @@ export default {
   .container {
     max-width: $global-width;
 
-    .marks {
-      text-align: right;
-
-      @media screen and (max-width: 490px) {
-        text-align: center;
-      }
-
-      .mark-news {
-        padding: 0 5px;
-        color: $primary_color;
-        cursor: pointer;
-        font-size: 14px;
-
-        .text {
-          padding-left: 3px;
-          transition: 0.3s;
-        }
-
-        &:hover {
-          .text {
-            color: $primary_color;
-          }
-        }
-      }
-    }
-
-    .bookmark-news {
-      padding-left: 10px;
-
-      .bookmark {
-        color: $primary_color;
-        background: transparent;
-        border: none;
-        outline: none;
-        padding: 0;
-        svg {
-          width: 15px;
-          vertical-align: bottom;
-          font-weight: 900;
-        }
-      }
-    }
-
-    .reviews-link {
-      cursor: pointer;
-      text-decoration: none;
-      font-weight: 600;
-      transition: color 0.3s;
-      color: black;
-
-      &:hover {
-        color: $primary_color;
-      }
-    }
-
-    .text {
-      font-size: 16px;
-      font-family: Open Sans, sans-serif !important;
-    }
-
     .tags {
       margin-top: 1em;
       margin-bottom: 3em;
@@ -571,13 +389,15 @@ export default {
         background-color: $heading-color;
         z-index: 1;
       }
+    }
 
+    .text {
+      margin-bottom: 3rem;
     }
 
     .image-wrapper {
       position: relative;
       margin: 0 0 2em;
-      // margin-bottom: 5px;
 
       .post-image {
         width: 100%;
@@ -742,130 +562,9 @@ export default {
     }
   }
 }
+
 .active {
   visibility: visible !important;
-}
-
-.about-user-in-post {
-  height: 80px;
-  display: flex;
-
-  .user-popup {
-    padding: 1.5em 1.2em 0.8em 1.2em;
-    border-radius: 2px;
-    background-color: $white;
-    position: absolute;
-    top: 30px;
-    z-index: 1;
-    max-width: 20em;
-    min-height: 300px;
-    min-width: 250px;
-    width: 100%;
-    border: 1px solid $dedede;
-    border-radius: 4px;
-    visibility: hidden;
-    opacity: 1;
-    -webkit-box-shadow: 2px 4px 16px 0 $shark026;
-    box-shadow: 2px 4px 16px 0 $shark026;
-    font-family: "Open Sans";
-
-    &::before {
-      content: '';
-      border-left: 1px solid $secondary-bgcolor;
-      border-top: 1px solid $secondary-bgcolor;
-      position: absolute;
-      top: -8px;
-      right: 80%;
-      background: $whiteFE;
-      width: 15px;
-      height: 15px;
-      z-index: 5;
-      -webkit-transform: rotate(45deg);
-      -ms-transform: rotate(45deg);
-      transform: rotate(45deg);
-    }
-  }
-
-  .element {
-    display: inline-block;
-    margin-right: 1em;
-    height: 40px;
-
-    &.information {
-      .role {
-        display: grid;
-        line-height: 1;
-        font-size: .8em;
-        margin-bottom: .4em;
-        font-family: "Open Sans";
-      }
-
-      .name {
-        display: grid;
-        font-weight: 600;
-        transition: color .25s;
-        font-family: "Open Sans";
-        font-size: 16px;
-        cursor: pointer;
-
-        &:hover {
-          color: $primary_color;
-          transition: 0.3s;
-        }
-      }
-
-      .date-created {
-        display: grid;
-        font-size: .9em;
-        letter-spacing: -.2px;
-        line-height: 1;
-        font-family: "Open Sans";
-        font-weight: 600;
-      }
-    }
-
-    .user-profile-info {
-      width: 47px;
-      height: 47px;
-      border-radius: 25px;
-      overflow: hidden;
-      margin-top: 5px;
-    }
-
-    .follow {
-      color: $primary_color;
-      &:hover {
-        background-color: $hover_color;
-        color: $white;
-      }
-    }
-    .unfollow {
-      color: #474747;
-      border-color:#474747;
-      &:hover {
-        background-color: #474747;
-        color: $white;
-      }
-    }
-
-    .click-for-follow {
-      font-size: .75rem;
-      padding: .55em 1.4em;
-      text-transform: none;
-      letter-spacing: .9px;
-      border-radius: 5px;
-      vertical-align: text-top;
-      margin-bottom: 0;
-      font-weight: 400;
-      pointer-events: all;
-      background: 0 0;
-      border: 1px solid;
-      line-height: 1;
-      text-align: center;
-      transition: 0.3s;
-      cursor: pointer;
-    }
-  }
 }
 
 @media (min-width: 769px) {

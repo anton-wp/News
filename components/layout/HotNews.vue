@@ -1,48 +1,55 @@
 <template>
- <div class="hot-news-wrapper">
-   <div class="hot-news">
-    <div class="hot-news-title">Latest:</div>
-    <div class="hot-news-item-list-wrapper">
-      <div class="hot-news-item-list">
-        <div class="hot-news-item">
-          <a class="hot-news-link">lorem</a>
-        </div>
-        <div class="hot-news-item">
-          <a class="hot-news-link">lorem</a>
-        </div>
-        <div class="hot-news-item">
-          <a class="hot-news-link">lorem</a>
-        </div>
-        <div class="hot-news-item">
-          <a class="hot-news-link">lorem</a>
-        </div>
-        <div class="hot-news-item">
-          <a class="hot-news-link">lorem</a>
-        </div>
-        <div class="hot-news-item">
-          <a class="hot-news-link">lorem</a>
-        </div>
-        <div class="hot-news-item">
-          <a class="hot-news-link">lorem</a>
-        </div>
-        <div class="hot-news-item">
-          <a class="hot-news-link">lorem</a>
-        </div>
-        <div class="hot-news-item">
-          <a class="hot-news-link">lorem</a>
-        </div>
-        <div class="hot-news-item">
-          <a class="hot-news-link">lorem</a>
+  <div class="hot-news-wrapper">
+    <div class="hot-news">
+      <div class="hot-news-title">
+        Latest:
+      </div>
+      <div class="hot-news-item-list-wrapper">
+        <div class="hot-news-item-list">
+          <div class="hot-news-item">
+            <a class="hot-news-link">
+              lorem
+            </a>
+          </div>
+          <div class="hot-news-item">
+            <a class="hot-news-link">
+              lorem
+            </a>
+          </div>
+          <div class="hot-news-item">
+            <a class="hot-news-link">
+              lorem
+            </a>
+          </div>
+          <div class="hot-news-item">
+            <a class="hot-news-link">
+              lorem
+            </a>
+          </div>
+          <div class="hot-news-item">
+            <a class="hot-news-link">
+              lorem
+            </a>
+          </div>
+          <div class="hot-news-item">
+            <a class="hot-news-link">
+              lorem
+            </a>
+          </div>
+          <div class="hot-news-item">
+            <a class="hot-news-link">
+              lorem
+            </a>
+          </div>
         </div>
       </div>
+      <div class="nav-search">
+        <svg width="20" height="20">
+          <use xlink:href="#search-icon" />
+        </svg>
+      </div>
     </div>
-    <div class="nav-search">
-      <svg width="20" height="20">
-       <use xlink:href="#search-icon" />
-      </svg>
-    </div>
-   </div>
- </div>
+  </div>
 </template>
 
 <style lang="scss" scoped>
