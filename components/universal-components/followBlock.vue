@@ -10,10 +10,9 @@
     <div class="col-12 social-links">
       <div class="row socialBlock">
         <div v-for="icon in social" :key="icon.linkName" class="social-icon-round" v-bind:class="icon.linkName">
-           <svg width="30" height="30">
+          <svg width="30" height="30">
             <use v-bind:xlink:href="`#${icon.linkName}`" />
           </svg>
-          <!-- <img class="social-icon-in-menu" src={{getIcon(icon.linkName)}} /> -->
         </div>
       </div>
     </div>
