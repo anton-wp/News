@@ -47,7 +47,7 @@
   @import "../../assets/utils/colors";
 
   .marks {
-    text-align: right;
+    margin-left: auto;
 
     @media screen and (max-width: 490px) {
       text-align: center;

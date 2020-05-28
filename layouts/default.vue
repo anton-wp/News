@@ -3,6 +3,7 @@
     <custom-svg />
     <app-header />
     <hot-news />
+    <breadcrumbs />
     <nuxt />
     <app-footer />
   </div>
@@ -12,13 +13,15 @@
 import CustomSvg from '~/components/module/CustomSvg'
 import HotNews from '~/components/layout/HotNews'
 import AppHeader from '~/components/layout/AppHeader'
+import Breadcrumbs from '~/components/layout/Breadcrumbs'
 import AppFooter from '~/components/layout/AppFooter'
 export default {
   components: {
     CustomSvg,
     AppHeader,
     AppFooter,
-    HotNews
+    HotNews,
+    Breadcrumbs
   }
 }
 </script>
