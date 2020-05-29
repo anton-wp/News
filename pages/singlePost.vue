@@ -18,7 +18,7 @@
                       <div class="col-lg-6">
                         <author-block />
                       </div>
-                      <div class="col-lg-6">
+                      <div class="col-lg-6" style="align-items: center; display: flex;">
                         <marks />
                       </div>
                     </div>

@@ -152,6 +152,10 @@ export default {
 
   aside {
     position: relative;
+
+    i {
+      cursor: pointer;
+    }
   }
   .shared-news-links{
     height: 100%;
@@ -212,6 +216,7 @@ export default {
     .big-shared-buttons{
       display: inline-flex;
       height: 40px;
+      cursor: pointer;
 
       .facebook{
         background-color: $facebook-color;

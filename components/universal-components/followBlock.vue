@@ -9,11 +9,10 @@
     </div>
     <div class="col-12 social-links">
       <div class="row socialBlock">
-        <div>
-          <div class="social-icon-round text-center">
-            icon social
-            <!-- <img class="social-icon-in-menu" src={{getIcon(icon.linkName)}} /> -->
-          </div>
+        <div v-for="icon in social" :key="icon.linkName" class="social-icon-round" v-bind:class="icon.linkName">
+          <svg width="30" height="30">
+            <use v-bind:xlink:href="`#${icon.linkName}`" />
+          </svg>
         </div>
       </div>
     </div>
@@ -37,11 +36,33 @@
       </div>
     </div>
     <div class="col-12">
-      posts
+      <sidebar-with-posts />
       <!-- <vrd-swp></vrd-swp> -->
     </div>
   </div>
 </template>
+
+<script>
+import SidebarWithPosts from '~/components/universal-components/sidebar-with-posts.vue'
+
+export default {
+  components: {
+    SidebarWithPosts
+  },
+  data () {
+    return {
+      social: [
+        { linkName: 'facebook', link: '/' },
+        { linkName: 'twitter', link: '/' },
+        { linkName: 'instagram', link: '/' },
+        { linkName: 'pinterest', link: '/' },
+        { linkName: 'feedburner', link: '/' },
+        { linkName: 'feed', link: '/' }
+      ]
+    }
+  }
+}
+</script>
 
 <style lang="scss" scoped>
   @import "../../assets/utils/variables";
@@ -129,6 +150,10 @@
       position: relative;
       margin: 0 auto 15px;
       cursor: pointer;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      fill: $white;
 
       .social-icon-in-menu {
         position: absolute;
