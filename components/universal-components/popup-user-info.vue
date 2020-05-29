@@ -14,7 +14,7 @@
             <span class="stat">newsCount posts / verdictsCount verdicts</span>
           </div>
           <div class="col-4 col-padding-0 img-wrapper">
-            <img class="user-avatar" />
+            <img class="user-avatar">
           </div>
         </div>
       </div>

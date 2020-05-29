@@ -1,0 +1,136 @@
+<template>
+  <div class="wrapper-search-popup">
+    <div id="close" class="close-button" @click="closeSearch">
+      <button>×</button>
+    </div>
+    <div class="wrapper-input">
+      <label class="label-form">
+        <input
+          v-model="search"
+          type="search"
+          name="q"
+          class="search-filed"
+          placeholder="Search..."
+          autocomplete="off"
+          @keyup.enter="activeSearch"
+        ></input>
+      </label>
+      <p class="about-input-listeners">
+        Type above and press
+        <i>Enter</i> to search. Press
+        <i>Esc</i> to cancel.
+      </p>
+    </div>
+  </div>
+</template>
+
+<script>
+export default {
+  data () {
+    return {
+      search: ''
+    }
+  },
+  methods: {
+    activeSearch () {
+      if (this.search) {
+        this.$router.push({ path: 'search', query: { q: this.search } })
+        this.closeSearch()
+      }
+    },
+    closeSearch () {
+      this.$emit('closeSearch')
+    }
+  }
+}
+</script>
+
+<style lang="scss">
+@import "../../assets/utils/variables";
+@import "../../assets/utils/colors";
+
+.wrapper-search-popup {
+  position: fixed;
+  z-index: 1000;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  background-color: $white;
+  .close-button {
+    position: absolute;
+    z-index: 1001;
+    top: 32px;
+    right: 32px;
+    button {
+      font-size: 4em;
+      -webkit-text-stroke: 2px $white;
+      line-height: 35px;
+      background-color: $white;
+      border: none;
+      outline: none;
+      cursor: pointer;
+      user-select: none;
+      border-radius: 0;
+      background: 0 0;
+      padding: 0;
+    }
+  }
+  .wrapper-input {
+    position: absolute;
+    z-index: 1001;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100%;
+    max-width: 66.9rem;
+    padding: 48px;
+    .label-form {
+      width: 100%;
+      .search-filed {
+        width: 100%;
+        font-family: $default-font-family;
+        position: relative;
+        color: black;
+        background-color: transparent;
+        outline: none;
+        border: none;
+        padding: 10px;
+        padding-top: 11px;
+        line-height: 1;
+        font-size: 4em;
+        border-bottom: 1px solid $mercury;
+        margin-bottom: 22px;
+        font-weight: 700;
+        &::placeholder {
+          color: $black;
+          font-family: $default-font-family;
+          font-weight: 700;
+          opacity: 1;
+        }
+      }
+    }
+    .about-input-listeners {
+      letter-spacing: normal;
+      color: $silverChalice;
+      padding: 0;
+      margin: 0;
+      font-size: 1.125em;
+      line-height: 1.7;
+      font-family: $default-font-family;
+    }
+  }
+}
+
+@media (max-width: $middle-breackpoint) {
+  .wrapper-search-popup {
+    .wrapper-input {
+      .label-form {
+        .search-filed {
+          font-size: 42px;
+        }
+      }
+    }
+  }
+}
+</style>

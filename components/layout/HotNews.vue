@@ -43,14 +43,38 @@
           </div>
         </div>
       </div>
-      <div class="nav-search">
+      <div class="nav-search" @click="openSearch">
         <svg width="20" height="20">
           <use xlink:href="#search-icon" />
         </svg>
       </div>
     </div>
+    <search-popup v-if="showPopusSearch" @closeSearch="closeSearch" />
   </div>
 </template>
+
+<script>
+import SearchPopup from '~/components/universal-components/popup-search.vue'
+
+export default {
+  components: {
+    SearchPopup
+  },
+  data () {
+    return {
+      showPopusSearch: false
+    }
+  },
+  methods: {
+    openSearch () {
+      this.showPopusSearch = true
+    },
+    closeSearch () {
+      this.showPopusSearch = false
+    }
+  }
+}
+</script>
 
 <style lang="scss" scoped>
 @import "../../assets/utils/variables";
