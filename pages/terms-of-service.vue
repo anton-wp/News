@@ -11,7 +11,11 @@
               Welcome to Verdict, a social networking platform operated by Verdict, LLC a Delaware Limited Liability
               Company (the <strong>"Company"</strong> or <strong>"Verdict"</strong>). By accessing the Verdict
               Application or Website located
-              at <a class="terms-text-link" href="#">VERDICT.ORG</a>, including through a mobile application, (the
+              at
+              <nuxt-link class="terms-text-link" to="/">
+                VERDICT.ORG
+              </nuxt-link>
+              , including through a mobile application, (the
               <strong>"Website"</strong>) you agree to be bound by these Terms of Service whether or not you register as
               a member of the Website.
               The term "Website" is deemed to refer to using of the Service by means of a computer, a mobile device or a
@@ -27,11 +31,18 @@
               on the presented facts and ideas. Verdict hopes to inspire understanding and interconnectivity amongst its
               users while discussing interesting questions and topics in today’s society. To learn more information
               about how Verdict
-              works please visit <a class="terms-text-link">About Verdict</a>.
+              works please visit
+              <nuxt-link class="terms-text-link" to="/about-verdict">
+                About Verdict
+              </nuxt-link>.
             </p>
             <p class="text">
               Please read these Terms of Service, together with the Verdict Privacy Policy (<strong>“Privacy
-                Policy”</strong>, a copy of which may be found at <a class="terms-text-link">https://verdict.org/privacy-policy/</a> which is hereby incorporated
+                Policy”</strong>, a copy of which may be found at
+              <nuxt-link class="terms-text-link" to="/privacy-policy">
+                https://verdict.org/privacy-policy/
+              </nuxt-link>
+              which is hereby incorporated
               by reference as if fully set forth herein) (collectively the "<strong>Terms</strong>”), fully and
               carefully before accessing or using the Application, Website or any activities, content, products, and/or
               services made available by Verdict (together with the Website, the “<strong>Services</strong>”). If you do
@@ -804,7 +815,7 @@
               <p class="text">
                 Please contact us at support@verdict.org with any questions regarding these Terms.
               </p>
-              <p class= "text">
+              <p class="text">
                 <i>Date of Last Revision: February 7, 2019</i>
               </p>
             </div>
@@ -829,7 +840,7 @@ export default {
 
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
   @import "../assets/utils/variables";
   @import "../assets/utils/colors";
 
