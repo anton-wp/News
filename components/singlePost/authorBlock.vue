@@ -3,18 +3,13 @@
     <div class="element photo">
       <img src="https://verdict.org/assets/img/default/default-avatar-original.png" class="user-profile-info">
     </div>
-    <div class="element information">
-      <div>
-        <div class="user-popup">
-          xd
-          <!-- <ng-container >
-            <vrd-poi></vrd-poi>
-          </ng-container> -->
-        </div>
-        <span class="name">
-          Tracy Few
-        </span>
+    <div class="element information" @mouseleave="hide">
+      <div v-if="showPopup" class="user-popup">
+        <popup-user-info />
       </div>
+      <span class="name" @mouseover="toggle">
+        Tracy Few
+      </span>
       <div>
         <!-- <span class="role">
           role
@@ -40,6 +35,29 @@
   </div>
 </template>
 
+<script>
+import PopupUserInfo from '~/components/universal-components/popup-user-info.vue'
+
+export default {
+  components: {
+    PopupUserInfo
+  },
+  data () {
+    return {
+      showPopup: false
+    }
+  },
+  methods: {
+    toggle () {
+      this.showPopup = true
+    },
+    hide () {
+      this.showPopup = false
+    }
+  }
+}
+</script>
+
 <style lang="scss">
   @import "../../assets/utils/variables";
   @import "../../assets/utils/colors";
@@ -61,7 +79,7 @@
       width: 100%;
       border: 1px solid $dedede;
       border-radius: 4px;
-      visibility: hidden;
+      // visibility: hidden;
       opacity: 1;
       -webkit-box-shadow: 2px 4px 16px 0 $shark026;
       box-shadow: 2px 4px 16px 0 $shark026;
