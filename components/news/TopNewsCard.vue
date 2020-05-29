@@ -2,7 +2,7 @@
   <article>
     <div class="wrapper-hot-card category">
       <div class="img">
-        <img  src="/image/top-news.jpg" alt="top news">
+        <img src="/image/top-news.jpg" alt="top news">
       </div>
       <div class="container info">
         <news-card-header colorScheme="light" />

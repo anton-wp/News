@@ -1,23 +1,23 @@
 <template>
   <div>
     <div class="wrapper-block-news">
-    <div class="container">
-      <div class="row top-verdict">
-        <div class="col-lg-4 col-md-6">
-          <top-news-card />
-        </div>
-        <div class="col-lg-4 col-md-6">
-          <top-news-card />
-        </div>
-        <div class="col-lg-4 col-md-6 col-12">
-          <div class="wrapper-title-hot">
-            <h5 class="title-hot">
-              <span>top verdicts</span>
-            </h5>
+      <div class="container">
+        <div class="row top-verdict">
+          <div class="col-lg-4 col-md-6">
+            <top-news-card />
+          </div>
+          <div class="col-lg-4 col-md-6">
+            <top-news-card />
+          </div>
+          <div class="col-lg-4 col-md-6 col-12">
+            <div class="wrapper-title-hot">
+              <h5 class="title-hot">
+                <span>top verdicts</span>
+              </h5>
+            </div>
           </div>
         </div>
       </div>
-    </div>
     </div>
     <div class="wrapper-block-news background">
       <div class="container">
@@ -34,16 +34,55 @@
         </div>
       </div>
     </div>
+    <div class="wrapper-block-news">
+      <div class="container">
+        <div class="row top-verdict">
+          <div class="col-12 col-md-12 col-lg-8 padding-0">
+            <div class="container">
+              <div class="row">
+                <div class="col-12 padding-0">
+                  <gorizontal-news-card type="full-block" :background="true" />
+                </div>
+                <div class="col-12 padding-0">
+                  <gorizontal-news-card type="full-block" :background="true" />
+                </div>
+                <div class="col-12 padding-0">
+                  <gorizontal-news-card type="full-block" :background="true" />
+                </div>
+                <div class="col-12 padding-0">
+                  <gorizontal-news-card type="full-block" :background="true" />
+                </div>
+                <div class="col-12 padding-0">
+                  <gorizontal-news-card type="full-block" :background="true" />
+                </div>
+                <div class="col-12 padding-0">
+                  <gorizontal-news-card type="full-block" :background="true" />
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-12 col-md-12 col-lg-4 padding-0">
+            <div class="row">
+              <div class="col-12">
+                <!-- <vrd-fbc></vrd-fbc> -->
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
 import TopNewsCard from '~/components/news/TopNewsCard'
 import DefaultNewsCard from '~/components/news/DefaultNewsCard'
+import GorizontalNewsCard from '~/components/news/GorizontalNewsCard'
 export default {
   components: {
     TopNewsCard,
-    DefaultNewsCard
+    DefaultNewsCard,
+    GorizontalNewsCard
   }
 }
 </script>
@@ -52,7 +91,7 @@ export default {
 @import "../assets/utils/variables";
 @import "../assets/utils/colors";
 .background {
-    background-color: $secondary-bgcolor;
+  background-color: $secondary-bgcolor;
 }
 
 .row-flex {
@@ -61,42 +100,41 @@ export default {
 }
 
 .wrapper-block-news {
-    width: 100%;
-    .container {
-        max-width: $global-width;
-        .top-verdict {
-            padding: 24px 0;
-            .wrapper-title-hot {
-              position: relative;
-              padding: 0 1.2em;
-              .title-hot {
-                position: relative;
-                color: $doveGray;
-                font-size: 1.4em;
-                font-weight: 700;
-                line-height: 16px;
-                width: 100%;
-                span {
-                    background-color: $white;
-                    position: relative;
-                    z-index: 5;
-                    padding-right: 5px;
-                }
-                &::after {
-                  content: '';
-                  position: absolute;
-                  display: block;
-                  top: 8px;
-                  height: 1px;
-                  width: 100%;
-                  background-color: $doveGray;
-                  z-index: 2;
-                }
-            }
-            }
+  width: 100%;
+  .container {
+    max-width: $global-width;
+    .top-verdict {
+      padding: 24px 0;
+      .wrapper-title-hot {
+        position: relative;
+        padding: 0 1.2em;
+        .title-hot {
+          position: relative;
+          color: $doveGray;
+          font-size: 1.4em;
+          font-weight: 700;
+          line-height: 16px;
+          width: 100%;
+          span {
+            background-color: $white;
+            position: relative;
+            z-index: 5;
+            padding-right: 5px;
+          }
+          &::after {
+            content: "";
+            position: absolute;
+            display: block;
+            top: 8px;
+            height: 1px;
+            width: 100%;
+            background-color: $doveGray;
+            z-index: 2;
+          }
         }
-
+      }
     }
+  }
 }
 
 .padding-0 {
@@ -108,11 +146,11 @@ export default {
   text-align: center;
   span {
     position: relative;
-    font-size: .95rem;
+    font-size: 0.95rem;
     padding: 1.15em 2.8em;
     font-weight: 700;
     text-transform: uppercase;
-    letter-spacing: .8px;
+    letter-spacing: 0.8px;
     user-select: none;
     border: 1px solid transparent;
     border-radius: 0;
@@ -121,7 +159,7 @@ export default {
     cursor: pointer;
     background-color: $primary_color;
     color: $whiteFE;
-    transition: background-color .25s ease-out,color .25s ease-out;
+    transition: background-color 0.25s ease-out, color 0.25s ease-out;
     &:hover {
       background-color: $button-hover-background;
     }
@@ -137,56 +175,67 @@ export default {
   }
 }
 .follow {
-    margin: 2em 0;
-    padding: 0 28px;
-    h5 {
-      color: $doveGray;
-      font-weight: 700;
-      line-height: 16px;
-      font-size: 1em;
-      margin-bottom: 10px;
-      letter-spacing: 1px;
+  margin: 2em 0;
+  padding: 0 28px;
+  h5 {
+    color: $doveGray;
+    font-weight: 700;
+    line-height: 16px;
+    font-size: 1em;
+    margin-bottom: 10px;
+    letter-spacing: 1px;
+    position: relative;
+    span {
+      background-color: $white;
       position: relative;
-      span {
-        background-color: $white;
-        position: relative;
-        z-index: 5;
-        padding-right: 5px;
-      }
-      &::before {
-        content: '';
-        position: absolute;
-        display: block;
-        top: 8px;
-        height: 1px;
-        width: 100%;
-        background-color: $doveGray;
-        z-index: 2;
+      z-index: 5;
+      padding-right: 5px;
     }
-    }
-    .instagram { background-color: $millbrook; };
-    .twitter { background-color: $pictonBlue; };
-    .feed { background-color: $flamingo; };
-    .pinterest { background-color: $cardinal; };
-    .news-icon { background-color: $lochmara; };
-    .facebook { background-color: $chambray; };
-    .social-icon-round {
-      width: 45px;
-      height: 45px;
-      border-radius: 25px;
-      position: relative;
-      margin: 0 0 15px;
-      cursor: pointer;
-      .social-icon-in-menu {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        width: 30px;
-        height: 30px;
-        cursor: pointer;
-      }
+    &::before {
+      content: "";
+      position: absolute;
+      display: block;
+      top: 8px;
+      height: 1px;
+      width: 100%;
+      background-color: $doveGray;
+      z-index: 2;
     }
   }
-
+  .instagram {
+    background-color: $millbrook;
+  }
+  .twitter {
+    background-color: $pictonBlue;
+  }
+  .feed {
+    background-color: $flamingo;
+  }
+  .pinterest {
+    background-color: $cardinal;
+  }
+  .news-icon {
+    background-color: $lochmara;
+  }
+  .facebook {
+    background-color: $chambray;
+  }
+  .social-icon-round {
+    width: 45px;
+    height: 45px;
+    border-radius: 25px;
+    position: relative;
+    margin: 0 0 15px;
+    cursor: pointer;
+    .social-icon-in-menu {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 30px;
+      height: 30px;
+      cursor: pointer;
+    }
+  }
+}
 </style>
