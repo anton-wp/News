@@ -1,7 +1,7 @@
 <template>
   <div class="about-user-in-post">
     <div class="element photo">
-      <img src="https://verdict.org/assets/img/default/default-avatar-original.png" class="user-profile-info">
+      <img src="/image/default-avatar-original.png" class="user-profile-info">
     </div>
     <div class="element information" @mouseleave="hide">
       <div v-if="showPopup" class="user-popup">

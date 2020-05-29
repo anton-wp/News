@@ -35,7 +35,7 @@
         </div>
       </div>
     </div>
-    <div class="col-12">
+    <div class="col-12" v-if="!posts">
       <sidebar-with-posts />
       <!-- <vrd-swp></vrd-swp> -->
     </div>
@@ -48,6 +48,9 @@ import SidebarWithPosts from '~/components/universal-components/sidebar-with-pos
 export default {
   components: {
     SidebarWithPosts
+  },
+  props: {
+    posts: Boolean
   },
   data () {
     return {
