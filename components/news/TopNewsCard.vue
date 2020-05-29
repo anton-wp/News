@@ -1,0 +1,168 @@
+<template>
+  <article>
+    <div class="wrapper-hot-card category">
+      <div class="img">
+        <img  src="/image/top-news.jpg" alt="top news">
+      </div>
+      <div class="container info">
+        <news-card-header colorScheme="light" />
+        <div class="wrapp">
+          <h2 class="title top-title">
+            <a>title</a>
+          </h2>
+        </div>
+        <div class="shortContent">
+          <p>shortContent,[...]</p>
+        </div>
+        <news-card-footer colorScheme="light" :pending="false" :showMarks="false" />
+      </div>
+    </div>
+  </article>
+</template>
+
+<script>
+import NewsCardHeader from '~/components/news/NewsCardHeader'
+import NewsCardFooter from '~/components/news/NewsCardFooter'
+export default {
+  components: {
+    NewsCardHeader,
+    NewsCardFooter
+  }
+}
+</script>
+
+<style lang="scss" scoped>
+@import "../../assets/utils/variables";
+.active {
+  visibility: visible !important;
+}
+img{
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+article {
+  margin-bottom: 16px;
+  height: 95%;
+  position: relative;
+  &:hover {
+    .img::before {
+      background-color: $black05;
+    }
+  }
+
+  .img{
+    top: 0px;
+    left: 0px;
+    position: absolute;
+    height: 100%;
+    width: 100%;
+
+    &::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: transparent;
+      -webkit-transition: background-color .25s ease-out, color .25s ease-out;
+      -o-transition: background-color .25s ease-out, color .25s ease-out;
+      transition: background-color .25s ease-out, color .25s ease-out;
+    }
+  }
+
+  .wrapper-hot-card {
+    width: 100%;
+    height: 100%;
+    // padding-top: 100px;
+
+    padding: 7em 1.3em 1.25em;
+    // position: relative;
+    cursor: pointer;
+
+    &.category {
+      padding: 15em 1.3em 1.25em;
+    }
+
+    .info {
+      background-color: $black05;
+      position: relative;
+      background-color: $black03;
+      color: $whiteFE;
+      padding: 1em 1.2em 1.4em;
+      height: 100%;
+      z-index: 2;
+      user-select: none;
+
+      .shortContent {
+        p {
+          padding-top: 10px;
+          font-size: 17.6px;
+          font-weight: 600;
+        }
+      }
+
+      .wrapp {
+        // height: 96px;
+        margin-left: 0;
+        margin-right: 0;
+        justify-content: space-between;
+        // padding-bottom: 10px;
+
+        .title {
+          font-family: "Open Sans";
+          -webkit-font-smoothing: antialiased;
+          font-size: 1.6em;
+          line-height: 1.2;
+          margin-top: 0.3em;
+          margin-bottom: 0;
+          letter-spacing: -.3px;
+          word-break: break-all;
+          overflow-wrap: normal;
+          word-wrap: normal;
+          line-break: auto;
+          margin-top: 1em;
+          text-overflow: ellipsis;
+          transition: 0.3s;
+          font-weight: 700;
+
+          &:hover {
+            cursor: pointer;
+            opacity: 0.7;
+          }
+
+          a {
+            color: $white;
+            text-decoration: none;
+          }
+        }
+
+        .topTitle {
+          margin-top: 0.3em;
+          font-size: 2.5em;
+        }
+
+        .about-news {
+          font-size: 1.1em;
+          line-height: 1.3;
+          font-weight: 600;
+          letter-spacing: -0.3px;
+          font-family: "Open Sans";
+          margin-top: .4em;
+          display: -webkit-box;
+          max-height: calc(1.21em * 3);
+          overflow: hidden;
+          -webkit-line-clamp: 3;
+          -webkit-box-orient: vertical;
+          -o-text-overflow: ellipsis;
+          text-overflow: ellipsis;
+          -webkit-font-smoothing: antialiased;
+          -webkit-box-direction: normal;
+        }
+      }
+    }
+  }
+}
+</style>
