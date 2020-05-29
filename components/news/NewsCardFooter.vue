@@ -1,22 +1,22 @@
 <template>
   <div class="row wrapp">
-    <span class=bywho >
-      <div v-if="showPopup" @mouseleave="hide" class="user-popup active" id="1">
-          <div>
-            <popup-user-info />
-          </div>
+    <span class=bywho>
+      <div v-if="showPopup" class="user-popup active" id="1" @mouseleave="hide">
+        <div>
+          <popup-user-info />
+        </div>
       </div>
       <span v-if="!pending">By: </span>
-      <a id="username-link" @mouseover="toggle" class="username-link" v-if="!pending">
+      <a id="username-link" class="username-link" @mouseover="toggle" v-if="!pending">
         firstName lastName
       </a>
       <time class="author">
         May 25,2020 9:51 am EST
       </time><br>
       <button v-if="pending">
-       <svg width="15" height="15">
-        <use xlink:href="#pencil" />
-       </svg>
+        <svg width="15" height="15">
+          <use xlink:href="#pencil" />
+        </svg>
         Edit
       </button>
       <div v-if="showMarks" class="marks">
@@ -24,10 +24,10 @@
       </div>
     </span>
     <a v-if="!pending" class="action">
-       <svg width="12" height="15">
+      <svg width="12" height="15">
         <use xlink:href="#trash" />
-       </svg>
-        delete
+      </svg>
+      delete
     </a>
   </div>
 </template>

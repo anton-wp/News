@@ -6,12 +6,24 @@
     </div>
     <div class="row wrapper-side-post">
       <div class="col-sm-12 col-md-4 col-lg-12">
-        post
+        <default-news-card :padding="true" />
+        <default-news-card :padding="true" />
+        <default-news-card :padding="true" />
         <!-- <vrd-vdc type="second-block" [defaultPost]="post" [padding]="true"></vrd-vdc> -->
       </div>
     </div>
   </div>
 </template>
+
+<script>
+import DefaultNewsCard from '~/components/news/DefaultNewsCard'
+
+export default {
+  components: {
+    DefaultNewsCard
+  }
+}
+</script>
 
 <style lang="scss">
   @import "../../assets/utils/colors";

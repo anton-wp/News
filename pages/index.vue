@@ -1,23 +1,23 @@
 <template>
   <div>
     <div class="wrapper-block-news">
-    <div class="container">
-      <div class="row top-verdict">
-        <div class="col-lg-4 col-md-6">
-          <top-news-card />
-        </div>
-        <div class="col-lg-4 col-md-6">
-          <top-news-card />
-        </div>
-        <div class="col-lg-4 col-md-6 col-12">
-          <div class="wrapper-title-hot">
-            <h5 class="title-hot">
-              <span>top verdicts</span>
-            </h5>
+      <div class="container">
+        <div class="row top-verdict">
+          <div class="col-lg-4 col-md-6">
+            <top-news-card />
+          </div>
+          <div class="col-lg-4 col-md-6">
+            <top-news-card />
+          </div>
+          <div class="col-lg-4 col-md-6 col-12">
+            <div class="wrapper-title-hot">
+              <h5 class="title-hot">
+                <span>top verdicts</span>
+              </h5>
+            </div>
           </div>
         </div>
       </div>
-    </div>
     </div>
     <div class="wrapper-block-news background">
       <div class="container">

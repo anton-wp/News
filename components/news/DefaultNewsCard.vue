@@ -2,7 +2,7 @@
   <article>
     <div class="picture">
       <a>
-        <img src="/image/top-news.jpg" />
+        <img src="/image/top-news.jpg">
       </a>
       <div class="information" :class="!padding ? 'with-padding' : 'without-padding'">
         <div class="container-fluid">
