@@ -64,8 +64,55 @@
           <div class="col-12 col-md-12 col-lg-4 padding-0">
             <div class="row">
               <div class="col-12">
-                <!-- <vrd-fbc></vrd-fbc> -->
+                <follow-block :posts="true" />
               </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="wrapper-block-news background">
+      <div class="container">
+        <div class="row row-flex top-verdict">
+          <div class="col-12 col-sm-12 col-md-12 col-lg-6">
+            <gorizontal-news-card type="minimal-block" :background="true" />
+          </div>
+          <div class="col-12 col-sm-12 col-md-12 col-lg-6">
+            <gorizontal-news-card type="minimal-block" :background="true" />
+          </div>
+          <div class="col-12 col-sm-12 col-md-12 col-lg-6">
+            <gorizontal-news-card type="minimal-block" :background="true" />
+          </div>
+          <div class="col-12 col-sm-12 col-md-12 col-lg-6">
+            <gorizontal-news-card type="minimal-block" :background="true" />
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="wrapper-block-news">
+      <div class="container">
+        <div class="row top-verdict">
+          <div class="col-12 col-sm-12 col-md-6 col-lg-3">
+             <default-news-card type="second-block" :padding="true" />
+          </div>
+          <div class="col-12 col-sm-12 col-md-6 col-lg-3">
+             <default-news-card type="second-block" :padding="true" />
+          </div>
+          <div class="col-12 col-sm-12 col-md-6 col-lg-3">
+             <default-news-card type="second-block" :padding="true" />
+          </div>
+          <div class="col-12 col-sm-12 col-md-6 col-lg-3">
+             <default-news-card type="second-block" :padding="true" />
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="wrapper-block-news">
+      <div class="container">
+        <div class="row">
+          <div class="col-12">
+            <div class="load-more-wrapper">
+              <span>load more</span>
             </div>
           </div>
         </div>
@@ -78,11 +125,13 @@
 import TopNewsCard from '~/components/news/TopNewsCard'
 import DefaultNewsCard from '~/components/news/DefaultNewsCard'
 import GorizontalNewsCard from '~/components/news/GorizontalNewsCard'
+import followBlock from '~/components/universal-components/followBlock'
 export default {
   components: {
     TopNewsCard,
     DefaultNewsCard,
-    GorizontalNewsCard
+    GorizontalNewsCard,
+    followBlock
   }
 }
 </script>

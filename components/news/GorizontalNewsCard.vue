@@ -1,28 +1,28 @@
 <template>
-  <div class="container wrapper-horizontal-verdict-card" :class="type">
-    <div class="row">
-      <div class="pad0-image col-12 col-sm-12 col-md-6 col-lg-6">
+  <div class="container wrapper-horizontal-verdict-card" :class="{back_block: type === 'minimal-block'}">
+    <div class="row w-100 mx-0">
+      <div class="pad0-image col-12 col-sm-12 col-md-6 col-lg-6 pl-0">
         <!-- add go to post page {id} -->
-        <a>
+        <a :class="'image-'+type">
           <img src="/image/top-news.jpg" class="post-image" alt="">
         </a>
       </div>
-      <div class="pad0-image col-12 col-sm-12 col-md-6 col-lg-6">
-        <div class="information" :class="{padding0: type === 'minimal-block' || type === 'full-block', paddingBT0: type !== 'full-block'}">
+      <div class="pad0-image col-12 col-sm-12 col-md-6 col-lg-6 px-0">
+        <div class="information padding0">
           <div class="container-fluid">
             <news-card-header colorScheme="dark" />
             <div class="row block wrapp">
               <h2 class="title" >
                 <!-- add go to post page {id} -->
-                <a v-if="type === 'full-block'">title, ...</a>
-                <a v-if="(type === 'minimal-block')">title, ...</a>
+                <a v-if="type === 'full-block'">Amazon Suspends Its Shipping Service--No Word On Restart Date</a>
+                <a v-if="type === 'minimal-block'">Amazon Suspends Its Shipping Service--No Word On Restart Date</a>
               </h2>
             </div>
             <div class="shortContent">
               <p v-if="!background">shortContent,[...]</p>
             </div>
             <div v-if="type === 'full-block'" class="row wrapp">
-              <span class="about-news">HTML</span>
+              <span class="about-news">Nadia, the tiger, was not acting like her usual self.  She was presenting with a persistent dry cough, and her [...]</span>
             </div>
             <news-card-footer colorScheme="light" :pending="false" :showMarks="false" />
           </div>
@@ -53,6 +53,28 @@ export default {
   visibility: visible !important;
 }
 
+.image-full-block {
+    max-width: 100%;
+
+    .post-image {
+        display: inline-block;
+        vertical-align: middle;
+        max-width: 100%;
+        height: auto;
+    }
+}
+
+.image-minimal-block {
+    max-width: 100%;
+
+    .post-image {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: center;
+    }
+}
+
 .wrapper-horizontal-verdict-card {
   font-family: open sans, Helvetica Neue, Helvetica, Roboto, Arial, sans-serif;
   margin: 10px 0 1em 0;
@@ -65,14 +87,6 @@ export default {
     cursor: pointer;
   }
 
-  .post-image {
-    max-height: 230px;
-    width: 100%;
-    height: 100%;
-    background-position: top;
-    background-size: cover;
-  }
-
   .information {
     background-color: $white;
     padding: .9em 1.2em;
@@ -83,7 +97,7 @@ export default {
     }
 
     &.padding0 {
-      padding: 0 1.2em 0 0;
+      padding: 0;
     }
 
     .author {

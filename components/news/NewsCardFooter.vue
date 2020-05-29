@@ -8,7 +8,7 @@
       </div>
       <span v-if="!pending">By: </span>
       <a id="username-link" class="username-link" @mouseover="toggle" v-if="!pending">
-        firstName lastName
+        fName lName
       </a>
       <time class="author">
         May 25,2020 9:51 am EST
