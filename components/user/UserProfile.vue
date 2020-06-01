@@ -1,12 +1,12 @@
 <template>
-  <div id="wrapper-default-avatar" class="wrapper-default-avatar">
+  <div id="wrapper-default-avatar" class="wrapper-default-avatar" @mouseover="getPopUp" @mouseleave="hidePopUp">
     <img class="default-avatar" src="/image/default-avatar-original.png">
     <div class="icon">
       <svg width="12" height="15">
         <use xlink:href="#chevron-down" />
       </svg>
     </div>
-    <div id="sign-popup" class="sign-popup">
+    <div id="sign-popup" class="sign-popup" v-if="showPopup">
       <ul class="sign-popup-ul">
         <li class="sign-popup-ul-item" @click="openLoginPopup('logIn')">
           Log In
@@ -21,9 +21,24 @@
 
 <script>
 export default {
+  data () {
+    return {
+      showPopup: false
+    }
+  },
   methods: {
     openLoginPopup (type) {
       this.$emit('openLoginPopup', type)
+    },
+    getPopUp () {
+      setTimeout(() => {
+        this.showPopup = true
+      }, 2)
+    },
+    hidePopUp () {
+      setTimeout(() => {
+        this.showPopup = false
+      }, 200)
     }
   }
 }
