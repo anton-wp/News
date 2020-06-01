@@ -18,10 +18,10 @@
                 <a v-if="type === 'minimal-block'">Amazon Suspends Its Shipping Service--No Word On Restart Date</a>
               </h2>
             </div>
-            <div class="shortContent">
-              <p v-if="!background">shortContent,[...]</p>
+            <div v-if="shortContent" class="shortContent">
+              <p v-if="!background">The northern island of Hokkaido, off of Japan, acted swiftly during the early outbreak of COVID-19, as the officials [...]</p>
             </div>
-            <div v-if="type === 'full-block'" class="row wrapp">
+            <div v-if="type === 'full-block' && !shortContent" class="row wrapp">
               <span class="about-news">Nadia, the tiger, was not acting like her usual self.  She was presenting with a persistent dry cough, and her [...]</span>
             </div>
             <news-card-footer colorScheme="light" :pending="false" :showMarks="false" />
@@ -38,7 +38,8 @@ import NewsCardFooter from '~/components/news/NewsCardFooter'
 export default {
   props: {
     type: String,
-    background: Boolean
+    background: Boolean,
+    shortContent: Boolean
   },
   components: {
     NewsCardHeader,
