@@ -8,16 +8,26 @@
     </div>
     <div id="sign-popup" class="sign-popup">
       <ul class="sign-popup-ul">
-        <li class="sign-popup-ul-item">
+        <li class="sign-popup-ul-item" @click="openLoginPopup('logIn')">
           Log In
         </li>
-        <li class="sign-popup-ul-item">
+        <li class="sign-popup-ul-item" @click="openLoginPopup('signUp')">
           Sign Up
         </li>
       </ul>
     </div>
   </div>
 </template>
+
+<script>
+export default {
+  methods: {
+    openLoginPopup (type) {
+      this.$emit('openLoginPopup', type)
+    }
+  }
+}
+</script>
 
 <style lang="scss" scoped>
 @import "../../assets/utils/variables";

@@ -40,6 +40,27 @@
     display: flex;
     align-items: center;
 
+    .category-name {
+      position: relative;
+      font-size: 14px;
+      text-transform: uppercase;
+      font-weight: 700;
+      margin: 15px 15px 15px 0;
+      display: inline-block;
+      font-family: "Open Sans";
+
+      &:after {
+        content: '';
+        background-color: $primary_color;
+        height: 3px;
+        width: 1.9em;
+        position: absolute;
+        left: 0.04em;
+        bottom: 1px;
+        top: 20px;
+      }
+    }
+
     .blockAction {
       display: inline-block;
       margin-left: auto;

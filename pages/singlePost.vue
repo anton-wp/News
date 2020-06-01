@@ -170,7 +170,7 @@ export default {
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
   @import "../assets/utils/variables";
   @import "../assets/utils/colors";
 
@@ -408,27 +408,6 @@ export default {
         font-size: 12px;
         font-weight: 400;
         font-family: "Open Sans";
-      }
-    }
-
-    .category-name {
-      position: relative;
-      font-size: 14px;
-      text-transform: uppercase;
-      font-weight: 700;
-      margin: 15px 15px 15px 0;
-      display: inline-block;
-      font-family: "Open Sans";
-
-      &:after {
-        content: '';
-        background-color: $primary_color;
-        height: 3px;
-        width: 1.9em;
-        position: absolute;
-        left: 0.04em;
-        bottom: 1px;
-        top: 20px;
       }
     }
 

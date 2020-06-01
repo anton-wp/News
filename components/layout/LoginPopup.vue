@@ -1,36 +1,38 @@
 <template>
   <div class="form-wrapper">
     <div class="form">
-      <div class="close-form">
+      <div class="close-form" @click="closeLoginPopup">
         ×
-        <!-- <fa-icon (click)="close()" [icon]="Times"></fa-icon> -->
       </div>
-      <div style="padding: 2.4rem 3rem 0em;">
+      <div v-if="type !== 'forgotPassword'" style="padding: 2.4rem 3rem 0em;">
         <div class="container in-form-container">
           <div class="row">
             <div class="col-12">
-              <h3 class="form-title">Log In to Verdict</h3>
-              <!-- <h3 class="form-title">Sign Up for Verdict</h3> -->
+              <h3 v-if="type === 'logIn'" class="form-title">
+                Log In to Verdict
+              </h3>
+              <h3 v-if="type === 'signUp'" class="form-title">
+                Sign Up for Verdict
+              </h3>
             </div>
           </div>
           <div class="row buttons-wrapper">
-            <!-- <div class="col-12 col-sm-6">
-              <vrd-sbc [iconName]="item"></vrd-sbc>
-            </div> -->
-            icon
+            <social />
           </div>
           <div class="row">
             <div class="col-12">
-              <h6 class="form-sub-title">Or by email</h6>
+              <h6 class="form-sub-title">
+                Or by email
+              </h6>
             </div>
             <div class="col-12">
-              <!-- <form
-                class="primary-form"
-                [formGroup]="authForm"
+              <form
+                v-if="type === 'logIn'"
                 id="authorizationForm"
+                class="primary-form"
               >
                 <div>
-                  <p style="color: red; text-align: center;">{{error}}</p>
+                  <!-- <p style="color: red; text-align: center;">{{error}}</p> -->
                 </div>
                 <div class="input-block">
                   <label class="label-input">
@@ -40,7 +42,7 @@
                       class="form-input"
                       type="text"
                       formControlName="email"
-                    />
+                    >
                     <span class="primary-error">getErrorMessageEmailAuth</span>
                   </label>
                 </div>
@@ -52,33 +54,40 @@
                       class="form-input"
                       type="password"
                       formControlName="password"
-                    />
+                    >
                     <span class="primary-error">getErrorMessagePasswordAuth</span>
                   </label>
                 </div>
                 <div class="forgot-button">
-                  <button type="button">
+                  <button type="button" @click="changeLoginPopup('forgotPassword')">
                     Forgot Password?
                   </button>
                 </div>
                 <div class="terms">
                   By proceeding, you agree to Verdict's
-                  <nuxt-link to="/terms-of-service">Terms of Service</nuxt-link> &
-                  <nuxt-link to="/privacy-policy">Privacy Policy</nuxt-link>
+                  <nuxt-link to="/terms-of-service">
+                    <span @click="closeLoginPopup">Terms of Service</span>
+                  </nuxt-link> &
+                  <nuxt-link to="/privacy-policy">
+                    <span @click="closeLoginPopup">
+                      Privacy Policy
+                    </span>
+                  </nuxt-link>
                 </div>
                 <div class="input-block">
                   <button
                     class="primary-form-button"
                     form="authorizationForm"
                     type="submit"
-                    [disabled]="blockButton"
-                  >Log in</button>
+                  >
+                    Log in
+                  </button>
                 </div>
-              </form> -->
+              </form>
               <form
-                class="primary-form"
-                [formGroup]="regForm"
+                v-if="type === 'signUp'"
                 id="registrationForm"
+                class="primary-form"
               >
                 <div class="row">
                   <div class="col-12 col-lg-6">
@@ -90,7 +99,7 @@
                           class="form-input"
                           type="text"
                           formControlName="firstName"
-                        />
+                        >
                         <span
                           class="primary-error"
                         >getErrorMessageEmail</span>
@@ -106,7 +115,7 @@
                           class="form-input"
                           type="text"
                           formControlName="lastName"
-                        />
+                        >
                         <span class="primary-error">getErrorMessageEmail</span>
                       </label>
                     </div>
@@ -132,7 +141,7 @@
                       class="form-input"
                       type="password"
                       formControlName="password"
-                    />
+                    >
                     <span class="primary-error">getErrorMessagePassword</span>
                   </label>
                 </div>
@@ -153,49 +162,83 @@
                 </div>-->
                 <div class="terms">
                   By checking this box, you confirm that you have read, understand and agree with Verdict's
-                  <nuxt-link to="/terms-of-service">Terms of Service</nuxt-link> &
-                  <nuxt-link to="/privacy-policy">Privacy Policy</nuxt-link>
+                  <nuxt-link to="/terms-of-service">
+                    <span @click="closeLoginPopup">Terms of Service</span>
+                  </nuxt-link> &
+                  <nuxt-link to="/privacy-policy">
+                    <span @click="closeLoginPopup">
+                      Privacy Policy
+                    </span>
+                  </nuxt-link>
                 </div>
                 <div class="input-block">
                   <button
                     class="primary-form-button"
                     form="registrationForm"
                     type="submit"
-                    [disabled]="regForm.status === 'INVALID'"
-                  >Sign Up</button>
+                  >
+                    Sign Up
+                  </button>
                 </div>
               </form>
             </div>
           </div>
         </div>
       </div>
-      <div class="trigger-form">
-        <span>
+      <div v-if="type !== 'forgotPassword'" class="trigger-form">
+        <span v-if="type === 'signUp'">
           Don't have an account?
-          <a>Sign Up</a>.
+          <a @click="changeLoginPopup('logIn')">Sign Up</a>.
         </span>
-        <!-- <span>
+        <span v-if="type === 'logIn'">
           Already have an account?
-          <a>Log In</a>.
-        </span> -->
+          <a @click="changeLoginPopup('signUp')">Log In</a>.
+        </span>
       </div>
-      <!-- <div *ngIf="ForgotPassword" class="forgot-password">
-        <h3 class="form-title">Forgot your password?</h3>
-        <h4>Enter your email address, and we’ll send a link to choose a new password.</h4>
+      <div v-if="type === 'forgotPassword'" class="forgot-password">
+        <h3 class="form-title">
+          Forgot your password?
+        </h3>
+        <h4>
+          Enter your email address, and we’ll send a link to choose a new password.
+        </h4>
         <div class="input-block">
           <label class="label-input">
-            <input placeholder="Email" autocomplete="off" class="form-input" type="text" />
+            <input placeholder="Email" autocomplete="off" class="form-input" type="text">
           </label>
         </div>
         <div class="input-block">
-          <button class="primary-form-button">RESET PASSWORD</button>
+          <button class="primary-form-button">
+            RESET PASSWORD
+          </button>
         </div>
-      </div> -->
+      </div>
     </div>
   </div>
 </template>
 
-<style lang="scss">
+<script>
+import Social from '~/components/Login/social-button.vue'
+
+export default {
+  components: {
+    Social
+  },
+  props: {
+    type: String
+  },
+  methods: {
+    closeLoginPopup () {
+      this.$emit('closeLoginPopup')
+    },
+    changeLoginPopup (type) {
+      this.$emit('changeLoginPopup', type)
+    }
+  }
+}
+</script>
+
+<style lang="scss" scoped>
 @import "../../assets/utils/variables";
 @import "../../assets/utils/colors";
 

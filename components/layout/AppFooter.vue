@@ -4,7 +4,7 @@
       <div class="row sub-wrapper">
         <div class="first-block col-lg-2 col-xl-3 col-12 col-sm-6 order-1">
           <a href="/" class="footer-logo">
-            <img class="footer-logo-icon" src="/image/logo-white.svg" />
+            <img class="footer-logo-icon" src="/image/logo-white.svg">
           </a>
           <p class="text-block-after-logo">
             your opinion on latest news, events, and society developments
@@ -12,21 +12,21 @@
         </div>
         <div class="second-block col-lg-8 col-xl-6 order-3 order-sm-3 order-md-3 order-lg-2">
           <div class="footer-general-icons-list">
-            <a class="footer-general-link">
+            <nuxt-link class="footer-general-link" to="/">
               HOME
-            </a>
-            <a class="footer-general-link">
+            </nuxt-link>
+            <nuxt-link class="footer-general-link" to="/about-verdict">
               ABOUT VERDICT
-            </a>
-            <a class="footer-general-link">
+            </nuxt-link>
+            <nuxt-link class="footer-general-link" to="/terms-of-service">
               TERMS OF SERVICE
-            </a>
-            <a class="footer-general-link">
+            </nuxt-link>
+            <nuxt-link class="footer-general-link" to="/privacy-policy">
               PRIVACY POLICYT
-            </a>
-            <a class="footer-general-link">
+            </nuxt-link>
+            <nuxt-link class="footer-general-link" to="/contact">
               CONTACT
-            </a>
+            </nuxt-link>
             <a class="footer-general-link">
               RSS
             </a>
@@ -47,19 +47,19 @@
         <div class="third-block col-lg-2 col-xl-3 order-4 order-sm-2 order-md-2 order-lg-3 col-12 col-sm-6">
           <div class="wrapper-market-icon">
             <button class="market-place-button">
-              <img class="market-place-icon" src="/image/app-store-badge.svg" alt="Verdict" />
+              <img class="market-place-icon" src="/image/app-store-badge.svg" alt="Verdict">
               <!-- TODO link to application and move link to config-->
             </button>
           </div>
           <div class="wrapper-market-icon">
             <button class="market-place-button">
-              <img class="market-place-icon google-play" src="/image/google-play-badge.svg" alt="Verdict" />
+              <img class="market-place-icon google-play" src="/image/google-play-badge.svg" alt="Verdict">
               <!-- TODO link to application and move link to config-->
             </button>
           </div>
 
           <div class="copyright-text d-block d-sm-none">
-            <span class="text-string" >Copyright © 2018-2020 VERDICT, LLC - All Rights Reserved.</span>
+            <span class="text-string">Copyright © 2018-2020 VERDICT, LLC - All Rights Reserved.</span>
           </div>
         </div>
       </div>

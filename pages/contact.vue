@@ -69,7 +69,7 @@
                 For all other questions please fill out the form below:
               </p>
             </div>
-            <form class="form" [formGroup]="messageForm" (ngSubmit)="sendMail()">
+            <form class="form">
               <div class="input-unit">
                 <h3>
                   Your Name (required)

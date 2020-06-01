@@ -9,7 +9,7 @@
         </div>
         <div class="main-logo">
           <nuxt-link to="/">
-            <img class="main-logo-img" src="/image/logo.svg" alt="Verdict - Main Logo"></img>
+            <img class="main-logo-img" src="/image/logo.svg" alt="Verdict - Main Logo">
           </nuxt-link>
         </div>
         <ul id="menu" class="nav-item-list d-none d-sm-none d-md-none d-lg-flex">
@@ -51,8 +51,8 @@
           </li>
         </ul>
         <div class="nav-signup">
-          <user-profile />
-          <button class="signup-btn d-none d-md-block">
+          <user-profile @openLoginPopup="openLoginPopup"/>
+          <button class="signup-btn d-none d-md-block" @click="openLoginPopup('signUp')">
             Sign Up
           </button>
         </div>
@@ -84,15 +84,37 @@
                 <vrd-smc></vrd-smc>
               </div>
       </template> -->
+      <login-popup v-if="loginPopupActive" @closeLoginPopup="closeLoginPopup" @changeLoginPopup="changeLoginPopup" :type="typeLoginPopup" />
     </template>
   </header>
 </template>
 
 <script>
 import UserProfile from '~/components/user/UserProfile'
+import LoginPopup from '~/components/layout/LoginPopup'
+
 export default {
   components: {
-    UserProfile
+    UserProfile,
+    LoginPopup
+  },
+  data () {
+    return {
+      loginPopupActive: false,
+      typeLoginPopup: ''
+    }
+  },
+  methods: {
+    openLoginPopup (type) {
+      this.typeLoginPopup = type
+      this.loginPopupActive = true
+    },
+    closeLoginPopup () {
+      this.loginPopupActive = false
+    },
+    changeLoginPopup (type) {
+      this.typeLoginPopup = type
+    }
   }
 }
 </script>

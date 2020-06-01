@@ -1,13 +1,13 @@
 <template>
   <div class="row wrapp">
-    <span class=bywho>
-      <div v-if="showPopup" class="user-popup active" id="1" @mouseleave="hide">
+    <span class="bywho">
+      <div v-if="showPopup" id="1" class="user-popup active" @mouseleave="hide">
         <div>
           <popup-user-info />
         </div>
       </div>
       <span v-if="!pending">By: </span>
-      <a id="username-link" class="username-link" @mouseover="toggle" v-if="!pending">
+      <a v-if="!pending" id="username-link" class="username-link" @mouseover="toggle">
         fName lName
       </a>
       <time class="author">

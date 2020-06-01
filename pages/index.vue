@@ -93,16 +93,16 @@
       <div class="container">
         <div class="row top-verdict">
           <div class="col-12 col-sm-12 col-md-6 col-lg-3">
-             <default-news-card type="second-block" :padding="true" />
+            <default-news-card type="second-block" :padding="true" />
           </div>
           <div class="col-12 col-sm-12 col-md-6 col-lg-3">
-             <default-news-card type="second-block" :padding="true" />
+            <default-news-card type="second-block" :padding="true" />
           </div>
           <div class="col-12 col-sm-12 col-md-6 col-lg-3">
-             <default-news-card type="second-block" :padding="true" />
+            <default-news-card type="second-block" :padding="true" />
           </div>
           <div class="col-12 col-sm-12 col-md-6 col-lg-3">
-             <default-news-card type="second-block" :padding="true" />
+            <default-news-card type="second-block" :padding="true" />
           </div>
         </div>
       </div>
