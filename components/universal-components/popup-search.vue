@@ -13,7 +13,7 @@
           placeholder="Search..."
           autocomplete="off"
           @keyup.enter="activeSearch"
-        ></input>
+        >
       </label>
       <p class="about-input-listeners">
         Type above and press
@@ -45,7 +45,7 @@ export default {
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scroped>
 @import "../../assets/utils/variables";
 @import "../../assets/utils/colors";
 
