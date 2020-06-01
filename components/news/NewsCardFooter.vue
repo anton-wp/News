@@ -1,7 +1,7 @@
 <template>
-  <div class="row wrapp">
+  <div class="row wrapp" @mouseleave="hide">
     <span class="bywho">
-      <div v-if="showPopup" id="1" class="user-popup active" @mouseleave="hide">
+      <div v-if="showPopup" id="1" class="user-popup active">
         <div>
           <popup-user-info />
         </div>

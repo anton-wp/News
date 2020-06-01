@@ -36,7 +36,34 @@
           </div>
           <div class="footer-social-icons-list">
             <a class="touchable-social-zone">
-              <!-- <vrd-fsi [iconName]="item.linkName"></vrd-fsi> -->
+              <svg width="30" height="30">
+                <use xlink:href="#facebook" />
+              </svg>
+            </a>
+            <a class="touchable-social-zone">
+              <svg width="30" height="30">
+                <use xlink:href="#twitter" />
+              </svg>
+            </a>
+            <a class="touchable-social-zone">
+              <svg width="30" height="30">
+                <use xlink:href="#pinterest" />
+              </svg>
+            </a>
+            <a class="touchable-social-zone">
+              <svg width="30" height="30">
+                <use xlink:href="#feed" />
+              </svg>
+            </a>
+            <a class="touchable-social-zone">
+              <svg width="30" height="30">
+                <use xlink:href="#feedburner" />
+              </svg>
+            </a>
+            <a class="touchable-social-zone">
+              <svg width="30" height="30">
+                <use xlink:href="#instagram" />
+              </svg>
             </a>
           </div>
           <div class="copyright-text d-none d-sm-block">
@@ -131,6 +158,23 @@
           }
           .touchable-social-zone {
             cursor: pointer;
+
+            svg {
+              fill: #fff;
+              margin: 0 15px;
+            }
+
+            @media (max-width: 400px) {
+                .social-icon {
+                    margin: 0 10px;
+                }
+            }
+            @media (max-width: 576px) {
+                .social-icon {
+                    height: 27px;
+                }
+            }
+
             &:hover {
               opacity: 0.7;
               transition: 0.3;

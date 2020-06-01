@@ -22,14 +22,14 @@
           <li class="nav-item">
             <a class="general-nav-item-link">ENTERTAINMENT</a>
           </li>
-          <li id="link" class="nav-item more">
+          <li id="link" class="nav-item more" @mouseover="popupMoreOn"  @mouseleave="popupMoreClose">
             <span id="more" class="general-nav-item-link">More</span>
             <span class="shevron">
               <svg width="12" height="15">
                 <use xlink:href="#chevron-down" />
               </svg>
             </span>
-            <!-- <div class="popup-more">
+            <div v-if="popupMore" class="popup-more">
               <ul>
                 <li class="nav-item">
                   <a class="nav-item-link">LIFESTYLE</a>
@@ -47,7 +47,7 @@
                   <a class="nav-item-link">HEALTH</a>
                 </li>
               </ul>
-            </div> -->
+            </div>
           </li>
         </ul>
         <div class="nav-signup">
@@ -101,7 +101,8 @@ export default {
   data () {
     return {
       loginPopupActive: false,
-      typeLoginPopup: ''
+      typeLoginPopup: '',
+      popupMore: false
     }
   },
   methods: {
@@ -114,6 +115,16 @@ export default {
     },
     changeLoginPopup (type) {
       this.typeLoginPopup = type
+    },
+    popupMoreOn () {
+      setTimeout(() => {
+        this.popupMore = true
+      }, 2)
+    },
+    popupMoreClose () {
+      setTimeout(() => {
+        this.popupMore = false
+      }, 200)
     }
   }
 }
