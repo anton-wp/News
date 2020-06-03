@@ -5,15 +5,11 @@
   "author": "Talanoff",
   "private": true,
   "scripts": {
-    "dev": "cross-env NODE_ENV=development nodemon server/dist/index.js --watch server",
+    "dev": "nuxt",
     "build": "nuxt build",
-    "start": "cross-env NODE_ENV=production node server/dist/index.js",
+    "start": "nuxt start",
     "generate": "nuxt generate",
-    "lint": "eslint --ext .js,.vue --ignore-path .gitignore .",
-    "api:init": "git submodule update --init --recursive && cd ./server && npm install",
-    "api:schema:sync": "cd ./server && typeorm schema:sync",
-    "api:migrate": "cd ./server && typeorm migration:run",
-    "api:build": "cd ./server && npm run build-dev"
+    "lint": "eslint --ext .js,.vue --ignore-path .gitignore ."
   },
   "dependencies": {
     "@nuxtjs/axios": "^5.3.6",
