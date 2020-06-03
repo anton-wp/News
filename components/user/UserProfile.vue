@@ -7,7 +7,7 @@
       </svg>
     </div>
     <div id="sign-popup" class="sign-popup" v-if="showPopup">
-      <ul class="sign-popup-ul">
+      <ul class="sign-popup-ul" v-if="!authorization">
         <li class="sign-popup-ul-item" @click="openLoginPopup('logIn')">
           Log In
         </li>
@@ -15,12 +15,29 @@
           Sign Up
         </li>
       </ul>
+      <ul class="sign-popup-ul"  v-if="authorization">
+        <nuxt-link class="sign-popup-ul-item" to="/profile/dashboard/">
+          Profile
+        </nuxt-link >
+        <nuxt-link  class="sign-popup-ul-item" to="/profile/notifications/">
+          Notification
+        </nuxt-link >
+        <nuxt-link  class="sign-popup-ul-item" to="/profile/settings/">
+          Settings
+        </nuxt-link >
+        <nuxt-link  class="sign-popup-ul-item" to="/">
+          Logout
+        </nuxt-link >
+      </ul>
     </div>
   </div>
 </template>
 
 <script>
 export default {
+  props: {
+    authorization: Boolean
+  },
   data () {
     return {
       showPopup: false
@@ -55,6 +72,7 @@ export default {
   height: 48px;
   margin-right: 26px;
   margin-top: 3px;
+  position: relative;
 
   .notification {
     position: absolute;
@@ -120,10 +138,7 @@ export default {
     height: 30px;
     user-select: none;
     // cursor: pointer;
-
   }
-
-  ;
 
   .icon {
     display: inline-block;
@@ -135,8 +150,6 @@ export default {
       height: 24px;
     }
   }
-
-  ;
 
   .icon-notification {
     display: inline-block;
@@ -154,12 +167,10 @@ export default {
     }
   }
 
-  ;
-
   .sign-popup {
     position: absolute;
     // top: -1000px;
-    margin-left: -18px;
+    right: -27px;
     margin-top: 2px;
     padding: .6em 1.5em .4em;
     z-index: 1000;
@@ -205,6 +216,7 @@ export default {
 
       .sign-popup-ul-item {
         user-select: none;
+        white-space: nowrap;
         font-family: 'Open Sans', Helvetica Neue,Helvetica,Roboto,Arial,sans-serif;
         color: $black;
         text-decoration: none;
@@ -213,6 +225,7 @@ export default {
         font-size: .9rem;
         line-height: 30px;
         padding-bottom: 2px;
+        display: list-item;
 
         &:hover {
           color: $hover_color;

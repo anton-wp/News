@@ -34,7 +34,7 @@ export default {
   methods: {
     activeSearch () {
       if (this.search) {
-        this.$router.push({ path: 'search', query: { q: this.search } })
+        this.$router.push({ path: '/search', query: { q: this.search } })
         this.closeSearch()
       }
     },

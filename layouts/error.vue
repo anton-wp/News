@@ -11,27 +11,30 @@
             We're sorry, the page you have looked for does not exist in our content! Perhaps you would like to go
             to our homepage or try searching below.
           </p>
-          <form class="search-form" id="addPostForm">
+          <div class="search-form" id="addPostForm">
             <div class="form-body">
               <div class="search-input-wrapper">
                 <input
+                  v-model="search"
                   type="search"
                   formControlName="search"
                   autocomplete="off"
                   name="q"
                   placeholder="Search"
                   @keyup.enter="activeSearch"
-                />
+                >
                 <button class="clear" type="button">
-                  <i class="icons color-primary">
-                    <svg width="20" height="20">
-                      <use xlink:href="#search-icon" />
-                    </svg>
-                  </i>
+                  <nuxt-link :to="{ path: '/search', query: { q: search }}">
+                    <i class="icons color-primary">
+                      <svg width="20" height="20">
+                        <use xlink:href="#search-icon" />
+                      </svg>
+                    </i>
+                  </nuxt-link>
                 </button>
               </div>
             </div>
-          </form>
+          </div>
         </div>
       </div>
 
@@ -62,6 +65,11 @@
 export default {
   props: ['error'],
   layout: 'blog', // you can set a custom layout for the error page
+  data () {
+    return {
+      search: ''
+    }
+  },
   methods: {
     activeSearch () {
       if (this.search) {
@@ -124,7 +132,7 @@ p {
   word-break: normal;
   line-break: auto;
 }
-form {
+.search-form {
   font-weight: 400;
   line-height: 1.5;
   text-align: center;

@@ -10,7 +10,7 @@
               </svg>
               <!-- <fa-icon class="icon" [icon]="faCamera"></fa-icon> -->
             </div>
-            <input type="file" id="file" />
+            <input id="file" type="file">
           </div>
           <img
             class="default-avatar"
@@ -23,10 +23,16 @@
           /> -->
         </div>
         <div class="about-your-role">
-          <p class="your-role">rank</p>
+          <p class="your-role">
+            rank
+          </p>
           <div class>
-            <p class="vrep-count">points</p>
-            <p class="vrep-title">V-rep</p>
+            <p class="vrep-count">
+              points
+            </p>
+            <p class="vrep-title">
+              V-rep
+            </p>
           </div>
           <div>
             <button class="click-for-follow">

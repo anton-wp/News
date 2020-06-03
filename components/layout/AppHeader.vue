@@ -51,7 +51,7 @@
           </li>
         </ul>
         <div class="nav-signup">
-          <user-profile @openLoginPopup="openLoginPopup"/>
+          <user-profile @openLoginPopup="openLoginPopup" :authorization="false" />
           <button class="signup-btn d-none d-md-block" @click="openLoginPopup('signUp')">
             Sign Up
           </button>

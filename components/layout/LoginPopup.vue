@@ -28,6 +28,7 @@
             <div class="col-12">
               <form
                 v-if="type === 'logIn'"
+                @submit.prevent="checkForm"
                 id="authorizationForm"
                 class="primary-form"
               >
@@ -41,9 +42,9 @@
                       autocomplete="off"
                       class="form-input"
                       type="text"
-                      formControlName="email"
+                      v-model="email"
                     >
-                    <span class="primary-error">getErrorMessageEmailAuth</span>
+                    <span class="primary-error">{{errors.email}}</span>
                   </label>
                 </div>
                 <div class="input-block">
@@ -53,9 +54,9 @@
                       autocomplete="off"
                       class="form-input"
                       type="password"
-                      formControlName="password"
+                      v-model="password"
                     >
-                    <span class="primary-error">getErrorMessagePasswordAuth</span>
+                    <span class="primary-error">{{errors.password}}</span>
                   </label>
                 </div>
                 <div class="forgot-button">
@@ -88,6 +89,7 @@
                 v-if="type === 'signUp'"
                 id="registrationForm"
                 class="primary-form"
+                @submit.prevent="checkForm"
               >
                 <div class="row">
                   <div class="col-12 col-lg-6">
@@ -98,7 +100,7 @@
                           autocomplete="off"
                           class="form-input"
                           type="text"
-                          formControlName="firstName"
+                          v-model="firstName"
                         >
                         <span
                           class="primary-error"
@@ -114,7 +116,7 @@
                           autocomplete="off"
                           class="form-input"
                           type="text"
-                          formControlName="lastName"
+                          v-model="lastName"
                         >
                         <span class="primary-error">getErrorMessageEmail</span>
                       </label>
@@ -128,7 +130,7 @@
                       autocomplete="off"
                       class="form-input"
                       type="text"
-                      formControlName="email"
+                      v-model="email"
                     >
                     <span class="primary-error">getErrorMessageEmail</span>
                   </label>
@@ -140,7 +142,7 @@
                       autocomplete="off"
                       class="form-input"
                       type="password"
-                      formControlName="password"
+                      v-model="password"
                     >
                     <span class="primary-error">getErrorMessagePassword</span>
                   </label>
@@ -152,7 +154,7 @@
                       autocomplete="off"
                       class="form-input"
                       type="password"
-                      formControlName="confirmPassword"
+                      v-model="confirmPassword"
                     >
                     <span class="primary-error">getErrorMessagePasswordConfirm</span>
                   </label>
@@ -186,13 +188,13 @@
         </div>
       </div>
       <div v-if="type !== 'forgotPassword'" class="trigger-form">
-        <span v-if="type === 'signUp'">
-          Don't have an account?
-          <a @click="changeLoginPopup('logIn')">Sign Up</a>.
-        </span>
         <span v-if="type === 'logIn'">
+          Don't have an account?
+          <a @click="changeLoginPopup('signUp')">Sign Up</a>.
+        </span>
+        <span v-if="type === 'signUp'">
           Already have an account?
-          <a @click="changeLoginPopup('signUp')">Log In</a>.
+          <a @click="changeLoginPopup('logIn')">Log In</a>.
         </span>
       </div>
       <div v-if="type === 'forgotPassword'" class="forgot-password">
@@ -224,15 +226,60 @@ export default {
   components: {
     Social
   },
+  data () {
+    return {
+      errors: {
+        firstName: '',
+        lastName: '',
+        email: '',
+        password: '',
+        confirmPassword: ''
+      },
+      error: false,
+      firstName: '',
+      lastName: '',
+      email: '',
+      password: '',
+      confirmPassword: ''
+    }
+  },
   props: {
     type: String
   },
   methods: {
+    checkForm () {
+      if(!this.firstName) {
+        this.errors.firstName = 'First Name is required'
+        this.error = true
+      } if (!this.lastName) {
+        this.errors.lastName = 'Last Name is required'
+        this.error = true
+      } if (!this.email) {
+        this.errors.email = 'email address is required'
+        this.error = true
+      } if (!this.password) {
+        this.errors.password = 'password is required'
+        this.error = true
+      } if (!this.confirmPassword) {
+        this.errors.confirmPassword = 'password is required'
+        this.error = true
+      }
+      console.log(this.errors)
+      console.log(this.password)
+    },
     closeLoginPopup () {
       this.$emit('closeLoginPopup')
     },
     changeLoginPopup (type) {
       this.$emit('changeLoginPopup', type)
+      this.clearForm()
+    },
+    clearForm () {
+      this.firstName = ''
+      this.lastName = ''
+      this.email = ''
+      this.password = ''
+      this.confirmPassword = ''
     }
   }
 }
@@ -339,6 +386,7 @@ export default {
 
     .buttons-wrapper {
       margin-bottom: 2em;
+      padding: 0px 15px;
     }
 
     .forgot-button {

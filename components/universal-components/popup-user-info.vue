@@ -11,7 +11,12 @@
               <span class="count-vraps">points</span>
               V-Rap
             </span>
-            <span class="stat">newsCount posts / verdictsCount verdicts</span>
+            <span class="stat">
+              <!-- postsCount  -->
+              0 posts /
+                <!-- verdictsCount  -->
+              0 verdicts
+            </span>
           </div>
           <div class="col-4 col-padding-0 img-wrapper">
             <img src="/image/default-avatar-original.png" class="user-avatar">
@@ -38,10 +43,10 @@
         <button class="button-followed unfollow">
           Unfollow
         </button>
-        <button class="button-followed unfollow">
+        <!-- <button class="button-followed unfollow">
           <i class="fa fa-circle-o-notch fa-spin" />
           Loading
-        </button>
+        </button> -->
       </div>
     </div>
     <!-- <div class="cssload-container">
