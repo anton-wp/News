@@ -1,20 +1,20 @@
 <template>
   <article>
-    <div class="wrapper-hot-card category">
-      <div class="img">
-        <img src="/image/top-news.jpg" alt="top news">
-      </div>
+    <div class="wrapper-hot-card" :class="category ? 'category' : ''">
+      <nuxt-link class="img" v-bind:to="post.slug">
+        <img v-bind:src="post.featured.wide" alt="top news">
+      </nuxt-link>
       <div class="container info">
-        <news-card-header colorScheme="light" />
-        <div class="wrapp">
+        <news-card-header colorScheme="light" :category="post.category" />
+        <nuxt-link class="wrapp" v-bind:to="post.slug">
           <h2 class="title top-title">
-            <a>title</a>
+            {{ post.title }}
           </h2>
-        </div>
+        </nuxt-link>
         <div class="shortContent">
-          <p>shortContent,[...]</p>
+          <p>{{post.shortContent}}[...]</p>
         </div>
-        <news-card-footer colorScheme="light" :pending="false" :showMarks="false" />
+        <news-card-footer :author="post.author" :publishedAt="post.publishedAt" colorScheme="light" :pending="false" :showMarks="false" />
       </div>
     </div>
   </article>
@@ -27,6 +27,10 @@ export default {
   components: {
     NewsCardHeader,
     NewsCardFooter
+  },
+  props: {
+    post: Object,
+    category: Boolean
   }
 }
 </script>
@@ -105,7 +109,8 @@ article {
       }
 
       .wrapp {
-        // height: 96px;
+        text-decoration: none;
+        color: inherit;
         margin-left: 0;
         margin-right: 0;
         justify-content: space-between;

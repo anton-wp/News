@@ -19,13 +19,13 @@
         <nuxt-link class="sign-popup-ul-item" to="/profile/dashboard/">
           Profile
         </nuxt-link >
-        <nuxt-link  class="sign-popup-ul-item" to="/profile/notifications/">
+        <nuxt-link class="sign-popup-ul-item" to="/profile/notifications/">
           Notification
         </nuxt-link >
-        <nuxt-link  class="sign-popup-ul-item" to="/profile/settings/">
+        <nuxt-link class="sign-popup-ul-item" to="/profile/settings/">
           Settings
         </nuxt-link >
-        <nuxt-link  class="sign-popup-ul-item" to="/">
+        <nuxt-link class="sign-popup-ul-item" @click.native="logout" to="/">
           Logout
         </nuxt-link >
       </ul>
@@ -36,7 +36,7 @@
 <script>
 export default {
   props: {
-    authorization: Boolean
+    authorization: false
   },
   data () {
     return {
@@ -56,6 +56,10 @@ export default {
       setTimeout(() => {
         this.showPopup = false
       }, 200)
+    },
+    logout () {
+      console.log(123)
+      localStorage.clear('token')
     }
   }
 }

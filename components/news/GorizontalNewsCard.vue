@@ -3,28 +3,29 @@
     <div class="row w-100 mx-0">
       <div class="pad0-image col-12 col-sm-12 col-md-6 col-lg-6 pl-0">
         <!-- add go to post page {id} -->
-        <a :class="'image-'+type">
-          <img src="/image/top-news.jpg" class="post-image" alt="">
-        </a>
+        <nuxt-link :class="'image-'+type" v-bind:to="post.slug">
+          <img v-bind:src="post.featured.landscape" class="post-image" alt="">
+        </nuxt-link>
       </div>
       <div class="pad0-image col-12 col-sm-12 col-md-6 col-lg-6 px-0">
         <div class="information padding0">
           <div class="container-fluid">
-            <news-card-header colorScheme="dark" />
+            <news-card-header :category="post.category" colorScheme="dark" />
             <div class="row block wrapp">
-              <h2 class="title" >
+              <!-- <h2  > -->
                 <!-- add go to post page {id} -->
-                <a v-if="type === 'full-block'">Amazon Suspends Its Shipping Service--No Word On Restart Date</a>
-                <a v-if="type === 'minimal-block'">Amazon Suspends Its Shipping Service--No Word On Restart Date</a>
-              </h2>
+              <nuxt-link class="title" v-bind:to="post.slug" v-if="type === 'full-block'">{{ post.title }}</nuxt-link>
+              <nuxt-link class="title" v-bind:to="post.slug" v-if="type === 'minimal-block'">{{ post.title }}</nuxt-link>
+                <!-- <nuxt-link v-if="type === 'minimal-block'">{{ post.title }}</nuxt-link> -->
+              <!-- </h2> -->
             </div>
             <div v-if="shortContent" class="shortContent">
               <p v-if="!background">The northern island of Hokkaido, off of Japan, acted swiftly during the early outbreak of COVID-19, as the officials [...]</p>
             </div>
             <div v-if="type === 'full-block' && !shortContent" class="row wrapp">
-              <span class="about-news">Nadia, the tiger, was not acting like her usual self.  She was presenting with a persistent dry cough, and her [...]</span>
+              <span class="about-news">{{ post.shortContent }}[...]</span>
             </div>
-            <news-card-footer colorScheme="light" :pending="false" :showMarks="false" />
+            <news-card-footer :author="post.author" :publishedAt="post.publishedAt" colorScheme="light" :pending="false" :showMarks="false" />
           </div>
         </div>
       </div>
@@ -36,20 +37,25 @@
 import NewsCardHeader from '~/components/news/NewsCardHeader'
 import NewsCardFooter from '~/components/news/NewsCardFooter'
 export default {
-  props: {
-    type: String,
-    background: Boolean,
-    shortContent: Boolean
-  },
   components: {
     NewsCardHeader,
     NewsCardFooter
-  }
+  },
+  props: {
+    type: String,
+    background: Boolean,
+    shortContent: Boolean,
+    post: Object
+  },
 }
 </script>
 
 <style lang="scss" scoped>
 @import "../../assets/utils/colors";
+
+.nuxt-link {
+  color: inherit;
+}
 .active {
   visibility: visible !important;
 }
@@ -168,14 +174,11 @@ export default {
       user-select: none;
       // min-height: 93px;
       display: block;
+      color: $black;
+      text-decoration: none;
 
       &:hover {
         color: $doveGray;
-      }
-
-      a {
-        color: $black;
-        text-decoration: none;
       }
     }
 

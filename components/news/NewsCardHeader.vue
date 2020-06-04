@@ -2,24 +2,25 @@
   <div class="row wrapp">
     <div class="theme-wrapper">
       <span class="theme">
-        <a class="tag-link" :class="colorScheme" href="#">
-          theme name
-        </a>
+        <nuxt-link class="tag-link" :class="colorScheme" v-bind:to="category.slug">
+          {{ category.name }}
+        </nuxt-link>
       </span>
     </div>
-    <news-card-header-marks :colorScheme="colorScheme" :pending="false" />
+    <news-card-header-marks :pending="false" />
   </div>
 </template>
 
 <script>
 import NewsCardHeaderMarks from '~/components/news/NewsCardHeaderMarks'
 export default {
-  props: {
-    colorScheme: String
-  },
   components: {
     NewsCardHeaderMarks
-  }
+  },
+  props: {
+    colorScheme: String,
+    category: Object
+  },
 }
 </script>
 

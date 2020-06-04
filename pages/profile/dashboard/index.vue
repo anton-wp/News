@@ -25,7 +25,7 @@ export default {
   layout: 'profile',
   components: {
     BlockNotes
-  }
+  },
 }
 </script>
 

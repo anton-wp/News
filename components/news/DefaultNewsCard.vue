@@ -1,19 +1,19 @@
 <template>
   <article>
     <div class="picture">
-      <a>
-        <img src="/image/top-news.jpg">
-      </a>
+      <nuxt-link v-bind:to="post.slug">
+        <img v-bind:src="post.featured.landscape">
+      </nuxt-link>
       <div class="information" :class="!padding ? 'with-padding' : 'without-padding'">
         <div class="container-fluid">
-          <news-card-header colorScheme="dark" />
+          <news-card-header :category="post.category" colorScheme="dark" />
           <div class="row block wrapp">
-            <h2 class="title">
+            <!-- <h2 > -->
               <!-- add go to post page {id} -->
-              <a>title</a>
-            </h2>
+            <nuxt-link class="title" v-bind:to="post.slug">{{ post.title }}</nuxt-link>
+            <!-- </h2> -->
           </div>
-          <news-card-footer colorScheme="light" :pending="false" :showMarks="false" />
+          <news-card-footer :author="post.author" :publishedAt="post.publishedAt" colorScheme="light" :pending="false" :showMarks="false" />
         </div>
       </div>
     </div>
@@ -25,7 +25,8 @@ import NewsCardHeader from '~/components/news/NewsCardHeader'
 import NewsCardFooter from '~/components/news/NewsCardFooter'
 export default {
   props: {
-    padding: Boolean
+    padding: Boolean,
+    post: Object
   },
   components: {
     NewsCardHeader,
@@ -50,25 +51,23 @@ article {
   }
 
   .picture {
-    h2 {
-      a {
-        margin-top: 5px;
-        // -webkit-font-smoothing: antialiased;
-        font-family: open sans,Helvetica Neue,Helvetica,Roboto,Arial,sans-serif;
-        // -webkit-box-direction: normal;
-        font-size: 1.3em;
-        letter-spacing: -.3px;
-        line-height: 1.3;
-        box-sizing: inherit;
-        background-color: transparent;
-        text-decoration: none;
-        color: inherit;
-        overflow-wrap: normal;
-        word-wrap: normal;
-        line-break: auto;
-        // min-height: 95px;
-        display: block;
-      }
+    .title {
+      margin-top: 5px;
+      // -webkit-font-smoothing: antialiased;
+      font-family: open sans,Helvetica Neue,Helvetica,Roboto,Arial,sans-serif;
+      // -webkit-box-direction: normal;
+      font-size: 1.3em;
+      letter-spacing: -.3px;
+      line-height: 1.3;
+      box-sizing: inherit;
+      background-color: transparent;
+      text-decoration: none;
+      color: inherit;
+      overflow-wrap: normal;
+      word-wrap: normal;
+      line-break: auto;
+      // min-height: 95px;
+      display: block;
     }
 
     a {
@@ -122,8 +121,8 @@ article {
       }
 
       .title {
-        font-size: 1em;
-        line-height: 1.4;
+        // font-size: 1em;
+        // line-height: 1.4;
         margin-top: .3em;
         margin-bottom: .5em;
         text-overflow: ellipsis;
@@ -133,15 +132,12 @@ article {
         color: #000;
         cursor: pointer;
         user-select: none;
+        color:$black;
+        text-decoration: none;
+        transition: color .3s;
 
-        a {
-          color:$black;
-          text-decoration: none;
-          transition: color .3s;
-
-          &:hover {
-            color: $doveGray;
-          }
+        &:hover {
+          color: $doveGray;
         }
       }
 

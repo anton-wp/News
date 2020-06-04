@@ -33,7 +33,7 @@
                 class="primary-form"
               >
                 <div>
-                  <!-- <p style="color: red; text-align: center;">{{error}}</p> -->
+                  <p style="color: red; text-align: center;">{{ errorMessage }}</p>
                 </div>
                 <div class="input-block">
                   <label class="label-input">
@@ -81,7 +81,7 @@
                     form="authorizationForm"
                     type="submit"
                   >
-                    Log in
+                    {{loading ? 'Loading' : 'Log In'}}
                   </button>
                 </div>
               </form>
@@ -221,6 +221,8 @@
 
 <script>
 import Social from '~/components/Login/social-button.vue'
+import { log } from 'util'
+import axios from 'axios'
 
 export default {
   components: {
@@ -235,7 +237,9 @@ export default {
         password: '',
         confirmPassword: ''
       },
+      loading: false,
       error: false,
+      errorMessage: '',
       firstName: '',
       lastName: '',
       email: '',
@@ -264,8 +268,26 @@ export default {
         this.errors.confirmPassword = 'password is required'
         this.error = true
       }
-      console.log(this.errors)
-      console.log(this.password)
+      let formData = {
+        email: this.email,
+	      password: this.password
+      }
+      this.loading = true
+      this.login(formData)
+    },
+    login (formData) {
+      axios.post('/api/auth/login', formData)
+      .then(
+        (responce) => {
+          this.loading = false
+          localStorage.setItem('token', responce.data.token);
+          this.closeLoginPopup()
+        }
+      )
+      .catch((error) => {
+        this.loading = false
+        this.errorMessage = error.response.data.message
+      })
     },
     closeLoginPopup () {
       this.$emit('closeLoginPopup')

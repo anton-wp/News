@@ -30,10 +30,10 @@
     <span class="bookmark-news">
       <!-- add function add this post to save -->
       <button v-if="!pending" class="bookmark">
-          <svg width="15" height="15">
+          <svg width="20" height="20">
           <use xlink:href="#bookmark-empty" />
         </svg>
-        <!-- <svg width="15" height="15">
+        <!-- <svg width="20" height="20">
           <use xlink:href="#bookmark" />
         </svg> -->
       </button>

@@ -9,7 +9,8 @@
             </div>
           </div>
           <div class="row">
-            <div class="col-12">
+            sad
+            <!-- <div class="col-12">
               <top-news-card />
             </div>
             <div class="col-12 col-lg-6">
@@ -44,7 +45,7 @@
             </div>
             <div class="col-12">
               <gorizontal-news-card type="full-block" :background="false" />
-            </div>
+            </div> -->
           </div>
           <div class="container">
             <div class="row">

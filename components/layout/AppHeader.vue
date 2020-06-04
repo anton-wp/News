@@ -51,7 +51,8 @@
           </li>
         </ul>
         <div class="nav-signup">
-          <user-profile @openLoginPopup="openLoginPopup" :authorization="false" />
+          <user-profile v-if="token()" @openLoginPopup="openLoginPopup" :authorization="true" />
+          <user-profile v-if="!token()" @openLoginPopup="openLoginPopup" :authorization="false" />
           <button class="signup-btn d-none d-md-block" @click="openLoginPopup('signUp')">
             Sign Up
           </button>
@@ -92,6 +93,7 @@
 <script>
 import UserProfile from '~/components/user/UserProfile'
 import LoginPopup from '~/components/layout/LoginPopup'
+import axios from 'axios'
 
 export default {
   components: {
@@ -102,8 +104,14 @@ export default {
     return {
       loginPopupActive: false,
       typeLoginPopup: '',
-      popupMore: false
+      popupMore: false,
+      categories: []
     }
+  },
+  beforeMount () {
+    axios.get(`/api/menu/header`)
+    .then(res => this.categories = res.data.data)
+    .catch(error => console.error(error))
   },
   methods: {
     openLoginPopup (type) {
@@ -125,6 +133,13 @@ export default {
       setTimeout(() => {
         this.popupMore = false
       }, 200)
+    },
+    token () {
+      // console.log(localStorage)
+      // if(localStorage.getItem('token') !== null) {
+      //   return true
+      // }
+      return false
     }
   }
 }

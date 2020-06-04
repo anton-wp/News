@@ -52,8 +52,12 @@ module.exports = {
   axios: {
     proxy: true
   },
+
   proxy: {
-    '/api/': 'http://localhost:3000/api'
+    '/api/': {
+      target: 'https://dev.api.verdict.org',
+      pathRewrite: {'^/api/': ''}
+    }
   },
   /*
   ** Build configuration

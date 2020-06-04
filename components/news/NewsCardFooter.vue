@@ -7,11 +7,13 @@
         </div>
       </div>
       <span v-if="!pending">By: </span>
-      <a v-if="!pending" id="username-link" class="username-link" @mouseover="toggle">
-        fName lName
-      </a>
-      <time class="author">
-        May 25,2020 9:51 am EST
+      <nuxt-link class="username-link" v-bind:to="`/m/${author.slug}`">
+        <span v-if="!pending" id="username-link" @mouseover="toggle">
+          {{ author.firstName }} {{ author.lastName }}
+        </span>
+      </nuxt-link>
+      <time class="author" v-bind:datetime="publishedAt">
+        {{ publishedAt }}
       </time><br>
       <button v-if="pending">
         <svg width="15" height="15">
@@ -39,7 +41,9 @@ export default {
   props: {
     colorScheme: String,
     pending: Boolean,
-    showMarks: Boolean
+    showMarks: Boolean,
+    author: Object,
+    publishedAt: String
   },
   components: {
     PopupUserInfo,

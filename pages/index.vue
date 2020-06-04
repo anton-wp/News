@@ -3,11 +3,8 @@
     <div class="wrapper-block-news">
       <div class="container">
         <div class="row top-verdict">
-          <div class="col-lg-4 col-md-6">
-            <top-news-card />
-          </div>
-          <div class="col-lg-4 col-md-6">
-            <top-news-card />
+          <div class="col-lg-4 col-md-6" v-for="post in posts.slice(0, 2)" :key="post.id">
+            <top-news-card :post="post" />
           </div>
           <div class="col-lg-4 col-md-6 col-12">
             <div class="wrapper-title-hot">
@@ -22,14 +19,8 @@
     <div class="wrapper-block-news background">
       <div class="container">
         <div class="row row-flex top-verdict">
-          <div class="col-12 col-sm-6 col-md-4 col-lg-4">
-            <default-news-card type="first-block" :padding="false" />
-          </div>
-          <div class="col-12 col-sm-6 col-md-4 col-lg-4">
-            <default-news-card type="first-block" :padding="false" />
-          </div>
-          <div class="col-12 col-sm-6 col-md-4 col-lg-4">
-            <default-news-card type="first-block" :padding="false" />
+          <div class="col-12 col-sm-6 col-md-4 col-lg-4"  v-for="post in posts.slice(2, 5)" :key="post.id">
+            <default-news-card type="first-block" :post="post" :padding="false" />
           </div>
         </div>
       </div>
@@ -40,7 +31,10 @@
           <div class="col-12 col-md-12 col-lg-8 padding-0">
             <div class="container">
               <div class="row">
-                <div class="col-12 padding-0">
+                <div class="col-12 padding-0"  v-for="post in posts.slice(5, 11)" :key="post.id">
+                  <gorizontal-news-card type="full-block" :post="post" :background="true" />
+                </div>
+                <!-- <div class="col-12 padding-0">
                   <gorizontal-news-card type="full-block" :background="true" />
                 </div>
                 <div class="col-12 padding-0">
@@ -54,10 +48,7 @@
                 </div>
                 <div class="col-12 padding-0">
                   <gorizontal-news-card type="full-block" :background="true" />
-                </div>
-                <div class="col-12 padding-0">
-                  <gorizontal-news-card type="full-block" :background="true" />
-                </div>
+                </div> -->
               </div>
             </div>
           </div>
@@ -74,17 +65,8 @@
     <div class="wrapper-block-news background">
       <div class="container">
         <div class="row row-flex top-verdict">
-          <div class="col-12 col-sm-12 col-md-12 col-lg-6">
-            <gorizontal-news-card type="minimal-block" :background="true" />
-          </div>
-          <div class="col-12 col-sm-12 col-md-12 col-lg-6">
-            <gorizontal-news-card type="minimal-block" :background="true" />
-          </div>
-          <div class="col-12 col-sm-12 col-md-12 col-lg-6">
-            <gorizontal-news-card type="minimal-block" :background="true" />
-          </div>
-          <div class="col-12 col-sm-12 col-md-12 col-lg-6">
-            <gorizontal-news-card type="minimal-block" :background="true" />
+          <div class="col-12 col-sm-12 col-md-12 col-lg-6"  v-for="post in posts.slice(11, 15)" :key="post.id">
+            <gorizontal-news-card type="minimal-block" :post="post" :background="true" />
           </div>
         </div>
       </div>
@@ -92,17 +74,8 @@
     <div class="wrapper-block-news">
       <div class="container">
         <div class="row top-verdict">
-          <div class="col-12 col-sm-12 col-md-6 col-lg-3">
-            <default-news-card type="second-block" :padding="true" />
-          </div>
-          <div class="col-12 col-sm-12 col-md-6 col-lg-3">
-            <default-news-card type="second-block" :padding="true" />
-          </div>
-          <div class="col-12 col-sm-12 col-md-6 col-lg-3">
-            <default-news-card type="second-block" :padding="true" />
-          </div>
-          <div class="col-12 col-sm-12 col-md-6 col-lg-3">
-            <default-news-card type="second-block" :padding="true" />
+          <div class="col-12 col-sm-12 col-md-6 col-lg-3" v-for="post in posts.slice(15, 19)" :key="post.id">
+            <default-news-card type="second-block" :post="post" :padding="true" />
           </div>
         </div>
       </div>
@@ -126,13 +99,28 @@ import TopNewsCard from '~/components/news/TopNewsCard'
 import DefaultNewsCard from '~/components/news/DefaultNewsCard'
 import GorizontalNewsCard from '~/components/news/GorizontalNewsCard'
 import followBlock from '~/components/universal-components/followBlock'
+import axios from 'axios'
+
 export default {
   components: {
     TopNewsCard,
     DefaultNewsCard,
     GorizontalNewsCard,
     followBlock
-  }
+  },
+  data () {
+    return {
+      posts: []
+    }
+  },
+  beforeMount () {
+    axios.get(`/api/posts/?limit=19&page=1`)
+    .then(res => {
+      console.log(res)
+      this.posts = res.data.data
+    })
+    .catch(error => console.error(error))
+  },
 }
 </script>
 

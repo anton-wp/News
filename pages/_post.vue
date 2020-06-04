@@ -167,16 +167,16 @@ export default {
     Marks,
     SocialBlock
   },
-  // async fetch ({ $axios, params, next }) {
-  //   // if (process.server) {
-  //   //   const data = this.$http.$get('/api/news')
-  //   //   console.log(data)
-  //   // }
-  //   // if (process.server) {
-  //   //   let res = await $axios.get(`/api/politics`).catch(error => console.error(error))
-  //   //   console.log(res.data)
-  //   // }
-  // }
+  async fetch ({ $axios, params, next }) {
+    // if (process.server) {
+    //   const data = this.$http.get('/api/news')
+    //   console.log(data)
+    // }
+    if (process.server) {
+      let res = await $axios.get(`/api/politics`).catch(error => console.error(error))
+      console.log(res.data)
+    }
+  }
 }
 </script>
 

@@ -1,41 +1,89 @@
 <template>
-  <ul>
-    <li class="menu">
-      <svg width="20" height="20">
-        <use xlink:href="#dashboard" />
-      </svg>
-      <span>comments</span>
-      <span>
-        <span class="title">
-          title
-          <span>(0)</span>
-        </span>
-      </span>
-      <svg class="icon" width="17" height="17">
-        <use xlink:href="#caret-down" />
-      </svg>
-      <!-- <fa-icon *ngIf="!item.click && item.children" class="icon" (click)="expandMenu(item.title)" [icon]="faSortDown"></fa-icon>
-      <fa-icon *ngIf="item.click && item.children" class="icon" (click)="expandMenu(item.title)" [icon]="faSortUp"></fa-icon>-->
-      <ul class="blockSubMenu">
-        <li class="subMenu">
-          <span class="subtitle">
-            tags
-            <span>(123)</span>
+  <div class="tabs">
+    <ul>
+      <li class="menu" v-for="item in tabs" :key="item.title">
+        <!-- <span>comments</span> -->
+        <span class="menu-block" @click="openCloseTabs(item.title)">
+          <svg width="20" height="20">
+            <use v-bind:xlink:href="`#${item.title}`" />
+          </svg>
+          <span class="title">
+            {{ item.title }}
+            <span v-if="item.counter > 0">({{ item.counter }})</span>
           </span>
-        </li>
-      </ul>
-    </li>
-  </ul>
+          <svg class="icon" :class="item.status ? 'open' : ''" v-if="item.children" width="17" height="17">
+            <use xlink:href="#caret-down" />
+          </svg>
+        </span>
+        <!-- <fa-icon *ngIf="!item.click && item.children" class="icon" (click)="expandMenu(item.title)" [icon]="faSortDown"></fa-icon>
+        <fa-icon *ngIf="item.click && item.children" class="icon" (click)="expandMenu(item.title)" [icon]="faSortUp"></fa-icon>-->
+        <ul class="blockSubMenu" v-if="item.children && item.status">
+          <li class="subMenu" v-for="subTabs in item.children" :key="subTabs.title">
+            <span class="subtitle">
+              {{ subTabs.title }}
+              <span v-if="subTabs.counter">({{ subTabs.counter }})</span>
+            </span>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </div>
 </template>
+
+<script>
+import axios from 'axios'
+
+export default {
+  data () {
+    return {
+      token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI0OTc5ZDdmYy05MjcxLTQ4MGEtOTI5ZS00ODlkY2U0OTZlYjgiLCJ1c2VybmFtZSI6ImFkbWluIiwidXNlclJvbGUiOiJzdXBlci1hZG1pbiIsInR5cGUiOiJzeXN0ZW0iLCJpYXQiOjE1OTEyNzc0NDUsImV4cCI6MTU5MTM2Mzg0NX0.-fz-5kOLaPcbNuZjWkh9zHhWeoVh51Oivm7jnXcFKYM',
+      tabs: []
+    }
+  },
+  methods: {
+    openCloseTabs (id) {
+      this.tabs.map(tab => tab.title === id ? tab.status = !tab.status : null)
+    }
+  },
+  beforeMount () {
+    const httpOptions = {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${this.token}`,
+      }
+    };
+    axios.get(`/api/profile/tabs`, httpOptions)
+    .then(res => {
+      console.log(res)
+      res.data.data.map(data => data.status = false)
+      this.tabs = res.data.data
+    })
+    .catch(error => console.error(error))
+  }
+}
+</script>
 
 <style lang="scss" scoped>
 .menu {
-  display: inline-block;
+  // display: inline-block;
   margin-right: 10px;
+
+  .menu-block {
+    display: flex;
+    align-items: center;
+
+    @media (max-width: 768px) {
+      display: inline;
+    }
+  }
+}
+.open {
+  transform: rotate(180deg);
 }
 .icon {
   color: #919191;
-  margin-left: 10px;
+  display: block;
+  margin-left: 10px !important;
   @media (max-width: 768px) {
     display: none !important;
   }
@@ -44,6 +92,9 @@
 ul {
   position: sticky;
   top: 90px;
+}
+
+ul {
   z-index: 1;
   padding-left: 0 !important;
   margin-top: -15px;
@@ -72,7 +123,7 @@ li {
   display: contents;
   @media (max-width: 639px) {
     display: none;
-    margin-top: 5px;
+    margin-top: 25px;
   }
 }
 
@@ -115,13 +166,13 @@ li {
     width: calc(100vw - 100% - 0.9375rem);
     overflow-x: scroll;
     left: 85px;
-    top: 5px;
+    top: 25px;
     background-color: #f4f4f4;
     cursor: pointer;
   }
   @media (max-width: 639px) {
     left: 50px;
-    // top: 50px;
+    top: 35px;
     width: calc(100vw - 100% - 1rem);
   }
   .subMenu {

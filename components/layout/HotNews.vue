@@ -6,40 +6,10 @@
       </div>
       <div class="hot-news-item-list-wrapper">
         <div class="hot-news-item-list">
-          <div class="hot-news-item">
-            <a class="hot-news-link">
-              lorem
-            </a>
-          </div>
-          <div class="hot-news-item">
-            <a class="hot-news-link">
-              lorem
-            </a>
-          </div>
-          <div class="hot-news-item">
-            <a class="hot-news-link">
-              lorem
-            </a>
-          </div>
-          <div class="hot-news-item">
-            <a class="hot-news-link">
-              lorem
-            </a>
-          </div>
-          <div class="hot-news-item">
-            <a class="hot-news-link">
-              lorem
-            </a>
-          </div>
-          <div class="hot-news-item">
-            <a class="hot-news-link">
-              lorem
-            </a>
-          </div>
-          <div class="hot-news-item">
-            <a class="hot-news-link">
-              lorem
-            </a>
+          <div class="hot-news-item" v-for="item in tags" :key="item.id">
+            <nuxt-link class="hot-news-link" v-bind:to="`/l/${item.slug}`">
+              {{ item.name }}
+            </nuxt-link>
           </div>
         </div>
       </div>
@@ -55,6 +25,7 @@
 
 <script>
 import SearchPopup from '~/components/universal-components/popup-search.vue'
+import axios from 'axios'
 
 export default {
   components: {
@@ -62,8 +33,14 @@ export default {
   },
   data () {
     return {
-      showPopusSearch: false
+      showPopusSearch: false,
+      tags: []
     }
+  },
+  beforeMount () {
+    axios.get(`/api/tags/featured-tags`)
+    .then(res => this.tags = res.data.data)
+    .catch(error => console.error(error))
   },
   methods: {
     openSearch () {
