@@ -93,7 +93,7 @@
 <script>
 import UserProfile from '~/components/user/UserProfile'
 import LoginPopup from '~/components/layout/LoginPopup'
-import axios from 'axios'
+import Cookies from 'js-cookie';
 
 export default {
   components: {
@@ -109,7 +109,7 @@ export default {
     }
   },
   beforeMount () {
-    axios.get(`/api/menu/header`)
+     this.$http.get(`/api/menu/header`)
     .then(res => this.categories = res.data.data)
     .catch(error => console.error(error))
   },
@@ -135,10 +135,11 @@ export default {
       }, 200)
     },
     token () {
-      // console.log(localStorage)
-      // if(localStorage.getItem('token') !== null) {
-      //   return true
-      // }
+	  console.log(Cookies.get('token'))
+
+    //   if(Cookies.get('token')) {
+    //     return true
+    //   }
       return true
     }
   }

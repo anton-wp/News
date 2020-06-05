@@ -4,10 +4,10 @@
       <div class="row">
         <div class="col-12 sort">
           <span class="verdicts-posts">Sort by:</span>
-          <button class="click-for-follow follow">
+          <button class="click-for-follow follow" :class="sort === 'DESC' ? 'active' : ''" @click="updateSort('DESC')">
             latest
           </button>
-          <button class="click-for-follow follow">
+          <button class="click-for-follow follow" :class="sort === 'ASC' ? 'active' : ''" @click="updateSort('ASC')">
             top voted
           </button>
         </div>
@@ -15,13 +15,13 @@
           <div class="row">
             <!-- post -->
             <template >
-              <div class="col-12 col-md-6 col-lg-4">
-                <!-- <default-news-card :padding="true" /> -->
+              <div class="col-12 col-md-6 col-lg-4" v-for="post in posts" :key="post.id">
+                <default-news-card :post="post" :padding="true" />
                 <!-- <vrd-vdc type="second-block" [defaultPost]="post" [padding]="true" [profile]="true"></vrd-vdc> -->
               </div>
             </template>
             <div class="col-12 button-block">
-              <button class="loadMore">
+              <button class="loadMore" v-if="pagination.next" @click="morePosts()">
                 Load More
               </button>
             </div>
@@ -39,6 +39,44 @@ export default {
   layout: 'profile',
   components: {
     DefaultNewsCard
+  },
+  data () {
+    return {
+      sort: 'DESC',
+      posts: [],
+      pagination: Object,
+      page: 1,
+    }
+  },
+  methods: {
+    updateSort (sort) {
+      this.sort = sort
+      this.page = 1
+      this.getPosts()
+    },
+    morePosts() {
+      this.getPosts('more', this.page + 1)
+    },
+    getPosts (more, page) {
+      if(page) {
+        this.page = page
+      }
+       this.$http.get(`/api/profile/bookmarks?sort=${this.sort}&page=${this.page}&limit=12`)
+      .then(res => {
+        // console.log(res)
+        if(!more) {
+          this.posts = res.data.data
+          this.pagination = res.data.pagination
+        }else {
+          this.posts = [...this.posts, ...res.data.data]
+          this.pagination = res.data.pagination
+        }
+      })
+      .catch(error => console.error(error))
+    }
+  },
+  beforeMount () {
+    this.getPosts()
   }
 }
 </script>

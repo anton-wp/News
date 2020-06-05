@@ -25,7 +25,6 @@
 
 <script>
 import SearchPopup from '~/components/universal-components/popup-search.vue'
-import axios from 'axios'
 
 export default {
   components: {
@@ -38,7 +37,7 @@ export default {
     }
   },
   beforeMount () {
-    axios.get(`/api/tags/featured-tags`)
+     this.$http.get(`/api/tags/featured-tags`)
     .then(res => this.tags = res.data.data)
     .catch(error => console.error(error))
   },

@@ -55,16 +55,45 @@
 </template>
 
 <script>
-// import axios from 'axios'
-import { log } from "util";
+import { log } from 'util'
 
 export default {
-    data() {
-        return {
-            tabs: [],
-            token:
-                "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI0OTc5ZDdmYy05MjcxLTQ4MGEtOTI5ZS00ODlkY2U0OTZlYjgiLCJ1c2VybmFtZSI6ImFkbWluIiwidXNlclJvbGUiOiJzdXBlci1hZG1pbiIsInR5cGUiOiJzeXN0ZW0iLCJpYXQiOjE1OTEzNjA4NzcsImV4cCI6MTU5MTQ0NzI3N30.SXvitSphmYD_JSAiJrqmPrzxP-82fskTMjLEG6CKwe0"
-        };
+  data () {
+    return {
+      tabs: [],
+    }
+  },
+  methods: {
+    openCloseTabs (id) {
+      this.tabs.map(tab => tab.title === id ? tab.status = !tab.status : null)
+    },
+    activTabsStart (res, rout2, rout3) {
+      let rout = []
+      if(!rout2) {
+        let str = ''
+        rout = this.$route.fullPath.split('/')
+        rout = rout.map(rout => rout = str.concat('/', rout))
+      } else {
+        rout[2] = rout2
+        rout[3] = rout3
+      }
+      res.map(data => {
+        if(data.path === rout[2]) {
+          data.status = true
+          if(data.children && rout[3]) {
+            data.children.map(tab => tab.path === rout[2] + rout[3] ? tab.status = true : tab.status = false)
+          }
+          if(data.children && !rout[3]) {
+            data.children.map(tab => tab.path === rout[3] || tab.path === rout[2] ? tab.status = true : tab.status = false)
+          }
+        }else {
+          data.status = false
+          if(data.children) {
+            data.children.map(tab => tab.status = false)
+          }
+        }
+      })
+      this.tabs = res
     },
     methods: {
         openCloseTabs(id) {
@@ -210,7 +239,15 @@ export default {
             })
             .catch(error => console.error(error));
     }
-};
+  },
+  beforeMount () {
+    this.$http.get(`/api/profile/tabs`)
+    .then(res => {
+      this.sortTabs(res)
+    })
+    .catch(error => console.error(error))
+  }
+}
 </script>
 
 <style lang="scss" scoped>

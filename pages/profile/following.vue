@@ -21,25 +21,23 @@
 
 <script>
 import FollowerBlock from "~/components/profile/block-follower"
-import axios from 'axios'
 
 export default {
   layout: "profile",
   components: {
     FollowerBlock
   },
+  methods: {
+    getFollowing () {
+       this.$http.get(`/api/profile/subscriptions?created=DESC&page=1&limit=12`)
+      .then(res => {
+        this.sortTabs(res)
+      })
+      .catch(error => console.error(error))
+    }
+  },
   created () {
-    const httpOptions = {
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${this.token}`,
-      }
-    };
-    axios.get(`/api/profile/tabs`, httpOptions)
-    .then(res => {
-      this.sortTabs(res)
-    })
-    .catch(error => console.error(error))
+
   }
 };
 </script>
