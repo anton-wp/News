@@ -55,45 +55,13 @@
 </template>
 
 <script>
-import { log } from 'util'
+import { log } from "util";
 
 export default {
-  data () {
-    return {
-      tabs: [],
-    }
-  },
-  methods: {
-    openCloseTabs (id) {
-      this.tabs.map(tab => tab.title === id ? tab.status = !tab.status : null)
-    },
-    activTabsStart (res, rout2, rout3) {
-      let rout = []
-      if(!rout2) {
-        let str = ''
-        rout = this.$route.fullPath.split('/')
-        rout = rout.map(rout => rout = str.concat('/', rout))
-      } else {
-        rout[2] = rout2
-        rout[3] = rout3
-      }
-      res.map(data => {
-        if(data.path === rout[2]) {
-          data.status = true
-          if(data.children && rout[3]) {
-            data.children.map(tab => tab.path === rout[2] + rout[3] ? tab.status = true : tab.status = false)
-          }
-          if(data.children && !rout[3]) {
-            data.children.map(tab => tab.path === rout[3] || tab.path === rout[2] ? tab.status = true : tab.status = false)
-          }
-        }else {
-          data.status = false
-          if(data.children) {
-            data.children.map(tab => tab.status = false)
-          }
-        }
-      })
-      this.tabs = res
+    data() {
+        return {
+            tabs: []
+        };
     },
     methods: {
         openCloseTabs(id) {
@@ -226,12 +194,6 @@ export default {
         }
     },
     beforeMount() {
-        const httpOptions = {
-            headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${this.token}`
-            }
-        };
         this.$http
             .get(`/api/profile/tabs`)
             .then(res => {
@@ -239,15 +201,7 @@ export default {
             })
             .catch(error => console.error(error));
     }
-  },
-  beforeMount () {
-    this.$http.get(`/api/profile/tabs`)
-    .then(res => {
-      this.sortTabs(res)
-    })
-    .catch(error => console.error(error))
-  }
-}
+};
 </script>
 
 <style lang="scss" scoped>
