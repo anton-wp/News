@@ -41,7 +41,8 @@ import { log } from 'util'
 export default {
   data () {
     return {
-      tabs: []
+      tabs: [],
+      token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI0OTc5ZDdmYy05MjcxLTQ4MGEtOTI5ZS00ODlkY2U0OTZlYjgiLCJ1c2VybmFtZSI6ImFkbWluIiwidXNlclJvbGUiOiJzdXBlci1hZG1pbiIsInR5cGUiOiJzeXN0ZW0iLCJpYXQiOjE1OTEzNjA4NzcsImV4cCI6MTU5MTQ0NzI3N30.SXvitSphmYD_JSAiJrqmPrzxP-82fskTMjLEG6CKwe0'
     }
   },
   methods: {
@@ -148,7 +149,7 @@ export default {
     const httpOptions = {
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${this.store.state.token}`,
+        Authorization: `Bearer ${this.token}`,
       }
     };
     axios.get(`/api/profile/tabs`, httpOptions)
