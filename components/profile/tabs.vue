@@ -3,26 +3,30 @@
     <ul>
       <li class="menu" v-for="item in tabs" :key="item.title">
         <!-- <span>comments</span> -->
-        <span class="menu-block" @click="openCloseTabs(item.title)">
-          <svg width="20" height="20">
-            <use v-bind:xlink:href="`#${item.title}`" />
-          </svg>
-          <span class="title">
-            {{ item.title }}
-            <span v-if="item.counter > 0">({{ item.counter }})</span>
+        <nuxt-link class="link" v-bind:to="item.children ? '' : `/profile${item.path}`">
+          <span class="menu-block" @click="openCloseTabs(item.title)">
+            <svg width="20" height="20">
+              <use v-bind:xlink:href="`#${item.title}`" />
+            </svg>
+            <span class="title">
+              {{ item.title }}
+              <span v-if="item.counter > 0">({{ item.counter }})</span>
+            </span>
+            <svg class="icon" :class="item.status ? 'open' : ''" v-if="item.children" width="17" height="17">
+              <use xlink:href="#caret-down" />
+            </svg>
           </span>
-          <svg class="icon" :class="item.status ? 'open' : ''" v-if="item.children" width="17" height="17">
-            <use xlink:href="#caret-down" />
-          </svg>
-        </span>
+        </nuxt-link>
         <!-- <fa-icon *ngIf="!item.click && item.children" class="icon" (click)="expandMenu(item.title)" [icon]="faSortDown"></fa-icon>
         <fa-icon *ngIf="item.click && item.children" class="icon" (click)="expandMenu(item.title)" [icon]="faSortUp"></fa-icon>-->
         <ul class="blockSubMenu" v-if="item.children && item.status">
           <li class="subMenu" v-for="subTabs in item.children" :key="subTabs.title">
-            <span class="subtitle">
-              {{ subTabs.title }}
-              <span v-if="subTabs.counter">({{ subTabs.counter }})</span>
-            </span>
+            <nuxt-link class="link" v-bind:to="`/profile${subTabs.path}`">
+              <span class="subtitle">
+                {{ subTabs.title }}
+                <span v-if="subTabs.counter">({{ subTabs.counter }})</span>
+              </span>
+            </nuxt-link>
           </li>
         </ul>
       </li>
@@ -36,7 +40,7 @@ import axios from 'axios'
 export default {
   data () {
     return {
-      token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI0OTc5ZDdmYy05MjcxLTQ4MGEtOTI5ZS00ODlkY2U0OTZlYjgiLCJ1c2VybmFtZSI6ImFkbWluIiwidXNlclJvbGUiOiJzdXBlci1hZG1pbiIsInR5cGUiOiJzeXN0ZW0iLCJpYXQiOjE1OTEyNzc0NDUsImV4cCI6MTU5MTM2Mzg0NX0.-fz-5kOLaPcbNuZjWkh9zHhWeoVh51Oivm7jnXcFKYM',
+      token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI0OTc5ZDdmYy05MjcxLTQ4MGEtOTI5ZS00ODlkY2U0OTZlYjgiLCJ1c2VybmFtZSI6ImFkbWluIiwidXNlclJvbGUiOiJzdXBlci1hZG1pbiIsInR5cGUiOiJzeXN0ZW0iLCJpYXQiOjE1OTEzMzY4NDQsImV4cCI6MTU5MTQyMzI0NH0.jdrfwqUfJnHuD9QRd95007UKEvnhnRq8NWtjweKEMBw',
       tabs: []
     }
   },
@@ -125,6 +129,10 @@ li {
     display: none;
     margin-top: 25px;
   }
+}
+.link {
+  text-decoration: none;
+  color: inherit;
 }
 
 .menu {

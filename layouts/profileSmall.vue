@@ -11,30 +11,7 @@
           <div class="line" />
         </div>
         <div class="col-auto sideBar">
-          <ul>
-            <li class="menu">
-              <svg width="20" height="20">
-                <use xlink:href="#dashboard" />
-              </svg>
-              <span>comments</span>
-              <span>
-                <span class="title">
-                  title
-                  <span>(0)</span>
-                </span>
-              </span>
-              <!-- <fa-icon *ngIf="!item.click && item.children" class="icon" (click)="expandMenu(item.title)" [icon]="faSortDown"></fa-icon>
-              <fa-icon *ngIf="item.click && item.children" class="icon" (click)="expandMenu(item.title)" [icon]="faSortUp"></fa-icon>-->
-              <ul class="blockSubMenu">
-                <li class="subMenu">
-                  <span class="subtitle">
-                    tags
-                    <span>(123)</span>
-                  </span>
-                </li>
-              </ul>
-            </li>
-          </ul>
+          <tabs />
         </div>
         <div class="col content">
           <nuxt />
@@ -50,7 +27,7 @@ import CustomSvg from '~/components/module/CustomSvg'
 import HotNews from '~/components/layout/HotNews'
 import AppHeader from '~/components/layout/AppHeader'
 import smallHeader from '~/components/profile/smallHeader'
-// import Breadcrumbs from '~/components/layout/Breadcrumbs'
+import Tabs from '~/components/profile/tabs'
 import AppFooter from '~/components/layout/AppFooter'
 
 export default {
@@ -59,7 +36,8 @@ export default {
     AppHeader,
     AppFooter,
     HotNews,
-    smallHeader
+    smallHeader,
+    Tabs
     // Breadcrumbs
     // LoginPopup
   }

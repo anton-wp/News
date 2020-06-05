@@ -16,7 +16,7 @@
             <!-- post -->
             <template >
               <div class="col-12 col-md-6 col-lg-4">
-                <default-news-card :padding="true" />
+                <!-- <default-news-card :padding="true" /> -->
                 <!-- <vrd-vdc type="second-block" [defaultPost]="post" [padding]="true" [profile]="true"></vrd-vdc> -->
               </div>
             </template>
