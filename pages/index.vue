@@ -99,7 +99,6 @@ import TopNewsCard from '~/components/news/TopNewsCard'
 import DefaultNewsCard from '~/components/news/DefaultNewsCard'
 import GorizontalNewsCard from '~/components/news/GorizontalNewsCard'
 import followBlock from '~/components/universal-components/followBlock'
-import axios from 'axios'
 
 export default {
   components: {
@@ -113,8 +112,8 @@ export default {
       posts: []
     }
   },
-  beforeMount () {
-    axios.get(`/api/posts/?limit=19&page=1`)
+  mounted () {
+    this.$http.get(`/api/posts/?limit=19&page=1`)
     .then(res => {
       console.log(res)
       this.posts = res.data.data
