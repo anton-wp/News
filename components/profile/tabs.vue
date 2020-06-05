@@ -42,7 +42,7 @@ export default {
   data () {
     return {
       tabs: [],
-      token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI0OTc5ZDdmYy05MjcxLTQ4MGEtOTI5ZS00ODlkY2U0OTZlYjgiLCJ1c2VybmFtZSI6ImFkbWluIiwidXNlclJvbGUiOiJzdXBlci1hZG1pbiIsInR5cGUiOiJzeXN0ZW0iLCJpYXQiOjE1OTEzNjA4NzcsImV4cCI6MTU5MTQ0NzI3N30.SXvitSphmYD_JSAiJrqmPrzxP-82fskTMjLEG6CKwe0'
+      token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI0OTc5ZDdmYy05MjcxLTQ4MGEtOTI5ZS00ODlkY2U0OTZlYjgiLCJ1c2VybmFtZSI6ImFkbWluIiwidXNlclJvbGUiOiJzdXBlci1hZG1pbiIsInR5cGUiOiJzeXN0ZW0iLCJpYXQiOjE1OTEzNjY3MjcsImV4cCI6MTU5MTQ1MzEyN30.oIQZ-1CQ5tmsQO1oTjbtautNKG59UW2lzIZ44wvNa_k'
     }
   },
   methods: {

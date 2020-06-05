@@ -4,10 +4,10 @@
       <div class="row">
         <div class="col-12 sort">
           <span class="verdicts-posts">Sort by:</span>
-          <button class="click-for-follow follow">
+          <button class="click-for-follow follow" :class="sort === 'DESC' ? 'active' : ''" @click="updateSort('DESC')">
             latest
           </button>
-          <button class="click-for-follow follow">
+          <button class="click-for-follow follow" :class="sort === 'ASC' ? 'active' : ''" @click="updateSort('ASC')">
             top voted
           </button>
         </div>
@@ -15,13 +15,13 @@
           <div class="row">
             <!-- post -->
             <template >
-              <div class="col-12 col-md-6 col-lg-4">
-                <!-- <default-news-card :padding="true" /> -->
+              <div class="col-12 col-md-6 col-lg-4" v-for="post in posts" :key="post.id">
+                <default-news-card :post="post" :padding="true" />
                 <!-- <vrd-vdc type="second-block" [defaultPost]="post" [padding]="true" [profile]="true"></vrd-vdc> -->
               </div>
             </template>
             <div class="col-12 button-block">
-              <button class="loadMore">
+              <button class="loadMore" v-if="pagination.next" @click="morePosts()">
                 Load More
               </button>
             </div>
@@ -34,11 +34,57 @@
 
 <script>
 import DefaultNewsCard from '~/components/news/DefaultNewsCard'
+import axios from 'axios'
 
 export default {
   layout: 'profile',
   components: {
     DefaultNewsCard
+  },
+  data () {
+    return {
+      token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI0OTc5ZDdmYy05MjcxLTQ4MGEtOTI5ZS00ODlkY2U0OTZlYjgiLCJ1c2VybmFtZSI6ImFkbWluIiwidXNlclJvbGUiOiJzdXBlci1hZG1pbiIsInR5cGUiOiJzeXN0ZW0iLCJpYXQiOjE1OTEzNjA4NzcsImV4cCI6MTU5MTQ0NzI3N30.SXvitSphmYD_JSAiJrqmPrzxP-82fskTMjLEG6CKwe0',
+      sort: 'DESC',
+      posts: [],
+      pagination: Object,
+      page: 1,
+    }
+  },
+  methods: {
+    updateSort (sort) {
+      this.sort = sort
+      this.page = 1
+      this.getPosts()
+    },
+    morePosts() {
+      this.getPosts('more', this.page + 1)
+    },
+    getPosts (more, page) {
+      const httpOptions = {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${this.token}`,
+        }
+      };
+      if(page) {
+        this.page = page
+      }
+      axios.get(`/api/profile/bookmarks?sort=${this.sort}&page=${this.page}&limit=12`, httpOptions)
+      .then(res => {
+        // console.log(res)
+        if(!more) {
+          this.posts = res.data.data
+          this.pagination = res.data.pagination
+        }else {
+          this.posts = [...this.posts, ...res.data.data]
+          this.pagination = res.data.pagination
+        }
+      })
+      .catch(error => console.error(error))
+    }
+  },
+  beforeMount () {
+    this.getPosts()
   }
 }
 </script>
