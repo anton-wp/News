@@ -115,7 +115,6 @@ export default {
   mounted () {
     this.$http.get(`/api/posts/?limit=19&page=1`)
     .then(res => {
-      console.log(res)
       this.posts = res.data.data
     })
     .catch(error => console.error(error))

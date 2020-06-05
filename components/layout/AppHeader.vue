@@ -139,7 +139,7 @@ export default {
       // if(localStorage.getItem('token') !== null) {
       //   return true
       // }
-      return false
+      return true
     }
   }
 }
