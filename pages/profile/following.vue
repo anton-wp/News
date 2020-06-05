@@ -28,18 +28,23 @@ export default {
   components: {
     FollowerBlock
   },
+  methods: {
+    getFollowing () {
+      const httpOptions = {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${this.token}`,
+        }
+      };
+      axios.get(`/api/profile/tabs`, httpOptions)
+      .then(res => {
+        this.sortTabs(res)
+      })
+      .catch(error => console.error(error))
+    }
+  },
   created () {
-    const httpOptions = {
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${this.token}`,
-      }
-    };
-    axios.get(`/api/profile/tabs`, httpOptions)
-    .then(res => {
-      this.sortTabs(res)
-    })
-    .catch(error => console.error(error))
+
   }
 };
 </script>
