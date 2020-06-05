@@ -34,6 +34,8 @@
 </template>
 
 <script>
+import Cookies from 'js-cookie';
+
 export default {
   props: {
     authorization: false
@@ -58,8 +60,9 @@ export default {
       }, 200)
     },
     logout () {
-      console.log(123)
-      localStorage.clear('token')
+	//   console.log(Cookies)
+	  Cookies.remove('token')
+    //   localStorage.clear('token')
     }
   }
 }

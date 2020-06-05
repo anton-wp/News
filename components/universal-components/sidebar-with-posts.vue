@@ -17,7 +17,6 @@
 
 <script>
 import DefaultNewsCard from '~/components/news/DefaultNewsCard'
-import axios from 'axios'
 
 export default {
   components: {
@@ -36,7 +35,7 @@ export default {
     getPost (type) {
       if(this.type !== type) {
         this.type = type
-        axios.get(`/api/posts/query/sidebar?termSlug=&type=${type}&limit=3`)
+         this.$http.get(`/api/posts/query/sidebar?termSlug=&type=${type}&limit=3`)
         .then(res => {
           this.posts = res.data.data
         })

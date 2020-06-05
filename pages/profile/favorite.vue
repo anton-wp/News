@@ -34,7 +34,6 @@
 
 <script>
 import DefaultNewsCard from '~/components/news/DefaultNewsCard'
-import axios from 'axios'
 
 export default {
   layout: 'profile',
@@ -43,7 +42,6 @@ export default {
   },
   data () {
     return {
-      token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI0OTc5ZDdmYy05MjcxLTQ4MGEtOTI5ZS00ODlkY2U0OTZlYjgiLCJ1c2VybmFtZSI6ImFkbWluIiwidXNlclJvbGUiOiJzdXBlci1hZG1pbiIsInR5cGUiOiJzeXN0ZW0iLCJpYXQiOjE1OTEzNjA4NzcsImV4cCI6MTU5MTQ0NzI3N30.SXvitSphmYD_JSAiJrqmPrzxP-82fskTMjLEG6CKwe0',
       sort: 'DESC',
       posts: [],
       pagination: Object,
@@ -60,16 +58,10 @@ export default {
       this.getPosts('more', this.page + 1)
     },
     getPosts (more, page) {
-      const httpOptions = {
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${this.token}`,
-        }
-      };
       if(page) {
         this.page = page
       }
-      axios.get(`/api/profile/bookmarks?sort=${this.sort}&page=${this.page}&limit=12`, httpOptions)
+       this.$http.get(`/api/profile/bookmarks?sort=${this.sort}&page=${this.page}&limit=12`)
       .then(res => {
         // console.log(res)
         if(!more) {

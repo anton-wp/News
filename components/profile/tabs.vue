@@ -35,14 +35,12 @@
 </template>
 
 <script>
-import axios from 'axios'
 import { log } from 'util'
 
 export default {
   data () {
     return {
       tabs: [],
-      token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI0OTc5ZDdmYy05MjcxLTQ4MGEtOTI5ZS00ODlkY2U0OTZlYjgiLCJ1c2VybmFtZSI6ImFkbWluIiwidXNlclJvbGUiOiJzdXBlci1hZG1pbiIsInR5cGUiOiJzeXN0ZW0iLCJpYXQiOjE1OTEzNjY3MjcsImV4cCI6MTU5MTQ1MzEyN30.oIQZ-1CQ5tmsQO1oTjbtautNKG59UW2lzIZ44wvNa_k'
     }
   },
   methods: {
@@ -146,13 +144,7 @@ export default {
     }
   },
   beforeMount () {
-    const httpOptions = {
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${this.token}`,
-      }
-    };
-    axios.get(`/api/profile/tabs`, httpOptions)
+    this.$http.get(`/api/profile/tabs`)
     .then(res => {
       this.sortTabs(res)
     })

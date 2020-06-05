@@ -21,7 +21,6 @@
 
 <script>
 import FollowerBlock from "~/components/profile/block-follower"
-import axios from 'axios'
 
 export default {
   layout: "profile",
@@ -30,13 +29,7 @@ export default {
   },
   methods: {
     getFollowing () {
-      const httpOptions = {
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${this.token}`,
-        }
-      };
-      axios.get(`/api/profile/tabs`, httpOptions)
+       this.$http.get(`/api/profile/subscriptions?created=DESC&page=1&limit=12`)
       .then(res => {
         this.sortTabs(res)
       })
