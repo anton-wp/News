@@ -205,7 +205,8 @@
 import Social from "~/components/Login/social-button.vue";
 import { log } from "util";
 import axios from "axios";
-import Cookies from "js-cookie";
+// import Cookies from "js-cookie";
+import jwt_decode from "jwt-decode";
 
 export default {
     components: {
@@ -263,17 +264,23 @@ export default {
             this.login(formData);
         },
         login(formData) {
-            axios
+            this.$http
                 .post("/api/auth/login", formData)
                 .then(responce => {
                     this.loading = false;
-                    localStorage.setItem("token", responce.data.token);
-                    Cookies.set("token", responce.data.token);
+                    const token = responce.data.token;
+                    const tokenDecoded = jwt_decode(token);
+
+                    this.$cookies.set("token", token);
+
+                    this.$store.dispatch("SAVE_TOKEN", token);
+                    this.$store.dispatch("SAVE_TOKEN_INFO", tokenDecoded);
+
                     this.closeLoginPopup();
                 })
                 .catch(error => {
                     this.loading = false;
-                    this.errorMessage = error.response.data.message;
+                    // this.errorMessage = error.response.data.message;
                 });
         },
         closeLoginPopup() {
