@@ -2,7 +2,7 @@
   <div class="row wrapp">
     <div class="theme-wrapper">
       <span class="theme">
-        <nuxt-link class="tag-link" :class="colorScheme" v-bind:to="category.slug">
+        <nuxt-link class="tag-link" :class="colorScheme" v-bind:to="`/${category.slug}`">
           {{ category.name }}
         </nuxt-link>
       </span>

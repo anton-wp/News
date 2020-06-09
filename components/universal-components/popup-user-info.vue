@@ -1,11 +1,11 @@
 <template>
   <div class="popup-wrapper-user-info">
-    <div>
+    <div class="contentModal" v-if="!loading">
       <div class="header-user-popup container">
         <div class="row">
           <div class="col-8 col-padding-0">
             <!-- TODO go to user -->
-            <a class="user-name-span">{{modal.displayName}}</a>
+            <nuxt-link class="user-name-span" v-bind:to="`/m/${modal.slug}`">{{modal.displayName}}</nuxt-link>
             <span class="user-role-span">{{modal.rank}}</span>
             <span class="v-rap-span">
               <span class="count-vraps">{{modal.points}}</span>
@@ -13,9 +13,9 @@
             </span>
             <span class="stat">
               <!-- postsCount  -->
-              0 posts /
+              {{modal.newsCount}} posts /
                 <!-- verdictsCount  -->
-              0 verdicts
+              {{modal.verdictsCount}} verdicts
             </span>
           </div>
           <div class="col-4 col-padding-0 img-wrapper">
@@ -29,18 +29,18 @@
             latest posts:
           </p>
           <ol class="latest-posts-list">
-            <li class="latest-posts-titles">
-              <a>1. post.title...</a>
+            <li class="latest-posts-titles" v-for="(post, index) in modal.latestNews" :key="index">
+              <nuxt-link v-bind:to="`/${post.slug}`">{{++index}}. {{post.title}}...</nuxt-link>
             </li>
           </ol>
         </div>
       </div>
       <div class="followed-people-count-wrapper">
-        <span>Followed by followers people</span>
-        <button class="button-followed follow">
+        <span>Followed by {{modal.followers}} people</span>
+        <button class="button-followed follow" v-if="modal.follow" @click="Subscribe" :disabled="loadingFollow">
           Follow
         </button>
-        <button class="button-followed unfollow">
+        <button class="button-followed unfollow" v-if="!modal.follow" @click="Unsubscribe" :disabled="loadingFollow">
           Unfollow
         </button>
         <!-- <button class="button-followed unfollow">
@@ -49,9 +49,9 @@
         </button> -->
       </div>
     </div>
-    <!-- <div class="cssload-container">
+    <div class="cssload-container" v-if="loading">
       <div class="lds-ellipsis"><div></div><div></div><div></div><div></div></div>
-    </div> -->
+    </div>
   </div>
 </template>
 
@@ -62,21 +62,54 @@ export default {
 	},
 	data () {
 		return {
-			loading: false,
-			modal: Object
+			loading: true,
+			modal: Object,
+			loadingFollow: false,
+			authorHttp: {
+				authorId: String
+			}
 		}
 	},
 	created () {
+		this.authorHttp.authorId = this.authorId
 		this.$http
 		.get(`/api/author/${this.authorId}/modal`)
 		.then(responce => {
 			console.log(responce.data.data);
+			this.loading = false
 			this.modal = responce.data.data;
 		})
 		.catch(error => {
 			// this.loading = false;
 			// this.errorMessage = error.response.data.message;
 		});
+	},
+	methods: {
+		Unsubscribe () {
+			this.modal.follow = true
+			this.loadingFollow = true
+			this.$http
+			.post(`/api/author/unsubscribe`, this.authorHttp)
+			.then(responce => {
+				this.loadingFollow = false
+			})
+			.catch(error => {
+				// this.loading = false;
+				// this.errorMessage = error.response.data.message;
+			});
+		},
+		Subscribe () {
+			this.modal.follow = false
+			this.loadingFollow = true
+			this.$http
+			.post(`/api/author/subscribe`, this.authorHttp)
+			.then(responce => {
+				this.loadingFollow = false
+			})
+			.catch(error => {
+
+			});
+		},
 	}
 }
 </script>
@@ -86,9 +119,11 @@ export default {
 @import "../../assets/utils/colors";
 
 .cssload-container {
-  position: absolute;
-  top: 100px;
-  left: 100px;
+  position: relative;
+  display: flex;
+  margin-top: 100px;
+  justify-content: center;
+
 
   .lds-ellipsis {
     display: inline-block;
@@ -162,40 +197,54 @@ export default {
   z-index: 999;
   position: relative;
 
-  .header-user-popup {
-    align-items: center;
-    border-bottom: 1px solid $dedede;
-    padding-bottom: 10px;
+	.contentModal{
+		animation: content 0.3s linear;
+ 	 }
 
-    .col-padding-0 {
-      padding-left: 0;
-      padding-right: 0;
-    }
+	@keyframes content {
+		0% {
+			opacity: 0;
+		}
 
-    .img-wrapper {
-      align-items: center;
-      align-content: center;
-      justify-content: flex-end;
-      display: flex;
-    }
+		100% {
+			opacity: 1;
+		}
+	}
 
-    .user-avatar {
-      border-radius: 25px;
-      width: 50px;
-      height: 50px;
-    }
+  	.header-user-popup {
+		align-items: center;
+		border-bottom: 1px solid $dedede;
+		padding-bottom: 10px;
 
-    .user-name-span {
-      color: $black;
-      text-decoration: none;
-      font-weight: 700;
-      font-size: 0.9em;
-      display: block;
-      transition: color .25s;
+		.col-padding-0 {
+			padding-left: 0;
+			padding-right: 0;
+		}
 
-      &:hover {
-        color: $primary_color;
-      }
+		.img-wrapper {
+			align-items: center;
+			align-content: center;
+			justify-content: flex-end;
+			display: flex;
+		}
+
+		.user-avatar {
+			border-radius: 25px;
+			width: 50px;
+			height: 50px;
+		}
+
+		.user-name-span {
+			color: $black;
+			text-decoration: none;
+			font-weight: 700;
+			font-size: 0.9em;
+			display: block;
+			transition: color .25s;
+
+		&:hover {
+			color: $primary_color;
+		}
     }
 
     .user-role-span {

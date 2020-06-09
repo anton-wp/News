@@ -15,7 +15,7 @@
         </div>
         <div class="col content">
           <nuxt />
-          <not-found />
+          <!-- <not-found /> -->
         </div>
       </div>
     </div>

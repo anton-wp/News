@@ -4,10 +4,16 @@
       <div class="row">
         <div class="col-12 sort">
           <span class="verdicts-posts">Sort by:</span>
-          <button class="click-for-follow follow">latest</button>
-          <button class="click-for-follow follow">top</button>
+          <button class="click-for-follow follow" :class="sort === 'DESC' ? 'active' : ''" @click="updateSort('DESC')">
+            latest
+          </button>
+          <button class="click-for-follow follow" :class="sort === 'ASC' ? 'active' : ''" @click="updateSort('ASC')">
+            top voted
+          </button>
         </div>
-        <follower-block :type="'following'" />
+        <follower-block class="col-sm-6 profile" v-for="follow in followers" :key="follow.id" :post="follow" :type="'following'" />
+        <!-- <follower-block class="col-sm-6 profile" :type="'following'" />
+        <follower-block class="col-sm-6 profile" :type="'following'" /> -->
         <!-- <div *ngFor="let profile of profileStore.Follow" class="col-sm-6 profile">
           <vrd-fpb [id]="id" [profile]="profile" [rout]="rout"></vrd-fpb>
         </div>-->
@@ -27,22 +33,38 @@ export default {
   components: {
     FollowerBlock
   },
+  data () {
+	  return {
+		  followers: [],
+		  pagination: Object,
+		  sort: 'DESC',
+		  page: 1,
+	  }
+  },
   methods: {
     getFollowing () {
-       this.$http.get(`/api/profile/subscriptions?created=DESC&page=1&limit=12`)
-      .then(res => {
-        this.sortTabs(res)
-      })
-      .catch(error => console.error(error))
-    }
-  },
-  created () {
-
-  }
+		this.$http.get(`/api/profile/subscriptions?created=${this.sort}&page=${this.page}&limit=12`)
+		.then(res => {
+			console.log(res)
+			this.followers = res.data.data
+			this.pagination = res.data.pagination
+			// this.sortTabs(res)
+		})
+		.catch(error => console.error(error))
+	},
+	updateSort (sort) {
+      this.sort = sort
+      this.page = 1
+      this.getFollowing()
+    },
+},
+	created () {
+		this.getFollowing()
+	}
 };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
   .sort {
     margin-bottom: 20px;
 

@@ -1,7 +1,7 @@
 <template>
   <article>
     <div class="picture">
-      <nuxt-link v-bind:to="post.slug">
+      <nuxt-link v-bind:to="`/${post.slug}`">
         <img v-bind:src="post.featured.landscape">
       </nuxt-link>
       <div class="information" :class="!padding ? 'with-padding' : 'without-padding'">
@@ -10,7 +10,7 @@
           <div class="row block wrapp">
             <!-- <h2 > -->
               <!-- add go to post page {id} -->
-            <nuxt-link class="title" v-bind:to="post.slug">{{ post.title }}</nuxt-link>
+            <nuxt-link class="title" v-bind:to="`/${post.slug}`">{{ post.title }}</nuxt-link>
             <!-- </h2> -->
           </div>
           <news-card-footer :author="post.author" :publishedAt="post.publishedAt" colorScheme="light" :pending="false" :showMarks="false" />

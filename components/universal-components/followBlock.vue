@@ -1,5 +1,5 @@
 <template>
-  <div class="container-fluid follow">
+  <div class="container-fluid followVerdict">
     <div class="wrapper-title-follow">
       <h5>
         <span>
@@ -71,7 +71,7 @@ export default {
   @import "../../assets/utils/variables";
   @import "../../assets/utils/colors";
 
-  .follow {
+  .followVerdict {
   // font-family: 'Open Sans', Helvetica Neue,Helvetica,Roboto,Arial,sans-serif;
   margin-bottom: 44px;
   position: sticky;
