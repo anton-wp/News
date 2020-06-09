@@ -3,7 +3,7 @@
     <span class="bywho">
       <div v-if="showPopup" id="1" class="user-popup active">
         <div>
-          <popup-user-info />
+          <popup-user-info :authorId="author.id" />
         </div>
       </div>
       <span v-if="!pending">By: </span>

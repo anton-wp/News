@@ -59,17 +59,24 @@
                     <user-profile
                         v-if="true"
                         @openLoginPopup="openLoginPopup"
-                        :authorization="true"
+                        :authorization="$store.getters.IS_TOKEN"
                     />
-                    <user-profile
+                    <!-- <user-profile
                         v-if="!true"
                         @openLoginPopup="openLoginPopup"
                         :authorization="false"
-                    />
+                    /> -->
                     <button
+						v-if="!$store.state.token"
                         class="signup-btn d-none d-md-block"
                         @click="openLoginPopup('signUp')"
                     >Sign Up</button>
+                    <button
+						v-if="$store.state.token"
+                        class="signup-btn d-none d-md-block"
+                    >
+						<nuxt-link class="link-button" to='/add'>Add Post</nuxt-link>
+					</button>
                 </div>
             </div>
             <!-- <div class="c_modal">
@@ -181,6 +188,10 @@ header {
     border: solid 1px $secondary-bgcolor;
 }
 
+.link-button {
+	text-decoration: none;
+	color: inherit;
+}
 .main-header {
     display: grid;
     grid-gap: 24px;

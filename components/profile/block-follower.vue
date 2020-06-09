@@ -10,7 +10,7 @@
     <!-- добавить данные для запроса модального окна, по примеру из списка постов -->
     <div class="col-12 col-lg-auto aboutAuthor" @mouseleave="hide">
       <div class="user-popup" v-if="showPopup">
-        <author-info />
+        <author-info :authorSlug="author.id" />
         <!-- <ng-container>
           <vrd-poi></vrd-poi>
         </ng-container> -->

@@ -276,7 +276,9 @@ export default {
                     this.$store.dispatch("SAVE_TOKEN", token);
                     this.$store.dispatch("SAVE_TOKEN_INFO", tokenDecoded);
 
-                    this.closeLoginPopup();
+					this.closeLoginPopup();
+
+					location.reload()
                 })
                 .catch(error => {
                     this.loading = false;

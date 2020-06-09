@@ -5,10 +5,10 @@
         <div class="row">
           <div class="col-8 col-padding-0">
             <!-- TODO go to user -->
-            <a class="user-name-span">displayName</a>
-            <span class="user-role-span">rank</span>
+            <a class="user-name-span">{{modal.displayName}}</a>
+            <span class="user-role-span">{{modal.rank}}</span>
             <span class="v-rap-span">
-              <span class="count-vraps">points</span>
+              <span class="count-vraps">{{modal.points}}</span>
               V-Rap
             </span>
             <span class="stat">
@@ -54,6 +54,32 @@
     </div> -->
   </div>
 </template>
+
+<script>
+export default {
+	props: {
+		authorId: String
+	},
+	data () {
+		return {
+			loading: false,
+			modal: Object
+		}
+	},
+	created () {
+		this.$http
+		.get(`/api/author/${this.authorId}/modal`)
+		.then(responce => {
+			console.log(responce.data.data);
+			this.modal = responce.data.data;
+		})
+		.catch(error => {
+			// this.loading = false;
+			// this.errorMessage = error.response.data.message;
+		});
+	}
+}
+</script>
 
 <style lang="scss">
 @import "../../assets/utils/variables";

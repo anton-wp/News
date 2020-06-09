@@ -5,7 +5,7 @@
     </div>
     <div class="element information" @mouseleave="hide">
       <div v-if="showPopup" class="user-popup">
-        <popup-user-info />
+        <!-- <popup-user-info :authorId="author.id" /> -->
       </div>
       <span class="name" @mouseover="toggle">
         Tracy Few
