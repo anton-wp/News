@@ -53,12 +53,12 @@ export default {
             }, 200);
         },
         logout() {
-			console.log(this.$cookies)
-            this.$cookies.remove("token");
+            // console.log(this.$cookies)
+            Cookies.remove("token");
             this.$store.dispatch("SAVE_TOKEN", null);
-			this.$store.dispatch("SAVE_TOKEN_INFO", null);
+            this.$store.dispatch("SAVE_TOKEN_INFO", null);
 
-			location.reload()
+            location.reload()
         }
     }
 };

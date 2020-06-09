@@ -25,7 +25,8 @@
     "nuxt": "^2.12.2",
     "sass-loader": "^8.0.2",
     "vue-click-outside": "^1.1.0",
-    "vue-server-renderer": "^2.6.11"
+    "vue-server-renderer": "^2.6.11",
+    "vuelidate": "^0.7.5"
   },
   "devDependencies": {
     "nodemon": "^1.18.9",

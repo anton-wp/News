@@ -28,8 +28,8 @@ module.exports = {
 	** Plugins to load before mounting the App
 	*/
 	plugins: [
-		{ src: '~/plugins' },
-		{ src: '~/plugins/token' }
+		{ src: '~/plugins/token' },
+		{ src: '~/plugins' }
 	],
 	/*
 	** Nuxt.js dev-modules
@@ -67,6 +67,8 @@ module.exports = {
 	 * load info to vuex
 	 */
 	router: {
+		middleware: "token-check",
+		// middleware: "auth",
 	},
 
 

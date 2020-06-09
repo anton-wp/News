@@ -1,9 +1,9 @@
 import Cookies from 'js-cookie';
 import jwt_decode from 'jwt-decode';
 
-export default function ({ store, app }) {
+export default function ({ store }) {
 
-	const token = app.$cookies.get('token')
+	const token = Cookies.get('token')
 
 	if (token) {
 

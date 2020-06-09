@@ -205,7 +205,7 @@
 import Social from "~/components/Login/social-button.vue";
 import { log } from "util";
 import axios from "axios";
-// import Cookies from "js-cookie";
+import Cookies from "js-cookie";
 import jwt_decode from "jwt-decode";
 
 export default {
@@ -271,7 +271,7 @@ export default {
                     const token = responce.data.token;
                     const tokenDecoded = jwt_decode(token);
 
-                    this.$cookies.set("token", token);
+                    Cookies.set("token", token);
 
                     this.$store.dispatch("SAVE_TOKEN", token);
                     this.$store.dispatch("SAVE_TOKEN_INFO", tokenDecoded);

@@ -65,18 +65,15 @@
                         v-if="!true"
                         @openLoginPopup="openLoginPopup"
                         :authorization="false"
-                    /> -->
+                    />-->
                     <button
-						v-if="!$store.state.token"
+                        v-if="!$store.getters.IS_TOKEN"
                         class="signup-btn d-none d-md-block"
                         @click="openLoginPopup('signUp')"
                     >Sign Up</button>
-                    <button
-						v-if="$store.state.token"
-                        class="signup-btn d-none d-md-block"
-                    >
-						<nuxt-link class="link-button" to='/add'>Add Post</nuxt-link>
-					</button>
+                    <button v-if="$store.getters.IS_TOKEN" class="signup-btn d-none d-md-block">
+                        <nuxt-link class="link-button" to="/add">Add Post</nuxt-link>
+                    </button>
                 </div>
             </div>
             <!-- <div class="c_modal">
@@ -140,9 +137,6 @@ export default {
             .get(`/api/menu/header`)
             .then(res => (this.categories = res.data.data))
             .catch(error => console.error(error));
-
-        console.log(this.$cookies.get("token"));
-
     },
     methods: {
         openLoginPopup(type) {
@@ -189,8 +183,8 @@ header {
 }
 
 .link-button {
-	text-decoration: none;
-	color: inherit;
+    text-decoration: none;
+    color: inherit;
 }
 .main-header {
     display: grid;

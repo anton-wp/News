@@ -12,66 +12,83 @@
                     </p>
                 </div>
             </div>
-            <form class="primary-form" id="addPostForm">
+
+            <form class="primary-form" id="addPostForm" @submit.prevent="submit">
                 <div class="row blockForm">
                     <div class="col-12 col-lg-7 col-xl-8">
-                        <div class="input-wrapper title">
-                            <label>
-                                Title
-                                <span class="required">*</span>
-                            </label>
-                            <textarea
-                                required="required"
-                                placeholder="Minimum title length: 50 characters"
-                                autocomplete="off"
-                                class="form-input"
-                                maxlength="120"
-                                rows="2"
-                            ></textarea>
-                            <div class="counter">
-                                <span>0/</span>
-                                <span>120</span>
-                            </div>
-                        </div>
-                        <div class="error-notification">This field is required</div>
-                        <div class="error-notification">Minimum title length: 50 characters</div>
 
-                        <div class="input-wrapper">
-                            <label>Subtitle(optional)</label>
-                            <textarea
-                                required="required"
-                                placeholder="Minimum subtitle length: 80 characters"
-                                autocomplete="off"
-                                class="form-input"
-                                maxlength="120"
-                                rows="2"
-                            ></textarea>
-                            <div class="counter">
-                                <span>0/</span>
-                                <span>160</span>
+                        <div class="add-field" v-if="fields.title">
+                            <div class="input-wrapper title">
+                                <label>
+                                    Title
+                                    <span class="required">*</span>
+                                </label>
+                                <textarea
+                                    placeholder="Minimum title length: 50 characters"
+                                    class="form-input"
+                                    maxlength="120"
+                                    rows="2"
+                                    v-model.trim="$v.title.$model"
+                                ></textarea>
+                                <div class="counter">
+                                    <span>0/</span>
+                                    <span>120</span>
+                                </div>
                             </div>
+                            <div
+                                class="error-notification"
+                                v-if="!$v.title.required"
+                            >This field is required</div>
+                            <div
+                                class="error-notification"
+                                v-if="!$v.title.minLength"
+                            >Minimum title length: 50 characters</div>
                         </div>
 
-                        <div class="input-wrapper">
-                            <label>
-                                Post Content
-                                <span class="required">*</span>
-                            </label>
-                            <textarea
-                                required="required"
-                                class="form-input with-border"
-                                maxlength="10000"
-                            ></textarea>
-                            <div class="errorBody radius">
-                                <div class="body"></div>
+                        <div class="add-field" v-if="fields.subTitle">
+                            <div class="input-wrapper">
+                                <label>Subtitle(optional)</label>
+                                <textarea
+                                    placeholder="Minimum title length: 50 characters"
+                                    class="form-input"
+                                    maxlength="120"
+                                    rows="2"
+                                    v-model.trim="$v.subtitle.$model"
+                                ></textarea>
+                                <div class="counter">
+                                    <span>0/</span>
+                                    <span>160</span>
+                                </div>
                             </div>
-                            <div class="counter radius">
-                                <span>0/</span>
-                                <span>10000</span>
-                            </div>
+                            <div
+                                class="error-notification"
+                                v-if="!$v.subtitle.minLength"
+                            >Minimum title length: 50 characters</div>
                         </div>
-                        <div class="error-notification">This field is required</div>
-                        <div class="error-notification">Minimum content length: 350 words</div>
+
+                        <div class="add-field" v-if="fields.body">
+                            <div class="input-wrapper" v-if="fields.body">
+                                <label>
+                                    Post Content
+                                    <span class="required">*</span>
+                                </label>
+                                <textarea
+                                    required="required"
+                                    class="form-input with-border"
+                                    maxlength="10000"
+                                    v-model.trim="$v.body.$model"
+                                ></textarea>
+                                <div class="radius">
+                                    <div class="body"></div>
+                                </div>
+                                <div class="counter radius">
+                                    <span>0/</span>
+                                    <span>10000</span>
+                                </div>
+                            </div>
+                            <div class="error-notification" v-if="!$v.body.required && $v.body.$dirty">This field is required</div>
+                            <div class="error-notification" v-if="!$v.body.minLength">Minimum content length: 350 words</div>
+                        </div>
                     </div>
 
                     <div class="col-12 col-lg-5 col-xl-4">
@@ -87,6 +104,9 @@
                                             <div class="select-wrap month-select">
                                                 <div class="arrow-date">
                                                     <!-- <fa-icon [icon]="faCaretDown"></fa-icon> -->
+                                                    <svg class="icon" width="17" height="17">
+                                                        <use xlink:href="#caret-down" />
+                                                    </svg>
                                                 </div>
                                                 <select class="form-input select">
                                                     <option value="june">june</option>
@@ -99,6 +119,9 @@
                                             <div class="select-wrap day-select">
                                                 <div class="arrow-date">
                                                     <!-- <fa-icon [icon]="faCaretDown"></fa-icon> -->
+                                                    <svg class="icon" width="17" height="17">
+                                                        <use xlink:href="#caret-down" />
+                                                    </svg>
                                                 </div>
                                                 <select class="form-input select">
                                                     <option value="1">13</option>
@@ -112,6 +135,9 @@
                                             <div class="select-wrap year-select">
                                                 <div class="arrow-date">
                                                     <!-- <fa-icon [icon]="faCaretDown"></fa-icon> -->
+                                                    <svg class="icon" width="17" height="17">
+                                                        <use xlink:href="#caret-down" />
+                                                    </svg>
                                                 </div>
                                                 <select class="form-input select">
                                                     <option value="2020">2020</option>
@@ -135,6 +161,9 @@
                                                 </select>
                                                 <div class="arrow-date">
                                                     <!-- <fa-icon [icon]="faCaretDown"></fa-icon> -->
+                                                    <svg class="icon" width="17" height="17">
+                                                        <use xlink:href="#caret-down" />
+                                                    </svg>
                                                 </div>
                                             </div>
                                             <div class="time-dots">:</div>
@@ -147,6 +176,9 @@
                                                 </select>
                                                 <div class="arrow-date">
                                                     <!-- <fa-icon [icon]="faCaretDown"></fa-icon> -->
+                                                    <svg class="icon" width="17" height="17">
+                                                        <use xlink:href="#caret-down" />
+                                                    </svg>
                                                 </div>
                                             </div>
                                         </div>
@@ -158,6 +190,9 @@
                             <div class="arrow">
                                 <span>
                                     <!-- <fa-icon [icon]="faCaretDown"></fa-icon> -->
+                                    <svg class="icon" width="17" height="17">
+                                        <use xlink:href="#caret-down" />
+                                    </svg>
                                 </span>
                             </div>
                             <label>
@@ -174,6 +209,9 @@
                         <div class="input-wrapper">
                             <div class="arrow">
                                 <!-- <fa-icon [icon]="faCaretDown"></fa-icon> -->
+                                <svg class="icon" width="17" height="17">
+                                    <use xlink:href="#caret-down" />
+                                </svg>
                             </div>
                             <label>
                                 Verdict Options
@@ -270,8 +308,6 @@
                             <input type="file" id="file" />
                         </div>
 
-
-
                         <!-- <div *ngIf="!loadingImg"> -->
                         <!-- <div class="loader" *ngIf="loaded" style="height: 834px;">
                                 <div class="lds-ellipsis">
@@ -366,6 +402,80 @@
     </div>
 </template>
 
+<script>
+import { required, minLength, maxLength } from "vuelidate/lib/validators";
+
+export default {
+    data() {
+        return {
+            title: "",
+            submitStatus: '',
+            body: '',
+            fields: {
+                title: false,
+                subTitle: false,
+                body: false,
+                tags: false,
+                author: false,
+                category: false,
+                verdictOption: false,
+                forcePublish: false,
+                publishedAt: false,
+                source: false,
+                featuredImage: false,
+                cropper: false
+            }
+        };
+    },
+    validations: {
+        title: {
+            required,
+            minLength: minLength(50),
+            maxLength: maxLength(120)
+        },
+        subtitle: {
+            minLength: minLength(50)
+        },
+        body: {
+            required,
+            minLength: minLength(160),
+            maxLength: maxLength(1000)
+        },
+    },
+    methods: {
+        submit() {
+            console.log("submit!");
+            this.$v.$touch();
+            if (this.$v.$invalid) {
+                this.submitStatus = "ERROR";
+            } else {
+                // do your submit logic here
+                this.submitStatus = "PENDING";
+                setTimeout(() => {
+                    this.submitStatus = "OK";
+                }, 500);
+            }
+        },
+
+        addFields() {
+            this.$http
+                .get("api/profile/post-fields?action=create")
+                .then(resp => {
+                    this.fields = resp.data.fields;
+                    console.log(this.fields);
+                })
+                .catch(error => {
+                    // this.errorMessage = error.response.data.message;
+                });
+        }
+    },
+    mounted() {
+        this.addFields();
+    }
+};
+</script>
+
+
 <style lang="scss" scoped>
 @import "../assets/utils/variables";
 @import "../assets/utils/colors";
@@ -444,8 +554,8 @@
 
 .arrow-date {
     position: absolute;
-    right: 7px;
-    top: 5px;
+    right: 1px;
+    top: 3px;
     pointer-events: none;
 }
 
