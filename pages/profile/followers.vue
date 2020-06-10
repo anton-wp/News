@@ -11,7 +11,7 @@
             top
           </button>
         </div>
-        <follower-block :type="'followers'" />
+        <!-- <follower-block :type="'followers'" /> -->
         <!-- <div *ngFor="let profile of profileStore.Follow" class="col-sm-6 profile">
           <vrd-fpb [id]="id" [profile]="profile" [rout]="rout"></vrd-fpb>
         </div> -->

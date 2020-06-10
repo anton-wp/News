@@ -4,30 +4,35 @@
       <img
         class="default-avatar"
         src="/image/default-avatar-original.png"
+		v-if="!post.avatar"
       >
-      <!-- <img *ngIf="profile.avatar" class="default-avatar" [src]="profile.avatar?.medium" /> -->
+      <img
+		class="default-avatar"
+	  	v-if="post.avatar"
+		v-bind:src="post.avatar.medium"
+		>
     </div>
     <!-- добавить данные для запроса модального окна, по примеру из списка постов -->
     <div class="col-12 col-lg-auto aboutAuthor" @mouseleave="hide">
       <div class="user-popup" v-if="showPopup">
-        <author-info :authorSlug="author.id" />
+        <author-info :authorId="post.id" />
         <!-- <ng-container>
           <vrd-poi></vrd-poi>
         </ng-container> -->
       </div>
-      <a class="d-flex justify-content-center justify-content-lg-start" @mouseover="toggle">
-        firstName lastName
-      </a>
+      <span class="d-flex justify-content-center justify-content-lg-start" @mouseover="toggle">
+        <nuxt-link v-bind:to="`/m/${post.slug}`">{{post.firstName}} {{post.lastName}}</nuxt-link>
+      </span>
       <div class="d-flex justify-content-center justify-content-lg-start V-rep">
-        <span class="counterV-rep">points</span>
+        <span class="counterV-rep">{{post.points}}</span>
         <span>V-rep</span>
       </div>
       <div class="d-flex justify-content-center justify-content-lg-start">
         <span class="verdicts-posts">
           <!-- verdictsCount  -->
-          0 verdicts /
+          {{post.verdictsCount}} verdicts /
           <!-- postsCount  -->
-          0 posts
+          {{post.postsCount}} posts
         </span>
       </div>
       <div v-if="type === 'following'" class="d-flex justify-content-center justify-content-lg-start">
@@ -56,7 +61,8 @@ export default {
     AuthorInfo
   },
   props: {
-    type: String
+	type: String,
+	post: Object
   },
   data () {
     return {
