@@ -16,7 +16,6 @@
             <form class="primary-form" id="addPostForm" @submit.prevent="submit">
                 <div class="row blockForm">
                     <div class="col-12 col-lg-7 col-xl-8">
-
                         <div class="add-field" v-if="fields.title">
                             <div class="input-wrapper title">
                                 <label>
@@ -37,11 +36,11 @@
                             </div>
                             <div
                                 class="error-notification"
-                                v-if="!$v.title.required"
+                                v-if="validateError && !$v.title.required"
                             >This field is required</div>
                             <div
                                 class="error-notification"
-                                v-if="!$v.title.minLength"
+                                v-if="validateError && !$v.title.minLength"
                             >Minimum title length: 50 characters</div>
                         </div>
 
@@ -62,7 +61,7 @@
                             </div>
                             <div
                                 class="error-notification"
-                                v-if="!$v.subtitle.minLength"
+                                v-if="validateError && !$v.subtitle.minLength"
                             >Minimum title length: 50 characters</div>
                         </div>
 
@@ -72,12 +71,14 @@
                                     Post Content
                                     <span class="required">*</span>
                                 </label>
-                                <textarea
-                                    required="required"
+
+                                <editor />
+
+                                <!-- <textarea
                                     class="form-input with-border"
                                     maxlength="10000"
                                     v-model.trim="$v.body.$model"
-                                ></textarea>
+                                ></textarea>-->
                                 <div class="radius">
                                     <div class="body"></div>
                                 </div>
@@ -86,8 +87,14 @@
                                     <span>10000</span>
                                 </div>
                             </div>
-                            <div class="error-notification" v-if="!$v.body.required && $v.body.$dirty">This field is required</div>
-                            <div class="error-notification" v-if="!$v.body.minLength">Minimum content length: 350 words</div>
+                            <div
+                                class="error-notification"
+                                v-if="validateError && !$v.body.required"
+                            >This field is required</div>
+                            <div
+                                class="error-notification"
+                                v-if="validateError && !$v.body.minLength"
+                            >Minimum content length: 350 words</div>
                         </div>
                     </div>
 
@@ -385,11 +392,7 @@
                                 Featured Image source
                                 <span class="required">*</span>
                             </label>
-                            <input
-                                required="required"
-                                class="form-input"
-                                placeholder="e.g Instagram, Youtube, etc"
-                            />
+                            <input class="form-input" placeholder="e.g Instagram, Youtube, etc" />
                             <label class="require">
                                 <span class="required">*</span> required fields
                             </label>
@@ -404,13 +407,16 @@
 
 <script>
 import { required, minLength, maxLength } from "vuelidate/lib/validators";
+// import Header from '@editorjs/header'
 
 export default {
     data() {
         return {
+            config: {},
             title: "",
-            submitStatus: '',
-            body: '',
+            submitStatus: "",
+            body: "",
+            text: "",
             fields: {
                 title: false,
                 subTitle: false,
@@ -424,7 +430,8 @@ export default {
                 source: false,
                 featuredImage: false,
                 cropper: false
-            }
+            },
+            validateError: false
         };
     },
     validations: {
@@ -440,17 +447,17 @@ export default {
             required,
             minLength: minLength(160),
             maxLength: maxLength(1000)
-        },
+        }
     },
     methods: {
         submit() {
             console.log("submit!");
             this.$v.$touch();
             if (this.$v.$invalid) {
-                this.submitStatus = "ERROR";
+                this.validateError = true;
             } else {
                 // do your submit logic here
-                this.submitStatus = "PENDING";
+                this.validateError = false;
                 setTimeout(() => {
                     this.submitStatus = "OK";
                 }, 500);

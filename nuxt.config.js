@@ -29,7 +29,8 @@ module.exports = {
 	*/
 	plugins: [
 		{ src: '~/plugins/token' },
-		{ src: '~/plugins' }
+		{ src: '~/plugins' },
+		{ src: '~/plugins/editor', ssr: false },
 	],
 	/*
 	** Nuxt.js dev-modules
@@ -47,7 +48,6 @@ module.exports = {
 		// Doc: https://github.com/nuxt-community/dotenv-module
 		'@nuxtjs/dotenv',
 
-		'cookie-universal-nuxt'
 	],
 	/*
 	** Axios module configuration
