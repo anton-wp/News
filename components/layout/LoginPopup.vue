@@ -202,7 +202,7 @@
 </template>
 
 <script>
-import Social from "~/components/Login/social-button.vue";
+import Social from "~/components/login/social-button.vue";
 import { log } from "util";
 import axios from "axios";
 import Cookies from "js-cookie";
