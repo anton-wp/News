@@ -75,7 +75,6 @@ export default {
 		this.$http
 		.get(`/api/author/${this.authorId}/modal`)
 		.then(responce => {
-			console.log(responce.data.data);
 			this.loading = false
 			this.modal = responce.data.data;
 		})

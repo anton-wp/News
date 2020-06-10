@@ -1,7 +1,6 @@
 <template>
   <div>
     <form class="primary-form">
-      <!-- [formGroup]="settingForm" id="settingForm" -->
       <div class="container account">
         <div class="row">
           <div class="col-12 blockTitle">
@@ -15,27 +14,18 @@
                 type="text"
                 placeholder="Email"
               />
-              <label class="col-4 col-sm-3 col-lg-2 ">
+              <label class="col-4 col-sm-3 col-lg-2 labelRadio">
                 <span class="custom-radio">
-					<div class="active-radio">
-
-					</div>
-                  <!-- <fa-icon *ngIf="this.settingForm.get('emailType').value != 'public'" [icon]="faCircle"></fa-icon>
-                  <fa-icon *ngIf="this.settingForm.get('emailType').value === 'public'" [icon]="faDotCircle"></fa-icon>-->
+                	<div class="active-radio" v-if="emailType === 'public'" />
                 </span>
-                <!-- formControlName="email" -->
-				<!-- name="emailType"  -->
-                <input type="radio" class="radioEmail" value="public" />
+                <input type="radio" class="radioEmail" id="emailType" value="public" v-model="emailType" />
                 public
               </label>
-              <label class="col-4 col-sm-3 col-lg-2">
+              <label class="col-4 col-sm-3 col-lg-2 labelRadio">
                 <span class="custom-radio">
-                  <!-- <fa-icon *ngIf="this.settingForm.get('emailType').value != 'private'" [icon]="faCircle"></fa-icon>
-                  <fa-icon *ngIf="this.settingForm.get('emailType').value === 'private'" [icon]="faDotCircle"></fa-icon>-->
+                	<div class="active-radio" v-if="emailType === 'private'" />
                 </span>
-                <!-- formControlName="emailType" -->
-				<!-- name="emailType"  -->
-                <input type="radio" class="radioEmail" value="private" />
+                <input type="radio" class="radioEmail" id="emailType" value="private" v-model="emailType" />
                 private
               </label>
             </div>
@@ -102,43 +92,27 @@
             </div>
             <div class="row container-fluid string">
               <h5 class="col-12 col-xl-3 text-xl-right">Profile visibility</h5>
-              <label class="col-4 col-sm-3 col-lg-2">
-                <span class="custom-radio">
-                  <!-- <fa-icon
-                    *ngIf="this.settingForm.get('profileVisibility').value != 'public'"
-                    [icon]="faCircle"
-                  ></fa-icon>
-                  <fa-icon
-                    *ngIf="this.settingForm.get('profileVisibility').value === 'public'"
-                    [icon]="faDotCircle"
-                  ></fa-icon> -->
+              <label class="col-4 col-sm-3 col-lg-2 labelRadio">
+               <span class="custom-radio">
+					<div class="active-radio" v-if="profileVisibility === 'public'" />
                 </span>
-                  <!-- formControlName="profileVisibility" -->
-                  <!-- name="profileVisibility" -->
                 <input
                   type="radio"
                   class="profileVisibility"
                   value="public"
+				  v-model="profileVisibility"
                 />
                 public
               </label>
-              <label class="col-4 col-sm-3 col-lg-2">
+              <label class="col-4 col-sm-3 col-lg-2 labelRadio">
                 <span class="custom-radio">
-                  <!-- <fa-icon
-                    *ngIf="this.settingForm.get('profileVisibility').value != 'private'"
-                    [icon]="faCircle"
-                  ></fa-icon>
-                  <fa-icon
-                    *ngIf="this.settingForm.get('profileVisibility').value === 'private'"
-                    [icon]="faDotCircle"
-                  ></fa-icon> -->
+					<div class="active-radio" v-if="profileVisibility === 'private'" />
                 </span>
-                  <!-- formControlName="profileVisibility" -->
-                  <!-- name="profileVisibility" -->
-                  <!-- value="private" -->
                 <input
                   type="radio"
                   class="profileVisibility"
+				  value="private"
+				  v-model="profileVisibility"
                 />
                 private
               </label>
@@ -150,9 +124,11 @@
                   (click)="visibleChangePasswordBlock()" -->
                 <button
                   class="col-12 text-left button-change"
+                  v-if="!changePassword"
+                  @click="visibleChangePasswordBlock"
                 >change password</button>
 				<!-- *ngIf="changePasswordBlock" -->
-                <div style="margin-top: 25px;">
+                <div style="margin-top: 25px;" v-if="changePassword">
                     <!-- formControlName="oldPassword" -->
                   <input
                     class="col-12 col-sm-4 col-xl-4"
@@ -173,7 +149,7 @@
                   />
                   <div class="block-button text-right">
 					   <!-- (click)="visibleChangePasswordBlock()" -->
-                    <button class="cancel">cancel</button>
+                    <button class="cancel" @click="visibleChangePasswordBlock">cancel</button>
 					<!-- (click)="changePassword()"  -->
                     <button class="update">update profile</button>
                   </div>
@@ -192,21 +168,11 @@
           <div class="row container-fluid string">
             <h4 class="col-12 col-xl-3 text-xl-right">Linked accounts</h4>
             <div class="col-12 col-sm-12 col-xl-9">
-              <a class="social facebook">
-                <!-- <fa-icon [icon]="faFacebookF"></fa-icon> -->
-                <p>connect facebook</p>
-              </a>
-              <a class="social google">
-                <!-- <fa-icon [icon]="faGoogle"></fa-icon> -->
-                <p>connect google</p>
-              </a>
-              <a class="social twiter">
-                <!-- <fa-icon [icon]="faTwitter"></fa-icon> -->
-                <p>connect twitter</p>
-              </a>
-              <a class="social linkedin">
-                <!-- <fa-icon [icon]="faLinkedinIn"></fa-icon> -->
-                <p>connect linkedin</p>
+              <a class="social" :class="social" v-for="social in socialProfilesAccount" :key="social">
+                <svg width="21" height="21">
+					<use v-bind:xlink:href="`#${social}`" />
+				</svg>
+                <p>connect {{social}}</p>
               </a>
             </div>
 
@@ -216,31 +182,13 @@
       </div>
       <hr />
       <div class="container">
-        <div class="row container-fluid string">
-          <h5 class="col-12 col-xl-3 text-xl-right">Facebook Profile</h5>
+        <div class="row container-fluid string" v-for="profile in socialProfiles" :key="profile" style="text-transform: capitalize;">
+          <h5 class="col-12 col-xl-3 text-xl-right">{{profile}} Profile</h5>
             <!-- formControlName="facebookProfile" -->
           <input
             class="col-12 col-sm-5 col-xl-3"
             type="text"
-            placeholder="https://facebook.com/profile"
-          />
-        </div>
-        <div class="row container-fluid string">
-          <h5 class="col-12 col-xl-3 text-xl-right">Twitter Profile</h5>
-            <!-- formControlName="twitterProfile" -->
-          <input
-            class="col-12 col-sm-5 col-xl-3"
-            type="text"
-            placeholder="https://twiter.com/profile"
-          />
-        </div>
-        <div class="row container-fluid string">
-          <h5 class="col-12 col-xl-3 text-xl-right">LinkedIn Profile</h5>
-            <!-- formControlName="linkedInProfile" -->
-          <input
-            class="col-12 col-sm-5 col-xl-3"
-            type="text"
-            placeholder="https://linkedin.com/profile"
+            v-bind:placeholder="`https://${profile}.com/profile`"
           />
         </div>
       </div>
@@ -253,16 +201,81 @@
               (click)="changeActive(category.id)" -->
             <label
               class="col-12 col-sm-6 col-md-4"
+			  v-for="category in followingCategories"
+			  :key="category.id"
             >
-              <!-- <fa-icon *ngIf="!category.active" [icon]="faSquare"></fa-icon>
-              <fa-icon *ngIf="category.active" [icon]="faCheckSquare"></fa-icon> -->
-              category.name
+				<div class="categoryCheckbox">
+				  <svg width="10" height="10" v-if="followingCategoriesActive.filter(follow => follow === category.id).length > 0">
+					<use xlink:href="#checkbox" />
+				  </svg>
+				</div>
+				<input type="checkbox" id="category.id" :value="category.id" v-model="followingCategoriesActive">
+				<div class="categoryTitle">{{category.name}}</div>
             </label>
           </div>
         </div>
       </div>
       <hr />
+	  <div class="container">
+		<div class="row">
+			<div class="col-12 blockTitle">
+				<h4 class="title">Notification settings</h4>
+			</div>
+			<div class="row container-fluid string">
+				<h4 class="col-12 col-xl-3 text-xl-right">Send me notifications when</h4>
+				<div class="col-12 col-sm-12 col-xl-9">
+					<div class="row" v-for="string in notificationSettings" :key="string.id">
+						<!-- <div class="col-12" > -->
+							<h6 class="col-12 col-lg-5 col-xl-4">
+								{{string.title}}
+							</h6>
+							<div class="col-12 col-lg-7 col-xl-8 d-flex flex-column flex-sm-row justify-content-around align-items-sm-center">
+								<label class="labelRadio" v-for="(setting, key, index) in settings" :key="index">
+									<span class="custom-radio">
+									  <div class="active-radio" v-if="setting === string.settings" />
+									</span>
+									<input type="radio" class="radioEmail" :value="setting" v-model="string.settings">
+									{{setting}}
+								</label>
+							</div>
+						<!-- </div> -->
 
+					</div>
+
+					</div>
+				</div>
+				<!-- <h4 class="col-12 col-xl-3 text-xl-right ">Send Admin notifications when</h4>
+				<div class="col-12 col-sm-12 col-xl-9">
+				<div class="row">
+					<h6 class="col-12 col-lg-5 col-xl-4">
+					someone adds new post
+					</h6>
+					<div class="col-12 col-lg-7 col-xl-8 d-flex flex-column flex-sm-row justify-content-end align-items-sm-center">
+					<label class="radioBottom">
+						<span class="custom-radio">
+						<fa-icon *ngIf="this.settingForm.get('addsNewPost').value != 'display'" [icon]="faCircle"></fa-icon>
+						<fa-icon *ngIf="this.settingForm.get('addsNewPost').value === 'display'" [icon]="faDotCircle"></fa-icon>
+						</span>
+						<input type="radio" class="radioEmail" value="display" name="addsNewPost" formControlName="addsNewPost">
+						display
+					</label>
+					<label class="radioBottom">
+						<span class="custom-radio">
+						<fa-icon *ngIf="this.settingForm.get('addsNewPost').value != 'hide'" [icon]="faCircle"></fa-icon>
+						<fa-icon *ngIf="this.settingForm.get('addsNewPost').value === 'hide'" [icon]="faDotCircle"></fa-icon>
+						</span>
+						<input type="radio" class="radioEmail" value="hide" name="addsNewPost" formControlName="addsNewPost">
+						hide
+					</label>
+					</div>
+				</div>
+				</div>
+				<div class="bottom-button"> -->
+				<!-- <button class="update" (click)='update()' >update profile</button> -->
+
+
+			</div>
+		</div>
     </form>
 
     <!-- <div *ngIf="profileStore.modal" class="c_modal">
@@ -309,11 +322,76 @@
 
 <script>
 export default {
-  layout: "profile"
+  layout: "profile",
+  data () {
+    return {
+      emailType: '',
+	  changePassword: false,
+	  socialProfilesAccount: ['facebook', 'google', 'twitter', 'linkedin'],
+	  socialProfiles: ['facebook', 'twitter', 'linkedin'],
+	  followingCategories: [],
+	  followingCategoriesActive: [],
+	  profile: Object,
+	  profileVisibility: '',
+	  settings: ['immediately','daily','weekly','never'],
+	  notificationSettings:{
+		email_post_published:  {
+			title: 'my post is published',
+			settings: ''
+		},
+		email_post_replies:  {
+			title: 'someone replies to my verdict/comment/reply',
+			settings: ''
+		},
+		email_user_follow:  {
+			title: 'someone follows me',
+			settings: ''
+		},
+		email_recive_point:  {
+			title: 'my post is published',
+			settings: ''
+		},
+		email_verdict_replies:  {
+			title: 'gained V-rep',
+			settings: ''
+		},
+	  }
+    }
+  },
+  created () {
+	  this.getFollowingCategories()
+	  this.getProfileFull()
+  },
+  methods: {
+    visibleChangePasswordBlock () {
+      this.changePassword = !this.changePassword;
+	},
+	getFollowingCategories () {
+		this.$http.get(`/api/categories/list`)
+		.then(res => {
+			this.followingCategories = res.data.data
+		})
+		.catch(error => console.error(error))
+	},
+	getProfileFull () {
+		this.$http.get(`/api/profile/full`)
+		.then(res => {
+			this.profile = res.data.data
+			this.notificationSettings.email_post_published.settings = res.data.data.settings.email_post_published;
+			this.notificationSettings.email_post_replies.settings = res.data.data.settings.email_post_replies;
+			this.notificationSettings.email_user_follow.settings = res.data.data.settings.email_user_follow;
+			this.notificationSettings.email_recive_point.settings = res.data.data.settings.email_recive_point;
+			this.notificationSettings.email_verdict_replies.settings = res.data.data.settings.email_verdict_replies;
+
+			this.followingCategoriesActive = res.data.data.categories;
+		})
+		.catch(error => console.error(error))
+	},
+  }
 };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .primary-form {
   font-family: "Open Sans", Helvetica Neue, Helvetica, Roboto, Arial, sans-serif;
   .mb-2 {
@@ -321,9 +399,13 @@ export default {
       font-family: Lato;
     }
   }
-  label {
+  .labelRadio {
 	display: flex;
     align-items: center;
+
+	span{
+		margin-right: 5px;
+	}
   }
   .custom-radio {
 	  width: 16px;
@@ -340,6 +422,24 @@ export default {
 		 background-color: black;
 		 border-radius: 5px;
 	  }
+  }
+  .categoryCheckbox{
+	width: 16px;
+	height: 16px;
+	display: inline-flex;
+    justify-content: center;
+    align-items: center;
+	vertical-align: middle;
+	border: 1px solid #0a0a0a;
+    border-radius: 5px;
+
+	svg{
+		display: block;
+	}
+  }
+  .categoryTitle {
+	  display: inline-block;
+	  vertical-align: middle;
   }
   .title {
     margin-top: 15px;
@@ -401,8 +501,8 @@ export default {
       .right {
         float: right;
       }
-      fa-icon {
-        color: #fff;
+      svg {
+        fill: #fff;
       }
     }
     .facebook:hover {
@@ -411,7 +511,7 @@ export default {
     .google:hover {
       background-color: #c63224;
     }
-    .twiter:hover {
+    .twitter:hover {
       background-color: #2795e9;
     }
     .linkedin:hover {
