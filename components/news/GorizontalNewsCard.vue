@@ -3,19 +3,19 @@
     <div class="row w-100 mx-0">
       <div class="pad0-image col-12 col-sm-12 col-md-6 col-lg-6 pl-0">
         <!-- add go to post page {id} -->
-        <nuxt-link :class="'image-'+type" v-bind:to="post.slug">
+        <nuxt-link :class="'image-'+type" :to="`/${post.slug}`">
           <img v-bind:src="post.featured.landscape" class="post-image" alt="">
         </nuxt-link>
       </div>
       <div class="pad0-image col-12 col-sm-12 col-md-6 col-lg-6 px-0">
         <div class="information padding0">
           <div class="container-fluid">
-            <news-card-header :category="post.category" colorScheme="dark" />
+            <news-card-header v-if="!tag" :category="post.category" colorScheme="dark" />
             <div class="row block wrapp">
               <!-- <h2  > -->
                 <!-- add go to post page {id} -->
-              <nuxt-link class="title" v-bind:to="post.slug" v-if="type === 'full-block'">{{ post.title }}</nuxt-link>
-              <nuxt-link class="title" v-bind:to="post.slug" v-if="type === 'minimal-block'">{{ post.title }}</nuxt-link>
+              <nuxt-link class="title" :to="`/${post.slug}`" v-if="type === 'full-block'">{{ post.title }}</nuxt-link>
+              <nuxt-link class="title" :to="`/${post.slug}`" v-if="type === 'minimal-block'">{{ post.title }}</nuxt-link>
                 <!-- <nuxt-link v-if="type === 'minimal-block'">{{ post.title }}</nuxt-link> -->
               <!-- </h2> -->
             </div>
@@ -25,7 +25,7 @@
             <div v-if="type === 'full-block' && !shortContent" class="row wrapp">
               <span class="about-news">{{ post.shortContent }}[...]</span>
             </div>
-            <news-card-footer :author="post.author" :publishedAt="post.publishedAt" colorScheme="light" :pending="false" :showMarks="false" />
+            <news-card-footer :author="post.author" :tag="tag" :publishedAt="post.publishedAt" colorScheme="light" :pending="false" :showMarks="false" />
           </div>
         </div>
       </div>
@@ -45,7 +45,8 @@ export default {
     type: String,
     background: Boolean,
     shortContent: Boolean,
-    post: Object
+		post: Object,
+		tag: Boolean
   },
 }
 </script>

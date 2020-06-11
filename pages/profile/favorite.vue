@@ -182,7 +182,7 @@ a {
   position: absolute;
   // top: -45px;
   // width: 100px;
-  z-index: 1;
+  z-index: 3;
   max-width: 20em;
   min-height: 300px;
   min-width: 280px;

@@ -75,7 +75,7 @@
       <div class="fs-range-wrap">
         <div class="fs-range" />
       </div>
-      <button class="clear default js--change-font">
+      <button class="clear default js--change-font" @click="changeFontSize">
         A
         <span class="plusMinus">
           <span class="clear plus">+</span>
@@ -136,9 +136,12 @@ export default {
     }
   },
   methods: {
+		changeFontSize () {
+			this.$emit('changeFontSize')
+		},
     toggle () {
       this.visibleMobSocial = true
-    },
+		},
     hide () {
       this.visibleMobSocial = false
     }
