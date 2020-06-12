@@ -5,23 +5,24 @@
         <img
           class="default-avatar"
           src="/image/default-avatar-original.png"
+					v-if="!$store.state.profile.avatar"
         >
-        <!-- <img
-          *ngIf="profileStore.profile?.avatar?.medium"
-          class="default-avatar"
-          [src]="profileStore.profile?.avatar?.medium"
-        /> -->
+				<img
+					:src="$store.state.profile.avatar.big"
+					class="default-avatar"
+					v-if="$store.state.profile.avatar"
+          />
       </div>
       <div class="author">
         <h4 class="your-name">
-          firstName lastName
+          {{$store.state.profile.firstName}} {{$store.state.profile.lastName}}
         </h4>
         <p class="member-since">
           rank since:
-          time
-          <!-- <time
-            datetime="{{profileStore.profile.createdAt}}"
-          >{{profileStore.profile.createdAt | date:'MMM d,y h:mm a' }}</time> -->
+          {{$store.state.profile.rank}}
+          <time class="member-since">
+        		{{ new Date($store.state.profile.createdAt).toDateString()}}
+        	</time>
         </p>
       </div>
     </div>

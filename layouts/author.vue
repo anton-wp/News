@@ -45,6 +45,12 @@ export default {
     Tabs
     // LoginPopup
 	},
+	created () {
+		this.$store.dispatch('CLEAR_PROFILE');
+	},
+	destroyed () {
+		this.$store.dispatch('CLEAR_PROFILE');
+	},
 }
 </script>
 
