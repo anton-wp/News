@@ -21,7 +21,7 @@
               </div>
             </template>
             <div class="col-12 button-block">
-              <button class="loadMore" v-if="pagination.next" @click="morePosts()">
+              <button class="loadMore" v-if="pagination && pagination.next" @click="morePosts()">
                 Load More
               </button>
             </div>
@@ -44,7 +44,7 @@ export default {
     return {
       sort: 'DESC',
       posts: [],
-      pagination: Object,
+      pagination: null,
       page: 1,
     }
   },

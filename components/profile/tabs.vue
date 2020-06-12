@@ -1,8 +1,7 @@
 <template>
   <div class="tabs">
     <ul>
-      <li class="menu" v-for="item in tabs" :key="item.title">
-        <!-- <span>comments</span> -->
+      <li class="menu" v-for="item in $store.state.tabs" :key="item.title">
         <nuxt-link class="link" v-bind:to="item.children ? '' : `${path}${item.path}`">
           <span
             class="menu-block"
@@ -29,11 +28,6 @@
             </svg>
           </span>
         </nuxt-link>
-
-        <!-- <fa-icon *ngIf="!item.click && item.children" class="icon" (click)="expandMenu(item.title)" [icon]="faSortDown"></fa-icon>
-
-        <fa-icon *ngIf="item.click && item.children" class="icon" (click)="expandMenu(item.title)" [icon]="faSortUp"></fa-icon>-->
-
         <ul class="blockSubMenu" v-if="item.children && item.status">
           <li class="subMenu" v-for="subTabs in item.children" :key="subTabs.title">
             <nuxt-link class="link" v-bind:to="`${path}${subTabs.path}`">
@@ -62,16 +56,13 @@ import { log } from "util";
 export default {
   data() {
     return {
-			tabs: [],
 			slug: String,
-			path: String
+			path: '/profile'
     };
   },
   methods: {
     openCloseTabs(id) {
-      this.tabs.map(tab =>
-        tab.title === id ? (tab.status = !tab.status) : null
-      );
+			this.$store.dispatch('OPEN_CLOSE_TABS', id);
     },
     activTabsStart(res, rout2, rout3) {
       let rout = [];
@@ -106,14 +97,14 @@ export default {
             data.children.map(tab => (tab.status = false));
           }
         }
-      });
-      this.tabs = res;
+			});
+			this.$store.dispatch('GET_TABS', res);
     },
     activTabsUpdate(id) {
       let str = "";
       let rout = id.split("/");
       rout = rout.map(rout => (rout = str.concat("/", rout)));
-      this.activTabsStart(this.tabs, rout[1], rout[2]);
+      this.activTabsStart(this.$store.state.tabs, rout[1], rout[2]);
     },
     sortTabs(res) {
       let example = {
@@ -210,6 +201,7 @@ export default {
 			this.getTabs()
 			this.path = `/m/${this.slug}`
 		}
+		console.log(this.path)
   }
 };
 </script>

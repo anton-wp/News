@@ -10,7 +10,8 @@ const store = () => new Vuex.Store({
 	state: {
 		token: null,
 		tokenInfo: null,
-		profile: Object
+		profile: Object,
+		tabs: []
 	},
 	getters: {
 		IS_TOKEN: state => {

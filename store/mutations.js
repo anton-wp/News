@@ -11,6 +11,14 @@ export default {
 	SET_PROFILE: (state, profille) => {
 		state.profile = profille;
 	},
+	SET_TABS: (state, tabs) => {
+		state.tabs = tabs;
+	},
+	OPEN_CLOSE_TABS: (state, id) => {
+		state.tabs.map(tab =>
+			tab.title === id ? (tab.status = !tab.status) : null
+		);
+	},
 	CLEAR_PROFILE: (state) => {
 		state.profile = Object;
 	},

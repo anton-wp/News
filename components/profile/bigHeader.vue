@@ -103,9 +103,9 @@ export default {
 		this.slug = this.$route.params.slug
 		this.updateProfile()
 	},
-	destroyed () {
-		this.$store.dispatch('CLEAR_PROFILE');
-	},
+	// destroyed () {
+	// 	this.$store.dispatch('CLEAR_PROFILE');
+	// },
 	methods: {
 		updateProfile () {
 			if(!this.slug && !this.$store.state.profile.id){
