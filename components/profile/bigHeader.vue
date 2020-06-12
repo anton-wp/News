@@ -109,7 +109,6 @@ export default {
 	methods: {
 		updateProfile () {
 			if(!this.slug && !this.$store.state.profile.id){
-			console.log(1234)
 				this.getProfileFull()
 			}else if(this.slug && this.$store.state.profile.slug !== this.slug) {
 				this.getProfile()

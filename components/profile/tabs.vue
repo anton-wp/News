@@ -56,9 +56,8 @@ import { log } from "util";
 export default {
   data() {
     return {
-			// tabs: [],
 			slug: String,
-			path: String
+			path: '/profile'
     };
   },
   methods: {
@@ -202,6 +201,7 @@ export default {
 			this.getTabs()
 			this.path = `/m/${this.slug}`
 		}
+		console.log(this.path)
   }
 };
 </script>
