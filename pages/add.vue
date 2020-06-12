@@ -22,6 +22,7 @@
                                     Title
                                     <span class="required">*</span>
                                 </label>
+
                                 <textarea
                                     placeholder="Minimum title length: 50 characters"
                                     class="form-input"
@@ -29,18 +30,19 @@
                                     rows="2"
                                     v-model.trim="$v.title.$model"
                                 ></textarea>
+
                                 <div class="counter">
-                                    <span>0/</span>
+                                    <span>{{ titlesLength.title }}/</span>
                                     <span>120</span>
                                 </div>
                             </div>
                             <div
                                 class="error-notification"
-                                v-if="!$v.title.required"
+                                v-if="!$v.title.required && errorNotif"
                             >This field is required</div>
                             <div
                                 class="error-notification"
-                                v-if="!$v.title.minLength"
+                                v-if="!$v.title.minLength && errorNotif"
                             >Minimum title length: 50 characters</div>
                         </div>
 
@@ -55,13 +57,13 @@
                                     v-model.trim="$v.subtitle.$model"
                                 ></textarea>
                                 <div class="counter">
-                                    <span>0/</span>
-                                    <span>160</span>
+                                    <span>{{ titlesLength.subtitle }}/</span>
+                                    <span>120</span>
                                 </div>
                             </div>
                             <div
                                 class="error-notification"
-                                v-if="!$v.subtitle.minLength"
+                                v-if="!$v.subtitle.minLength && errorNotif"
                             >Minimum title length: 50 characters</div>
                         </div>
 
@@ -72,14 +74,8 @@
                                     <span class="required">*</span>
                                 </label>
 
-                                <editor />
+                                <editor v-model="content" />
 
-                                <!-- <textarea
-                                    required="required"
-                                    class="form-input with-border"
-                                    maxlength="10000"
-                                    v-model.trim="$v.body.$model"
-                                ></textarea>-->
                                 <div class="radius">
                                     <div class="body"></div>
                                 </div>
@@ -124,7 +120,7 @@
                                                         v-for="(month, index) of months"
                                                         :value="index"
                                                         :key="month"
-                                                        :disabled="index - now.getMonth() < disabledDates.months && date.year === now.getFullYear()"
+                                                        :disabled="index - now.getMonth() < 0 && date.year === now.getFullYear()"
                                                     >{{month}}</option>
                                                 </select>
                                             </div>
@@ -143,6 +139,7 @@
                                                         v-for="day of daysInMonth"
                                                         :key="day"
                                                         :value="day"
+                                                        :disabled="day - now.getDate() < 0 && disabledDates.minutes < 1440"
                                                     >{{day}}</option>
                                                 </select>
                                             </div>
@@ -174,13 +171,19 @@
                                         <label>Time</label>
                                         <div class="time-select-wrap">
                                             <div class="select-wrap hours-select">
-                                                <select class="form-input select">
-                                                    <option value="6 pm">6 pm</option>
-                                                    <option value="6 pm">6 pm</option>
-                                                    <option value="6 pm">6 pm</option>
+                                                <select
+                                                    class="form-input select"
+                                                    v-model="date.hours"
+                                                >
+                                                    <option
+                                                        v-for="hour of hours"
+                                                        :value="hour"
+                                                        :key="hour"
+                                                        :disabled="hour - now.getHours() < 0 && disabledDates.minutes < 60"
+                                                    >{{hour}}</option>
                                                 </select>
+
                                                 <div class="arrow-date">
-                                                    <!-- <fa-icon [icon]="faCaretDown"></fa-icon> -->
                                                     <svg class="icon" width="17" height="17">
                                                         <use xlink:href="#caret-down" />
                                                     </svg>
@@ -191,11 +194,18 @@
                                                 class="select-wrap minutes-select"
                                                 style="margin-left: 10px;"
                                             >
-                                                <select class="form-input select">
-                                                    <option value="31">32</option>
+                                                <select
+                                                    class="form-input select"
+                                                    v-model="date.minutes"
+                                                >
+                                                    <option
+                                                        v-for="minute of minutes"
+                                                        :value="minute"
+                                                        :key="minute"
+                                                        :disabled="minute - now.getMinutes() < 0 && disabledDates.minutes < 0"
+                                                    >{{minute}}</option>
                                                 </select>
                                                 <div class="arrow-date">
-                                                    <!-- <fa-icon [icon]="faCaretDown"></fa-icon> -->
                                                     <svg class="icon" width="17" height="17">
                                                         <use xlink:href="#caret-down" />
                                                     </svg>
@@ -219,10 +229,12 @@
                                 Category
                                 <span class="required">*</span>
                             </label>
-                            <select class="form-input select">
-                                <option>POLITICS</option>
-                                <option>POLITICS</option>
-                                <option>POLITICS</option>
+
+                            <select class="form-input select" v-model="selectedCategory">
+                                <option
+                                    v-for="category of categories"
+                                    :value="category.id"
+                                >{{ category.slug }}</option>
                             </select>
                         </div>
 
@@ -237,10 +249,11 @@
                                 Verdict Options
                                 <span class="required">*</span>
                             </label>
-                            <select class="form-input select">
-                                <option>AGREE/DESAGREE</option>
-                                <option>AGREE/DESAGREE</option>
-                                <option>AGREE/DESAGREE</option>
+                            <select class="form-input select" v-model="selectedOption">
+                                <option
+                                    v-for="option of options"
+                                    :value="option.key"
+                                >{{ option.title }}</option>
                             </select>
                         </div>
 
@@ -250,55 +263,68 @@
                                 <span class="required">*</span>
                             </label>
                             <label class="require links">5 links limit</label>
-                            <!-- <ng-select
-									[items]="tag$ | async"
-									bindLabel="name"
-									[addTag]="true"
-									[multiple]="true"
-									[hideSelected]="true"
-									[trackByFn]="trackByFn"
-									[minTermLength]="2"
-									[maxSelectedItems]="5"
-									[loading]="tagsLoading"
-									typeToSearchText="Please enter 2 or more characters"
-									[typeahead]="tagsInput$"
-									formControlName="links"
-									[class.error]="errorForm?.emptyLinks"
-                            ></ng-select>-->
-                            <input type="text" />
-                            <!-- <ul class="tags">
-									<li *ngFor="let item of addPostForm.get('links').value">
-											<button (click)="deleteTag(item.name)">x</button>
-											{{item.name}}
-									</li>
-                            </ul>-->
-                            <div class="error-notification">Please add at least 1 link</div>
+
+                            <multiselect
+                                v-model="selectedLinkOption"
+                                id="linksOpt"
+                                label="name"
+                                track-by="id"
+                                placeholder="Type to search"
+                                open-direction="bottom"
+                                :options="linkOption"
+                                :multiple="true"
+                                :searchable="true"
+                                :loading="isLoading"
+                                :internal-search="false"
+                                :clear-on-select="false"
+                                :close-on-select="false"
+                                :options-limit="300"
+                                :max-height="600"
+                                :show-no-results="false"
+                                :hide-selected="false"
+                                :taggable="true"
+                                :max="5"
+                                @tag="addTag"
+                                @search-change="searchOptions"
+                            ></multiselect>
+
+                            <div
+                                class="error-notification"
+                                v-if="errorNotif && selectedLinkOption.length > 0"
+                            >Please add at least 1 link</div>
                         </div>
+
                         <div class="input-wrapper author">
                             <label>
                                 Author
                                 <span class="required">*</span>
                             </label>
-                            <!-- <ng-select
-									formControlName="author"
-									[items]="author$ | async"
-									[typeahead]="authorInput$"
-									[loading]="authorLoading"
-									bindLabel="firstName"
-									autofocus
-									bindValue="id"
-									[(ngModel)]="author"
-                            ></ng-select>-->
 
-                            <select class="form-input select">
-                                <option>AGREE/DESAGREE</option>
-                                <option>AGREE/DESAGREE</option>
-                                <option>AGREE/DESAGREE</option>
-                            </select>
+                            <multiselect
+                                v-model="selectedAuthor"
+                                id="author"
+                                label="firstName"
+                                track-by="id"
+                                placeholder="Type to search"
+                                open-direction="bottom"
+                                :options="authorsOption"
+                                :searchable="true"
+                                :loading="isLoadingAuthor"
+                                :max-height="600"
+                                :show-no-results="false"
+                                :hide-selected="false"
+                                @search-change="searchAuthors"
+                            >
+                                <template slot="option" slot-scope="props">
+                                    <div class="option__desc">
+                                        <span class="option__title">{{ props.option.firstName }}</span>
+                                    </div>
+                                </template>
+                            </multiselect>
                         </div>
 
                         <div class="buttons-wrapp">
-                            <button class="button-add draft-button">Save Draft</button>
+                            <!-- <button class="button-add draft-button">Save Draft</button> -->
                             <div>
                                 <button class="button-add post-button">Publish</button>
                                 <div class="buttons-forse">
@@ -307,14 +333,14 @@
                                             <!-- <fa-icon *ngIf="!force" [icon]="faSquare"></fa-icon>
                                             <fa-icon *ngIf="force" [icon]="faCheckSquare"></fa-icon>-->
                                         </div>
-                                        <p>force publish</p>
+                                        <!-- <p>force publish</p> -->
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="buttons-wrapp">
+                        <!-- <div class="buttons-wrapp">
                             <button class="button-add post-button">Update</button>
-                        </div>
+                        </div> -->
                     </div>
                     <!-- [disabled]="addPostForm.status === 'INVALID'" -->
 
@@ -324,43 +350,26 @@
                                 Featured Image
                                 <span class="required">*</span>
                             </label>
+
                             <button class="button-add post-button">Add Image</button>
                             <input type="file" id="file" />
                         </div>
 
-                        <!-- <div *ngIf="!loadingImg"> -->
-                        <!-- <div class="loader" *ngIf="loaded" style="height: 834px;">
-										<div class="lds-ellipsis">
-												<div></div>
-												<div></div>
-												<div></div>
-												<div></div>
-										</div>
-                        </div>-->
-
-                        <!-- TODO change 2500*2500 -->
-                        <!-- <image-cropper
-										*ngIf="base64Image"
-										class="animation"
-										[imageBase64]="base64Image"
-										[maintainAspectRatio]="true"
-										[aspectRatio]="16/9"
-										[resizeToWidth]="500"
-										format="jpeg"
-										(imageCropped)="imageCropped($event)"
-										(imageLoaded)="imageLoaded()"
-										(cropperReady)="cropperReady()"
-										(loadImageFailed)="loadImageFailed()"
-                        ></image-cropper>-->
-                        <!-- [cropper]="cropperStart" -->
-                        <!-- </div> -->
+                        <clipper-basic
+                            src="http://dummyimage.com/1920x1080/99cccc.jpeg"
+                            preview="preview"
+                            :grid="true"
+                            :ratio="16/9"
+                            :touch-create="false"
+                            class
+                        />
                     </div>
                     <div class="col-12 col-lg-5 col-xl-4">
                         <div
                             class="animation prevImgBlock"
                             style="max-width: 410px; height: 100%; margin: 0 auto;"
                         >
-                            <!-- <img class="preview-img" [src]="croppedImage" alt /> -->
+                            <clipper-preview name="preview"></clipper-preview>
                             <div class="header-metadata">
                                 <span class="category js--post-category-preview">
                                     <span>category</span>
@@ -425,8 +434,13 @@
 <script>
 import { maxLength, minLength, required } from "vuelidate/lib/validators";
 import { months } from "~/constants/dates";
+import Multiselect from "vue-multiselect";
 
 export default {
+    // middleware: "auth",
+    components: {
+        Multiselect
+    },
     data() {
         return {
             date: {
@@ -437,10 +451,15 @@ export default {
                 minutes: null
             },
             months,
+            hours: [],
+            minutes: [],
             years: [],
             now: new Date(),
 
+            content: [],
+
             title: "",
+            subtitle: "",
             submitStatus: "",
             body: "",
             fields: {
@@ -456,7 +475,22 @@ export default {
                 source: false,
                 featuredImage: false,
                 cropper: false
-            }
+            },
+            errorNotif: false,
+            selectedCategory: null,
+            categories: null,
+
+            selectedOption: null,
+            options: null,
+
+            selectedLinkOption: [],
+            linkOption: [],
+            newLinkOption: [],
+            isLoading: false,
+
+            selectedAuthor: [],
+            authorsOption: [],
+            isLoadingAuthor: false
         };
     },
     validations: {
@@ -472,10 +506,59 @@ export default {
             required,
             minLength: minLength(160),
             maxLength: maxLength(1000)
+        },
+        imgTitle: {
+            required
         }
     },
     methods: {
+        searchOptions(query) {
+            if (query) {
+                this.isLoading = true;
+
+                this.$http
+                    .get(
+                        "https://dev.api.verdict.org/tags/list?search=" + query
+                    )
+                    .then(({ data }) => {
+                        this.linkOption = data.data;
+                        this.linkOption = [
+                            ...this.linkOption,
+                            ...this.newLinkOption
+                        ];
+                        this.isLoading = false;
+                    });
+            }
+        },
+
+        searchAuthors(query) {
+            this.isLoadingAuthor = true;
+
+            this.$http
+                .get(
+                    "https://dev.api.verdict.org/posts/create-helpers/authors-search?search=" +
+                        query
+                )
+                .then(({ data }) => {
+                    this.authorsOption = data.data;
+
+                    console.log(this.authorsOption);
+
+                    this.isLoadingAuthor = false;
+                });
+        },
+
+        addTag(newTag) {
+            const tag = {
+                id: Math.floor(Math.random() * 10000000),
+                name: newTag
+            };
+
+            this.newLinkOption.push(tag);
+            this.selectedLinkOption.push(tag);
+        },
         submit() {
+            this.errorNotif = true;
             console.log("submit!");
             this.$v.$touch();
             if (this.$v.$invalid) {
@@ -494,7 +577,34 @@ export default {
                 .get("api/profile/post-fields?action=create")
                 .then(({ data }) => {
                     this.fields = data.fields;
-                    console.log(this.fields);
+                })
+                .catch(error => {
+                    // this.errorMessage = error.response.data.message;
+                });
+        },
+
+        getCategories() {
+            this.$http
+                .get("https://dev.api.verdict.org/categories/")
+                .then(({ data }) => {
+                    this.categories = data.data;
+
+                    this.selectedCategory = this.categories[0].id;
+                })
+                .catch(error => {
+                    // this.errorMessage = error.response.data.message;
+                });
+        },
+
+        getOptions() {
+            this.$http
+                .get(
+                    "https://dev.api.verdict.org/posts/create-helpers/verdict-options/"
+                )
+                .then(({ data }) => {
+                    this.options = data.data;
+
+                    this.selectedOption = this.options[0].key;
                 })
                 .catch(error => {
                     // this.errorMessage = error.response.data.message;
@@ -509,6 +619,11 @@ export default {
             );
         },
 
+        minutesDiff(dateFrom, dateTo) {
+            let diffMs = dateTo - dateFrom;
+            return Math.floor(diffMs / 1000 / 60);
+        },
+
         initDate() {
             this.date.day = this.now.getDate();
             this.date.year = this.now.getFullYear();
@@ -516,6 +631,10 @@ export default {
 
             this.date.hours = this.now.getHours();
             this.date.minutes = this.now.getMinutes();
+        },
+
+        saveCont() {
+            console.log("asdasdsad");
         }
     },
     created() {
@@ -529,7 +648,17 @@ export default {
             this.years.push(i);
         }
 
+        for (let i = 1; i <= 24; i++) {
+            this.hours.push(i);
+        }
+
+        for (let i = 0; i < 60; i++) {
+            this.minutes.push(("0" + i).slice(-2));
+        }
+
         this.addFields();
+        this.getCategories();
+        this.getOptions();
     },
     computed: {
         daysInMonth() {
@@ -546,22 +675,42 @@ export default {
         },
         disabledDates() {
             const diffs = {
-                months: this.monthDiff(this.now, this.selectedDate)
+                months: this.monthDiff(this.now, this.selectedDate),
+                minutes: this.minutesDiff(this.now, this.selectedDate)
             };
 
-            if (diffs.months < 0) {
+            if (diffs.minutes < 0) {
                 this.initDate();
             }
 
             return diffs;
+        },
+
+        titlesLength() {
+            console.log(this.$v.title.$model.length);
+
+            const lengthTitle = {
+                title: this.$v.title.$model.length,
+                subtitle: this.$v.subtitle.$model.length
+            };
+            return lengthTitle;
         }
     }
 };
 </script>
 
+<style src="vue-multiselect/dist/vue-multiselect.min.css"></style>
+
 <style lang="scss" scoped>
 @import "../assets/utils/variables";
 @import "../assets/utils/colors";
+
+.croper {
+    width: 100%;
+}
+select {
+    outline: none;
+}
 
 .time-select-wrap {
     display: flex;
