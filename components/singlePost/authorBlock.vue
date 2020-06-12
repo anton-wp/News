@@ -9,7 +9,7 @@
         <popup-user-info :authorId="author.id" />
       </div>
       <span class="name" @mouseover="toggle">
-				<nuxt-link class="link" :to="`/m/${author.slug}`">
+				<nuxt-link class="link" :to="`/m/${author.slug}/posts`">
         	{{author.firstName}} {{author.lastName}}
 				</nuxt-link>
 			</span>
@@ -23,7 +23,7 @@
       </div>
       <div>
         <time class="date-created">
-          {{publishedAtFormat}}
+          {{ new Date(this.publishedAt).toDateString() }}
         </time>
       </div>
     </div>
@@ -52,11 +52,7 @@ export default {
   data () {
     return {
 			showPopup: false,
-			publishedAtFormat: String
     }
-	},
-	created () {
-		this.publishedAtFormat = new Date(this.publishedAt).toDateString()
 	},
   methods: {
     toggle () {

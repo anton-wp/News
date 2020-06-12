@@ -43,6 +43,7 @@ export default {
     Breadcrumbs,
     NotFound,
     Tabs
+    // LoginPopup
 	},
 }
 </script>

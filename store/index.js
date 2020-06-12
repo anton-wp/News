@@ -1,5 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import actions from './actions'
+import mutations from './mutations'
 
 Vue.use(Vuex)
 
@@ -7,7 +9,8 @@ const store = () => new Vuex.Store({
 
 	state: {
 		token: null,
-		tokenInfo: null
+		tokenInfo: null,
+		profile: Object
 	},
 	getters: {
 		IS_TOKEN: state => {
@@ -15,30 +18,10 @@ const store = () => new Vuex.Store({
 		},
 		TOKEN_INFO: state => {
 			return state.tokenInfo;
-		}
-	},
-	mutations: {
-		SET_TOKEN: (state, token) => {
-			state.token = token
-		},
-		SET_TOKEN_INFO: (state, userInfo) => {
-			state.tokenInfo = userInfo;
-		},
-		REMOVE_TOKEN: (state) => {
-			state.token = '';
 		},
 	},
-	actions: {
-		SAVE_TOKEN: (context, token) => {
-			context.commit('SET_TOKEN', token);
-		},
-		DELETE_TOKEN: (context) => {
-			context.commit('REMOVE_TOKEN')
-		},
-		SAVE_TOKEN_INFO: (context, userInfo) => {
-			context.commit('SET_TOKEN_INFO', userInfo);
-		}
-	}
+	actions,
+	mutations
 })
 
 export default store

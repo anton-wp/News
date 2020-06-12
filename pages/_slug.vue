@@ -19,6 +19,7 @@
 			}
 		},
 		created() {
+			console.log(this.$route.params)
 			this.$http.get(`/api/${this.$route.params.slug}?limit=12`)
 				.then(({ data }) => {
 					console.log(data.data)

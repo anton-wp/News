@@ -5,7 +5,7 @@
         <div class="row">
           <div class="col-8 col-padding-0">
             <!-- TODO go to user -->
-            <nuxt-link class="user-name-span" v-bind:to="`/m/${modal.slug}`">{{modal.displayName}}</nuxt-link>
+            <nuxt-link class="user-name-span" v-bind:to="`/m/${modal.slug}/posts`">{{modal.displayName}}</nuxt-link>
             <span class="user-role-span">{{modal.rank}}</span>
             <span class="v-rap-span">
               <span class="count-vraps">{{modal.points}}</span>

@@ -7,13 +7,13 @@
         </div>
       </div>
       <span v-if="!pending">By: </span>
-      <nuxt-link class="username-link" v-bind:to="`/m/${author.slug}`">
+      <nuxt-link class="username-link" v-bind:to="`/m/${author.slug}/posts`">
         <span v-if="!pending" id="username-link" @mouseover="toggle">
           {{ author.firstName }} {{ author.lastName }}
         </span>
       </nuxt-link>
       <time class="author">
-        {{ publishedAtFormat }}
+        {{ new Date(this.publishedAt).toDateString() }}
       </time><br>
       <button v-if="pending">
         <svg width="15" height="15">
@@ -51,13 +51,9 @@ export default {
 		PopupUserInfo,
     NewsCardHeaderMarks
 	},
-	created () {
-		this.publishedAtFormat = new Date(this.publishedAt).toDateString()
-	},
   data () {
     return {
 			showPopup: false,
-			publishedAtFormat: ''
     }
   },
   methods: {

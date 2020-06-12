@@ -4,37 +4,38 @@
       <div class="col-12 col-sm-3">
         <div class="img">
           <div>
-            <div class="addPhoto">
+						<input type="file" id="file" ref="file" v-on:change="handleFileUpload()"/>
+            <div class="addPhoto" v-if="!slug"  v-on:click="submitFile()">
               <svg width="24" height="27">
                 <use xlink:href="#camera" />
               </svg>
-              <!-- <fa-icon class="icon" [icon]="faCamera"></fa-icon> -->
             </div>
-            <input id="file" type="file">
+            <!-- <input type="file" id="file" :change="fileChangeEvent($event)"> -->
           </div>
           <img
             class="default-avatar"
             src="/image/default-avatar-original.png"
-          >
-          <!-- <img
-            *ngIf="profileStore.profile?.avatar?.big"
-            [src]="profileStore.profile?.avatar?.big"
+						v-if="!$store.state.profile.avatar"
+					>
+          <img
+            :src="$store.state.profile.avatar.big"
             class="default-avatar"
-          /> -->
+						v-if="$store.state.profile.avatar"
+          />
         </div>
         <div class="about-your-role">
           <p class="your-role">
-            rank
+            {{$store.state.profile.rank}}
           </p>
           <div class>
             <p class="vrep-count">
-              points
+              {{$store.state.profile.points}}
             </p>
             <p class="vrep-title">
               V-rep
             </p>
           </div>
-          <div>
+          <div v-if="slug">
             <button class="click-for-follow">
               Follow
             </button>
@@ -42,18 +43,14 @@
               Unfollow
             </button>
           </div>
-          <!-- <button *ngIf="store.Follow" (click)="follow()" class="click-for-follow" [disabled]="store.isFollowing">Unfollow</button> -->
         </div>
       </div>
       <div class="col-12 col-sm-5">
         <h4 class="your-name">
-          firstName lastName
+          {{$store.state.profile.firstName}} {{$store.state.profile.lastName}}
         </h4>
         <p class="member-since">
-          time
-          <!-- <time datetime="{{profileStore.profile.createdAt}}"
-            class="author"
-          >{{profileStore.profile.createdAt | date:'MMM d,y h:mm a' }}</time> -->
+        	{{ new Date($store.state.profile.createdAt).toDateString()}}
         </p>
         <div class="mail-content">
           <div class="mail-wrapper">
@@ -65,8 +62,7 @@
       <div class="col-12 col-sm-4 stat">
         <div class="wrapper-statistic">
           <p class="statistic-count">
-            0
-            <!-- postsCount -->
+            {{ $store.state.profile.postsCount }}
           </p>
           <p class="statistic-title">
             Posts
@@ -74,8 +70,7 @@
         </div>
         <div class="wrapper-statistic">
           <p class="statistic-count">
-            0
-            <!-- verdictsCount -->
+						{{ $store.state.profile.verdictsCount }}
           </p>
           <p class="statistic-title">
             Verdicts
@@ -83,8 +78,7 @@
         </div>
         <div class="wrapper-statistic">
           <p class="statistic-count">
-            0
-            <!-- commentsCount -->
+            {{ $store.state.profile.commentsCount }}
           </p>
           <p class="statistic-title">
             Comments
@@ -94,6 +88,66 @@
     </div>
   </div>
 </template>
+
+<script>
+export default {
+
+	data () {
+		return {
+			profile: Object,
+			slug: String,
+			file: ''
+		}
+	},
+	created () {
+		this.slug = this.$route.params.slug
+		this.updateProfile()
+	},
+	destroyed () {
+		this.$store.dispatch('CLEAR_PROFILE');
+	},
+	methods: {
+		updateProfile () {
+			if(!this.slug && !this.$store.state.profile.id){
+				this.getProfileFull()
+			}else if(this.slug && this.$store.state.profile.slug !== this.slug) {
+				this.getProfile()
+			}
+		},
+		getProfileFull () {
+			this.$http.get(`/api/profile/full`)
+      .then(res => {
+				this.$store.dispatch('GET_PROFILE', res.data.data);
+      })
+      .catch(error => console.error(error));
+		},
+		getProfile () {
+			this.$http.get(`/api/author/${this.slug}`)
+      .then(res => {
+				this.$store.dispatch('GET_PROFILE', res.data.data);
+      })
+      .catch(error => console.error(error));
+		},
+		updateAvatar (img) {
+			const formData = new FormData();
+    	if (img) { formData.append('avatar', img); };
+			this.$http.put(`/api/profile/update-avatar`, formData)
+      .then(res => {
+				this.$store.dispatch('CLEAR_PROFILE');
+				this.updateProfile()
+      })
+      .catch(error => console.error(error));
+		},
+		handleFileUpload(){
+			this.updateAvatar(this.$refs.file.files[0])
+			// this.file = this.$refs.file.files[0];
+		},
+		submitFile(){
+			document.getElementById('file').click();
+    },
+	}
+}
+</script>
 
 <style lang="scss" scoped>
 @import "../../assets/utils/variables";
