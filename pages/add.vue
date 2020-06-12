@@ -13,7 +13,7 @@
                 </div>
             </div>
 
-            <form class="primary-form" id="addPostForm" @submit.prevent="submit">
+            <form class="primary-form" id="addPostForm">
                 <div class="row blockForm">
                     <div class="col-12 col-lg-7 col-xl-8">
                         <div class="add-field" v-if="fields.title">
@@ -252,7 +252,7 @@
                             <select class="form-input select" v-model="selectedOption">
                                 <option
                                     v-for="option of options"
-                                    :value="option.key"
+                                    :value="option.title"
                                 >{{ option.title }}</option>
                             </select>
                         </div>
@@ -326,7 +326,10 @@
                         <div class="buttons-wrapp">
                             <!-- <button class="button-add draft-button">Save Draft</button> -->
                             <div>
-                                <button class="button-add post-button">Publish</button>
+                                <button
+                                    class="button-add post-button"
+                                    @click.prevent="saveDraft"
+                                >Publish</button>
                                 <div class="buttons-forse">
                                     <div class="forse">
                                         <div class="fa-icon">
@@ -340,7 +343,7 @@
                         </div>
                         <!-- <div class="buttons-wrapp">
                             <button class="button-add post-button">Update</button>
-                        </div> -->
+                        </div>-->
                     </div>
                     <!-- [disabled]="addPostForm.status === 'INVALID'" -->
 
@@ -443,6 +446,7 @@ export default {
     },
     data() {
         return {
+            postId: null,
             date: {
                 month: null,
                 day: null,
@@ -551,6 +555,7 @@ export default {
         addTag(newTag) {
             const tag = {
                 id: Math.floor(Math.random() * 10000000),
+                type: "created",
                 name: newTag
             };
 
@@ -604,7 +609,7 @@ export default {
                 .then(({ data }) => {
                     this.options = data.data;
 
-                    this.selectedOption = this.options[0].key;
+                    this.selectedOption = this.options[0].title;
                 })
                 .catch(error => {
                     // this.errorMessage = error.response.data.message;
@@ -633,8 +638,29 @@ export default {
             this.date.minutes = this.now.getMinutes();
         },
 
-        saveCont() {
-            console.log("asdasdsad");
+        formatTags() {
+            const tagsForFormdata = this.selectedLinkOption.map(function(item) {
+                if (item.type) {
+                    return item.name;
+                } else {
+                    return item.id;
+                }
+            });
+
+            return tagsForFormdata;
+        },
+
+        saveDraft() {
+			// let formData = this.formData
+            this.$http
+                .post( '/api/posts/', this.formData
+                )
+                .then(resp => {
+					console.log(resp);
+				})
+                .catch(error => {
+                    console.log(error);
+                });
         }
     },
     created() {
@@ -687,13 +713,57 @@ export default {
         },
 
         titlesLength() {
-            console.log(this.$v.title.$model.length);
-
             const lengthTitle = {
                 title: this.$v.title.$model.length,
                 subtitle: this.$v.subtitle.$model.length
             };
             return lengthTitle;
+        },
+
+        formData() {
+            const newData = {
+                publishedAt: this.selectedDate,
+                category: this.selectedCategory,
+                verdictOption: this.selectedOption
+            };
+
+            if (this.$v.title.$model) newData.title = this.$v.title.$model;
+            if (this.$v.subtitle.$model)
+                newData.subTitle = this.$v.subtitle.$model;
+            if (this.content.length) newData.body = this.content;
+            if (this.formatTags().length) newData.tags = this.formatTags();
+
+            // title: this.$v.title.$model,
+            //     subTitle: this.$v.subtitle.$model,
+            //     body: this.content,
+            //     tags: this.formatTags(),
+            //     category: this.selectedCategory,
+            //     verdictOption: this.selectedOption,
+            //     publishedAt: this.selectedDate
+            // featuredImage: (binary)
+            // source: sdf sdf sdf sdf s
+            // cropperX: 134
+            // cropperY: 69.21875
+            // cropperWidth: 500
+            // cropperHeight: 281
+
+            // const newData = new FormData();
+
+            // newData.append("publishedAt", this.selectedDate);
+            // newData.append("category", this.selectedCategory);
+            // newData.append("verdictOption", this.selectedOption);
+
+            // newData.append("", this.selectedDate);
+
+            // if (this.$v.title.$model)
+            //     newData.append("title", this.$v.title.$model);
+            // if (this.$v.subtitle.$model)
+            //     newData.append("subTitle", this.$v.subtitle.$model);
+            // if (this.content.length) newData.append("body", this.content);
+            // if (this.formatTags().length)
+            //     newData.append("tags", this.selectedDate);
+
+            return newData;
         }
     }
 };

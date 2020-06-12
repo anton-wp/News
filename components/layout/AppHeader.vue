@@ -13,14 +13,8 @@
                     </nuxt-link>
                 </div>
                 <ul id="menu" class="nav-item-list d-none d-sm-none d-md-none d-lg-flex">
-                    <li class="nav-item">
-                        <a class="general-nav-item-link">U.S.</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="general-nav-item-link">POLITICS</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="general-nav-item-link">ENTERTAINMENT</a>
+                    <li class="nav-item" v-for="category of categories.slice(0, 7)" :key="category.order">
+                        <nuxt-link :to="`/${category.path}`" class="general-nav-item-link">{{ category.title }}</nuxt-link>
                     </li>
                     <li
                         id="link"
@@ -36,20 +30,8 @@
                         </span>
                         <div v-if="popupMore" class="popup-more">
                             <ul>
-                                <li class="nav-item">
-                                    <a class="nav-item-link">LIFESTYLE</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-item-link">TECH</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-item-link">SPORTS</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-item-link">WORLD</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-item-link">HEALTH</a>
+                                <li class="nav-item" v-for="category of categories.slice(7, 10)" :key="category.order">
+                                    <nuxt-link :to="`/${category.path}`" class="nav-item-link">{{ category.title }}</nuxt-link>
                                 </li>
                             </ul>
                         </div>
