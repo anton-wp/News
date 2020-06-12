@@ -49,7 +49,7 @@ export default {
 	},
   methods: {
     getFollowing () {
-			this.$http.get(`/api/${this.path}subscriptions?created=${this.sort}&page=${this.page}&limit=12`)
+			this.$http.get(`/api/${this.path}/subscriptions?created=${this.sort}&page=${this.page}&limit=12`)
 			.then(res => {
 				this.followers = res.data.data
 				this.pagination = res.data.pagination

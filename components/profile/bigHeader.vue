@@ -130,7 +130,7 @@ export default {
 		},
 		updateAvatar (img) {
 			const formData = new FormData();
-    	if (img) { formData.append('avatar', img); };
+    	if(img) { formData.append('avatar', img); };
 			this.$http.put(`/api/profile/update-avatar`, formData)
       .then(res => {
 				this.$store.dispatch('CLEAR_PROFILE');
