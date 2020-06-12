@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div class="container-fluid">
     <div class="row">
       <div class="col-12">
         <div class="content-404">
@@ -42,40 +42,54 @@
       <h1 class="category-page-title">latest news</h1>
       </div>-->
 
-      <!-- <div class="col-12 content">
+      <div class="col-12 content">
         <div class="row">
           <div class="col-12">
             <h1 class="category-page-title">latest news</h1>
           </div>
-          <ng-container *ngFor="let post of postStore.postForSideBar">
-            <vrd-vdc
-              class="col-sm-12 col-md-6 col-lg-3"
-              type="second-block"
-              [defaultPost]="post"
-              [padding]="true"
-            ></vrd-vdc>
-          </ng-container>
+					<div class="col-sm-12 col-md-6 col-lg-3" v-for="post of posts.slice(0, 4)" :key="post.title">
+						<default-news-card type="first-block" :post="post" :padding="true" />
+					</div>
         </div>
-      </div> -->
+      </div>
     </div>
   </div>
 </template>
 
 <script>
+import DefaultNewsCard from '~/components/news/DefaultNewsCard'
+
 export default {
+	components: {
+		DefaultNewsCard
+	},
   props: ['error'],
   layout: 'blog', // you can set a custom layout for the error page
   data () {
     return {
-      search: ''
+			search: '',
+			posts: []
     }
-  },
+	},
+	created () {
+		this.getPosts()
+	},
   methods: {
     activeSearch () {
       if (this.search) {
         this.$router.push({ path: '/search', query: { q: this.search } })
       }
-    }
+		},
+		getPosts() {
+			this.$http.get(`/api/posts/?limit=4`)
+			.then(({ data }) => {
+				console.log(data.data)
+				this.posts = data.data;
+			})
+			.catch(error => {
+				this.$router.push('/');
+			});
+		}
   }
 }
 

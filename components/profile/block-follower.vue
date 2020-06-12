@@ -21,7 +21,7 @@
         </ng-container> -->
       </div>
       <span class="d-flex justify-content-center justify-content-lg-start" @mouseover="toggle">
-        <nuxt-link v-bind:to="`/m/${post.slug}`">{{post.firstName}} {{post.lastName}}</nuxt-link>
+        <nuxt-link v-bind:to="`/m/${post.slug}/posts`">{{post.firstName}} {{post.lastName}}</nuxt-link>
       </span>
       <div class="d-flex justify-content-center justify-content-lg-start V-rep">
         <span class="counterV-rep">{{post.points}}</span>

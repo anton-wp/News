@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<following :type="'profile'" />
+		<following :type="'author'"/>
 	</div>
 </template>
 
@@ -8,7 +8,7 @@
 import Following from '~/components/profile/following'
 
 export default {
-	layout: "profile",
+	layout: "author",
 	components: {
 		Following
 	}

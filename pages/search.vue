@@ -6,9 +6,6 @@
           <h5 class="search-name">
             SEARCH RESULTS FOR {{ stringSearch }}
           </h5>
-          <!-- <h5
-            class="category-name"
-          >SEARCH RESULTS FOR {{ getSearchString() }}</h5> -->
           <div
             id="searchForm"
             class="primary-form"
@@ -20,47 +17,54 @@
               autocomplete="off"
               autocorrect="off"
               min="0"
+			  v-model="search"
+			  @keyup.enter="activeSearch"
             >
-            <svg width="20" height="20">
-              <use xlink:href="#search-icon" />
-            </svg>
+			<svg width="20" height="20" @click="activeSearch">
+				<use xlink:href="#search-icon" />
+			</svg>
           </div>
-          <!-- <ng-container *ngIf="store.posts.length > 0">
-            <ng-container *ngFor="let post of store.posts">
-              <vrd-gvc type="full-block" [text]="true" [horizontalPost]="post"></vrd-gvc>
-            </ng-container>
-          </ng-container> -->
+		  <div v-for="post in posts" :key="post.id">
+			<gorizontal-news-card type="full-block" :background="true" :post="post" />
+		  </div>
         </div>
-        <!-- <div class="col-lg-8 padding-0">
+        <div class="col-lg-8 padding-0" v-if="posts.length === 0">
           <h4>Sorry, nothing to show</h4>
-        </div> -->
+        </div>
         <div class="col-lg-4">
           <follow />
         </div>
       </div>
     </div>
-    <!-- <div *ngIf="store.pagination.next" class="container">
+    <div v-if="pagination.next" class="container">
       <div class="row">
         <div class="col-12">
           <div class="load-more-wrapper">
-            <span (click)="loadMore()">load more</span>
+            <span @click="loadMore">load more</span>
           </div>
         </div>
       </div>
-    </div> -->
+    </div>
   </div>
 </template>
 
 <script>
 import Follow from '~/components/universal-components/followBlock.vue'
+import GorizontalNewsCard from '~/components/news/GorizontalNewsCard.vue'
 
 export default {
   components: {
-    Follow
+	Follow,
+	GorizontalNewsCard
   },
   data () {
     return {
-      stringSearch: ''
+	  stringSearch: '',
+	  page: 1,
+	  limit: 8,
+	  posts: [],
+	  search: '',
+	  pagination: Object
     }
   },
   beforeRouteUpdate (to, from, next) {
@@ -68,9 +72,37 @@ export default {
     this.stringSearch = to.query.q
     next()
   },
-  mounted () {
-    // console.log(this.$route.query.q)
-    this.stringSearch = this.$route.query.q
+  created () {
+	this.stringSearch = this.$route.query.q
+	this.getSearch()
+  },
+   watch: {
+    '$route.query'() {
+      this.getSearch()
+    }
+  },
+  methods: {
+	getSearch (load) {
+		this.$http.get(`/api/posts/?search=${this.stringSearch}&limit=${this.limit}&page=${this.page}`)
+		.then(res => {
+			this.pagination = res.data.pagination
+			if(load){
+				this.posts = [...this.posts, ...res.data.data]
+			}else {
+				this.posts = res.data.data
+			}
+		})
+		.catch(error => console.error(error))
+	},
+	loadMore () {
+		this.page = this.page + 1
+		this.getSearch(true)
+	},
+	activeSearch () {
+      if (this.search) {
+        this.$router.push({ path: '/search', query: { q: this.search } })
+	  }
+    },
   }
 }
 </script>

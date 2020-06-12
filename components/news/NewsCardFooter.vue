@@ -7,13 +7,13 @@
         </div>
       </div>
       <span v-if="!pending">By: </span>
-      <nuxt-link class="username-link" v-bind:to="`/m/${author.slug}`">
+      <nuxt-link class="username-link" v-bind:to="`/m/${author.slug}/posts`">
         <span v-if="!pending" id="username-link" @mouseover="toggle">
           {{ author.firstName }} {{ author.lastName }}
         </span>
       </nuxt-link>
-      <time class="author" v-bind:datetime="publishedAt">
-        {{ publishedAt }}
+      <time class="author">
+        {{ new Date(this.publishedAt).toDateString() }}
       </time><br>
       <button v-if="pending">
         <svg width="15" height="15">
@@ -21,7 +21,7 @@
         </svg>
         Edit
       </button>
-      <div v-if="showMarks" class="marks">
+      <div v-if="tag" class="marks">
         <news-card-header-marks :colorScheme="colorScheme" :pending="false" />
       </div>
     </span>
@@ -37,21 +37,23 @@
 <script>
 import PopupUserInfo from '~/components/universal-components/popup-user-info'
 import NewsCardHeaderMarks from '~/components/news/NewsCardHeaderMarks'
+
 export default {
   props: {
     colorScheme: String,
     pending: Boolean,
     showMarks: Boolean,
     author: Object,
-    publishedAt: String
+		publishedAt: String,
+		tag: Boolean
   },
   components: {
-    PopupUserInfo,
+		PopupUserInfo,
     NewsCardHeaderMarks
-  },
+	},
   data () {
     return {
-      showPopup: false
+			showPopup: false,
     }
   },
   methods: {
@@ -143,7 +145,7 @@ export default {
       position: absolute;
       // top: -45px;
       // width: 100px;
-      z-index: 1;
+      z-index: 3;
       max-width: 20em;
       min-height: 300px;
       min-width: 280px;

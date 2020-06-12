@@ -1,26 +1,29 @@
 <template>
   <div class="about-user-in-post">
     <div class="element photo">
-      <img src="/image/default-avatar-original.png" class="user-profile-info">
+      <img v-if="!author.avatar.small" src="/image/default-avatar-original.png" class="user-profile-info">
+      <img v-if="author.avatar.small" :src="author.avatar" class="user-profile-info">
     </div>
     <div class="element information" @mouseleave="hide">
       <div v-if="showPopup" class="user-popup">
-        <!-- <popup-user-info :authorId="author.id" /> -->
+        <popup-user-info :authorId="author.id" />
       </div>
       <span class="name" @mouseover="toggle">
-        Tracy Few
-      </span>
+				<nuxt-link class="link" :to="`/m/${author.slug}/posts`">
+        	{{author.firstName}} {{author.lastName}}
+				</nuxt-link>
+			</span>
       <div>
         <!-- <span class="role">
           role
         </span> -->
         <span class="role">
-          Member if
+          {{author.rank}}
         </span>
       </div>
       <div>
         <time class="date-created">
-          December 10
+          {{ new Date(this.publishedAt).toDateString() }}
         </time>
       </div>
     </div>
@@ -41,12 +44,16 @@ import PopupUserInfo from '~/components/universal-components/popup-user-info.vue
 export default {
   components: {
     PopupUserInfo
-  },
+	},
+	props: {
+		author: Object,
+		publishedAt: String
+	},
   data () {
     return {
-      showPopup: false
+			showPopup: false,
     }
-  },
+	},
   methods: {
     toggle () {
       this.showPopup = true
@@ -72,7 +79,7 @@ export default {
       background-color: $white;
       position: absolute;
       top: 30px;
-      z-index: 1;
+      z-index: 3;
       max-width: 20em;
       min-height: 300px;
       min-width: 250px;
@@ -128,6 +135,10 @@ export default {
             color: $primary_color;
             transition: 0.3s;
           }
+					.link {
+						text-decoration: none;
+						color: inherit;
+					}
         }
 
         .date-created {

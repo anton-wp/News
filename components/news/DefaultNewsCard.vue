@@ -1,19 +1,19 @@
 <template>
   <article>
     <div class="picture">
-      <nuxt-link v-bind:to="`/${post.slug}`">
+      <nuxt-link :to="`/${post.slug}`">
         <img v-bind:src="post.featured.landscape">
       </nuxt-link>
       <div class="information" :class="!padding ? 'with-padding' : 'without-padding'">
         <div class="container-fluid">
-          <news-card-header :category="post.category" colorScheme="dark" />
+          <news-card-header v-if="!tag" :category="post.category" colorScheme="dark" />
           <div class="row block wrapp">
             <!-- <h2 > -->
               <!-- add go to post page {id} -->
-            <nuxt-link class="title" v-bind:to="`/${post.slug}`">{{ post.title }}</nuxt-link>
+            <nuxt-link class="title" :to="`/${post.slug}`">{{ post.title }}</nuxt-link>
             <!-- </h2> -->
           </div>
-          <news-card-footer :author="post.author" :publishedAt="post.publishedAt" colorScheme="light" :pending="false" :showMarks="false" />
+          <news-card-footer :author="post.author" :tag="tag" :publishedAt="post.publishedAt" colorScheme="light" :pending="false" :showMarks="false" />
         </div>
       </div>
     </div>
@@ -26,7 +26,8 @@ import NewsCardFooter from '~/components/news/NewsCardFooter'
 export default {
   props: {
     padding: Boolean,
-    post: Object
+		post: Object,
+		tag: Boolean
   },
   components: {
     NewsCardHeader,

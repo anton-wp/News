@@ -6,7 +6,7 @@
       </svg>
       <span class="text">
         <a class="reviews-link dark" href="#">
-          0
+          {{author.commentsCount}}
         </a>
       </span>
     </span>
@@ -16,7 +16,7 @@
       </svg>
       <span class="text">
         <a class="reviews-link dark" href="#">
-          0
+          {{author.verdictsCount}}
         </a>
       </span>
     </span>
@@ -26,7 +26,7 @@
       </svg>
       <span class="text">
         <a class="reviews-link dark" href="#">
-          0
+					{{author.followersCount}}
         </a>
       </span>
     </span>
@@ -42,6 +42,14 @@
     </span>
   </div>
 </template>
+
+<script>
+export default {
+	props:{
+		author: Object
+	}
+}
+</script>
 
 <style lang="scss" scoped>
   @import "../../assets/utils/colors";
