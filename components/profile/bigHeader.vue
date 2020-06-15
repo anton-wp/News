@@ -103,9 +103,6 @@ export default {
 		this.slug = this.$route.params.slug
 		this.updateProfile()
 	},
-	// destroyed () {
-	// 	this.$store.dispatch('CLEAR_PROFILE');
-	// },
 	methods: {
 		updateProfile () {
 			if(!this.slug && !this.$store.state.profile.id){
@@ -118,6 +115,8 @@ export default {
 			this.$http.get(`/api/profile/full`)
       .then(res => {
 				this.$store.dispatch('GET_PROFILE', res.data.data);
+
+				this.$store.commit('SET_BREADCRUMBS', [{title: `${res.data.data.firstName} ${res.data.data.lastName}`}])
       })
       .catch(error => console.error(error));
 		},
@@ -125,6 +124,8 @@ export default {
 			this.$http.get(`/api/author/${this.slug}`)
       .then(res => {
 				this.$store.dispatch('GET_PROFILE', res.data.data);
+
+				this.$store.commit('SET_BREADCRUMBS', [{title: `${res.data.data.firstName} ${res.data.data.lastName}`}])
       })
       .catch(error => console.error(error));
 		},

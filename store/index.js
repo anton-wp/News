@@ -11,7 +11,8 @@ const store = () => new Vuex.Store({
 		token: null,
 		tokenInfo: null,
 		profile: Object,
-		tabs: []
+		tabs: [],
+		breadcrumbs: []
 	},
 	getters: {
 		IS_TOKEN: state => {

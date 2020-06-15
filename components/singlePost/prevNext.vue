@@ -54,7 +54,6 @@ export default {
 		getPosts () {
 			this.$http.get(`/api/posts/${this.slug}/previous-next`)
 				.then(res => {
-					console.log(res)
 					this.posts = res.data
 				})
 				.catch(error => {

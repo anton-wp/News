@@ -66,17 +66,18 @@ export default {
 	  search: '',
 	  pagination: Object
     }
-  },
+	},
+	created () {
+		this.$store.commit('SET_BREADCRUMBS', [{title: 'Search'}])
+		this.stringSearch = this.$route.query.q
+		this.getSearch()
+	},
   beforeRouteUpdate (to, from, next) {
     // console.log(to.query.q)
     this.stringSearch = to.query.q
     next()
   },
-  created () {
-	this.stringSearch = this.$route.query.q
-	this.getSearch()
-  },
-   watch: {
+  watch: {
     '$route.query'() {
       this.getSearch()
     }
