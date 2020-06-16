@@ -5,8 +5,8 @@
         Latest:
       </div>
       <div class="hot-news-item-list-wrapper">
-        <div class="hot-news-item-list">
-          <div class="hot-news-item" v-for="item in tags" :key="item.id">
+        <div class="hot-news-item-list" :class="hoverClass || ''" @mouseenter="hoverClass='stop-animation'" @mouseleave="hoverClass=''">
+          <div class="hot-news-item" v-for="(item, index) in tags" :key="index">
             <nuxt-link class="hot-news-link" v-bind:to="`/l/${item.slug}`">
               {{ item.name }}
             </nuxt-link>
@@ -33,12 +33,13 @@ export default {
   data () {
     return {
       showPopusSearch: false,
+			hoverClass: String,
       tags: []
     }
   },
   beforeMount () {
      this.$http.get(`/api/tags/featured-tags`)
-    .then(res => this.tags = res.data.data)
+    .then(res => this.tags = [...res.data.data, ...res.data.data])
     .catch(error => console.error(error))
   },
   methods: {
@@ -76,6 +77,10 @@ export default {
     .hot-news-item-list-wrapper {
       overflow-x: hidden;
     }
+
+		.stop-animation {
+			animation: rolling infinite linear 50s paused !important;
+		}
     .hot-news-item-list {
       padding-top: 3px;
       // padding: 0 12px;
@@ -83,6 +88,15 @@ export default {
       display: flex;
       width: fit-content;
       position: relative;
+			animation: rolling infinite linear 50s ;
+			@keyframes rolling {
+        from {
+          transform: translate(-0%, 0);
+        }
+        to {
+          transform: translate(-50%, 0)
+        }
+      }
       .hot-news-item {
         padding: 0 12px;
         width: max-content;

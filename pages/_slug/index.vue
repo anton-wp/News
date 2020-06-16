@@ -1,5 +1,5 @@
 <template>
-	<component :is="type" :data="data" tag :slug="$route.params.slug" :pagination="pagination" v-if="type"/>
+	<component :is="type" :data="data" tag :slug="$route.params.slug" :term="term" :pagination="pagination" v-if="type"/>
 </template>
 
 <script>
@@ -15,7 +15,8 @@
 			return {
 				type: null,
 				data: null,
-				pagination: null
+				pagination: null,
+				term: null,
 			}
 		},
 		created() {
@@ -25,6 +26,7 @@
 					// console.log(data.data)
 					this.type = data.type;
 					this.data = data.data;
+					this.term = data.term;
 					this.pagination = data.pagination;
 				})
 				.catch(error => {

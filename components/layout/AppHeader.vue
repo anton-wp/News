@@ -166,7 +166,7 @@ export default {
         document.documentElement.offsetWidth === 993
       ) {
         this.cropMenu = 3;
-      } else if (document.documentElement.offsetWidth < 1100) {
+      } else if (document.documentElement.offsetWidth < 1200) {
         this.cropMenu = Math.floor(menu.offsetWidth / 100 - 1);
       } else {
         this.cropMenu = Math.floor(menu.offsetWidth / 100);
