@@ -19,10 +19,10 @@
 			}
 		},
 		created() {
-			console.log(this.$route.params)
+			// console.log(this.$route.params)
 			this.$http.get(`/api/${this.$route.params.slug}?limit=12`)
 				.then(({ data }) => {
-					console.log(data.data)
+					// console.log(data.data)
 					this.type = data.type;
 					this.data = data.data;
 					this.pagination = data.pagination;

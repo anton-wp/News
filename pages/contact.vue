@@ -136,7 +136,10 @@ import Follow from '~/components/universal-components/followBlock.vue'
 export default {
   components: {
     Follow
-  }
+	},
+	created () {
+		this.$store.commit('SET_BREADCRUMBS', [{title: 'Contact'}])
+	}
 }
 </script>
 

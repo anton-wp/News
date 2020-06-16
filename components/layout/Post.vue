@@ -156,6 +156,9 @@
 				bodySize: 110
 			}
 		},
+		created () {
+			this.$store.commit('SET_BREADCRUMBS', [{title: this.data.category.name, path: '/' + this.data.category.slug}, {title: this.data.title}])
+		},
 		methods: {
 			changeFontSize () {
 				if(this.bodySize === 130){

@@ -9,6 +9,7 @@ import Following from '~/components/profile/following'
 
 export default {
 	layout: "profile",
+	middleware: "auth",
 	components: {
 		Following
 	}

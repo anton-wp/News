@@ -11,6 +11,7 @@ import NotificationBlock from '~/components/profile/block-notification'
 
 export default {
   layout: 'profile',
+	middleware: "auth",
   components: {
     NotificationBlock
   }

@@ -446,7 +446,7 @@ export default {
     },
     data() {
         return {
-            postId: null,
+            postId: undefined,
             date: {
                 month: null,
                 day: null,
@@ -653,10 +653,11 @@ export default {
         saveDraft() {
 			// let formData = this.formData
             this.$http
-                .post( '/api/posts/', this.formData
+                .post( `/api/posts/${this.postId || ''}`, this.formData
                 )
                 .then(resp => {
 					console.log(resp);
+                    this.postId = resp.data.id;
 				})
                 .catch(error => {
                     console.log(error);

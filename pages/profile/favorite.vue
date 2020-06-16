@@ -37,6 +37,7 @@ import DefaultNewsCard from '~/components/news/DefaultNewsCard'
 
 export default {
   layout: 'profile',
+	middleware: "auth",
   components: {
     DefaultNewsCard
   },

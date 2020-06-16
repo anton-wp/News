@@ -67,12 +67,21 @@ export default {
     activTabsStart(res, rout2, rout3) {
       let rout = [];
       if (!rout2) {
-        let str = "";
-        rout = this.$route.fullPath.split("/");
-        rout = rout.map(rout => (rout = str.concat("/", rout)));
+        if(!this.slug){
+					let str = "";
+					console.log(this.$route)
+					rout = this.$route.fullPath.split("/");
+					rout = rout.map(rout => (rout = str.concat("/", rout)));
+					rout = rout.map(rout => rout === '/' ? rout = undefined : rout );
+				}else {
+					let str = "";
+					rout = this.$route.fullPath.split("/");
+					rout = rout.map(rout => (rout = str.concat("/", rout)));
+					rout = rout.slice(1, 5);
+				}
       } else {
         rout[2] = rout2;
-        rout[3] = rout3;
+				rout[3] = rout3;
       }
       res.map(data => {
         if (data.path === rout[2]) {
