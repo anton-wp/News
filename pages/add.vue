@@ -4,7 +4,6 @@
             <div class="row blockForm">
                 <div class="col-lg-12">
                     <h1 class="create-post-title">Add Post</h1>
-                    <h1 class="create-post-title">Edit Draft</h1>
                     <p class="create-post-subtitle">
                         must follow
                         <a href="#">TOS</a> and general post
@@ -13,7 +12,7 @@
                 </div>
             </div>
 
-            <form class="primary-form" id="addPostForm">
+            <form class="primary-form dropzone" id="addPostForm">
                 <div class="row blockForm">
                     <div class="col-12 col-lg-7 col-xl-8">
                         <div class="add-field" v-if="fields.title">
@@ -29,6 +28,7 @@
                                     maxlength="120"
                                     rows="2"
                                     v-model.trim="$v.title.$model"
+                                    @blur="saveDraft"
                                 ></textarea>
 
                                 <div class="counter">
@@ -55,6 +55,7 @@
                                     maxlength="120"
                                     rows="2"
                                     v-model.trim="$v.subtitle.$model"
+                                    @blur="saveDraft"
                                 ></textarea>
                                 <div class="counter">
                                     <span>{{ titlesLength.subtitle }}/</span>
@@ -74,24 +75,28 @@
                                     <span class="required">*</span>
                                 </label>
 
-                                <editor v-model="content" />
+                                <editor
+                                    :postid="postId"
+                                    v-model="content"
+                                    @editor:saved="saveDraft"
+                                />
 
                                 <div class="radius">
                                     <div class="body"></div>
                                 </div>
                                 <div class="counter radius">
-                                    <span>0/</span>
+                                    <span>{{ countContent }}/</span>
                                     <span>10000</span>
                                 </div>
                             </div>
                             <div
                                 class="error-notification"
-                                v-if="!$v.body.required && $v.body.$dirty"
+                                v-if="countContent = 0 && errorNotif"
                             >This field is required</div>
                             <div
                                 class="error-notification"
-                                v-if="!$v.body.minLength"
-                            >Minimum content length: 350 words</div>
+                                v-if="countContent < 350 && errorNotif"
+                            >Minimum content length: 350 letters</div>
                         </div>
                     </div>
 
@@ -115,6 +120,7 @@
                                                 <select
                                                     class="form-input select"
                                                     v-model="date.month"
+                                                    @change="saveDraft"
                                                 >
                                                     <option
                                                         v-for="(month, index) of months"
@@ -134,6 +140,7 @@
                                                 <select
                                                     class="form-input select"
                                                     v-model="date.day"
+                                                    @change="saveDraft"
                                                 >
                                                     <option
                                                         v-for="day of daysInMonth"
@@ -153,6 +160,7 @@
                                                 <select
                                                     class="form-input select"
                                                     v-model="date.year"
+                                                    @change="saveDraft"
                                                 >
                                                     <option
                                                         v-for="year of years"
@@ -174,6 +182,7 @@
                                                 <select
                                                     class="form-input select"
                                                     v-model="date.hours"
+                                                    @change="saveDraft"
                                                 >
                                                     <option
                                                         v-for="hour of hours"
@@ -197,6 +206,7 @@
                                                 <select
                                                     class="form-input select"
                                                     v-model="date.minutes"
+                                                    @change="saveDraft"
                                                 >
                                                     <option
                                                         v-for="minute of minutes"
@@ -230,7 +240,11 @@
                                 <span class="required">*</span>
                             </label>
 
-                            <select class="form-input select" v-model="selectedCategory">
+                            <select
+                                class="form-input select"
+                                v-model="selectedCategory"
+                                @change="saveDraft"
+                            >
                                 <option
                                     v-for="category of categories"
                                     :value="category.id"
@@ -249,7 +263,11 @@
                                 Verdict Options
                                 <span class="required">*</span>
                             </label>
-                            <select class="form-input select" v-model="selectedOption">
+                            <select
+                                class="form-input select"
+                                v-model="selectedOption"
+                                @change="saveDraft"
+                            >
                                 <option
                                     v-for="option of options"
                                     :value="option.title"
@@ -286,6 +304,7 @@
                                 :max="5"
                                 @tag="addTag"
                                 @search-change="searchOptions"
+                                @select="saveDraft"
                             ></multiselect>
 
                             <div
@@ -314,6 +333,7 @@
                                 :show-no-results="false"
                                 :hide-selected="false"
                                 @search-change="searchAuthors"
+                                @select="saveDraft"
                             >
                                 <template slot="option" slot-scope="props">
                                     <div class="option__desc">
@@ -328,7 +348,7 @@
                             <div>
                                 <button
                                     class="button-add post-button"
-                                    @click.prevent="saveDraft"
+                                    @click.prevent="publishedPost"
                                 >Publish</button>
                                 <div class="buttons-forse">
                                     <div class="forse">
@@ -354,18 +374,61 @@
                                 <span class="required">*</span>
                             </label>
 
-                            <button class="button-add post-button">Add Image</button>
-                            <input type="file" id="file" />
+                            <button
+                                class="button-add post-button"
+                                @click.prevent="trigerInputUpload()"
+                            >Add Image</button>
+                            <input
+                                name="file"
+                                type="file"
+                                id="file"
+                                ref="img"
+                                @change="uploadImg()"
+                            />
                         </div>
 
+                        <dropzone
+                            id="foo"
+                            ref="drope"
+                            :options="dropOptions"
+                            :destroyDropzone="true"
+                            @vdropzone-success="afterComplete"
+                            @vdropzone-processing="loadingDrop=true"
+                            :include-styling="false"
+                            class="drop-wrap"
+                            v-if="dropVisible"
+                            :useCustomSlot="true"
+                        >
+                            <h3 class="drop-title text-center">
+                                Drag and drop your image
+                                <br />or
+                            </h3>
+                            <div class="drop-btn">Choose Your Image</div>
+
+                            <p class="drop-subtitle">maximum file size: 50mb</p>
+
+                            <div class="cssload-container" v-if="loadingDrop">
+                                <div class="lds-ellipsis">
+                                    <div></div>
+                                    <div></div>
+                                    <div></div>
+                                    <div></div>
+                                </div>
+                            </div>
+                        </dropzone>
+
                         <clipper-basic
-                            src="http://dummyimage.com/1920x1080/99cccc.jpeg"
+                            :src="imgCrop"
                             preview="preview"
                             :grid="true"
                             :ratio="16/9"
                             :touch-create="false"
-                            class
-                        />
+                            ref="clipper"
+                            class="croper"
+                            @load="clipperLoaded"
+                        ></clipper-basic>
+
+                        <button @click.prevent="someFnc">clipper</button>
                     </div>
                     <div class="col-12 col-lg-5 col-xl-4">
                         <div
@@ -373,6 +436,7 @@
                             style="max-width: 410px; height: 100%; margin: 0 auto;"
                         >
                             <clipper-preview name="preview"></clipper-preview>
+
                             <div class="header-metadata">
                                 <span class="category js--post-category-preview">
                                     <span>category</span>
@@ -418,14 +482,18 @@
                                 <span class="required">*</span>
                             </label>
                             <input
-                                required="required"
                                 class="form-input"
                                 placeholder="e.g Instagram, Youtube, etc"
+                                v-model.trim="$v.imgTitle.$model"
+                                @blur="saveDraft"
                             />
                             <label class="require">
                                 <span class="required">*</span> required fields
                             </label>
-                            <div class="error-notification">This field is required</div>
+                            <div
+                                class="error-notification"
+                                v-if="!$v.imgTitle.required && errorNotif"
+                            >This field is required</div>
                         </div>
                     </div>
                 </div>
@@ -438,11 +506,14 @@
 import { maxLength, minLength, required } from "vuelidate/lib/validators";
 import { months } from "~/constants/dates";
 import Multiselect from "vue-multiselect";
+import Dropzone from "nuxt-dropzone";
+import Cookies from "js-cookie";
 
 export default {
     // middleware: "auth",
     components: {
-        Multiselect
+        Multiselect,
+        Dropzone
     },
     data() {
         return {
@@ -465,7 +536,6 @@ export default {
             title: "",
             subtitle: "",
             submitStatus: "",
-            body: "",
             fields: {
                 title: false,
                 subTitle: false,
@@ -494,7 +564,24 @@ export default {
 
             selectedAuthor: [],
             authorsOption: [],
-            isLoadingAuthor: false
+            isLoadingAuthor: false,
+
+            // cropper
+            imgCrop: undefined,
+            cropperX: undefined,
+            cropperY: undefined,
+            cropperW: undefined,
+            cropperH: undefined,
+            featuredImage: undefined,
+            dropOptions: {
+                url: "/api/media/image-preload/",
+                maxFilesize: 50, // MB
+                maxFiles: 1,
+                headers: { Authorization: "barier" },
+                paramName: "image"
+            },
+            loadingDrop: false,
+            dropVisible: true
         };
     },
     validations: {
@@ -516,6 +603,10 @@ export default {
         }
     },
     methods: {
+        someFnc() {
+            console.log(this.content);
+            console.log(this.countContent);
+        },
         searchOptions(query) {
             if (query) {
                 this.isLoading = true;
@@ -545,8 +636,6 @@ export default {
                 )
                 .then(({ data }) => {
                     this.authorsOption = data.data;
-
-                    console.log(this.authorsOption);
 
                     this.isLoadingAuthor = false;
                 });
@@ -647,21 +736,126 @@ export default {
                 }
             });
 
-            return tagsForFormdata;
+            return tagsForFormdata.toString();
+        },
+
+        trigerInputUpload() {
+            this.$refs.img.click();
+        },
+
+        uploadImg() {
+            this.loadingDrop = true;
+
+            const formData = new FormData();
+
+            formData.append("image", this.$refs.img.files[0]);
+
+            this.$http
+                .post("/api/media/image-preload/", formData)
+                .then(res => {
+                    this.imgCrop = res.data.blob;
+
+                    this.dropVisible = false;
+                    this.loadingDrop = false;
+
+                    this.$refs.clipper.setTL$.next({ left: 1, top: 1 });
+                    this.$refs.clipper.setWH$.next({ width: 50, height: 50 });
+
+                    console.log(this.$refs.clipper.getDrawPos());
+
+                    // this.saveDraft();
+                })
+                .catch(error => console.error(error));
+        },
+
+        clipperLoaded() {
+            this.dropVisible = false;
+            this.loadingDrop = false;
+            setTimeout(() => {
+                this.$refs.clipper.setTL$.next({ left: 1, top: 1 });
+                this.$refs.clipper.setWH$.next({ width: 50, height: 50 });
+
+                this.saveDraft();
+            }, 500);
+        },
+
+        clipperChanged() {
+            this.$refs.clipper.onChange$.subscribe(() => {
+                const cropPos = this.$refs.clipper.getDrawPos();
+
+                this.cropperX = Math.floor(cropPos.pos.sx);
+                this.cropperY = Math.floor(cropPos.pos.sy);
+                this.cropperW = Math.floor(cropPos.pos.swidth);
+                this.cropperH = Math.floor(cropPos.pos.sheight);
+            });
+        },
+
+        afterComplete(file, res) {
+            this.imgCrop = res.blob;
         },
 
         saveDraft() {
-			// let formData = this.formData
+            if (this.postId) {
+                this.$http
+                    .patch(`/api/posts/${this.postId}`, this.formData)
+                    .then(resp => {
+                        console.log(resp);
+                    })
+                    .catch(error => {
+                        console.log(error);
+                    });
+
+                return;
+            }
+
             this.$http
-                .post( `/api/posts/${this.postId || ''}`, this.formData
-                )
+                .post("/api/posts/", this.formData)
                 .then(resp => {
-					console.log(resp);
                     this.postId = resp.data.id;
-				})
+                })
                 .catch(error => {
                     console.log(error);
                 });
+        },
+
+        publishedPost() {
+            this.errorNotif = true;
+            if (this.$v.$invalid) {
+                return;
+            }
+            // if (this.postId) {
+            //     this.$http
+            //         .patch(`/api/posts/${this.postId}/publish`, this.formData)
+            //         .then(resp => {
+            //             console.log(resp);
+            //         })
+            //         .catch(error => {
+            //             console.log(error);
+            //         });
+
+            //     return;
+            // }
+
+            // this.$http
+            //     .post("/api/posts/", this.formData)
+            //     .then(resp => {
+            //         this.postId = resp.data.id;
+
+            //         this.$http
+            //             .patch(
+            //                 `/api/posts/${this.postId}/publish`,
+            //                 this.formData
+            //             )
+            //             .then(resp => {
+            //                 console.log(resp);
+            //             })
+            //             .catch(error => {
+            //                 console.log(error);
+            //             });
+            //     })
+            //     .catch(error => {
+            //         console.log(error);
+            //     });
         }
     },
     created() {
@@ -686,6 +880,21 @@ export default {
         this.addFields();
         this.getCategories();
         this.getOptions();
+
+        const token = Cookies.get("token");
+        this.dropOptions.headers.Authorization = `Bearer ${token}`;
+
+        this.$http
+            .post("/api/posts/")
+            .then(resp => {
+                this.postId = resp.data.id;
+            })
+            .catch(error => {
+                console.log(error);
+            });
+    },
+    mounted() {
+        this.clipperChanged();
     },
     computed: {
         daysInMonth() {
@@ -718,51 +927,85 @@ export default {
                 title: this.$v.title.$model.length,
                 subtitle: this.$v.subtitle.$model.length
             };
+
             return lengthTitle;
         },
 
+        countContent() {
+            let contentCount = 0;
+            contentCount = this.content.reduce(function(prev, el) {
+                let counter = 0;
+
+                if (
+                    el.type !== "linkTool" &&
+                    el.type !== "image" &&
+                    el.type !== "list"
+                ) {
+                    counter = el.data.text.length;
+                    return counter + prev;
+                }
+
+                if (el.type === "list" && el.data.items.length > 0) {
+                    counter = el.data.items.reduce(function(previus, elem) {
+                        return elem.length + previus;
+                    }, 0);
+                } else {
+                    return (counter = 0);
+                }
+
+                return counter + prev;
+            }, 0);
+
+            return contentCount;
+        },
+
         formData() {
-            const newData = {
-                publishedAt: this.selectedDate,
-                category: this.selectedCategory,
-                verdictOption: this.selectedOption
-            };
+            const newData = new FormData();
 
-            if (this.$v.title.$model) newData.title = this.$v.title.$model;
-            if (this.$v.subtitle.$model)
-                newData.subTitle = this.$v.subtitle.$model;
-            if (this.content.length) newData.body = this.content;
-            if (this.formatTags().length) newData.tags = this.formatTags();
+            if (this.$v.title.$model) {
+                newData.append("title", this.$v.title.$model);
+            }
+            if (this.$v.subtitle.$model) {
+                newData.append("subTitle", this.$v.subtitle.$model);
+            }
+            if (this.content.length) {
+                newData.append("body", JSON.stringify(this.content));
+            }
+            if (this.formatTags().length) {
+                newData.append("tags", this.formatTags());
+            }
+            if (this.selectedCategory) {
+                newData.append("category", this.selectedCategory);
+            }
+            if (this.selectedOption) {
+                newData.append("verdictOption", this.selectedOption);
+            }
+            if (this.selectedDate) {
+                newData.append("publishedAt", this.selectedDate);
+            }
 
-            // title: this.$v.title.$model,
-            //     subTitle: this.$v.subtitle.$model,
-            //     body: this.content,
-            //     tags: this.formatTags(),
-            //     category: this.selectedCategory,
-            //     verdictOption: this.selectedOption,
-            //     publishedAt: this.selectedDate
-            // featuredImage: (binary)
-            // source: sdf sdf sdf sdf s
-            // cropperX: 134
-            // cropperY: 69.21875
-            // cropperWidth: 500
-            // cropperHeight: 281
+            // if (object.forcePublish) { newData.append('forcePublish', object.forcePublish); };
 
-            // const newData = new FormData();
+            if (this.imgCrop) {
+                newData.append("featuredImage", this.imgCrop);
+            }
 
-            // newData.append("publishedAt", this.selectedDate);
-            // newData.append("category", this.selectedCategory);
-            // newData.append("verdictOption", this.selectedOption);
+            if (this.$v.imgTitle.$model) {
+                newData.append("source", this.$v.imgTitle.$model);
+            }
 
-            // newData.append("", this.selectedDate);
-
-            // if (this.$v.title.$model)
-            //     newData.append("title", this.$v.title.$model);
-            // if (this.$v.subtitle.$model)
-            //     newData.append("subTitle", this.$v.subtitle.$model);
-            // if (this.content.length) newData.append("body", this.content);
-            // if (this.formatTags().length)
-            //     newData.append("tags", this.selectedDate);
+            if (this.cropperX) {
+                newData.append("cropperX", this.cropperX);
+            }
+            if (this.cropperY) {
+                newData.append("cropperY", this.cropperY);
+            }
+            if (this.cropperW) {
+                newData.append("cropperWidth", this.cropperW);
+            }
+            if (this.cropperH) {
+                newData.append("cropperHeight", this.cropperH);
+            }
 
             return newData;
         }
@@ -773,8 +1016,133 @@ export default {
 <style src="vue-multiselect/dist/vue-multiselect.min.css"></style>
 
 <style lang="scss" scoped>
+// @import "nuxt-dropzone/dropzone.css";
 @import "../assets/utils/variables";
 @import "../assets/utils/colors";
+
+.cssload-container {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    left: 0;
+    top: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #ccc;
+    margin-top: 0 !important;
+    z-index: 3;
+    .lds-ellipsis {
+        display: inline-block;
+        position: relative;
+        width: 80px;
+        height: 80px;
+    }
+
+    .lds-ellipsis div {
+        position: absolute;
+        top: 33px;
+        width: 13px;
+        height: 13px;
+        border-radius: 50%;
+        background: grey;
+        animation-timing-function: cubic-bezier(0, 1, 1, 0);
+    }
+
+    .lds-ellipsis div:nth-child(1) {
+        left: 8px;
+        animation: lds-ellipsis1 0.6s infinite;
+    }
+
+    .lds-ellipsis div:nth-child(2) {
+        left: 8px;
+        animation: lds-ellipsis2 0.6s infinite;
+    }
+
+    .lds-ellipsis div:nth-child(3) {
+        left: 32px;
+        animation: lds-ellipsis2 0.6s infinite;
+    }
+
+    .lds-ellipsis div:nth-child(4) {
+        left: 56px;
+        animation: lds-ellipsis3 0.6s infinite;
+    }
+
+    @keyframes lds-ellipsis1 {
+        0% {
+            transform: scale(0);
+        }
+
+        100% {
+            transform: scale(1);
+        }
+    }
+
+    @keyframes lds-ellipsis3 {
+        0% {
+            transform: scale(1);
+        }
+
+        100% {
+            transform: scale(0);
+        }
+    }
+
+    @keyframes lds-ellipsis2 {
+        0% {
+            transform: translate(0, 0);
+        }
+
+        100% {
+            transform: translate(24px, 0);
+        }
+    }
+}
+
+.drop-wrap {
+    height: 400px;
+    width: 100%;
+    background-color: #e5e5e5;
+    position: relative;
+    cursor: pointer;
+    padding-top: 400/850 * 100%;
+    &:after {
+        content: "";
+        position: absolute;
+        top: 20px;
+        left: 20px;
+        right: 20px;
+        bottom: 20px;
+        border: 2px dashed #867f7f;
+        opacity: 0;
+        transition: all 0.5s ease;
+        z-index: 1;
+    }
+    &:hover {
+        &:after {
+            opacity: 1;
+        }
+    }
+}
+
+.drop-btn {
+    display: inline-flex;
+    border: 1px solid #8d8d8d;
+    color: #8d8d8d;
+    text-transform: uppercase;
+    font-weight: bold;
+    padding: 10px 20px;
+    transition: all 0.5s ease;
+    &:hover {
+        color: #e5e5e5;
+        background-color: #8d8d8d;
+    }
+}
+
+.drop-subtitle {
+    font-weight: bold;
+}
 
 .croper {
     width: 100%;
