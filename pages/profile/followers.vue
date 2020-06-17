@@ -30,6 +30,7 @@ import FollowerBlock from '~/components/profile/block-follower'
 
 export default {
   layout: 'profile',
+	middleware: "auth",
   components: {
     FollowerBlock
   }

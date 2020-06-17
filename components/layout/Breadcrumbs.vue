@@ -1,25 +1,24 @@
 <template>
-  <div class="routing">
-    <template>
-      <span class="breadcrumbs">
-        label1
-        <span class="arrow">
+  <div class="routing" v-if="breadcrumbs.length">
+      <component :is="item.path ? 'nuxt-link' : 'span'" class="breadcrumbs" v-for="(item, index) of breadcrumbs" :key="index" :to="item.path">
+        <span :class="item.path ? 'active-breadcrumbs' : ''">{{ item.title }}</span>
+        <span class="arrow" v-if="breadcrumbs[index + 1]">
           >
         </span>
-      </span>
-      <a class="breadcrumbs">
-        <span class="breadcrumbs">
-          label3
-          <span class="arrow">
-            >
-          </span>
-        </span>
-      </a>
-    </template>
+      </component>
   </div>
 </template>
 
-<style lang="scss">
+<script>
+import {mapState} from 'vuex'
+export default {
+	computed: {
+		...mapState(['breadcrumbs'])
+	}
+}
+</script>
+
+<style lang="scss" scoped>
   @import "../../assets/utils/variables";
 
   .routing {
@@ -29,19 +28,20 @@
     padding: 0 15px;
 
     .breadcrumbs {
-      // padding: 0 4px 0 0;
-
       font-size: 11px;
       font-weight: 400;
       text-decoration: none;
       transition: 0.3s;
       color: $black;
-      cursor: pointer;
 
-      &:hover {
-        color: #ff4242;
-      }
     }
+		.active-breadcrumbs {
+			cursor: pointer;
+
+			&:hover {
+				color: #ff4242;
+			}
+		}
 
     .arrow {
       padding: 0 5px;

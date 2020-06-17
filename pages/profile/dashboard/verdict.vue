@@ -6,6 +6,7 @@
 
 <script>
 export default {
-  layout: 'profileSmall'
+	layout: 'profileSmall',
+	middleware: "auth",
 }
 </script>

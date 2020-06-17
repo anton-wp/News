@@ -74,6 +74,9 @@
 			pagination: Object,
 			tag: Boolean
 		},
+		created () {
+			this.$store.commit('SET_BREADCRUMBS', [{title: this.slug}])
+		},
 		mounted () {
 			this.posts.push(this.data);
 			this.paginations = this.pagination

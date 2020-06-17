@@ -2,19 +2,11 @@
   <div class="container-fluid followVerdict">
     <div class="wrapper-title-follow">
       <h5>
-        <span>
-          follow verdict
-        </span>
+        <span>follow verdict</span>
       </h5>
     </div>
     <div class="col-12 social-links">
-      <div class="row socialBlock">
-        <div v-for="icon in social" :key="icon.linkName" class="social-icon-round" v-bind:class="icon.linkName">
-          <svg width="30" height="30">
-            <use v-bind:xlink:href="`#${icon.linkName}`" />
-          </svg>
-        </div>
-      </div>
+      <social-block />
     </div>
     <div id="follow">
       <div class="row">
@@ -31,7 +23,7 @@
                 style="border: none; visibility: visible; width: 500px; height: 121px;" class="">
               </iframe>
             </span>
-          </div> -->
+          </div>-->
         </div>
       </div>
     </div>
@@ -43,35 +35,25 @@
 </template>
 
 <script>
-import SidebarWithPosts from '~/components/universal-components/sidebar-with-posts.vue'
+import SidebarWithPosts from "~/components/universal-components/sidebar-with-posts.vue";
+import SocialBlock from "~/components/universal-components/socialBlock.vue";
 
 export default {
   components: {
-    SidebarWithPosts
+    SidebarWithPosts,
+    SocialBlock
   },
   props: {
     posts: Boolean
-  },
-  data () {
-    return {
-      social: [
-        { linkName: 'facebook', link: '/' },
-        { linkName: 'twitter', link: '/' },
-        { linkName: 'instagram', link: '/' },
-        { linkName: 'pinterest', link: '/' },
-        { linkName: 'feedburner', link: '/' },
-        { linkName: 'feed', link: '/' }
-      ]
-    }
   }
-}
+};
 </script>
 
 <style lang="scss" scoped>
-  @import "../../assets/utils/variables";
-  @import "../../assets/utils/colors";
+@import "../../assets/utils/variables";
+@import "../../assets/utils/colors";
 
-  .followVerdict {
+.followVerdict {
   // font-family: 'Open Sans', Helvetica Neue,Helvetica,Roboto,Arial,sans-serif;
   margin-bottom: 44px;
   position: sticky;
@@ -105,7 +87,7 @@ export default {
         padding-right: 5px;
       }
       &::after {
-        content: '';
+        content: "";
         position: absolute;
         display: block;
         top: 8px;
@@ -120,53 +102,14 @@ export default {
   .social-links {
     margin-bottom: 2.2em;
 
-    .instagram { background-color: $millbrook; };
-
-    .twitter { background-color: $pictonBlue; };
-
-    .feed { background-color: $flamingo; };
-
-    .pinterest { background-color: $cardinal; };
-
-    .news-icon { background-color: $lochmara; };
-
-    .facebook { background-color: $chambray; };
-
-    .feedburner { background-color: $feedburner; };
-
-    .socialBlock {
-      justify-content: space-around;
-
-      @media (max-width: 992px) {
-        justify-content: space-between;
-      }
-
-      @media (max-width: 576px) {
-        justify-content: space-around;
-      }
-    }
-
-    .social-icon-round {
-      width: 45px;
-      height: 45px;
-      border-radius: 25px;
-      position: relative;
-      margin: 0 auto 15px;
+    .social-icon-in-menu {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 30px;
+      height: 30px;
       cursor: pointer;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      fill: $white;
-
-      .social-icon-in-menu {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        width: 30px;
-        height: 30px;
-        cursor: pointer;
-      }
     }
   }
 }
@@ -178,5 +121,4 @@ export default {
     }
   }
 }
-
 </style>

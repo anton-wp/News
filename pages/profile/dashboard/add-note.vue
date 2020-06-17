@@ -42,7 +42,8 @@
 
 <script>
 export default {
-  layout: 'profile'
+	layout: 'profile',
+	middleware: "auth",
 }
 </script>
 
