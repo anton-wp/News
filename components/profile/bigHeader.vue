@@ -1,153 +1,190 @@
 <template>
-  <div class="container">
-    <div class="row">
-      <div class="col-12 col-sm-3">
-        <div class="img">
-          <div>
-						<input type="file" id="file" ref="file" v-on:change="handleFileUpload()"/>
-            <div class="addPhoto" v-if="!slug"  v-on:click="submitFile()">
-              <svg width="24" height="27">
-                <use xlink:href="#camera" />
-              </svg>
+  <div class="mai">
+    <div class="container">
+      <div class="row">
+        <div class="col-12 col-sm-3">
+          <div class="img">
+            <div>
+              <input type="file" id="file" ref="file" v-on:change="handleFileUpload()" />
+              <div class="addPhoto" v-if="!slug" v-on:click="submitFile()">
+                <svg width="24" height="27">
+                  <use xlink:href="#camera" />
+                </svg>
+              </div>
+              <!-- <input type="file" id="file" :change="fileChangeEvent($event)"> -->
             </div>
-            <!-- <input type="file" id="file" :change="fileChangeEvent($event)"> -->
+            <img
+              class="default-avatar"
+              src="/image/default-avatar-original.png"
+              v-if="!$store.state.profile.avatar"
+            />
+            <img
+              :src="$store.state.profile.avatar.big"
+              class="default-avatar"
+              v-if="$store.state.profile.avatar"
+            />
           </div>
-          <img
-            class="default-avatar"
-            src="/image/default-avatar-original.png"
-						v-if="!$store.state.profile.avatar"
-					>
-          <img
-            :src="$store.state.profile.avatar.big"
-            class="default-avatar"
-						v-if="$store.state.profile.avatar"
-          />
-        </div>
-        <div class="about-your-role">
-          <p class="your-role">
-            {{$store.state.profile.rank}}
-          </p>
-          <div class>
-            <p class="vrep-count">
-              {{$store.state.profile.points}}
-            </p>
-            <p class="vrep-title">
-              V-rep
-            </p>
-          </div>
-          <div class="follow-block" v-if="slug">
-						<follow-buttons full :id="$store.state.profile.id"/>
+          <div class="about-your-role">
+            <p class="your-role">{{$store.state.profile.rank}}</p>
+            <div class>
+              <p class="vrep-count">{{$store.state.profile.points}}</p>
+              <p class="vrep-title">V-rep</p>
+            </div>
+            <div v-if="slug">
+              <button class="click-for-follow">Follow</button>
+              <button class="click-for-follow unfollow">Unfollow</button>
+            </div>
           </div>
         </div>
+        <div class="col-12 col-sm-5">
+          <h4 class="your-name">{{$store.state.profile.firstName}} {{$store.state.profile.lastName}}</h4>
+          <p class="member-since">{{ new Date($store.state.profile.createdAt).toDateString()}}</p>
+          <div class="mail-content">
+            <div class="mail-wrapper">
+              social
+              <!-- <fa-icon [icon]="faEnvelope"></fa-icon> -->
+            </div>
+          </div>
+        </div>
+        <div class="col-12 col-sm-4 stat">
+          <div class="wrapper-statistic">
+            <p class="statistic-count">{{ $store.state.profile.postsCount }}</p>
+            <p class="statistic-title">Posts</p>
+          </div>
+          <div class="wrapper-statistic">
+            <p class="statistic-count">{{ $store.state.profile.verdictsCount }}</p>
+            <p class="statistic-title">Verdicts</p>
+          </div>
+          <div class="wrapper-statistic">
+            <p class="statistic-count">{{ $store.state.profile.commentsCount }}</p>
+            <p class="statistic-title">Comments</p>
+          </div>
+        </div>
+        <!-- <input type="file" id="file" :change="fileChangeEvent($event)"> -->
       </div>
-      <div class="col-12 col-sm-5">
-        <h4 class="your-name">
-          {{$store.state.profile.firstName}} {{$store.state.profile.lastName}}
-        </h4>
-        <p class="member-since">
-        	{{ new Date($store.state.profile.createdAt).toDateString()}}
-        </p>
-        <div class="mail-content">
-          <div class="mail-wrapper">
-            social
-            <!-- <fa-icon [icon]="faEnvelope"></fa-icon> -->
-          </div>
-        </div>
+      <img
+        class="default-avatar"
+        src="/image/default-avatar-original.png"
+        v-if="!$store.state.profile.avatar"
+      />
+      <img
+        :src="$store.state.profile.avatar.big"
+        class="default-avatar"
+        v-if="$store.state.profile.avatar"
+      />
+    </div>
+    <div class="about-your-role">
+      <p class="your-role">{{$store.state.profile.rank}}</p>
+      <div class>
+        <p class="vrep-count">{{$store.state.profile.points}}</p>
+        <p class="vrep-title">V-rep</p>
       </div>
-      <div class="col-12 col-sm-4 stat">
-        <div class="wrapper-statistic">
-          <p class="statistic-count">
-            {{ $store.state.profile.postsCount }}
-          </p>
-          <p class="statistic-title">
-            Posts
-          </p>
-        </div>
-        <div class="wrapper-statistic">
-          <p class="statistic-count">
-						{{ $store.state.profile.verdictsCount }}
-          </p>
-          <p class="statistic-title">
-            Verdicts
-          </p>
-        </div>
-        <div class="wrapper-statistic">
-          <p class="statistic-count">
-            {{ $store.state.profile.commentsCount }}
-          </p>
-          <p class="statistic-title">
-            Comments
-          </p>
+      <div class="follow-block" v-if="slug">
+        <follow-buttons full :id="$store.state.profile.id" />
+      </div>
+    </div>
+    <!-- </div> -->
+    <div class="col-12 col-sm-5">
+      <h4 class="your-name">{{$store.state.profile.firstName}} {{$store.state.profile.lastName}}</h4>
+      <p class="member-since">{{ new Date($store.state.profile.createdAt).toDateString()}}</p>
+      <div class="mail-content">
+        <div class="mail-wrapper">
+          social
+          <!-- <fa-icon [icon]="faEnvelope"></fa-icon> -->
         </div>
       </div>
     </div>
+    <div class="col-12 col-sm-4 stat">
+      <div class="wrapper-statistic">
+        <p class="statistic-count">{{ $store.state.profile.postsCount }}</p>
+        <p class="statistic-title">Posts</p>
+      </div>
+      <div class="wrapper-statistic">
+        <p class="statistic-count">{{ $store.state.profile.verdictsCount }}</p>
+        <p class="statistic-title">Verdicts</p>
+      </div>
+      <div class="wrapper-statistic">
+        <p class="statistic-count">{{ $store.state.profile.commentsCount }}</p>
+        <p class="statistic-title">Comments</p>
+      </div>
+    </div>
   </div>
+  <!-- </div> -->
 </template>
 
 <script>
 import FollowButtons from "~/components/universal-components/Follow-Buttons";
 
 export default {
-	components: {
-		FollowButtons
-	},
-	data () {
-		return {
-			profile: Object,
-			slug: String,
-			file: ''
-		}
-	},
-	created () {
-		this.slug = this.$route.params.slug
-		this.updateProfile()
-	},
-	methods: {
-		updateProfile () {
-			if(!this.slug && !this.$store.state.profile.id){
-				this.getProfileFull()
-			}else if(this.slug && this.$store.state.profile.slug !== this.slug) {
-				this.getProfile()
-			}
-		},
-		getProfileFull () {
-			this.$http.get(`/api/profile/full`)
-      .then(res => {
-				this.$store.dispatch('GET_PROFILE', res.data.data);
-
-				this.$store.commit('SET_BREADCRUMBS', [{title: `${res.data.data.firstName} ${res.data.data.lastName}`}])
-      })
-      .catch(error => console.error(error));
-		},
-		getProfile () {
-			this.$http.get(`/api/author/${this.slug}`)
-      .then(res => {
-				this.$store.dispatch('GET_PROFILE', res.data.data);
-
-				this.$store.commit('SET_BREADCRUMBS', [{title: `${res.data.data.firstName} ${res.data.data.lastName}`}])
-      })
-      .catch(error => console.error(error));
-		},
-		updateAvatar (img) {
-			const formData = new FormData();
-    	if(img) { formData.append('avatar', img); };
-			this.$http.put(`/api/profile/update-avatar`, formData)
-      .then(res => {
-				this.$toasted.show(res.data.message)
-				this.$store.dispatch('CLEAR_PROFILE');
-				this.updateProfile()
-      })
-      .catch(error => console.error(error));
-		},
-		handleFileUpload(){
-			this.updateAvatar(this.$refs.file.files[0])
-			// this.file = this.$refs.file.files[0];
-		},
-		submitFile(){
-			document.getElementById('file').click();
+  components: {
+    FollowButtons
+  },
+  data() {
+    return {
+      profile: Object,
+      slug: String,
+      file: ""
+    };
+  },
+  created() {
+    this.slug = this.$route.params.slug;
+    this.updateProfile();
+  },
+  methods: {
+    updateProfile() {
+      if (!this.slug && !this.$store.state.profile.id) {
+        this.getProfileFull();
+      } else if (this.slug && this.$store.state.profile.slug !== this.slug) {
+        this.getProfile();
+      }
     },
-	}
-}
+    getProfileFull() {
+      this.$http
+        .get(`/api/profile/full`)
+        .then(res => {
+          this.$store.dispatch("GET_PROFILE", res.data.data);
+
+          this.$store.commit("SET_BREADCRUMBS", [
+            { title: `${res.data.data.firstName} ${res.data.data.lastName}` }
+          ]);
+        })
+        .catch(error => console.error(error));
+    },
+    getProfile() {
+      this.$http
+        .get(`/api/author/${this.slug}`)
+        .then(res => {
+          this.$store.dispatch("GET_PROFILE", res.data.data);
+
+          this.$store.commit("SET_BREADCRUMBS", [
+            { title: `${res.data.data.firstName} ${res.data.data.lastName}` }
+          ]);
+        })
+        .catch(error => console.error(error));
+    },
+    updateAvatar(img) {
+      const formData = new FormData();
+      if (img) {
+        formData.append("avatar", img);
+      }
+      this.$http
+        .put(`/api/profile/update-avatar`, formData)
+        .then(res => {
+          this.$toasted.show(res.data.message);
+          this.$store.dispatch("CLEAR_PROFILE");
+          this.updateProfile();
+        })
+        .catch(error => console.error(error));
+    },
+    handleFileUpload() {
+      this.updateAvatar(this.$refs.file.files[0]);
+      // this.file = this.$refs.file.files[0];
+    },
+    submitFile() {
+      document.getElementById("file").click();
+    }
+  }
+};
 </script>
 
 <style lang="scss" scoped>
@@ -235,7 +272,6 @@ export default {
     height: 40px;
     cursor: pointer;
     fill: $white;
-
   }
 
   .img {
@@ -274,62 +310,15 @@ export default {
     }
   }
 
-  .about-your-role {
-    text-align: center;
+  .follow-block {
+    display: flex;
+    justify-content: center;
+  }
 
-		.follow-block {
-			display: flex;
-    	justify-content: center;
-		}
-
-    .your-role {
-      margin-bottom: 0.4em;
-      font-size: 1.1em;
-      font-weight: 600;
-    }
-
-    .vrep-count {
-      color: #e0a31b;
-      font-size: 2.2em;
-      font-weight: 200;
-      line-height: 1.15;
-      margin-bottom: 0px;
-    }
-
-    .vrep-title {
-      font-size: 1em;
-    }
-
-    .click-for-follow {
-      font-size: 0.75rem;
-      padding: 0.6em 1.5em;
-      text-transform: none;
-      letter-spacing: 0.9px;
-      border-radius: 5px;
-      vertical-align: text-top;
-      margin-bottom: 0;
-      font-weight: 400;
-      pointer-events: all;
-      background: 0 0;
-      border: 1px solid;
-      color: #fff;
-      background-color: #f63e3c;
-      line-height: 1;
-      text-align: center;
-      transition: 0.3s;
-      cursor: pointer;
-
-      &:hover {
-        background-color: #bc2d2d;
-      }
-    }
-    .unfollow {
-      background-color: #8d8d8d;
-
-      &:hover {
-        background-color: #606060;
-      }
-    }
+  .your-role {
+    margin-bottom: 0.4em;
+    font-size: 1.1em;
+    font-weight: 600;
   }
 
   .your-name {
