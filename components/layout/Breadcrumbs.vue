@@ -33,6 +33,7 @@ export default {
       text-decoration: none;
       transition: 0.3s;
       color: $black;
+			text-transform: capitalize;
 
     }
 		.active-breadcrumbs {

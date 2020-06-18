@@ -19,7 +19,8 @@
             </span>
           </div>
           <div class="col-4 col-padding-0 img-wrapper">
-            <img src="/image/default-avatar-original.png" class="user-avatar">
+            <img src="/image/default-avatar-original.png" class="user-avatar" v-if="!modal.avatar.small">
+            <img :src="modal.avatar.small" class="user-avatar" v-if="modal.avatar.small" />
           </div>
         </div>
       </div>
@@ -37,16 +38,7 @@
       </div>
       <div class="followed-people-count-wrapper">
         <span>Followed by {{modal.followers}} people</span>
-        <button class="button-followed follow" v-if="modal.follow" @click="Subscribe" :disabled="loadingFollow">
-          Follow
-        </button>
-        <button class="button-followed unfollow" v-if="!modal.follow" @click="Unsubscribe" :disabled="loadingFollow">
-          Unfollow
-        </button>
-        <!-- <button class="button-followed unfollow">
-          <i class="fa fa-circle-o-notch fa-spin" />
-          Loading
-        </button> -->
+				<follow-buttons :id="modal.id"/>
       </div>
     </div>
     <div class="cssload-container" v-if="loading">
@@ -56,57 +48,45 @@
 </template>
 
 <script>
+import {mapState} from 'vuex'
+import FollowButtons from "~/components/universal-components/Follow-Buttons";
+
 export default {
+	components: {
+		FollowButtons
+	},
+	computed: {
+		...mapState(['modal'])
+	},
 	props: {
 		authorId: String
 	},
 	data () {
 		return {
-			loading: true,
-			modal: Object,
-			loadingFollow: false,
+			loading: false,
 			authorHttp: {
 				authorId: String
 			}
 		}
 	},
 	created () {
-		this.authorHttp.authorId = this.authorId
-		this.$http
-		.get(`/api/author/${this.authorId}/modal`)
-		.then(responce => {
-			this.loading = false
-			this.modal = responce.data.data;
-		})
-		.catch(error => {
-			// this.loading = false;
-			// this.errorMessage = error.response.data.message;
-		});
+		if(this.modal && this.modal.id !== this.authorId){
+			this.getModal()
+		}
 	},
 	methods: {
-		Unsubscribe () {
-			this.modal.follow = true
-			this.loadingFollow = true
+		getModal () {
+			this.loading = true;
+			this.authorHttp.authorId = this.authorId
 			this.$http
-			.post(`/api/author/unsubscribe`, this.authorHttp)
+			.get(`/api/author/${this.authorId}/modal`)
 			.then(responce => {
-				this.loadingFollow = false
+				this.loading = false
+				this.$store.dispatch('GET_MODAL', responce.data.data)
 			})
 			.catch(error => {
 				// this.loading = false;
 				// this.errorMessage = error.response.data.message;
-			});
-		},
-		Subscribe () {
-			this.modal.follow = false
-			this.loadingFollow = true
-			this.$http
-			.post(`/api/author/subscribe`, this.authorHttp)
-			.then(responce => {
-				this.loadingFollow = false
-			})
-			.catch(error => {
-
 			});
 		},
 	}
@@ -320,39 +300,10 @@ export default {
       font-weight: 600;
       font-size: 0.9em;
     }
-
-    .follow{
-      color: #ff4242;
-      border-color: #ff4242;
-      &:hover {
-        background-color: #bc2d2d;
-        color: #fff;
-      }
-    }
-
-    .unfollow{
-      color: #474747;
-      border-color:#474747;
-      &:hover {
-        background-color: #474747;
-        color: #fff;
-      }
-
-      .fa {
-        margin-left: -12px;
-        margin-right: 8px;
-      }
-    }
-
-    .button-followed {
-      font-size: 12px;
-      width: 88px;
-      height: 28px;
-      float: right;
-      border: 1px solid;
-      border-radius: 5px;
-      background-color: #fff;
-    }
+		.fa {
+			margin-left: -12px;
+			margin-right: 8px;
+		}
   }
 }
 

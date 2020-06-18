@@ -1,5 +1,5 @@
 <template>
-	<component :is="type" :data="data" tag :slug="$route.params.slug" :term="term" :pagination="pagination" v-if="type"/>
+	<component :is="type" :data="data" :tag="tag" :slug="$route.params.slug" :term="term" :pagination="pagination" v-if="type"/>
 </template>
 
 <script>
@@ -17,16 +17,24 @@
 				data: null,
 				pagination: null,
 				term: null,
+				rout: String,
+				tag: Boolean
 			}
 		},
-		created() {
+		mounted() {
 			// console.log(this.$route.params)
-			this.$http.get(`/api/${this.$route.params.slug}?limit=12`)
+			if(this.$route.params.slug === 'news') {
+				console.log(this.rout)
+				this.rout = 'posts/query/news'
+			} else {
+				this.rout = this.$route.params.slug
+			}
+			this.$http.get(`/api/${this.rout}?limit=12`)
 				.then(({ data }) => {
-					// console.log(data.data)
-					this.type = data.type;
+					this.tag = data.type === 'feed' ? false : true;
+					this.type = data.type === 'feed' ? 'category' : data.type;
 					this.data = data.data;
-					this.term = data.term;
+					this.term = data.term || {name: 'news'};
 					this.pagination = data.pagination;
 				})
 				.catch(error => {

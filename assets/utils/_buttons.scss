@@ -1,8 +1,12 @@
+button {
+	outline: none !important;
+}
+
 button.link-button {
   text-decoration: underline;
   appearance: none;
   cursor: pointer;
-  display: inline;
+	display: inline;
 }
 
 .button {

@@ -5,7 +5,7 @@
         <div class="avatar">
           <div class="img"></div>
         </div>
-        <div :class=" small ? 'small' : big">
+        <div :class=" small ? 'small' : ''">
           <p>New post "Daily Mail Accused Of Publishing Misinformation—Was It Really Chinese Supplied Information?" has been published in "Health".</p>
           <time>Mar 28,2020 6:14 pm EST</time>
         </div>

@@ -77,7 +77,7 @@
               <div class="container follow">
                 <span>Follow verdict</span>
                 <div class="social">
-									<social-block />
+                  <social-block />
                 </div>
               </div>
             </li>
@@ -122,8 +122,8 @@ import SocialBlock from "~/components/universal-components/socialBlock.vue";
 export default {
   components: {
     UserProfile,
-		LoginPopup,
-		SocialBlock
+    LoginPopup,
+    SocialBlock
   },
   data() {
     return {
@@ -150,6 +150,19 @@ export default {
       //Init
       this.getWindowWidth();
       // this.getWindowHeight()
+
+      this.$http
+        .get(`/api/profile/bookmarks/ids`)
+        .then(res => {
+          this.$store.dispatch("GET_BOOKMARK", res.data.data);
+        })
+        .catch(error => console.error(error));
+      this.$http
+        .get(`/api/profile/subscriptions/ids`)
+        .then(res => {
+          this.$store.dispatch("GET_SUBSCRIPTIONS", res.data.data);
+        })
+        .catch(error => console.error(error));
     });
   },
   methods: {
@@ -249,7 +262,7 @@ header {
   position: absolute;
   left: 25px;
   top: 25px;
-	cursor: pointer;
+  cursor: pointer;
   svg {
     color: $primary_color;
     font-size: 36px;
@@ -515,7 +528,7 @@ header {
   padding-top: 15px;
   padding-left: 0;
   position: fixed;
-	overflow: hidden;
+  overflow: hidden;
   li {
     list-style: none;
     .general-nav-item-link {
@@ -574,10 +587,9 @@ header {
       top: 17px;
     }
   }
-	.social {
-		margin: 0 auto;
-		width: 175px;
-	}
-
+  .social {
+    margin: 0 auto;
+    width: 175px;
+  }
 }
 </style>

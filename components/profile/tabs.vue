@@ -1,53 +1,51 @@
 <template>
-  <div class="tabs">
-    <ul>
-      <li class="menu" v-for="item in $store.state.tabs" :key="item.title">
-        <nuxt-link class="link" v-bind:to="item.children ? '' : `${path}${item.path}`">
-          <span
-            class="menu-block"
-            :class="item.status ? 'active-tab' : ''"
-            @click="item.children ? openCloseTabs(item.title) : activTabsUpdate(item.path)"
-          >
-            <svg width="20" height="20">
-              <use v-bind:xlink:href="`#${item.title}`" />
-            </svg>
+	<ul>
+		<li class="menu" v-for="item in $store.state.tabs" :key="item.title">
+			<nuxt-link class="link" v-bind:to="item.children ? '' : `${path}${item.path}`">
+				<span
+					class="menu-block"
+					:class="item.status ? 'active-tab' : ''"
+					@click="item.children ? openCloseTabs(item.title) : activTabsUpdate(item.path)"
+				>
+					<svg width="20" height="20">
+						<use v-bind:xlink:href="`#${item.title}`" />
+					</svg>
 
-            <span class="title">
-              {{ item.title }}
-              <span class="counter" v-if="item.counter > 0">({{ item.counter }})</span>
-            </span>
+					<span class="title">
+						{{ item.title }}
+						<span class="counter" v-if="item.counter > 0">({{ item.counter }})</span>
+					</span>
 
-            <svg
-              class="icon"
-              :class="item.status ? 'open' : ''"
-              v-if="item.children"
-              width="17"
-              height="17"
-            >
-              <use xlink:href="#caret-down" />
-            </svg>
-          </span>
-        </nuxt-link>
-        <ul class="blockSubMenu" v-if="item.children && item.status">
-          <li class="subMenu" v-for="subTabs in item.children" :key="subTabs.title">
-            <nuxt-link class="link" v-bind:to="`${path}${subTabs.path}`">
-              <span
-                class="subtitle"
-                :class="subTabs.status ? 'active-tab' : ''"
-                @click="activTabsUpdate(subTabs.path)"
-              >
-                {{ subTabs.title }}
-                <span
-                  class="counter"
-                  v-if="subTabs.counter"
-                >({{ subTabs.counter }})</span>
-              </span>
-            </nuxt-link>
-          </li>
-        </ul>
-      </li>
-    </ul>
-  </div>
+					<svg
+						class="icon"
+						:class="item.status ? 'open' : ''"
+						v-if="item.children"
+						width="17"
+						height="17"
+					>
+						<use xlink:href="#caret-down" />
+					</svg>
+				</span>
+			</nuxt-link>
+			<ul class="blockSubMenu" v-if="item.children && item.status">
+				<li class="subMenu" v-for="subTabs in item.children" :key="subTabs.title">
+					<nuxt-link class="link" v-bind:to="`${path}${subTabs.path}`">
+						<span
+							class="subtitle"
+							:class="subTabs.status ? 'active-tab' : ''"
+							@click="activTabsUpdate(subTabs.path)"
+						>
+							{{ subTabs.title }}
+							<span
+								class="counter"
+								v-if="subTabs.counter"
+							>({{ subTabs.counter }})</span>
+						</span>
+					</nuxt-link>
+				</li>
+			</ul>
+		</li>
+	</ul>
 </template>
 
 <script>
@@ -65,6 +63,9 @@ export default {
 			this.$store.dispatch('OPEN_CLOSE_TABS', id);
     },
     activTabsStart(res, rout2, rout3) {
+			console.log(res)
+			console.log(rout2)
+			console.log(rout3)
       let rout = [];
       if (!rout2) {
         if(!this.slug){
@@ -204,6 +205,9 @@ export default {
   created () {
 		this.slug = this.$route.params.slug
 		if(!this.slug && !this.$store.state.profile.id){
+			this.getTabsFull()
+			this.path = '/profile'
+		}else if(!this.slug && this.$store.state.profile.id){
 			this.getTabsFull()
 			this.path = '/profile'
 		}else if(this.slug && this.$store.state.profile.slug !== this.slug) {

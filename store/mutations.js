@@ -5,8 +5,29 @@ export default {
 	SET_TOKEN_INFO: (state, userInfo) => {
 		state.tokenInfo = userInfo;
 	},
-	SET_PROFILE: (state, profille) => {
-		state.profile = profille;
+	SET_PROFILE: (state, profile) => {
+		state.profile = profile;
+	},
+	SET_MODAL: (state, modal) => {
+		state.modal = modal;
+	},
+	SET_BOOKMARK: (state, bookmarks) => {
+		state.bookmarks = bookmarks;
+	},
+	SET_SUBSCRIPTIONS: (state, subscriptions) => {
+		state.subscriptions = subscriptions;
+	},
+	DEL_SUBSCRIPTION: (state, id) => {
+		state.subscriptions = state.subscriptions.filter(subscription => subscription !== id);
+	},
+	DEL_BOOKMARK: (state, id) => {
+		state.bookmarks = state.bookmarks.filter(bookmark => bookmark !== id);
+	},
+	ADD_SUBSCRIPTION: (state, id) => {
+		state.subscriptions = state.subscriptions.concat(id);
+	},
+	ADD_BOOKMARK: (state, id) => {
+		state.bookmarks = state.bookmarks.concat(id);
 	},
 	SET_BREADCRUMBS: (state, breadcrumbCustom) => {
 		let breadcrumbs = [
