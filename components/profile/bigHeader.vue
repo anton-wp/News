@@ -83,7 +83,7 @@
         <follow-buttons full :id="$store.state.profile.id" />
       </div>
     </div>
-    <!-- </div> -->
+
     <div class="col-12 col-sm-5">
       <h4 class="your-name">{{$store.state.profile.firstName}} {{$store.state.profile.lastName}}</h4>
       <p class="member-since">{{ new Date($store.state.profile.createdAt).toDateString()}}</p>
@@ -109,7 +109,7 @@
       </div>
     </div>
   </div>
-  <!-- </div> -->
+
 </template>
 
 <script>

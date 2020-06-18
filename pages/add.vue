@@ -867,6 +867,7 @@ export default {
         }
     },
     created() {
+				this.$store.commit('SET_BREADCRUMBS', [{title: 'Add'}])
         this.initDate();
 
         for (
