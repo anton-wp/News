@@ -308,11 +308,12 @@
                                 @tag="addTag"
                                 @search-change="searchOptions"
                                 @select="saveDraft"
+                                :class="(errorNotif && selectedLinkOption.length < 1) ? 'error' : ''"
                             ></multiselect>
 
                             <div
                                 class="error-notification"
-                                v-if="errorNotif && selectedLinkOption.length > 0"
+                                v-if="errorNotif && selectedLinkOption.length < 1"
                             >Please add at least 1 link</div>
                         </div>
 
@@ -337,6 +338,7 @@
                                 :hide-selected="false"
                                 @search-change="searchAuthors"
                                 @select="saveDraft"
+                                :class="(errorNotif && selectedAuthor.length < 1) ? 'error' : ''"
                             >
                                 <template slot="option" slot-scope="props">
                                     <div class="option__desc">
@@ -344,6 +346,11 @@
                                     </div>
                                 </template>
                             </multiselect>
+
+                            <div
+                                class="error-notification"
+                                v-if="errorNotif && selectedAuthor.length < 1"
+                            >This field is required</div>
                         </div>
 
                         <div class="buttons-wrapp">
@@ -406,9 +413,14 @@
                                 Drag and drop your image
                                 <br />or
                             </h3>
-                            <div class="drop-btn">Choose Your Image</div>
+                            <div class="drop-btn my-4">Choose Your Image</div>
 
                             <p class="drop-subtitle">maximum file size: 50mb</p>
+
+                            <div
+                                v-if="errorNotif && !imgCrop"
+                                class="form-field-tip error-tip"
+                            >Featured image is required</div>
 
                             <div class="cssload-container" v-if="loadingDrop">
                                 <div class="lds-ellipsis">
@@ -430,19 +442,15 @@
                             class="croper"
                             @load="clipperLoaded"
                         ></clipper-basic>
-
-                        <button @click.prevent="someFnc">clipper</button>
                     </div>
+
                     <div class="col-12 col-lg-5 col-xl-4">
-                        <div
-                            class="animation prevImgBlock"
-                            style="max-width: 410px; height: 100%; margin: 0 auto;"
-                        >
+                        <div class="animation prev-img-block" v-if="imgCrop">
                             <clipper-preview name="preview"></clipper-preview>
 
-                            <div class="header-metadata">
+                            <div class="header-metadata" v-if="selectedCategory">
                                 <span class="category js--post-category-preview">
-                                    <span>category</span>
+                                    <span>{{ categories[selectedCategory] }}</span>
                                 </span>
                                 <div class="news-item-metadata">
                                     <span class="metadata-block">
@@ -475,7 +483,7 @@
                                     </span>
                                 </div>
                             </div>
-                            <h2 class="title-posts">title-post</h2>
+                            <h2 class="title-posts" v-if="$v.title.$model">{{ $v.title.$model }}</h2>
                         </div>
                     </div>
                     <div class="col-12 col-lg-7 col-xl-8">
@@ -489,6 +497,7 @@
                                 placeholder="e.g Instagram, Youtube, etc"
                                 v-model.trim="$v.imgTitle.$model"
                                 @blur="saveDraft"
+                                :class="(errorNotif && $v.imgTitle.$anyError) ? 'error' : ''"
                             />
                             <label class="require">
                                 <span class="required">*</span> required fields
@@ -802,10 +811,12 @@ export default {
                 this.$http
                     .patch(`/api/posts/${this.postId}`, this.formData)
                     .then(resp => {
-                        console.log(resp);
+                        this.$toasted.show(resp.data.message);
+                        // console.log(resp);
                     })
                     .catch(error => {
                         console.log(error);
+                        this.$toasted.show(error.data.message);
                     });
 
                 return;
@@ -815,6 +826,7 @@ export default {
                 .post("/api/posts/", this.formData)
                 .then(resp => {
                     this.postId = resp.data.id;
+                    this.$toasted.show(resp.data.message);
                 })
                 .catch(error => {
                     console.log(error);
@@ -1027,6 +1039,12 @@ export default {
 // @import "nuxt-dropzone/dropzone.css";
 @import "../assets/utils/variables";
 @import "../assets/utils/colors";
+
+.prev-img-block {
+    max-width: 410px;
+    height: 100%;
+    margin: 0 auto;
+}
 
 .cssload-container {
     position: absolute;
