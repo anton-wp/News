@@ -25,6 +25,7 @@
                                 <textarea
                                     placeholder="Minimum title length: 50 characters"
                                     class="form-input"
+                                    :class="(errorNotif && $v.title.$anyError) ? 'error' : ''"
                                     maxlength="120"
                                     rows="2"
                                     v-model.trim="$v.title.$model"
@@ -76,9 +77,11 @@
                                 </label>
 
                                 <editor
+                                    v-if="postId"
                                     :postid="postId"
                                     v-model="content"
                                     @editor:saved="saveDraft"
+                                    :class="(errorNotif && countContent < 1000) ? 'error' : ''"
                                 />
 
                                 <div class="radius">
@@ -91,12 +94,12 @@
                             </div>
                             <div
                                 class="error-notification"
-                                v-if="countContent = 0 && errorNotif"
+                                v-if="countContent == 0 && errorNotif"
                             >This field is required</div>
                             <div
                                 class="error-notification"
-                                v-if="countContent < 350 && errorNotif"
-                            >Minimum content length: 350 letters</div>
+                                v-if="countContent < 1000 && countContent !== 0 && errorNotif"
+                            >Minimum content length: 1000 letters</div>
                         </div>
                     </div>
 
@@ -510,7 +513,7 @@ import Dropzone from "nuxt-dropzone";
 import Cookies from "js-cookie";
 
 export default {
-    // middleware: "auth",
+    middleware: "auth",
     components: {
         Multiselect,
         Dropzone
@@ -603,10 +606,10 @@ export default {
         }
     },
     methods: {
-        someFnc() {
-            console.log(this.content);
-            console.log(this.countContent);
-        },
+        // someFnc() {
+        //     console.log(this.content);
+        //     console.log(this.countContent);
+        // },
         searchOptions(query) {
             if (query) {
                 this.isLoading = true;
@@ -819,10 +822,15 @@ export default {
         },
 
         publishedPost() {
-            this.errorNotif = true;
+            this.$v.$touch();
+            console.log(this.$v.title);
+
             if (this.$v.$invalid) {
+                this.errorNotif = true;
                 return;
             }
+
+            this.errorNotif = false;
             // if (this.postId) {
             //     this.$http
             //         .patch(`/api/posts/${this.postId}/publish`, this.formData)
@@ -932,8 +940,8 @@ export default {
         },
 
         countContent() {
-            let contentCount = 0;
-            contentCount = this.content.reduce(function(prev, el) {
+            let cContent = 0;
+            cContent = this.content.reduce(function(prev, el) {
                 let counter = 0;
 
                 if (
@@ -956,7 +964,7 @@ export default {
                 return counter + prev;
             }, 0);
 
-            return contentCount;
+            return cContent;
         },
 
         formData() {

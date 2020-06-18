@@ -19,7 +19,7 @@ export default {
             editor: undefined,
             blocks: undefined,
 			token: undefined,
-			id: this.postid
+			// id: this.postid
         };
     },
     methods: {
@@ -56,7 +56,7 @@ export default {
                             Authorization: this.token
                         },
                         additionalRequestData: {
-                            postId: this.id
+                            postId: this.postid
                         }
                     }
                 },
