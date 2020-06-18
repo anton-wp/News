@@ -1,115 +1,62 @@
 <template>
-  <div class="mai">
-    <div class="container">
-      <div class="row">
-        <div class="col-12 col-sm-3">
-          <div class="img">
-            <div>
-              <input type="file" id="file" ref="file" v-on:change="handleFileUpload()" />
-              <div class="addPhoto" v-if="!slug" v-on:click="submitFile()">
-                <svg width="24" height="27">
-                  <use xlink:href="#camera" />
-                </svg>
-              </div>
-              <!-- <input type="file" id="file" :change="fileChangeEvent($event)"> -->
-            </div>
-            <img
-              class="default-avatar"
-              src="/image/default-avatar-original.png"
-              v-if="!$store.state.profile.avatar"
-            />
-            <img
-              :src="$store.state.profile.avatar.big"
-              class="default-avatar"
-              v-if="$store.state.profile.avatar"
-            />
+  <div class="container">
+    <div class="row">
+      <div class="col-12 col-sm-3">
+        <div class="img">
+          <input type="file" id="file" ref="file" v-on:change="handleFileUpload()" />
+          <div class="addPhoto" v-if="!slug" v-on:click="submitFile()">
+            <svg width="24" height="27">
+              <use xlink:href="#camera" />
+            </svg>
           </div>
-          <div class="about-your-role">
-            <p class="your-role">{{$store.state.profile.rank}}</p>
-            <div class>
-              <p class="vrep-count">{{$store.state.profile.points}}</p>
-              <p class="vrep-title">V-rep</p>
-            </div>
-            <div v-if="slug">
-              <button class="click-for-follow">Follow</button>
-              <button class="click-for-follow unfollow">Unfollow</button>
-            </div>
+          <img
+            class="default-avatar"
+            src="/image/default-avatar-original.png"
+            v-if="!$store.state.profile.avatar"
+          />
+          <img
+            :src="$store.state.profile.avatar.big"
+            class="default-avatar"
+            v-if="$store.state.profile.avatar"
+          />
+        </div>
+        <div class="about-your-role">
+          <p class="your-role">{{$store.state.profile.rank}}</p>
+          <div class>
+            <p class="vrep-count">{{$store.state.profile.points}}</p>
+            <p class="vrep-title">V-rep</p>
+          </div>
+          <div class="follow-block" v-if="slug">
+            <follow-buttons full :id="$store.state.profile.id" />
           </div>
         </div>
-        <div class="col-12 col-sm-5">
-          <h4 class="your-name">{{$store.state.profile.firstName}} {{$store.state.profile.lastName}}</h4>
-          <p class="member-since">{{ new Date($store.state.profile.createdAt).toDateString()}}</p>
-          <div class="mail-content">
-            <div class="mail-wrapper">
-              social
-              <!-- <fa-icon [icon]="faEnvelope"></fa-icon> -->
-            </div>
+      </div>
+      <div class="col-12 col-sm-5">
+        <h4 class="your-name">{{$store.state.profile.firstName}} {{$store.state.profile.lastName}}</h4>
+        <p class="member-since">{{ new Date($store.state.profile.createdAt).toDateString()}}</p>
+        <div class="mail-content">
+          <div class="mail-wrapper">
+            social
+            <!-- <fa-icon [icon]="faEnvelope"></fa-icon> -->
           </div>
         </div>
-        <div class="col-12 col-sm-4 stat">
-          <div class="wrapper-statistic">
-            <p class="statistic-count">{{ $store.state.profile.postsCount }}</p>
-            <p class="statistic-title">Posts</p>
-          </div>
-          <div class="wrapper-statistic">
-            <p class="statistic-count">{{ $store.state.profile.verdictsCount }}</p>
-            <p class="statistic-title">Verdicts</p>
-          </div>
-          <div class="wrapper-statistic">
-            <p class="statistic-count">{{ $store.state.profile.commentsCount }}</p>
-            <p class="statistic-title">Comments</p>
-          </div>
+      </div>
+      <div class="col-12 col-sm-4 stat">
+        <div class="wrapper-statistic">
+          <p class="statistic-count">{{ $store.state.profile.postsCount }}</p>
+          <p class="statistic-title">Posts</p>
         </div>
-        <!-- <input type="file" id="file" :change="fileChangeEvent($event)"> -->
-      </div>
-      <img
-        class="default-avatar"
-        src="/image/default-avatar-original.png"
-        v-if="!$store.state.profile.avatar"
-      />
-      <img
-        :src="$store.state.profile.avatar.big"
-        class="default-avatar"
-        v-if="$store.state.profile.avatar"
-      />
-    </div>
-    <div class="about-your-role">
-      <p class="your-role">{{$store.state.profile.rank}}</p>
-      <div class>
-        <p class="vrep-count">{{$store.state.profile.points}}</p>
-        <p class="vrep-title">V-rep</p>
-      </div>
-      <div class="follow-block" v-if="slug">
-        <follow-buttons full :id="$store.state.profile.id" />
-      </div>
-    </div>
-
-    <div class="col-12 col-sm-5">
-      <h4 class="your-name">{{$store.state.profile.firstName}} {{$store.state.profile.lastName}}</h4>
-      <p class="member-since">{{ new Date($store.state.profile.createdAt).toDateString()}}</p>
-      <div class="mail-content">
-        <div class="mail-wrapper">
-          social
-          <!-- <fa-icon [icon]="faEnvelope"></fa-icon> -->
+        <div class="wrapper-statistic">
+          <p class="statistic-count">{{ $store.state.profile.verdictsCount }}</p>
+          <p class="statistic-title">Verdicts</p>
         </div>
-      </div>
-    </div>
-    <div class="col-12 col-sm-4 stat">
-      <div class="wrapper-statistic">
-        <p class="statistic-count">{{ $store.state.profile.postsCount }}</p>
-        <p class="statistic-title">Posts</p>
-      </div>
-      <div class="wrapper-statistic">
-        <p class="statistic-count">{{ $store.state.profile.verdictsCount }}</p>
-        <p class="statistic-title">Verdicts</p>
-      </div>
-      <div class="wrapper-statistic">
-        <p class="statistic-count">{{ $store.state.profile.commentsCount }}</p>
-        <p class="statistic-title">Comments</p>
+        <div class="wrapper-statistic">
+          <p class="statistic-count">{{ $store.state.profile.commentsCount }}</p>
+          <p class="statistic-title">Comments</p>
+        </div>
       </div>
     </div>
   </div>
-
 </template>
 
 <script>
@@ -315,12 +262,27 @@ export default {
     justify-content: center;
   }
 
-  .your-role {
-    margin-bottom: 0.4em;
-    font-size: 1.1em;
-    font-weight: 600;
-  }
+  .about-your-role {
+    text-align: center;
 
+    .your-role {
+      margin-bottom: 0.4em;
+      font-size: 1.1em;
+      font-weight: 600;
+    }
+
+    .vrep-count {
+      color: #e0a31b;
+      font-size: 2.2em;
+      font-weight: 200;
+      line-height: 1.15;
+      margin-bottom: 0px;
+    }
+
+    .vrep-title {
+      font-size: 1em;
+    }
+  }
   .your-name {
     letter-spacing: 0.35px;
     margin: 0.2em 0 0.4em 0;

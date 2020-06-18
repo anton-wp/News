@@ -84,7 +84,7 @@
         <div class="row">
           <div class="col-12">
             <div class="load-more-wrapper">
-              <span @click="loadMore">load more</span>
+              <span @click="loadMore">{{ loadMoreText }}</span>
             </div>
           </div>
         </div>
@@ -111,12 +111,13 @@ export default {
 			arrayPosts: [],
 			pagination: Object,
 			page: 1,
-			limit: 19
+			limit: 19,
+			loadMoreText: 'load more'
     };
   },
   created() {
+		this.$store.commit('SET_BREADCRUMBS')
 		this.getPosts()
-
 	},
 	methods: {
 		loadMore() {
@@ -124,11 +125,13 @@ export default {
 			this.getPosts()
 		},
 		getPosts () {
+			this.loadMoreText = 'loading'
 			this.$http
       .get(`/api/posts/?limit=${this.limit}&page=${this.page}`)
       .then(res => {
 				this.arrayPosts.push(res.data.data);
 				this.pagination = res.data.pagination
+				this.loadMoreText = 'load more'
       })
       .catch(error => console.error(error));
 		}
