@@ -905,7 +905,7 @@ export default {
                         return elem.length + previus;
                     }, 0);
                 } else {
-                    return (counter = 0);
+                    counter = 0;
                 }
 
                 return counter + prev;
