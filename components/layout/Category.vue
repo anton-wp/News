@@ -28,7 +28,7 @@
 						<div class="row">
 							<div class="col-12">
 								<div class="load-more-wrapper">
-									<span @click="loadMore" >more {{ term.name === 'news' ? '' : term.name }} news</span>
+									<span @click="loadMore">{{ loadMoreText }}</span>
 								</div>
 							</div>
 						</div>
@@ -61,7 +61,8 @@
 				limit: 12,
 				page: 1,
 				paginations: Object,
-				api: ''
+				api: '',
+				loadMoreText: '',
 			}
 		},
 		props: {
@@ -72,6 +73,7 @@
 			term: Object
 		},
 		created () {
+			this.loadMoreText =`more ${this.term.name === 'news' ? '' : this.term.name} news`
 			this.$store.commit('SET_BREADCRUMBS', [{title: this.term.name}])
 		},
 		mounted () {
@@ -81,10 +83,12 @@
 		},
 		methods: {
 			getPosts () {
+				this.loadMoreText = 'loading'
 				this.$http.get(`/api/${this.api}${this.slug}?limit=${this.limit}&page=${this.page}`)
 				.then(({ data }) => {
 					this.posts.push(data.data);
 					this.paginations = data.pagination
+					this.loadMoreText =`more ${this.term.name === 'news' ? '' : this.term.name} news`
 				})
 				.catch(error => {
 					console.log(error)
