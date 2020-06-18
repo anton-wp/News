@@ -6,9 +6,6 @@ import Toasted from 'vue-toasted';
 
 Vue.component('editor', Editor)
 
-
-
-
 Vue.use(VuejsClipper, {
 	components: {
 		clipperBasic: true,

@@ -250,6 +250,7 @@
                             >
                                 <option
                                     v-for="category of categories"
+                                    :key="category.id"
                                     :value="category.id"
                                 >{{ category.slug }}</option>
                             </select>
@@ -273,6 +274,7 @@
                             >
                                 <option
                                     v-for="option of options"
+                                    :key="option.id"
                                     :value="option.title"
                                 >{{ option.title }}</option>
                             </select>
@@ -495,16 +497,16 @@
                             <input
                                 class="form-input"
                                 placeholder="e.g Instagram, Youtube, etc"
-                                v-model.trim="$v.imgTitle.$model"
+                                v-model.trim="$v.imgDescript.$model"
                                 @blur="saveDraft"
-                                :class="(errorNotif && $v.imgTitle.$anyError) ? 'error' : ''"
+                                :class="($v.imgDescript.$anyError && errorNotif) ? 'error' : ''"
                             />
                             <label class="require">
                                 <span class="required">*</span> required fields
                             </label>
                             <div
                                 class="error-notification"
-                                v-if="!$v.imgTitle.required && errorNotif"
+                                v-if="!$v.imgDescript.required && errorNotif"
                             >This field is required</div>
                         </div>
                     </div>
@@ -547,7 +549,8 @@ export default {
 
             title: "",
             subtitle: "",
-            submitStatus: "",
+            imgDescript: "",
+            // submitStatus: "",
             fields: {
                 title: false,
                 subTitle: false,
@@ -602,23 +605,14 @@ export default {
             minLength: minLength(50),
             maxLength: maxLength(120)
         },
+        imgDescript: {
+            required
+        },
         subtitle: {
             minLength: minLength(50)
-        },
-        body: {
-            required,
-            minLength: minLength(160),
-            maxLength: maxLength(1000)
-        },
-        imgTitle: {
-            required
         }
     },
     methods: {
-        // someFnc() {
-        //     console.log(this.content);
-        //     console.log(this.countContent);
-        // },
         searchOptions(query) {
             if (query) {
                 this.isLoading = true;
@@ -835,7 +829,8 @@ export default {
 
         publishedPost() {
             this.$v.$touch();
-            console.log(this.$v.title);
+
+            console.log(this.$v);
 
             if (this.$v.$invalid) {
                 this.errorNotif = true;
@@ -843,79 +838,18 @@ export default {
             }
 
             this.errorNotif = false;
-            // if (this.postId) {
-            //     this.$http
-            //         .patch(`/api/posts/${this.postId}/publish`, this.formData)
-            //         .then(resp => {
-            //             console.log(resp);
-            //         })
-            //         .catch(error => {
-            //             console.log(error);
-            //         });
 
-            //     return;
-            // }
-
-            // this.$http
-            //     .post("/api/posts/", this.formData)
-            //     .then(resp => {
-            //         this.postId = resp.data.id;
-
-            //         this.$http
-            //             .patch(
-            //                 `/api/posts/${this.postId}/publish`,
-            //                 this.formData
-            //             )
-            //             .then(resp => {
-            //                 console.log(resp);
-            //             })
-            //             .catch(error => {
-            //                 console.log(error);
-            //             });
-            //     })
-            //     .catch(error => {
-            //         console.log(error);
-            //     });
+            this.$http
+                .patch(`/api/posts/${this.postId}/publish`, this.formData)
+                .then(resp => {
+                    // console.log(resp);
+                    this.$toasted.show(resp.data.message);
+                })
+                .catch(error => {
+                    console.log(error);
+                    this.$toasted.show(error.data.message);
+                });
         }
-    },
-    created() {
-				this.$store.commit('SET_BREADCRUMBS', [{title: 'Add'}])
-        this.initDate();
-
-        for (
-            let i = this.now.getFullYear();
-            i <= this.now.getFullYear() + 3;
-            i++
-        ) {
-            this.years.push(i);
-        }
-
-        for (let i = 1; i <= 24; i++) {
-            this.hours.push(i);
-        }
-
-        for (let i = 0; i < 60; i++) {
-            this.minutes.push(("0" + i).slice(-2));
-        }
-
-        this.addFields();
-        this.getCategories();
-        this.getOptions();
-
-        const token = Cookies.get("token");
-        this.dropOptions.headers.Authorization = `Bearer ${token}`;
-
-        this.$http
-            .post("/api/posts/")
-            .then(resp => {
-                this.postId = resp.data.id;
-            })
-            .catch(error => {
-                console.log(error);
-            });
-    },
-    mounted() {
-        this.clipperChanged();
     },
     computed: {
         daysInMonth() {
@@ -1011,8 +945,8 @@ export default {
                 newData.append("featuredImage", this.imgCrop);
             }
 
-            if (this.$v.imgTitle.$model) {
-                newData.append("source", this.$v.imgTitle.$model);
+            if (this.$v.imgDescript.$model) {
+                newData.append("source", this.$v.imgDescript.$model);
             }
 
             if (this.cropperX) {
@@ -1030,6 +964,46 @@ export default {
 
             return newData;
         }
+    },
+
+    created() {
+        this.$store.commit("SET_BREADCRUMBS", [{ title: "Add" }]);
+        this.initDate();
+
+        for (
+            let i = this.now.getFullYear();
+            i <= this.now.getFullYear() + 3;
+            i++
+        ) {
+            this.years.push(i);
+        }
+
+        for (let i = 1; i <= 24; i++) {
+            this.hours.push(i);
+        }
+
+        for (let i = 0; i < 60; i++) {
+            this.minutes.push(("0" + i).slice(-2));
+        }
+
+        this.addFields();
+        this.getCategories();
+        this.getOptions();
+
+        const token = Cookies.get("token");
+        this.dropOptions.headers.Authorization = `Bearer ${token}`;
+
+        this.$http
+            .post("/api/posts/")
+            .then(resp => {
+                this.postId = resp.data.id;
+            })
+            .catch(error => {
+                console.log(error);
+            });
+    },
+    mounted() {
+        this.clipperChanged();
     }
 };
 </script>
