@@ -358,6 +358,26 @@
                         <div class="buttons-wrapp">
                             <!-- <button class="button-add draft-button">Save Draft</button> -->
                             <div>
+                                <div class="buttons-forse">
+                                    <!-- <div class="forse">
+                                        <div class="fa-icon">
+                                            <fa-icon [icon]="faSquare"></fa-icon>
+                                            <fa-icon [icon]="faCheckSquare"></fa-icon>
+                                        </div>
+                                        <p>force publish</p>
+                                    </div>-->
+
+                                    <label class="d-flex align-items-center w-100">
+                                        <div class="categoryCheckbox">
+                                            <svg width="10" height="10" v-if="forcePublish">
+                                                <use xlink:href="#checkbox" />
+                                            </svg>
+                                            <input type="checkbox" v-model="forcePublish" />
+                                        </div>
+
+                                        <div class="categoryTitle ml-2">force publish</div>
+                                    </label>
+                                </div>
                                 <button
                                     class="button-add post-button"
                                     @click.prevent="publishedPost"
@@ -550,6 +570,7 @@ export default {
             title: "",
             subtitle: "",
             imgDescript: "",
+            forcePublish: false,
             // submitStatus: "",
             fields: {
                 title: false,
@@ -939,7 +960,9 @@ export default {
                 newData.append("publishedAt", this.selectedDate);
             }
 
-            // if (object.forcePublish) { newData.append('forcePublish', object.forcePublish); };
+            if (this.forcePublish) {
+                newData.append("forcePublish", this.forcePublish);
+            }
 
             if (this.imgCrop) {
                 newData.append("featuredImage", this.imgCrop);
@@ -1014,6 +1037,27 @@ export default {
 // @import "nuxt-dropzone/dropzone.css";
 @import "../assets/utils/variables";
 @import "../assets/utils/colors";
+
+.categoryCheckbox {
+    width: 16px;
+    height: 16px;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    vertical-align: middle;
+    border: 1px solid #0a0a0a;
+    border-radius: 5px;
+    input {
+        display: none;
+    }
+    svg {
+        display: block;
+    }
+}
+.categoryTitle {
+    display: inline-block;
+    vertical-align: middle;
+}
 
 .prev-img-block {
     max-width: 410px;
