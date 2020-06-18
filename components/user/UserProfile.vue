@@ -189,7 +189,7 @@ export default {
   .icon-notification {
   	display: flex !important;
     align-items: center;
-    margin: 0px 20px 0 10px;
+    margin: 0px 25px 0 10px;
     user-select: none;
     font-size: 20px;
     svg {

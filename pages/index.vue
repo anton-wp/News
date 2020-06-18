@@ -1,103 +1,90 @@
 <template>
   <div>
-    <div class="wrapper-block-news">
-      <div class="container">
-        <div class="row top-verdict">
-          <div class="col-lg-4 col-md-6" v-for="post in posts.slice(0, 2)" :key="post.id">
-            <top-news-card :post="post" />
-          </div>
-          <div class="col-lg-4 col-md-6 col-12">
-            <div class="wrapper-title-hot">
-              <h5 class="title-hot">
-                <span>top verdicts</span>
-              </h5>
+    <div v-for="(posts, index) of arrayPosts" :key="index">
+      <div class="wrapper-block-news">
+        <div class="container">
+          <div class="row top-verdict">
+            <div class="col-lg-4 col-md-6" v-for="post in posts.slice(0, 2)" :key="post.id">
+              <top-news-card :post="post" />
+            </div>
+            <div class="col-lg-4 col-md-6 col-12">
+              <div class="wrapper-title-hot">
+                <h5 class="title-hot">
+                  <span>top verdicts</span>
+                </h5>
+              </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
-    <div class="wrapper-block-news background">
-      <div class="container">
-        <div class="row row-flex top-verdict">
-          <div
-            class="col-12 col-sm-6 col-md-4 col-lg-4"
-            v-for="post in posts.slice(2, 5)"
-            :key="post.id"
-          >
-            <default-news-card type="first-block" :post="post" :padding="false" />
+      <div class="wrapper-block-news background">
+        <div class="container">
+          <div class="row row-flex top-verdict">
+            <div
+              class="col-12 col-sm-6 col-md-4 col-lg-4"
+              v-for="post in posts.slice(2, 5)"
+              :key="post.id"
+            >
+              <default-news-card type="first-block" :post="post" :padding="false" />
+            </div>
           </div>
         </div>
       </div>
-    </div>
-    <div class="wrapper-block-news">
-      <div class="container">
-        <div class="row top-verdict">
-          <div class="col-12 col-md-12 col-lg-8 padding-0">
-            <div class="container">
+      <div class="wrapper-block-news">
+        <div class="container">
+          <div class="row top-verdict">
+            <div class="col-12 col-md-12 col-lg-8 padding-0">
+              <div class="container">
+                <div class="row">
+                  <div class="col-12 padding-0" v-for="post in posts.slice(5, 11)" :key="post.id">
+                    <gorizontal-news-card type="full-block" :post="post" :background="true" />
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-12 col-md-12 col-lg-4 padding-0">
               <div class="row">
-                <div class="col-12 padding-0" v-for="post in posts.slice(5, 11)" :key="post.id">
-                  <gorizontal-news-card type="full-block" :post="post" :background="true" />
+                <div class="col-12">
+                  <follow-block :posts="true" />
                 </div>
-                <!-- <div class="col-12 padding-0">
-                  <gorizontal-news-card type="full-block" :background="true" />
-                </div>
-                <div class="col-12 padding-0">
-                  <gorizontal-news-card type="full-block" :background="true" />
-                </div>
-                <div class="col-12 padding-0">
-                  <gorizontal-news-card type="full-block" :background="true" />
-                </div>
-                <div class="col-12 padding-0">
-                  <gorizontal-news-card type="full-block" :background="true" />
-                </div>
-                <div class="col-12 padding-0">
-                  <gorizontal-news-card type="full-block" :background="true" />
-                </div>-->
-              </div>
-            </div>
-          </div>
-          <div class="col-12 col-md-12 col-lg-4 padding-0">
-            <div class="row">
-              <div class="col-12">
-                <follow-block :posts="true" />
               </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
-    <div class="wrapper-block-news background">
-      <div class="container">
-        <div class="row row-flex top-verdict">
-          <div
-            class="col-12 col-sm-12 col-md-12 col-lg-6"
-            v-for="post in posts.slice(11, 15)"
-            :key="post.id"
-          >
-            <gorizontal-news-card type="minimal-block" :post="post" :background="true" />
+      <div class="wrapper-block-news background">
+        <div class="container">
+          <div class="row row-flex top-verdict">
+            <div
+              class="col-12 col-sm-12 col-md-12 col-lg-6"
+              v-for="post in posts.slice(11, 15)"
+              :key="post.id"
+            >
+              <gorizontal-news-card type="minimal-block" :post="post" :background="true" />
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="wrapper-block-news">
+        <div class="container">
+          <div class="row top-verdict">
+            <div
+              class="col-12 col-sm-12 col-md-6 col-lg-3"
+              v-for="post in posts.slice(15, 19)"
+              :key="post.id"
+            >
+              <default-news-card type="second-block" :post="post" :padding="true" />
+            </div>
           </div>
         </div>
       </div>
     </div>
-    <div class="wrapper-block-news">
-      <div class="container">
-        <div class="row top-verdict">
-          <div
-            class="col-12 col-sm-12 col-md-6 col-lg-3"
-            v-for="post in posts.slice(15, 19)"
-            :key="post.id"
-          >
-            <default-news-card type="second-block" :post="post" :padding="true" />
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="wrapper-block-news">
+    <div class="wrapper-block-news" v-if="pagination.next">
       <div class="container">
         <div class="row">
           <div class="col-12">
             <div class="load-more-wrapper">
-              <span>load more</span>
+              <span @click="loadMore">load more</span>
             </div>
           </div>
         </div>
@@ -121,18 +108,31 @@ export default {
   },
   data() {
     return {
-      posts: []
+			arrayPosts: [],
+			pagination: Object,
+			page: 1,
+			limit: 19
     };
   },
   created() {
-		this.$store.commit('SET_BREADCRUMBS')
-    this.$http
-      .get(`/api/posts/?limit=19&page=1`)
+		this.getPosts()
+
+	},
+	methods: {
+		loadMore() {
+			this.page = this.page + 1;
+			this.getPosts()
+		},
+		getPosts () {
+			this.$http
+      .get(`/api/posts/?limit=${this.limit}&page=${this.page}`)
       .then(res => {
-        this.posts = res.data.data;
+				this.arrayPosts.push(res.data.data);
+				this.pagination = res.data.pagination
       })
       .catch(error => console.error(error));
-  }
+		}
+	}
 };
 </script>
 

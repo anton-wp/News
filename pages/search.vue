@@ -17,8 +17,8 @@
               autocomplete="off"
               autocorrect="off"
               min="0"
-			  v-model="search"
-			  @keyup.enter="activeSearch"
+							v-model="search"
+							@keyup.enter="activeSearch"
             >
 			<svg width="20" height="20" @click="activeSearch">
 				<use xlink:href="#search-icon" />

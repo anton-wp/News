@@ -5,3 +5,5 @@ import Vuelidate from 'vuelidate'
 
 Vue.use(Vuelidate);
 Vue.use(Http);
+
+

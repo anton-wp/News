@@ -28,22 +28,19 @@
       </div>
     </div>
     <div class="element follow-me">
-      <button class="click-for-follow follow">
-        Follow
-      </button>
-      <button class="click-for-follow unfollow">
-        Unfollow
-      </button>
+      <follow-buttons :id="author.id"/>
     </div>
   </div>
 </template>
 
 <script>
 import PopupUserInfo from '~/components/universal-components/popup-user-info.vue'
+import FollowButtons from "~/components/universal-components/Follow-Buttons";
 
 export default {
   components: {
-    PopupUserInfo
+		PopupUserInfo,
+		FollowButtons
 	},
 	props: {
 		author: Object,

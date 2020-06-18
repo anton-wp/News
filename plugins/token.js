@@ -14,6 +14,10 @@ export default function ({ store }) {
 		if (tokenValid) {
 			store.dispatch('SAVE_TOKEN', token);
 			store.dispatch('SAVE_TOKEN_INFO', tokenDecoded);
+
+
+
+
 		} else {
 			Cookies.remove('token');
 			store.dispatch('SAVE_TOKEN', null);

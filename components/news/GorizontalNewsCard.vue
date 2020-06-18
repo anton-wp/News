@@ -47,7 +47,12 @@ export default {
     shortContent: Boolean,
 		post: Object,
 		tag: Boolean
-  },
+	},
+	provide() {
+		return {
+			id: this.post.id
+		}
+	}
 }
 </script>
 

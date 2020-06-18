@@ -25,7 +25,7 @@
         <news-card-header-marks :colorScheme="colorScheme" :pending="false" />
       </div>
     </span>
-    <a v-if="!pending" class="action">
+    <a v-if="$store.getters.TOKEN_INFO && $store.getters.TOKEN_INFO.userRole === 'super-admin'" class="action">
       <svg width="12" height="15">
         <use xlink:href="#trash" />
       </svg>

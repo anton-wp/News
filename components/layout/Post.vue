@@ -151,6 +151,11 @@
 			data: Object,
 			slug: String,
 		},
+		provide() {
+			return {
+				id: this.data.id
+			}
+		},
 		data () {
 			return {
 				bodySize: 110

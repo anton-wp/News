@@ -35,13 +35,8 @@
               V-rep
             </p>
           </div>
-          <div v-if="slug">
-            <button class="click-for-follow">
-              Follow
-            </button>
-            <button class="click-for-follow unfollow">
-              Unfollow
-            </button>
+          <div class="follow-block" v-if="slug">
+						<follow-buttons full :id="$store.state.profile.id"/>
           </div>
         </div>
       </div>
@@ -90,8 +85,12 @@
 </template>
 
 <script>
-export default {
+import FollowButtons from "~/components/universal-components/Follow-Buttons";
 
+export default {
+	components: {
+		FollowButtons
+	},
 	data () {
 		return {
 			profile: Object,
@@ -134,6 +133,7 @@ export default {
     	if(img) { formData.append('avatar', img); };
 			this.$http.put(`/api/profile/update-avatar`, formData)
       .then(res => {
+				this.$toasted.show(res.data.message)
 				this.$store.dispatch('CLEAR_PROFILE');
 				this.updateProfile()
       })
@@ -276,6 +276,11 @@ export default {
 
   .about-your-role {
     text-align: center;
+
+		.follow-block {
+			display: flex;
+    	justify-content: center;
+		}
 
     .your-role {
       margin-bottom: 0.4em;

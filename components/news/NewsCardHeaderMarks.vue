@@ -29,24 +29,22 @@
     </span>
     <span class="bookmark-news">
       <!-- add function add this post to save -->
-      <button v-if="!pending" class="bookmark">
-          <svg width="20" height="20">
-          <use xlink:href="#bookmark-empty" />
-        </svg>
-        <!-- <svg width="20" height="20">
-          <use xlink:href="#bookmark" />
-        </svg> -->
-      </button>
+			<bookmark />
     </span>
   </div>
 </template>
 
 <script>
+import Bookmark from "~/components/universal-components/Bookmark";
+
 export default {
+	components: {
+		Bookmark
+	},
   props: {
     colorScheme: String,
     pending: Boolean
-  }
+	},
 }
 </script>
 
@@ -62,14 +60,6 @@ export default {
 
 .bookmark-news {
   padding-left: 10px;
-
-  .bookmark {
-    fill: $primary_color;
-    background: transparent;
-    border: none;
-    outline: none;
-    padding: 0;
-  }
 }
 .reviews-link {
   cursor: pointer;

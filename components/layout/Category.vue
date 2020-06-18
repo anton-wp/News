@@ -3,7 +3,7 @@
 		<div class="container">
 			<div class="row">
 				<div class="col-12 col-lg-8">
-					<h1 class="category-page-title">{{slug}}</h1>
+					<h1 class="category-page-title">{{term.name}}</h1>
 					<div class="row" v-for="(data, index) in posts" :key="index">
 						<div class="col-12" v-for="post in data.slice(0, 1)" :key="post.id">
 							<top-news-card :tag="tag" padding :post="post" />
@@ -28,18 +28,14 @@
 						<div class="row">
 							<div class="col-12">
 								<div class="load-more-wrapper">
-									<span @click="loadMore">load more</span>
+									<span @click="loadMore" >more {{ term.name === 'news' ? '' : term.name }} news</span>
 								</div>
 							</div>
 						</div>
 					</div>
 				</div>
 				<div class="col-lg-4">
-					<div class="affix sticky-wrapper">
-						<div class="sticky">
-							<follow-block :posts="false"/>
-						</div>
-					</div>
+					<follow-block :posts="false"/>
 				</div>
 			</div>
 		</div>
@@ -50,14 +46,14 @@
 	import TopNewsCard from '~/components/news/TopNewsCard'
 	import DefaultNewsCard from '~/components/news/DefaultNewsCard'
 	import GorizontalNewsCard from '~/components/news/GorizontalNewsCard'
-	import followBlock from '~/components/universal-components/followBlock'
+	import FollowBlock from '~/components/universal-components/followBlock'
 
 	export default {
 		components: {
 			TopNewsCard,
 			DefaultNewsCard,
 			GorizontalNewsCard,
-			followBlock,
+			FollowBlock,
 		},
 		data () {
 			return {
@@ -72,10 +68,11 @@
 			data: Array,
 			slug: String,
 			pagination: Object,
-			tag: Boolean
+			tag: Boolean,
+			term: Object
 		},
 		created () {
-			this.$store.commit('SET_BREADCRUMBS', [{title: this.slug}])
+			this.$store.commit('SET_BREADCRUMBS', [{title: this.term.name}])
 		},
 		mounted () {
 			this.posts.push(this.data);
