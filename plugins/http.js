@@ -1,13 +1,16 @@
 import axios from 'axios';
 import Cookies from 'js-cookie';
 
-const token = Cookies.get('token');
+// console.log(app.$auth.getToken('local'));
+
+const token = Cookies.get('auth._token.local');
+
 let http = axios;
 
 if (token) {
 	http = axios.create({
 		headers: {
-			'Authorization': `Bearer ${token}`
+			'Authorization': token
 		}
 	});
 }

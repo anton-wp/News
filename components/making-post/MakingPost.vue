@@ -1359,9 +1359,6 @@ select {
 
 .add-post-wrapper {
     margin-top: 10px;
-    // .invalid {
-    //   // opacity: 0.3;
-    // }
 
     width: 100%;
 
@@ -1381,7 +1378,6 @@ select {
             margin: 0;
             position: relative;
             color: $black;
-            // font-family: "Open Sans";
             font-weight: bold;
             text-size-adjust: 100%;
             -webkit-box-direction: normal;
@@ -1394,7 +1390,6 @@ select {
             color: $black;
             font-size: 16px;
             font-weight: 400;
-            // font-family: "Open Sans";
             text-size-adjust: 100%;
             -webkit-box-direction: normal;
             -webkit-font-smoothing: antialiased;
@@ -1444,7 +1439,6 @@ select {
                 -webkit-appearance: none;
                 font-size: 0.9rem;
                 vertical-align: middle;
-                // font-family: "Open Sans";
                 cursor: pointer;
                 text-align: center;
             }
@@ -1507,7 +1501,6 @@ select {
                 font-size: 1.2em;
                 letter-spacing: 0.5px;
                 margin-bottom: 0.1em;
-                // font-family: "Open Sans";
 
                 span {
                     font-weight: 600;
@@ -1538,7 +1531,6 @@ select {
             textarea,
             select,
             input {
-                // font-family: "Open Sans";
                 width: 100%;
                 display: block;
                 text-indent: 0;
@@ -1574,7 +1566,6 @@ select {
             }
 
             .counter {
-                // border-bottom-right-radius: 10px;
                 background-color: $white;
                 position: absolute;
                 bottom: 1px;
@@ -1644,7 +1635,6 @@ select {
             line-height: 1.5;
             color: #0a0a0a;
             -webkit-font-smoothing: antialiased;
-            // font-family: open sans, Helvetica Neue, Helvetica, Roboto, Arial, sans-serif;
             -webkit-box-direction: normal;
             font-size: 0.9em;
             text-transform: uppercase;
@@ -1763,7 +1753,6 @@ select {
     .error-tip {
         line-height: 1.5;
         -webkit-font-smoothing: antialiased;
-        // font-family: open sans,Helvetica Neue,Helvetica,Roboto,Arial,sans-serif;
         -webkit-box-direction: normal;
         text-align: center;
         user-select: none;
@@ -1816,12 +1805,9 @@ select {
     right: 0;
     text-align: center;
     z-index: 999;
-    // transition: opacity .3s, visibility .3s, transform .2s ease-out;
     margin-bottom: 50px;
     pointer-events: none;
     padding-top: 10px;
-    // opacity: 1;
-    // transform: translateY(0);
     bottom: 0px;
 
     div {
@@ -1874,18 +1860,6 @@ select {
     }
 }
 
-// :host {
-//   display: block;
-// }
-
-// .open-close-container {
-//   border: 1px solid #dddddd;
-//   margin-top: 1em;
-//   padding: 20px 20px 0px 20px;
-//   color: #000000;
-//   font-weight: bold;
-//   font-size: 20px;
-// }
 .title-posts {
     cursor: pointer;
     font-weight: 700;

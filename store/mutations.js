@@ -1,10 +1,4 @@
 export default {
-	SET_TOKEN: (state, token) => {
-		state.token = token
-	},
-	SET_TOKEN_INFO: (state, userInfo) => {
-		state.tokenInfo = userInfo;
-	},
 	SET_PROFILE: (state, profile) => {
 		state.profile = profile;
 	},
@@ -41,9 +35,6 @@ export default {
 		} else {
 			state.breadcrumbs = []
 		}
-	},
-	REMOVE_TOKEN: (state) => {
-		state.token = '';
 	},
 	SET_TABS: (state, tabs) => {
 		state.tabs = tabs;
