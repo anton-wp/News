@@ -18,12 +18,14 @@ const store = () => new Vuex.Store({
 		subscriptions: [],
 	},
 	getters: {
-		IS_TOKEN: state => {
-			return state.token ? true : false;
-		},
-		TOKEN_INFO: state => {
-			return state.tokenInfo;
-		},
+		IS_TOKEN: state => state.token,
+		TOKEN_INFO: state => state.tokenInfo,
+    isAuthenticated(state) {
+      return state.auth.loggedIn
+    },
+    loggedInUser(state) {
+      return state.auth.user
+    }
 	},
 	actions,
 	mutations

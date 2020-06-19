@@ -11,7 +11,7 @@
             </div>
           </div>
           <div class="row buttons-wrapper">
-            <social />
+            <social/>
           </div>
           <div class="row">
             <div class="col-12">
@@ -52,13 +52,15 @@
                   </label>
                 </div>
                 <div class="forgot-button">
-                  <button type="button" @click="changeLoginPopup('forgotPassword')">Forgot Password?</button>
+                  <button type="button" @click="changeLoginPopup('forgotPassword')">Forgot Password?
+                  </button>
                 </div>
                 <div class="terms">
                   By proceeding, you agree to Verdict's
                   <nuxt-link to="/terms-of-service">
                     <span @click="closeLoginPopup">Terms of Service</span>
-                  </nuxt-link>&
+                  </nuxt-link>
+                  &
                   <nuxt-link to="/privacy-policy">
                     <span @click="closeLoginPopup">Privacy Policy</span>
                   </nuxt-link>
@@ -68,7 +70,8 @@
                     class="primary-form-button"
                     form="authorizationForm"
                     type="submit"
-                  >{{loading ? 'Loading' : 'Log In'}}</button>
+                  >{{loading ? 'Loading' : 'Log In'}}
+                  </button>
                 </div>
               </form>
               <form
@@ -147,16 +150,19 @@
                 <button>Forgot Password?</button>
                 </div>-->
                 <div class="terms">
-                  By checking this box, you confirm that you have read, understand and agree with Verdict's
+                  By checking this box, you confirm that you have read, understand and agree with
+                  Verdict's
                   <nuxt-link to="/terms-of-service">
                     <span @click="closeLoginPopup">Terms of Service</span>
-                  </nuxt-link>&
+                  </nuxt-link>
+                  &
                   <nuxt-link to="/privacy-policy">
                     <span @click="closeLoginPopup">Privacy Policy</span>
                   </nuxt-link>
                 </div>
                 <div class="input-block">
-                  <button class="primary-form-button" form="registrationForm" type="submit">Sign Up</button>
+                  <button class="primary-form-button" form="registrationForm" type="submit">Sign Up
+                  </button>
                 </div>
               </form>
             </div>
@@ -178,7 +184,7 @@
         <h4>Enter your email address, and we’ll send a link to choose a new password.</h4>
         <div class="input-block">
           <label class="label-input">
-            <input placeholder="Email" autocomplete="off" class="form-input" type="text" />
+            <input placeholder="Email" autocomplete="off" class="form-input" type="text"/>
           </label>
         </div>
         <div class="input-block">
@@ -190,344 +196,352 @@
 </template>
 
 <script>
-import Social from "~/components/login/social-button.vue";
-import { log } from "util";
-import axios from "axios";
-import Cookies from "js-cookie";
-import jwt_decode from "jwt-decode";
+  import Social from "~/components/login/social-button.vue";
 
-export default {
-  components: {
-    Social
-  },
-  data() {
-    return {
-      errors: {
+  export default {
+    components: {
+      Social
+    },
+    data() {
+      return {
+        errors: {
+          firstName: "",
+          lastName: "",
+          email: "",
+          password: "",
+          confirmPassword: ""
+        },
+        loading: false,
+        error: false,
+        errorMessage: "",
         firstName: "",
         lastName: "",
         email: "",
         password: "",
         confirmPassword: ""
-      },
-      loading: false,
-      error: false,
-      errorMessage: "",
-      firstName: "",
-      lastName: "",
-      email: "",
-      password: "",
-      confirmPassword: ""
-    };
-  },
-  props: {
-    type: String
-  },
-  methods: {
-    checkForm() {
-      if (!this.firstName) {
-        this.errors.firstName = "First Name is required";
-        this.error = true;
-      }
-      if (!this.lastName) {
-        this.errors.lastName = "Last Name is required";
-        this.error = true;
-      }
-      if (!this.email) {
-        this.errors.email = "email address is required";
-        this.error = true;
-      }
-      if (!this.password) {
-        this.errors.password = "password is required";
-        this.error = true;
-      }
-      if (!this.confirmPassword) {
-        this.errors.confirmPassword = "password is required";
-        this.error = true;
-      }
-      let formData = {
-        email: this.email,
-        password: this.password
       };
-      this.loading = true;
-      this.login(formData);
     },
-    login(formData) {
-      this.$http
-        .post("/api/auth/login", formData)
-        .then(responce => {
-          this.loading = false;
-          const token = responce.data.token;
-          const tokenDecoded = jwt_decode(token);
+    props: {
+      type: String
+    },
+    methods: {
+      checkForm() {
+        if (!this.firstName) {
+          this.errors.firstName = "First Name is required";
+          this.error = true;
+        }
+        if (!this.lastName) {
+          this.errors.lastName = "Last Name is required";
+          this.error = true;
+        }
+        if (!this.email) {
+          this.errors.email = "email address is required";
+          this.error = true;
+        }
+        if (!this.password) {
+          this.errors.password = "password is required";
+          this.error = true;
+        }
+        if (!this.confirmPassword) {
+          this.errors.confirmPassword = "password is required";
+          this.error = true;
+        }
+        let formData = {
+          email: this.email,
+          password: this.password
+        };
+        this.loading = true;
+        this.login(formData);
+      },
 
-          Cookies.set("token", token);
-
-          this.$store.dispatch("SAVE_TOKEN", token);
-          this.$store.dispatch("SAVE_TOKEN_INFO", tokenDecoded);
-
-          this.closeLoginPopup();
-
-          location.reload();
-        })
-        .catch(error => {
-          this.loading = false;
-          // this.errorMessage = error.response.data.message;
+      async login(formData) {
+        await this.$auth.loginWith('local', {
+          data: formData
         });
-    },
-    closeLoginPopup() {
-      this.$emit("closeLoginPopup");
-    },
-    changeLoginPopup(type) {
-      this.$emit("changeLoginPopup", type);
-      this.clearForm();
-    },
-    clearForm() {
-      this.firstName = "";
-      this.lastName = "";
-      this.email = "";
-      this.password = "";
-      this.confirmPassword = "";
+
+        this.closeLoginPopup();
+
+        // await this.$http
+        //   .post("/api/auth/login", formData)
+        //   .then(responce => {
+        //     this.loading = false;
+        //     const token = responce.data.token;
+        //     const tokenDecoded = jwt_decode(token);
+        //
+        //     Cookies.set("token", token);
+        //
+        //     this.$store.dispatch("SAVE_TOKEN", token);
+        //     this.$store.dispatch("SAVE_TOKEN_INFO", tokenDecoded);
+        //
+        //
+        //
+        //     location.reload();
+        //   })
+        //   .catch(error => {
+        //     this.loading = false;
+        //     // this.errorMessage = error.response.data.message;
+        //   });
+      },
+      closeLoginPopup() {
+        this.$emit("closeLoginPopup");
+      },
+      changeLoginPopup(type) {
+        this.$emit("changeLoginPopup", type);
+        this.clearForm();
+      },
+      clearForm() {
+        this.firstName = "";
+        this.lastName = "";
+        this.email = "";
+        this.password = "";
+        this.confirmPassword = "";
+      }
     }
-  }
-};
+  };
 </script>
 
 <style lang="scss" scoped>
-@import "../../assets/utils/variables";
-@import "../../assets/utils/colors";
+  @import "../../assets/utils/variables";
+  @import "../../assets/utils/colors";
 
-.invalid {
-  opacity: 0.5;
-}
+  .invalid {
+    opacity: 0.5;
+  }
 
-.primary-error {
-  color: $primary_color;
-}
+  .primary-error {
+    color: $primary_color;
+  }
 
-.form-wrapper {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: rgba(0, 0, 0, 0.7);
-  z-index: 100000000000;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  .form-wrapper {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.7);
+    z-index: 100000000000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 
-  .forgot-password {
-    padding: 2.4rem 3rem 0px;
-    h4 {
-      font-family: open sans, Helvetica Neue, Helvetica, Roboto, Arial,
+    .forgot-password {
+      padding: 2.4rem 3rem 0px;
+
+      h4 {
+        font-family: open sans, Helvetica Neue, Helvetica, Roboto, Arial,
         sans-serif;
-      font-size: 100%;
-      font-weight: 400;
-      line-height: 1.5;
-      color: #0a0a0a;
-      visibility: visible;
-      box-sizing: inherit;
-      padding: 0.9em 0;
-      padding-top: 0;
+        font-size: 100%;
+        font-weight: 400;
+        line-height: 1.5;
+        color: #0a0a0a;
+        visibility: visible;
+        box-sizing: inherit;
+        padding: 0.9em 0;
+        padding-top: 0;
+      }
     }
-  }
 
-  .forgot-modal {
-    top: 88px;
-  }
+    .forgot-modal {
+      top: 88px;
+    }
 
-  .form {
-    position: absolute;
-    // top: 45%;
-    // left: 50%;
-    // transform: translate(-50%, -50%);
-    max-width: 32.5em;
-    // padding: 2.4rem 3rem 0em;
-    border-radius: 8px;
-    background: $white;
-    width: 95%;
-    border: none;
-    -webkit-box-shadow: 0 0 50px 10px rgba(0, 0, 0, 0.4);
-    box-shadow: 0 0 50px 10px rgba(0, 0, 0, 0.4);
-    z-index: 4;
-    -webkit-transition: opacity 0.15s 0.3s ease, visibility 0.15s 0.3s ease,
+    .form {
+      position: absolute;
+      // top: 45%;
+      // left: 50%;
+      // transform: translate(-50%, -50%);
+      max-width: 32.5em;
+      // padding: 2.4rem 3rem 0em;
+      border-radius: 8px;
+      background: $white;
+      width: 95%;
+      border: none;
+      -webkit-box-shadow: 0 0 50px 10px rgba(0, 0, 0, 0.4);
+      box-shadow: 0 0 50px 10px rgba(0, 0, 0, 0.4);
+      z-index: 4;
+      -webkit-transition: opacity 0.15s 0.3s ease, visibility 0.15s 0.3s ease,
       -webkit-transform 0.2s 0.3s ease-in-out;
-    transition: opacity 0.15s 0.3s ease, visibility 0.15s 0.3s ease,
+      transition: opacity 0.15s 0.3s ease, visibility 0.15s 0.3s ease,
       -webkit-transform 0.2s 0.3s ease-in-out;
-    -o-transition: opacity 0.15s 0.3s ease, visibility 0.15s 0.3s ease,
+      -o-transition: opacity 0.15s 0.3s ease, visibility 0.15s 0.3s ease,
       transform 0.2s 0.3s ease-in-out;
-    transition: opacity 0.15s 0.3s ease, visibility 0.15s 0.3s ease,
+      transition: opacity 0.15s 0.3s ease, visibility 0.15s 0.3s ease,
       transform 0.2s 0.3s ease-in-out;
-    transition: opacity 0.15s 0.3s ease, visibility 0.15s 0.3s ease,
+      transition: opacity 0.15s 0.3s ease, visibility 0.15s 0.3s ease,
       transform 0.2s 0.3s ease-in-out, -webkit-transform 0.2s 0.3s ease-in-out;
-    // overflow: scroll;
-    max-height: 95%;
+      // overflow: scroll;
+      max-height: 95%;
 
-    .close-form {
-      position: absolute;
-      position: absolute;
-      right: 15px;
-      top: 15px;
-      font-size: 20px;
-      color: #ff4242;
-      font-size: 2.5rem;
-      font-weight: bold;
-      line-height: 1;
-      cursor: pointer;
-    }
-
-    .in-form-container {
-      padding: 0;
-    }
-
-    .form-title {
-      font-weight: 400;
-      margin: 0;
-      font-size: 2em;
-      text-align: left;
-      color: #505050;
-      font-family: "Open Sans";
-      margin-bottom: 1em;
-      -webkit-font-smoothing: antialiased;
-    }
-
-    .buttons-wrapper {
-      margin-bottom: 2em;
-      padding: 0px 15px;
-    }
-
-    .forgot-button {
-      text-align: right;
-      margin-bottom: 1em;
-      margin-top: -0.7em;
-      text-align: right;
-      font-size: 0.9em;
-
-      button {
-        border: none;
-        font-weight: 500;
+      .close-form {
+        position: absolute;
+        position: absolute;
+        right: 15px;
+        top: 15px;
+        font-size: 20px;
         color: #ff4242;
-        background: none;
-        outline: none;
+        font-size: 2.5rem;
+        font-weight: bold;
+        line-height: 1;
         cursor: pointer;
-        -webkit-font-smoothing: antialiased;
-        font-family: "Open Sans";
-        transition: color 0.25s;
-        &:hover {
-          color: #bc2d2d;
-        }
       }
-    }
 
-    .form-sub-title {
-      font-weight: 500;
-      font-size: 1em;
-      padding: 0.9em 0;
-      color: #505050;
-      font-family: "Open Sans";
-      -webkit-font-smoothing: antialiased;
-    }
+      .in-form-container {
+        padding: 0;
+      }
 
-    .label-input {
-      display: block;
-      margin-bottom: 0.9em;
+      .form-title {
+        font-weight: 400;
+        margin: 0;
+        font-size: 2em;
+        text-align: left;
+        color: #505050;
+        font-family: "Open Sans";
+        margin-bottom: 1em;
+        -webkit-font-smoothing: antialiased;
+      }
 
-      input {
-        line-height: 1.15;
-        width: 100%;
-        font-weight: 600;
-        padding: 0.5em 0.8em;
+      .buttons-wrapper {
+        margin-bottom: 2em;
+        padding: 0px 15px;
+      }
+
+      .forgot-button {
+        text-align: right;
+        margin-bottom: 1em;
+        margin-top: -0.7em;
+        text-align: right;
         font-size: 0.9em;
-        color: #555;
-        background-color: $white;
-        background-image: none;
-        border: 1px solid #ccc;
-        border-radius: 4px;
-        -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
-        box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
-        -webkit-transition: border-color ease-in-out;
-        -o-transition: border-color ease-in-out;
-        transition: border-color ease-in-out;
-        font-family: "Open Sans";
 
-        &::placeholder {
-          font-family: "Open Sans";
-          color: #555;
-          -webkit-appearance: textfield;
+        button {
+          border: none;
+          font-weight: 500;
+          color: #ff4242;
+          background: none;
+          outline: none;
+          cursor: pointer;
           -webkit-font-smoothing: antialiased;
-          opacity: 0.5;
+          font-family: "Open Sans";
+          transition: color 0.25s;
+
+          &:hover {
+            color: #bc2d2d;
+          }
         }
       }
-    }
 
-    .terms {
-      line-height: 1.3;
-      text-align: center;
-      padding: 0;
-      margin: 0 0 2em;
-      font-size: 0.8em;
-      -webkit-font-smoothing: antialiased;
-      font-family: "Open Sans";
+      .form-sub-title {
+        font-weight: 500;
+        font-size: 1em;
+        padding: 0.9em 0;
+        color: #505050;
+        font-family: "Open Sans";
+        -webkit-font-smoothing: antialiased;
+      }
 
-      a {
-        color: #ff4242;
-        text-decoration: none;
-        cursor: pointer;
-        transition: color 0.25s;
-        &:hover {
-          color: #bc2d2d;
+      .label-input {
+        display: block;
+        margin-bottom: 0.9em;
+
+        input {
+          line-height: 1.15;
+          width: 100%;
+          font-weight: 600;
+          padding: 0.5em 0.8em;
+          font-size: 0.9em;
+          color: #555;
+          background-color: $white;
+          background-image: none;
+          border: 1px solid #ccc;
+          border-radius: 4px;
+          -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+          box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+          -webkit-transition: border-color ease-in-out;
+          -o-transition: border-color ease-in-out;
+          transition: border-color ease-in-out;
+          font-family: "Open Sans";
+
+          &::placeholder {
+            font-family: "Open Sans";
+            color: #555;
+            -webkit-appearance: textfield;
+            -webkit-font-smoothing: antialiased;
+            opacity: 0.5;
+          }
         }
       }
-    }
 
-    .input-block {
-      text-align: right;
-
-      .primary-form-button {
-        background-color: #ff4242;
-        color: white;
-        margin-bottom: 1.8em;
-        border-radius: 4px;
-        font-weight: 700;
-        border: none;
-        text-transform: uppercase;
-        letter-spacing: 0.8px;
-        -webkit-user-select: none;
-        -moz-user-select: none;
-        -ms-user-select: none;
-        user-select: none;
-        padding: 0.75em 1.4em 0.7em 1.4em;
-        font-size: 0.9rem;
+      .terms {
+        line-height: 1.3;
+        text-align: center;
+        padding: 0;
+        margin: 0 0 2em;
+        font-size: 0.8em;
         -webkit-font-smoothing: antialiased;
         font-family: "Open Sans";
-        transition: background-color 0.25s;
-        &:hover {
-          background-color: #bc2d2d;
+
+        a {
+          color: #ff4242;
+          text-decoration: none;
+          cursor: pointer;
+          transition: color 0.25s;
+
+          &:hover {
+            color: #bc2d2d;
+          }
         }
       }
-    }
 
-    .trigger-form {
-      padding: 1.5rem 0;
-      font-size: 0.9em;
-      background-color: #dfdfdf;
-      color: #505050;
-      text-align: center;
-      -webkit-font-smoothing: antialiased;
-      font-family: "Open Sans";
-      cursor: pointer;
-      border-bottom-left-radius: 8px;
-      border-bottom-right-radius: 8px;
+      .input-block {
+        text-align: right;
 
-      a {
-        color: #ff4242;
-        text-decoration: none;
+        .primary-form-button {
+          background-color: #ff4242;
+          color: white;
+          margin-bottom: 1.8em;
+          border-radius: 4px;
+          font-weight: 700;
+          border: none;
+          text-transform: uppercase;
+          letter-spacing: 0.8px;
+          -webkit-user-select: none;
+          -moz-user-select: none;
+          -ms-user-select: none;
+          user-select: none;
+          padding: 0.75em 1.4em 0.7em 1.4em;
+          font-size: 0.9rem;
+          -webkit-font-smoothing: antialiased;
+          font-family: "Open Sans";
+          transition: background-color 0.25s;
+
+          &:hover {
+            background-color: #bc2d2d;
+          }
+        }
+      }
+
+      .trigger-form {
+        padding: 1.5rem 0;
+        font-size: 0.9em;
+        background-color: #dfdfdf;
+        color: #505050;
+        text-align: center;
+        -webkit-font-smoothing: antialiased;
+        font-family: "Open Sans";
         cursor: pointer;
-        transition: color 0.25s;
-        &:hover {
-          color: #bc2d2d;
+        border-bottom-left-radius: 8px;
+        border-bottom-right-radius: 8px;
+
+        a {
+          color: #ff4242;
+          text-decoration: none;
+          cursor: pointer;
+          transition: color 0.25s;
+
+          &:hover {
+            color: #bc2d2d;
+          }
         }
       }
     }
   }
-}
 </style>
