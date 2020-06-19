@@ -2,10 +2,8 @@
 export default function ({ store, redirect }) {
 
 	// If the user is not authenticated
-	if (!store.getters.IS_TOKEN) {
-		return console.log('no token');
-	} else {
-		return console.log('token');
+	if (store.getters.IS_TOKEN) {
+		return redirect('/');
 	}
 }
 

@@ -1024,6 +1024,8 @@ export default {
             .catch(error => {
                 console.log(error);
             });
+
+        console.log("chek store", this.$store.getters.IS_TOKEN);
     },
     mounted() {
         this.clipperChanged();

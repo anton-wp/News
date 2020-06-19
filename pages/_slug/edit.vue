@@ -25,6 +25,7 @@
                                 <textarea
                                     placeholder="Minimum title length: 50 characters"
                                     class="form-input"
+                                    :class="(errorNotif && $v.title.$anyError) ? 'error' : ''"
                                     maxlength="120"
                                     rows="2"
                                     v-model.trim="$v.title.$model"
@@ -76,9 +77,11 @@
                                 </label>
 
                                 <editor
+                                    v-if="postId"
                                     :postid="postId"
                                     v-model="content"
                                     @editor:saved="saveDraft"
+                                    :class="(errorNotif && countContent < 1000) ? 'error' : ''"
                                 />
 
                                 <div class="radius">
@@ -91,12 +94,12 @@
                             </div>
                             <div
                                 class="error-notification"
-                                v-if="countContent = 0 && errorNotif"
+                                v-if="countContent == 0 && errorNotif"
                             >This field is required</div>
                             <div
                                 class="error-notification"
-                                v-if="countContent < 350 && errorNotif"
-                            >Minimum content length: 350 letters</div>
+                                v-if="countContent < 1000 && countContent !== 0 && errorNotif"
+                            >Minimum content length: 1000 letters</div>
                         </div>
                     </div>
 
@@ -247,6 +250,7 @@
                             >
                                 <option
                                     v-for="category of categories"
+                                    :key="category.id"
                                     :value="category.id"
                                 >{{ category.slug }}</option>
                             </select>
@@ -270,6 +274,7 @@
                             >
                                 <option
                                     v-for="option of options"
+                                    :key="option.id"
                                     :value="option.title"
                                 >{{ option.title }}</option>
                             </select>
@@ -305,11 +310,12 @@
                                 @tag="addTag"
                                 @search-change="searchOptions"
                                 @select="saveDraft"
+                                :class="(errorNotif && selectedLinkOption.length < 1) ? 'error' : ''"
                             ></multiselect>
 
                             <div
                                 class="error-notification"
-                                v-if="errorNotif && selectedLinkOption.length > 0"
+                                v-if="errorNotif && selectedLinkOption.length < 1"
                             >Please add at least 1 link</div>
                         </div>
 
@@ -334,6 +340,7 @@
                                 :hide-selected="false"
                                 @search-change="searchAuthors"
                                 @select="saveDraft"
+                                :class="(errorNotif && selectedAuthor.length < 1) ? 'error' : ''"
                             >
                                 <template slot="option" slot-scope="props">
                                     <div class="option__desc">
@@ -341,11 +348,36 @@
                                     </div>
                                 </template>
                             </multiselect>
+
+                            <div
+                                class="error-notification"
+                                v-if="errorNotif && selectedAuthor.length < 1"
+                            >This field is required</div>
                         </div>
 
                         <div class="buttons-wrapp">
                             <!-- <button class="button-add draft-button">Save Draft</button> -->
                             <div>
+                                <div class="buttons-forse">
+                                    <!-- <div class="forse">
+                                        <div class="fa-icon">
+                                            <fa-icon [icon]="faSquare"></fa-icon>
+                                            <fa-icon [icon]="faCheckSquare"></fa-icon>
+                                        </div>
+                                        <p>force publish</p>
+                                    </div>-->
+
+                                    <label class="d-flex align-items-center w-100">
+                                        <div class="categoryCheckbox">
+                                            <svg width="10" height="10" v-if="forcePublish">
+                                                <use xlink:href="#checkbox" />
+                                            </svg>
+                                            <input type="checkbox" v-model="forcePublish" />
+                                        </div>
+
+                                        <div class="categoryTitle ml-2">force publish</div>
+                                    </label>
+                                </div>
                                 <button
                                     class="button-add post-button"
                                     @click.prevent="publishedPost"
@@ -403,9 +435,14 @@
                                 Drag and drop your image
                                 <br />or
                             </h3>
-                            <div class="drop-btn">Choose Your Image</div>
+                            <div class="drop-btn my-4">Choose Your Image</div>
 
                             <p class="drop-subtitle">maximum file size: 50mb</p>
+
+                            <div
+                                v-if="errorNotif && !imgCrop"
+                                class="form-field-tip error-tip"
+                            >Featured image is required</div>
 
                             <div class="cssload-container" v-if="loadingDrop">
                                 <div class="lds-ellipsis">
@@ -427,19 +464,15 @@
                             class="croper"
                             @load="clipperLoaded"
                         ></clipper-basic>
-
-                        <button @click.prevent="someFnc">clipper</button>
                     </div>
+
                     <div class="col-12 col-lg-5 col-xl-4">
-                        <div
-                            class="animation prevImgBlock"
-                            style="max-width: 410px; height: 100%; margin: 0 auto;"
-                        >
+                        <div class="animation prev-img-block" v-if="imgCrop">
                             <clipper-preview name="preview"></clipper-preview>
 
-                            <div class="header-metadata">
+                            <div class="header-metadata" v-if="selectedCategory">
                                 <span class="category js--post-category-preview">
-                                    <span>category</span>
+                                    <span>{{ categories[selectedCategory] }}</span>
                                 </span>
                                 <div class="news-item-metadata">
                                     <span class="metadata-block">
@@ -472,7 +505,7 @@
                                     </span>
                                 </div>
                             </div>
-                            <h2 class="title-posts">title-post</h2>
+                            <h2 class="title-posts" v-if="$v.title.$model">{{ $v.title.$model }}</h2>
                         </div>
                     </div>
                     <div class="col-12 col-lg-7 col-xl-8">
@@ -484,15 +517,16 @@
                             <input
                                 class="form-input"
                                 placeholder="e.g Instagram, Youtube, etc"
-                                v-model.trim="$v.imgTitle.$model"
+                                v-model.trim="$v.imgDescript.$model"
                                 @blur="saveDraft"
+                                :class="($v.imgDescript.$anyError && errorNotif) ? 'error' : ''"
                             />
                             <label class="require">
                                 <span class="required">*</span> required fields
                             </label>
                             <div
                                 class="error-notification"
-                                v-if="!$v.imgTitle.required && errorNotif"
+                                v-if="!$v.imgDescript.required && errorNotif"
                             >This field is required</div>
                         </div>
                     </div>
@@ -510,7 +544,7 @@ import Dropzone from "nuxt-dropzone";
 import Cookies from "js-cookie";
 
 export default {
-    // middleware: "auth",
+    middleware: "auth",
     components: {
         Multiselect,
         Dropzone
@@ -535,7 +569,9 @@ export default {
 
             title: "",
             subtitle: "",
-            submitStatus: "",
+            imgDescript: "",
+            forcePublish: false,
+            // submitStatus: "",
             fields: {
                 title: false,
                 subTitle: false,
@@ -590,23 +626,14 @@ export default {
             minLength: minLength(50),
             maxLength: maxLength(120)
         },
+        imgDescript: {
+            required
+        },
         subtitle: {
             minLength: minLength(50)
-        },
-        body: {
-            required,
-            minLength: minLength(160),
-            maxLength: maxLength(1000)
-        },
-        imgTitle: {
-            required
         }
     },
     methods: {
-        someFnc() {
-            console.log(this.content);
-            console.log(this.countContent);
-        },
         searchOptions(query) {
             if (query) {
                 this.isLoading = true;
@@ -668,7 +695,7 @@ export default {
 
         addFields() {
             this.$http
-                .get("/api/profile/post-fields")
+                .get("api/profile/post-fields?action=create")
                 .then(({ data }) => {
                     this.fields = data.fields;
                 })
@@ -679,7 +706,7 @@ export default {
 
         getCategories() {
             this.$http
-                .get("/api/categories/")
+                .get("https://dev.api.verdict.org/categories/")
                 .then(({ data }) => {
                     this.categories = data.data;
 
@@ -693,7 +720,7 @@ export default {
         getOptions() {
             this.$http
                 .get(
-                    "/api/posts/create-helpers/verdict-options/"
+                    "https://dev.api.verdict.org/posts/create-helpers/verdict-options/"
                 )
                 .then(({ data }) => {
                     this.options = data.data;
@@ -799,10 +826,12 @@ export default {
                 this.$http
                     .patch(`/api/posts/${this.postId}`, this.formData)
                     .then(resp => {
-                        console.log(resp);
+                        this.$toasted.show(resp.data.message);
+                        // console.log(resp);
                     })
                     .catch(error => {
                         console.log(error);
+                        this.$toasted.show(error.data.message);
                     });
 
                 return;
@@ -812,6 +841,7 @@ export default {
                 .post("/api/posts/", this.formData)
                 .then(resp => {
                     this.postId = resp.data.id;
+                    this.$toasted.show(resp.data.message);
                 })
                 .catch(error => {
                     console.log(error);
@@ -819,82 +849,28 @@ export default {
         },
 
         publishedPost() {
-            this.errorNotif = true;
+            this.$v.$touch();
+
+            console.log(this.$v);
+
             if (this.$v.$invalid) {
+                this.errorNotif = true;
                 return;
             }
-            // if (this.postId) {
-            //     this.$http
-            //         .patch(`/api/posts/${this.postId}/publish`, this.formData)
-            //         .then(resp => {
-            //             console.log(resp);
-            //         })
-            //         .catch(error => {
-            //             console.log(error);
-            //         });
 
-            //     return;
-            // }
+            this.errorNotif = false;
 
-            // this.$http
-            //     .post("/api/posts/", this.formData)
-            //     .then(resp => {
-            //         this.postId = resp.data.id;
-
-            //         this.$http
-            //             .patch(
-            //                 `/api/posts/${this.postId}/publish`,
-            //                 this.formData
-            //             )
-            //             .then(resp => {
-            //                 console.log(resp);
-            //             })
-            //             .catch(error => {
-            //                 console.log(error);
-            //             });
-            //     })
-            //     .catch(error => {
-            //         console.log(error);
-            //     });
+            this.$http
+                .patch(`/api/posts/${this.postId}/publish`, this.formData)
+                .then(resp => {
+                    // console.log(resp);
+                    this.$toasted.show(resp.data.message);
+                })
+                .catch(error => {
+                    console.log(error);
+                    this.$toasted.show(error.data.message);
+                });
         }
-    },
-    created() {
-        this.initDate();
-
-        for (
-            let i = this.now.getFullYear();
-            i <= this.now.getFullYear() + 3;
-            i++
-        ) {
-            this.years.push(i);
-        }
-
-        for (let i = 1; i <= 24; i++) {
-            this.hours.push(i);
-        }
-
-        for (let i = 0; i < 60; i++) {
-            this.minutes.push(("0" + i).slice(-2));
-        }
-
-        this.addFields();
-        this.getCategories();
-        this.getOptions();
-
-        const token = Cookies.get("token");
-        this.dropOptions.headers.Authorization = `Bearer ${token}`;
-
-        // this.$http
-        //     .post("/api/posts/")
-        //     .then(resp => {
-        //         this.postId = resp.data.id;
-        //     })
-        //     .catch(error => {
-        //         console.log(error);
-        //     });
-    },
-    mounted() {
-        this.clipperChanged();
     },
     computed: {
         daysInMonth() {
@@ -932,8 +908,8 @@ export default {
         },
 
         countContent() {
-            let contentCount = 0;
-            contentCount = this.content.reduce(function(prev, el) {
+            let cContent = 0;
+            cContent = this.content.reduce(function(prev, el) {
                 let counter = 0;
 
                 if (
@@ -950,13 +926,13 @@ export default {
                         return elem.length + previus;
                     }, 0);
                 } else {
-                    return (counter = 0);
+                    counter = 0;
                 }
 
                 return counter + prev;
             }, 0);
 
-            return contentCount;
+            return cContent;
         },
 
         formData() {
@@ -984,14 +960,16 @@ export default {
                 newData.append("publishedAt", this.selectedDate);
             }
 
-            // if (object.forcePublish) { newData.append('forcePublish', object.forcePublish); };
+            if (this.forcePublish) {
+                newData.append("forcePublish", this.forcePublish);
+            }
 
             if (this.imgCrop) {
                 newData.append("featuredImage", this.imgCrop);
             }
 
-            if (this.$v.imgTitle.$model) {
-                newData.append("source", this.$v.imgTitle.$model);
+            if (this.$v.imgDescript.$model) {
+                newData.append("source", this.$v.imgDescript.$model);
             }
 
             if (this.cropperX) {
@@ -1009,6 +987,46 @@ export default {
 
             return newData;
         }
+    },
+
+    created() {
+        this.$store.commit("SET_BREADCRUMBS", [{ title: "Add" }]);
+        this.initDate();
+
+        for (
+            let i = this.now.getFullYear();
+            i <= this.now.getFullYear() + 3;
+            i++
+        ) {
+            this.years.push(i);
+        }
+
+        for (let i = 1; i <= 24; i++) {
+            this.hours.push(i);
+        }
+
+        for (let i = 0; i < 60; i++) {
+            this.minutes.push(("0" + i).slice(-2));
+        }
+
+        this.addFields();
+        this.getCategories();
+        this.getOptions();
+
+        const token = Cookies.get("token");
+        this.dropOptions.headers.Authorization = `Bearer ${token}`;
+
+        // this.$http
+        //     .post("/api/posts/")
+        //     .then(resp => {
+        //         this.postId = resp.data.id;
+        //     })
+        //     .catch(error => {
+        //         console.log(error);
+        //     });
+    },
+    mounted() {
+        this.clipperChanged();
     }
 };
 </script>
@@ -1017,8 +1035,36 @@ export default {
 
 <style lang="scss" scoped>
 // @import "nuxt-dropzone/dropzone.css";
-@import "../../assets/utils/variables";
-@import "../../assets/utils/colors";
+@import "../assets/utils/variables";
+@import "../assets/utils/colors";
+
+.categoryCheckbox {
+    width: 16px;
+    height: 16px;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    vertical-align: middle;
+    border: 1px solid #0a0a0a;
+    border-radius: 5px;
+    input {
+        display: none;
+    }
+    svg {
+        display: block;
+    }
+}
+.categoryTitle {
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.prev-img-block {
+    max-width: 410px;
+    height: 100%;
+    margin: 0 auto;
+}
+
 .cssload-container {
     position: absolute;
     width: 100%;
