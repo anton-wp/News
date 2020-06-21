@@ -1,41 +1,73 @@
 <template>
-    <div
-        id="wrapper-default-avatar"
-        class="wrapper-default-avatar"
-        @mouseover="getPopUp"
-        @mouseleave="hidePopUp"
-    >
-        <img class="default-avatar" src="/image/default-avatar-original.png" />
-        <div class="icon">
-            <svg width="12" height="15">
-                <use xlink:href="#chevron-down" />
-            </svg>
+    <div id="wrapper-default-avatar" class="wrapper-default-avatar">
+        <div
+            class="icon-notification d-none d-sm-inline-block"
+            v-if="authorization"
+            v-click-outside="() => {modalNotification = false}"
+        >
+            <div class="bell" @click="modalNotification = true">
+                <svg width="20" height="20">
+                    <use xlink:href="#Notifications" />
+                </svg>
+                <span class="counter-notification">4</span>
+            </div>
+            <div v-if="modalNotification" class="notification">
+                <div class="row blockNotification">
+                    <block-notification small />
+                    <!-- <vrd-ppnb class="col-12 block" [small]='true'></vrd-ppnb>
+					<vrd-ppnb class="col-12 block" [small]='true'></vrd-ppnb>
+					<vrd-ppnb class="col-12 block" [small]='true'></vrd-ppnb>
+					<vrd-ppnb class="col-12 block" [small]='true'></vrd-ppnb>
+					<vrd-ppnb class="col-12 block" [small]='true'></vrd-ppnb>
+                    <vrd-ppnb class="col-12 block" [small]='true'></vrd-ppnb>-->
+                    <div class="viewAll">
+                        <a>view all</a>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div id="sign-popup" class="sign-popup" v-if="showPopup">
-            <ul class="sign-popup-ul" v-if="!authorization">
-                <li class="sign-popup-ul-item" @click="openLoginPopup('logIn')">Log In</li>
-                <li class="sign-popup-ul-item" @click="openLoginPopup('signUp')">Sign Up</li>
-            </ul>
-            <ul class="sign-popup-ul" v-if="authorization">
-                <nuxt-link class="sign-popup-ul-item" to="/profile/dashboard/">Profile</nuxt-link>
-                <nuxt-link class="sign-popup-ul-item" to="/profile/notifications/">Notification</nuxt-link>
-                <nuxt-link class="sign-popup-ul-item" to="/profile/settings/">Settings</nuxt-link>
-                <nuxt-link class="sign-popup-ul-item" @click.native="logout" to="/">Logout</nuxt-link>
-            </ul>
+        <div @mouseover="getPopUp" @mouseleave="hidePopUp" style="position: relative;">
+            <img class="default-avatar" src="/image/default-avatar-original.png" />
+            <div class="icon">
+                <svg width="12" height="15">
+                    <use xlink:href="#chevron-down" />
+                </svg>
+            </div>
+            <div id="sign-popup" class="sign-popup" v-if="showPopup">
+                <ul class="sign-popup-ul" v-if="!authorization">
+                    <li class="sign-popup-ul-item" @click="openLoginPopup('logIn')">Log In</li>
+                    <li class="sign-popup-ul-item" @click="openLoginPopup('signUp')">Sign Up</li>
+                </ul>
+                <ul class="sign-popup-ul" v-if="authorization">
+                    <nuxt-link class="sign-popup-ul-item" to="/profile/dashboard/">Profile</nuxt-link>
+                    <nuxt-link class="sign-popup-ul-item" to="/profile/notifications/">Notification</nuxt-link>
+                    <nuxt-link class="sign-popup-ul-item" to="/profile/settings/">Settings</nuxt-link>
+                    <nuxt-link class="sign-popup-ul-item" @click.native="logout" to="/">Logout</nuxt-link>
+                </ul>
+            </div>
         </div>
     </div>
 </template>
 
 <script>
 import Cookies from "js-cookie";
+import BlockNotification from "~/components/profile/block-notification";
+import ClickOutside from "vue-click-outside";
 
 export default {
+    directives: {
+        ClickOutside
+    },
+    components: {
+        BlockNotification
+    },
     props: {
         authorization: Boolean
     },
     data() {
         return {
-            showPopup: false
+            showPopup: false,
+            modalNotification: false
         };
     },
     methods: {
@@ -54,11 +86,9 @@ export default {
         },
         logout() {
             // console.log(this.$cookies)
-            Cookies.remove("token");
-            this.$store.dispatch("SAVE_TOKEN", null);
-            this.$store.dispatch("SAVE_TOKEN_INFO", null);
+            this.$auth.logout("local").then(() => {});
 
-            location.reload()
+            // location.reload();
         }
     }
 };
@@ -66,16 +96,18 @@ export default {
 
 <style lang="scss" scoped>
 @import "../../assets/utils/variables";
+@import "../../assets/utils/colors";
 .default-avatar {
     border-radius: 25px;
 }
 
 .wrapper-default-avatar {
+    display: flex;
+    align-content: center;
     cursor: pointer;
     height: 48px;
     margin-right: 26px;
     margin-top: 3px;
-    position: relative;
 
     .notification {
         position: absolute;
@@ -114,7 +146,7 @@ export default {
             background: #fefefe;
             width: 15px;
             height: 15px;
-            z-index: 500000;
+            z-index: 3;
             transform: rotate(45deg);
         }
         .viewAll {
@@ -157,8 +189,9 @@ export default {
     }
 
     .icon-notification {
-        display: inline-block;
-        margin: 0px 27px 0 10px;
+        display: flex !important;
+        align-items: center;
+        margin: 0px 25px 0 10px;
         user-select: none;
         font-size: 20px;
         svg {
@@ -169,6 +202,25 @@ export default {
             &:hover {
                 color: #bc2d2d;
             }
+        }
+        .bell {
+            position: relative;
+            display: flex;
+            align-content: center;
+            padding-bottom: 3px;
+        }
+        .counter-notification {
+            background-color: $primary-color;
+            font-size: 12px;
+            font-weight: 700;
+            cursor: pointer;
+            border-radius: 10px;
+            line-height: 15px;
+            padding: 0 5px;
+            position: absolute;
+            left: 12px;
+            top: 0;
+            color: $white;
         }
     }
 

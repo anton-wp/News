@@ -1,7 +1,7 @@
 <template>
   <div class="routing" v-if="breadcrumbs.length">
-      <component :is="item.path ? 'nuxt-link' : 'span'" class="breadcrumbs" :class="item.path ? 'active' : ''" v-for="(item, index) of breadcrumbs" :key="index" :to="item.path">
-        {{ item.title}}
+      <component :is="item.path ? 'nuxt-link' : 'span'" class="breadcrumbs" v-for="(item, index) of breadcrumbs" :key="index" :to="item.path">
+        <span :class="item.path ? 'active-breadcrumbs' : ''">{{ item.title }}</span>
         <span class="arrow" v-if="breadcrumbs[index + 1]">
           >
         </span>
@@ -33,9 +33,10 @@ export default {
       text-decoration: none;
       transition: 0.3s;
       color: $black;
+			text-transform: capitalize;
 
     }
-		.active {
+		.active-breadcrumbs {
 			cursor: pointer;
 
 			&:hover {

@@ -150,7 +150,8 @@
                 <button>Forgot Password?</button>
                                 </div>-->
                                 <div class="terms">
-                                    By checking this box, you confirm that you have read, understand and agree with Verdict's
+                                    By checking this box, you confirm that you have read, understand and agree with
+                                    Verdict's
                                     <nuxt-link to="/terms-of-service">
                                         <span @click="closeLoginPopup">Terms of Service</span>
                                     </nuxt-link>&
@@ -203,8 +204,6 @@
 
 <script>
 import Social from "~/components/login/social-button.vue";
-import { log } from "util";
-import axios from "axios";
 import Cookies from "js-cookie";
 import jwt_decode from "jwt-decode";
 
@@ -263,28 +262,19 @@ export default {
             this.loading = true;
             this.login(formData);
         },
+
         login(formData) {
-            this.$http
-                .post("/api/auth/login", formData)
-                .then(responce => {
-                    this.loading = false;
-                    const token = responce.data.token;
-                    const tokenDecoded = jwt_decode(token);
-
-                    Cookies.set("token", token);
-
-                    this.$store.dispatch("SAVE_TOKEN", token);
-                    this.$store.dispatch("SAVE_TOKEN_INFO", tokenDecoded);
-
-					this.closeLoginPopup();
-
-					location.reload()
+            this.$auth
+                .loginWith("local", {
+                    data: formData
                 })
-                .catch(error => {
+                .then(resp => {
                     this.loading = false;
-                    // this.errorMessage = error.response.data.message;
+
+                    this.closeLoginPopup();
                 });
         },
+
         closeLoginPopup() {
             this.$emit("closeLoginPopup");
         },
@@ -329,6 +319,7 @@ export default {
 
     .forgot-password {
         padding: 2.4rem 3rem 0px;
+
         h4 {
             font-family: open sans, Helvetica Neue, Helvetica, Roboto, Arial,
                 sans-serif;
@@ -425,6 +416,7 @@ export default {
                 -webkit-font-smoothing: antialiased;
                 font-family: "Open Sans";
                 transition: color 0.25s;
+
                 &:hover {
                     color: #bc2d2d;
                 }
@@ -486,6 +478,7 @@ export default {
                 text-decoration: none;
                 cursor: pointer;
                 transition: color 0.25s;
+
                 &:hover {
                     color: #bc2d2d;
                 }
@@ -513,6 +506,7 @@ export default {
                 -webkit-font-smoothing: antialiased;
                 font-family: "Open Sans";
                 transition: background-color 0.25s;
+
                 &:hover {
                     background-color: #bc2d2d;
                 }
@@ -536,6 +530,7 @@ export default {
                 text-decoration: none;
                 cursor: pointer;
                 transition: color 0.25s;
+
                 &:hover {
                     color: #bc2d2d;
                 }

@@ -31,20 +31,19 @@
       </span>
     </span>
     <span class="bookmark-news">
-      <button class="bookmark">
-        <svg width="20" height="20">
-          <use xlink:href="#bookmark" />
-        </svg>
-        <!-- <svg width="20" height="20">
-          <use xlink:href="#bookmark-empty" />
-        </svg> -->
-      </button>
+
+			<bookmark />
     </span>
   </div>
 </template>
 
 <script>
+import Bookmark from "~/components/universal-components/Bookmark";
+
 export default {
+	components: {
+		Bookmark
+	},
 	props:{
 		author: Object
 	}

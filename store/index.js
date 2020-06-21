@@ -8,19 +8,20 @@ Vue.use(Vuex)
 const store = () => new Vuex.Store({
 
 	state: {
-		token: null,
-		tokenInfo: null,
 		profile: Object,
 		tabs: [],
-		breadcrumbs: []
+		modal: Object,
+		breadcrumbs: [],
+		bookmarks: [],
+		subscriptions: [],
 	},
 	getters: {
-		IS_TOKEN: state => {
-			return state.token ? true : false;
+		isAuthenticated(state) {
+			return state.auth.loggedIn
 		},
-		TOKEN_INFO: state => {
-			return state.tokenInfo;
-		},
+		loggedInUser(state) {
+			return state.auth.user
+		}
 	},
 	actions,
 	mutations

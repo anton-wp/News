@@ -33,7 +33,12 @@ export default {
 		category: Boolean,
 		tag: Boolean,
 		padding: Boolean
-  }
+	},
+	provide() {
+		return {
+			id: this.post.id
+		}
+	}
 }
 </script>
 

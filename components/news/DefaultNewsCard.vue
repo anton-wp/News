@@ -13,7 +13,7 @@
             <nuxt-link class="title" :to="`/${post.slug}`">{{ post.title }}</nuxt-link>
             <!-- </h2> -->
           </div>
-          <news-card-footer :author="post.author" :tag="tag" :publishedAt="post.publishedAt" colorScheme="light" :pending="false" :showMarks="false" />
+          <news-card-footer :author="post.author"  :tag="tag" :publishedAt="post.publishedAt" colorScheme="light" :pending="false" :showMarks="false" />
         </div>
       </div>
     </div>
@@ -32,7 +32,12 @@ export default {
   components: {
     NewsCardHeader,
     NewsCardFooter
-  }
+	},
+	provide() {
+		return {
+			id: this.post.id
+		}
+	}
 }
 </script>
 

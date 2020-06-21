@@ -5,20 +5,28 @@
 <script>
 import EditorJS from "@editorjs/editorjs";
 import Header from "@editorjs/header";
-import ImageTool from "@editorjs/image";
 import LinkTool from "@editorjs/link";
 import List from "@editorjs/list";
+import ImageTool from "@editorjs/image";
 
 export default {
+    props: {
+        postid: Number | String
+    },
     data() {
         return {
             editor: undefined,
-            blocks: undefined
+            blocks: undefined,
+            token: undefined
+            // id: this.postid
         };
     },
     methods: {
         save() {
-            this.editor.save().then(({blocks}) => this.$emit("input", blocks));
+            this.editor.save().then(({ blocks }) => {
+                this.$emit("input", blocks);
+                this.$emit("editor:saved");
+            });
         }
     },
     mounted() {
@@ -33,15 +41,21 @@ export default {
                 linkTool: {
                     class: LinkTool,
                     config: {
-                        endpoint: "http://localhost:3000/fetchUrl" // Your backend endpoint for url data fetching
+                        endpoint: "/" // Your backend endpoint for url data fetching
                     }
                 },
                 image: {
                     class: ImageTool,
                     config: {
                         endpoints: {
-                            byFile: "http://localhost:3000/uploadFile", // Your backend file uploader endpoint
-                            byUrl: "http://localhost:3000/fetchUrl" // Your endpoint that provides uploading by Url
+                            byFile: "/api/media/post-content-image/file", // Your backend file uploader endpoint
+                            byUrl: "/api/media/post-content-image/link" // Your endpoint that provides uploading by Url
+                        },
+                        additionalRequestHeaders: {
+                            Authorization: this.token
+                        },
+                        additionalRequestData: {
+                            postId: this.postid
                         }
                     }
                 },
@@ -55,15 +69,10 @@ export default {
                 this.save();
             }
         });
-
-        // editor
-        //     .save()
-        //     .then(outputData => {
-        //         console.log("Article data: ", outputData);
-        //     })
-        //     .catch(error => {
-        //         console.log("Saving failed: ", error);
-        //     });
+        console.log(this.postId);
+    },
+    created() {
+        this.token = this.$auth.getToken("local");
     }
 };
 </script>

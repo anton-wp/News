@@ -1,4 +1,3 @@
-
 module.exports = {
 	mode: 'universal',
 	/*
@@ -22,14 +21,11 @@ module.exports = {
 	/*
 	** Global CSS
 	*/
-	css: [
-	],
+	css: [],
 	/*
 	** Plugins to load before mounting the App
 	*/
 	plugins: [
-		{ src: '~/plugins/token' },
-		{ src: '~/plugins' },
 		{ src: '~/plugins/editor', ssr: false },
 	],
 	/*
@@ -47,6 +43,7 @@ module.exports = {
 		'@nuxtjs/axios',
 		// Doc: https://github.com/nuxt-community/dotenv-module
 		'@nuxtjs/dotenv',
+		'@nuxtjs/auth',
 
 	],
 	/*
@@ -55,6 +52,25 @@ module.exports = {
 	*/
 	axios: {
 		proxy: true
+	},
+
+	auth: {
+		redirect: {
+			logout: '/',
+		},
+		strategies: {
+			local: {
+				endpoints: {
+					login: { url: '/api/auth/login', method: 'post', propertyName: 'token' },
+					user: { url: '/api/profile', method: 'get', propertyName: '' },
+					logout: true,
+
+				},
+			}
+		},
+		plugins: [
+			{ src: '~/plugins' }
+		]
 	},
 
 	proxy: {
@@ -67,8 +83,6 @@ module.exports = {
 	 * load info to vuex
 	 */
 	router: {
-		middleware: "token-check",
-		// middleware: "auth",
 	},
 
 
@@ -79,6 +93,7 @@ module.exports = {
 		/*
 		** You can extend webpack config here
 		*/
-		extend(config, ctx) { }
+		extend(config, ctx) {
+		}
 	}
 }
