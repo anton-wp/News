@@ -10,6 +10,7 @@ Vue.use(VuejsClipper, {
 	components: {
 		clipperBasic: true,
 		clipperPreview: true,
+		clipperUpload: true
 	}
 })
 
