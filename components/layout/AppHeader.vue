@@ -15,7 +15,7 @@
         <ul id="menu" class="nav-item-list d-none d-sm-none d-md-none d-lg-flex">
           <li
             class="nav-item"
-            v-for="category of header.menu.slice(0, cropMenu)"
+            v-for="category of categories.slice(0, cropMenu)"
             :key="category.order"
           >
             <nuxt-link :to="`/${category.path}`" class="general-nav-item-link">{{ category.title }}</nuxt-link>
@@ -31,7 +31,7 @@
               <ul>
                 <li
                   class="nav-item"
-                  v-for="category of header.menu.slice(cropMenu, header.menu.length)"
+                  v-for="category of categories.slice(cropMenu, categories.length)"
                   :key="category.order"
                 >
                   <nuxt-link :to="`/${category.path}`" class="nav-item-link">{{ category.title }}</nuxt-link>
@@ -44,7 +44,7 @@
           <user-profile
             v-if="true"
             @openLoginPopup="openLoginPopup"
-            :authorization="$store.getters.IS_TOKEN"
+            :authorization="$store.state.auth.loggedIn"
           />
           <!-- <user-profile
                         v-if="!true"
@@ -52,11 +52,11 @@
                         :authorization="false"
           />-->
           <button
-            v-if="!$store.getters.IS_TOKEN"
+            v-if="!$store.state.auth.loggedIn"
             class="signup-btn d-none d-md-block"
             @click="openLoginPopup('signUp')"
           >Sign Up</button>
-          <button v-if="$store.getters.IS_TOKEN" class="signup-btn d-none d-md-block">
+          <button v-if="$store.state.auth.loggedIn" class="signup-btn d-none d-md-block">
             <nuxt-link class="link-button" to="/add">Add Post</nuxt-link>
           </button>
         </div>
@@ -70,7 +70,7 @@
             </svg>
           </div>
           <ul class="menu">
-            <li v-for="item of header.menu" :key="item.order">
+            <li v-for="item of categories" :key="item.order">
               <nuxt-link class="general-nav-item-link" :to="`/${item.path}`">{{ item.title }}</nuxt-link>
             </li>
             <li>
@@ -114,11 +114,11 @@
 </template>
 
 <script>
-import {mapState} from 'vuex'
+import { mapState } from "vuex";
 import UserProfile from "~/components/user/UserProfile";
 import LoginPopup from "~/components/layout/LoginPopup";
-import Cookies from "js-cookie";
 import SocialBlock from "~/components/universal-components/socialBlock.vue";
+import { mapGetters } from "vuex";
 
 export default {
   components: {
@@ -139,47 +139,47 @@ export default {
     };
   },
   mounted() {
-		if(this.header.menu.length === 0) {
-			this.getMenu()
-		}
-		if(this.bookmarks.length === 0) {
-			this.getBookmarks()
-		}
-		if(this.subscriptions.length === 0) {
-			this.getSubscriptions()
-		}
+    if (this.header.menu.length === 0) {
+      this.getMenu();
+    }
+    if (this.bookmarks.length === 0) {
+      this.getBookmarks();
+    }
+    if (this.subscriptions.length === 0) {
+      this.getSubscriptions();
+    }
     this.$nextTick(function() {
       window.addEventListener("resize", this.getWindowWidth);
       //Init
       this.getWindowWidth();
     });
-	},
-	computed: {
-		...mapState(['header', 'bookmarks', 'subscriptions'])
-	},
+  },
+  computed: {
+    ...mapState(["header", "bookmarks", "subscriptions"])
+  },
   methods: {
-		async	getBookmarks () {
-			await this.$http
-		  .get(`/api/profile/bookmarks/ids`)
-		  .then(res => {
-		    this.$store.dispatch("GET_BOOKMARK", res.data.data);
-		  })
-		  .catch(error => console.error(error));
-		},
-		async getSubscriptions () {
-			await this.$http
-		  .get(`/api/profile/subscriptions/ids`)
-		  .then(res => {
-		    this.$store.dispatch("GET_SUBSCRIPTIONS", res.data.data);
-		  })
-		  .catch(error => console.error(error));
-		},
-		async getMenu () {
-			await this.$http
-      .get(`/api/menu/header`)
-      .then(res => (this.$store.commit('SET_HEADER_MENU', res.data.data)))
-			.catch(error => console.error(error));
-		},
+    async getBookmarks() {
+      await this.$http
+        .get(`/api/profile/bookmarks/ids`)
+        .then(res => {
+          this.$store.dispatch("GET_BOOKMARK", res.data.data);
+        })
+        .catch(error => console.error(error));
+    },
+    async getSubscriptions() {
+      await this.$http
+        .get(`/api/profile/subscriptions/ids`)
+        .then(res => {
+          this.$store.dispatch("GET_SUBSCRIPTIONS", res.data.data);
+        })
+        .catch(error => console.error(error));
+    },
+    async getMenu() {
+      await this.$http
+        .get(`/api/menu/header`)
+        .then(res => this.$store.commit("SET_HEADER_MENU", res.data.data))
+        .catch(error => console.error(error));
+    },
     disabledSideBarMenu() {
       this.SideBarMenu = false;
     },
@@ -220,11 +220,6 @@ export default {
       }, 200);
     },
     token() {
-      // console.log(Cookies.get("token"));
-
-      //   if(Cookies.get('token')) {
-      //     return true
-      //   }
       return true;
     }
   },
@@ -236,6 +231,7 @@ export default {
 
 <style lang="scss" scoped>
 @import "../../assets/utils/variables";
+
 header {
   position: fixed;
   background-color: $white;
@@ -249,6 +245,7 @@ header {
   text-decoration: none;
   color: inherit;
 }
+
 .main-header {
   display: grid;
   grid-gap: 24px;
@@ -261,22 +258,27 @@ header {
   left: 50%;
   transform: translate(-50%);
   position: relative;
+
   .burger-icon {
     cursor: pointer;
     transition: color 0.25s;
+
     &:hover {
       color: #6d6d6d;
     }
+
     svg {
       fill: rgb(33, 37, 41);
     }
   }
 }
+
 .close-sidemenu-icon {
   position: absolute;
   left: 25px;
   top: 25px;
   cursor: pointer;
+
   svg {
     color: $primary_color;
     font-size: 36px;
@@ -299,6 +301,7 @@ header {
   padding: 0.5em 0.45em;
   box-shadow: 2px 4px 16px 0 rgba(35, 36, 40, 0.26);
   animation: popupMore linear 0.2s;
+
   .nav-item {
     margin: 0;
   }
@@ -315,9 +318,11 @@ header {
       // transform: rotateY(0deg);
     }
   }
+
   ul {
     list-style: none;
     padding-left: 0;
+
     li {
       border-top: none;
 
@@ -331,9 +336,11 @@ header {
         // padding: 5.6px 5.6px 5.6px 13.6px;
       }
     }
+
     li:hover {
       border-color: transparent;
       border-top: none;
+
       a {
         cursor: pointer;
         color: $hover_color;
@@ -351,9 +358,11 @@ header {
   margin: 0 0;
   padding-left: 25px;
 }
+
 .more {
   border-color: white !important;
 }
+
 .nav-item {
   list-style: none;
   position: relative;
@@ -361,15 +370,18 @@ header {
   border-top: solid 4px white;
   transition: all linear 0.3s;
   margin: 0 1em;
+
   &:hover {
     border-bottom: solid 4px $primary_color;
     border-top: solid 4px white;
+
     .general-nav-item-link {
       user-select: none;
       cursor: pointer;
       color: $primary_color;
     }
   }
+
   .shevron {
     // margin-left: 5px;
     svg {
@@ -378,6 +390,7 @@ header {
       margin-top: -4px;
     }
   }
+
   .general-nav-item-link {
     color: $black;
     text-decoration: none;
@@ -392,6 +405,7 @@ header {
   display: flex;
   align-items: center;
   margin-right: 3px;
+
   .signup-btn {
     background-color: $primary_color;
     color: $white;
@@ -405,6 +419,7 @@ header {
     border: none;
     -webkit-appearance: none;
     font-family: "Open Sans";
+
     &:hover {
       background-color: $hover_color;
     }
@@ -420,6 +435,7 @@ header {
   left: 0;
   transition: 0.3s;
 }
+
 .background05 {
   background-color: rgba(0, 0, 0, 0.7);
   position: fixed;
@@ -435,12 +451,14 @@ header {
     padding-left: 0;
   }
 }
+
 @media (max-width: 480px) {
   .nav-signup {
     margin-right: 15px;
   }
   .main-header {
     grid-template-columns: auto 1fr auto;
+
     .main-logo {
       .main-logo-img {
         width: 150px;
@@ -470,6 +488,7 @@ header {
   pointer-events: all;
   display: flex;
   justify-content: center;
+
   .opened {
     min-height: 120px;
     margin-top: 88px;
@@ -491,6 +510,7 @@ header {
     max-height: 80px;
     display: flex;
     align-items: center;
+
     .close-modal {
       -webkit-font-smoothing: antialiased;
       pointer-events: all;
@@ -516,15 +536,19 @@ header {
       z-index: 20;
     }
   }
+
   .c_modal-content {
     pointer-events: all;
     box-sizing: inherit;
     padding: 1.2rem;
+
     .verify-form-wrap {
       box-sizing: inherit;
+
       p {
         // margin-top: auto;
         margin-bottom: 0px;
+
         a {
           color: #0a0a0a;
         }
@@ -532,6 +556,7 @@ header {
     }
   }
 }
+
 .menu {
   background-color: $white;
   width: 260px;
@@ -543,8 +568,10 @@ header {
   padding-left: 0;
   position: fixed;
   overflow: hidden;
+
   li {
     list-style: none;
+
     .general-nav-item-link {
       display: block;
       color: $black;
@@ -560,6 +587,7 @@ header {
       -o-transition: color 0.3s, border 0.3s;
       transition: color 0.3s, border 0.3s;
       cursor: pointer;
+
       &:hover {
         color: $primary_color;
         border-left-color: $primary_color;
@@ -570,10 +598,12 @@ header {
 
 .follow {
   margin: 2em 0;
+
   .row {
     padding: 0 13px;
     margin-top: 22px;
   }
+
   span {
     font-family: "Open Sans", Helvetica Neue, Helvetica, Roboto, Arial,
       sans-serif;
@@ -601,6 +631,7 @@ header {
       top: 17px;
     }
   }
+
   .social {
     margin: 0 auto;
     width: 175px;

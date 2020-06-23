@@ -373,11 +373,7 @@
                                             <svg width="10" height="10" v-if="forcePublish">
                                                 <use xlink:href="#checkbox" />
                                             </svg>
-                                            <input
-                                                type="checkbox"
-                                                v-model="forcePublish"
-                                                @change="saveDraft"
-                                            />
+                                            <input type="checkbox" v-model="forcePublish" />
                                         </div>
 
                                         <div class="categoryTitle ml-2">force publish</div>
@@ -419,7 +415,7 @@
                                 name="file"
                                 type="file"
                                 id="file"
-                                ref="imgUploadInpt"
+                                ref="img"
                                 @change="uploadImg()"
                             />
                         </div>
@@ -430,7 +426,7 @@
                             :options="dropOptions"
                             :destroyDropzone="true"
                             @vdropzone-success="afterComplete"
-                            @vdropzone-processing="loadingDrop=true; imgCrop=''"
+                            @vdropzone-processing="loadingDrop=true"
                             :include-styling="false"
                             class="drop-wrap"
                             v-if="dropVisible"
@@ -464,23 +460,11 @@
                             preview="preview"
                             :grid="true"
                             :ratio="16/9"
-                            ref="clipper"
-                            class="croper"
-                            @load="clipperLoaded"
-                            @error="errorCrop"
-                        >No image</clipper-basic>
-
-                        <!-- <clipper-basic
-                            v-if="imgCrop"
-                            :src="imgCrop"
-                            preview="preview"
-                            :grid="true"
-                            :ratio="16/9"
                             :touch-create="false"
                             ref="clipper"
                             class="croper"
                             @load="clipperLoaded"
-                        >No image</clipper-basic>-->
+                        ></clipper-basic>
                     </div>
 
                     <div class="col-12 col-lg-5 col-xl-4">
@@ -558,20 +542,15 @@ import { maxLength, minLength, required } from "vuelidate/lib/validators";
 import { months } from "~/constants/dates";
 import Multiselect from "vue-multiselect";
 import Dropzone from "nuxt-dropzone";
-import { clipperUpload } from "vuejs-clipper";
-// import { mapGetters } from "vuex";
+import { mapGetters } from "vuex";
 
 export default {
-    middleware: "auth",
     components: {
         Multiselect,
-        Dropzone,
-        clipperUpload
+        Dropzone
     },
-
     data() {
         return {
-            defImg: undefined,
             postId: undefined,
             date: {
                 month: null,
@@ -592,6 +571,7 @@ export default {
             subtitle: "",
             imgDescript: "",
             forcePublish: false,
+            // submitStatus: "",
             fields: {
                 title: false,
                 subTitle: false,
@@ -628,6 +608,7 @@ export default {
             cropperY: undefined,
             cropperW: undefined,
             cropperH: undefined,
+            featuredImage: undefined,
             dropOptions: {
                 url: "/api/media/image-preload/",
                 maxFilesize: 50, // MB
@@ -642,16 +623,6 @@ export default {
             dropVisible: true
         };
     },
-
-    asyncData({ $axios }) {
-        return $axios
-            .$get("api/profile/post-fields?action=create")
-            .then(resp => {
-                let fields = resp.fields;
-                return { fields };
-            });
-    },
-
     validations: {
         title: {
             required,
@@ -666,9 +637,6 @@ export default {
         }
     },
     methods: {
-        errorCrop(er, er2) {
-            console.log(er, er2);
-        },
         searchOptions(query) {
             if (query) {
                 this.isLoading = true;
@@ -715,10 +683,10 @@ export default {
         },
 
         addFields() {
-            this.$axios
-                .$get("api/profile/post-fields?action=create")
+            this.$http
+                .get("api/profile/post-fields?action=create")
                 .then(({ data }) => {
-                    fields: data.fields;
+                    this.fields = data.fields;
                 })
                 .catch(error => {
                     // this.errorMessage = error.response.data.message;
@@ -740,7 +708,9 @@ export default {
 
         getOptions() {
             this.$http
-                .get("https://dev.api.verdict.org/posts/create-helpers/verdict-options/")
+                .get(
+                    "https://dev.api.verdict.org/posts/create-helpers/verdict-options/"
+                )
                 .then(({ data }) => {
                     this.options = data.data;
 
@@ -786,7 +756,29 @@ export default {
         },
 
         trigerInputUpload() {
-            this.$refs.imgUploadInpt.click();
+            this.$refs.img.click();
+        },
+
+        uploadImg() {
+            this.loadingDrop = true;
+
+            const formData = new FormData();
+
+            formData.append("image", this.$refs.img.files[0]);
+            formData.append("postId", this.postId);
+
+            this.$http
+                .post("/api/media/image-preload/", formData)
+                .then(res => {
+                    this.imgCrop = res.data.blob;
+
+                    this.dropVisible = false;
+                    this.loadingDrop = false;
+
+                    this.$refs.clipper.setTL$.next({ left: 1, top: 1 });
+                    this.$refs.clipper.setWH$.next({ width: 50, height: 50 });
+                })
+                .catch(error => console.error(error));
         },
 
         clipperLoaded() {
@@ -812,26 +804,7 @@ export default {
         },
 
         afterComplete(file, res) {
-            this.imgCrop = undefined;
-
-            this.imgCrop = res.file;
-        },
-
-        async uploadImg() {
-            this.loadingDrop = true;
-            this.imgCrop = undefined;
-
-            const formData = new FormData();
-
-            formData.append("image", this.$refs.imgUploadInpt.files[0]);
-            formData.append("postId", this.postId);
-
-            await this.$http
-                .post("/api/media/image-preload/", formData)
-                .then(res => {
-                    this.imgCrop = res.data.file;
-                })
-                .catch(error => console.error(error));
+            this.imgCrop = res.blob;
         },
 
         saveDraft() {
@@ -886,7 +859,7 @@ export default {
         }
     },
     computed: {
-        // ...mapGetters(["loggedInUser"]),
+        ...mapGetters(["loggedInUser"]),
 
         daysInMonth() {
             return new Date(this.date.year, this.date.month + 1, 0).getDate();
@@ -1023,7 +996,7 @@ export default {
             this.minutes.push(("0" + i).slice(-2));
         }
 
-        // this.addFields();
+        this.addFields();
         this.getCategories();
         this.getOptions();
 
@@ -1040,6 +1013,8 @@ export default {
             });
     },
     mounted() {
+        this.clipperChanged();
+
         this.$store.commit("SET_BREADCRUMBS", [{ title: "Add" }]);
     }
 };
@@ -1384,9 +1359,6 @@ select {
 
 .add-post-wrapper {
     margin-top: 10px;
-    // .invalid {
-    //   // opacity: 0.3;
-    // }
 
     width: 100%;
 
@@ -1406,7 +1378,6 @@ select {
             margin: 0;
             position: relative;
             color: $black;
-            // font-family: "Open Sans";
             font-weight: bold;
             text-size-adjust: 100%;
             -webkit-box-direction: normal;
@@ -1419,7 +1390,6 @@ select {
             color: $black;
             font-size: 16px;
             font-weight: 400;
-            // font-family: "Open Sans";
             text-size-adjust: 100%;
             -webkit-box-direction: normal;
             -webkit-font-smoothing: antialiased;
@@ -1469,7 +1439,6 @@ select {
                 -webkit-appearance: none;
                 font-size: 0.9rem;
                 vertical-align: middle;
-                // font-family: "Open Sans";
                 cursor: pointer;
                 text-align: center;
             }
@@ -1532,7 +1501,6 @@ select {
                 font-size: 1.2em;
                 letter-spacing: 0.5px;
                 margin-bottom: 0.1em;
-                // font-family: "Open Sans";
 
                 span {
                     font-weight: 600;
@@ -1563,7 +1531,6 @@ select {
             textarea,
             select,
             input {
-                // font-family: "Open Sans";
                 width: 100%;
                 display: block;
                 text-indent: 0;
@@ -1599,7 +1566,6 @@ select {
             }
 
             .counter {
-                // border-bottom-right-radius: 10px;
                 background-color: $white;
                 position: absolute;
                 bottom: 1px;
@@ -1669,7 +1635,6 @@ select {
             line-height: 1.5;
             color: #0a0a0a;
             -webkit-font-smoothing: antialiased;
-            // font-family: open sans, Helvetica Neue, Helvetica, Roboto, Arial, sans-serif;
             -webkit-box-direction: normal;
             font-size: 0.9em;
             text-transform: uppercase;
@@ -1788,7 +1753,6 @@ select {
     .error-tip {
         line-height: 1.5;
         -webkit-font-smoothing: antialiased;
-        // font-family: open sans,Helvetica Neue,Helvetica,Roboto,Arial,sans-serif;
         -webkit-box-direction: normal;
         text-align: center;
         user-select: none;
@@ -1841,12 +1805,9 @@ select {
     right: 0;
     text-align: center;
     z-index: 999;
-    // transition: opacity .3s, visibility .3s, transform .2s ease-out;
     margin-bottom: 50px;
     pointer-events: none;
     padding-top: 10px;
-    // opacity: 1;
-    // transform: translateY(0);
     bottom: 0px;
 
     div {
@@ -1899,18 +1860,6 @@ select {
     }
 }
 
-// :host {
-//   display: block;
-// }
-
-// .open-close-container {
-//   border: 1px solid #dddddd;
-//   margin-top: 1em;
-//   padding: 20px 20px 0px 20px;
-//   color: #000000;
-//   font-weight: bold;
-//   font-size: 20px;
-// }
 .title-posts {
     cursor: pointer;
     font-weight: 700;

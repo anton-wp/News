@@ -8,18 +8,17 @@ import Header from "@editorjs/header";
 import LinkTool from "@editorjs/link";
 import List from "@editorjs/list";
 import ImageTool from "@editorjs/image";
-import Cookies from "js-cookie";
 
 export default {
     props: {
-		postid: Number|String
+        postid: Number | String
     },
     data() {
         return {
             editor: undefined,
             blocks: undefined,
-			token: undefined,
-			// id: this.postid
+            token: undefined
+            // id: this.postid
         };
     },
     methods: {
@@ -68,13 +67,12 @@ export default {
 
             onChange: () => {
                 this.save();
-			},
-		});
-		console.log(this.postId);
+            }
+        });
+        console.log(this.postId);
     },
     created() {
-        const token = Cookies.get("token");
-        this.token = `Bearer ${token}`;
+        this.token = this.$auth.getToken("local");
     }
 };
 </script>

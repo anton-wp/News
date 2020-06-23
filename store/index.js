@@ -8,8 +8,6 @@ Vue.use(Vuex)
 const store = () => new Vuex.Store({
 
 	state: {
-		token: null,
-		tokenInfo: null,
 		profile: Object,
 		tabs: [],
 		modal: Object,
@@ -22,15 +20,15 @@ const store = () => new Vuex.Store({
 		}
 	},
 	getters: {
-		IS_TOKEN: state => {
-			return state.token ? true : false;
-		},
-		TOKEN_INFO: state => {
-			return state.tokenInfo;
+		isAuthenticated(state) {
+			return state.auth.loggedIn
 		},
 		IS_TABS: state => {
 			return state.tabs;
 		},
+		loggedInUser(state) {
+			return state.auth.user
+		}
 	},
 	actions,
 	mutations
