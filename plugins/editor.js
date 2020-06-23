@@ -9,8 +9,7 @@ Vue.component('editor', Editor)
 Vue.use(VuejsClipper, {
 	components: {
 		clipperBasic: true,
-		clipperPreview: true,
-		clipperUpload: true
+		clipperPreview: true
 	}
 })
 

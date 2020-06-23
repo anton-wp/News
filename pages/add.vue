@@ -419,7 +419,7 @@
                                 name="file"
                                 type="file"
                                 id="file"
-                                ref="img"
+                                ref="imgUploadInpt"
                                 @change="uploadImg()"
                             />
                         </div>
@@ -430,7 +430,7 @@
                             :options="dropOptions"
                             :destroyDropzone="true"
                             @vdropzone-success="afterComplete"
-                            @vdropzone-processing="loadingDrop=true"
+                            @vdropzone-processing="loadingDrop=true; imgCrop=''"
                             :include-styling="false"
                             class="drop-wrap"
                             v-if="dropVisible"
@@ -464,12 +464,23 @@
                             preview="preview"
                             :grid="true"
                             :ratio="16/9"
+                            ref="clipper"
+                            class="croper"
+                            @load="clipperLoaded"
+                            @error="errorCrop"
+                        >No image</clipper-basic>
+
+                        <!-- <clipper-basic
+                            v-if="imgCrop"
+                            :src="imgCrop"
+                            preview="preview"
+                            :grid="true"
+                            :ratio="16/9"
                             :touch-create="false"
                             ref="clipper"
                             class="croper"
                             @load="clipperLoaded"
-                            v-model="defImg"
-                        ></clipper-basic>
+                        >No image</clipper-basic>-->
                     </div>
 
                     <div class="col-12 col-lg-5 col-xl-4">
@@ -547,14 +558,17 @@ import { maxLength, minLength, required } from "vuelidate/lib/validators";
 import { months } from "~/constants/dates";
 import Multiselect from "vue-multiselect";
 import Dropzone from "nuxt-dropzone";
+import { clipperUpload } from "vuejs-clipper";
 // import { mapGetters } from "vuex";
 
 export default {
     middleware: "auth",
     components: {
         Multiselect,
-        Dropzone
+        Dropzone,
+        clipperUpload
     },
+
     data() {
         return {
             defImg: undefined,
@@ -578,7 +592,6 @@ export default {
             subtitle: "",
             imgDescript: "",
             forcePublish: false,
-            // submitStatus: "",
             fields: {
                 title: false,
                 subTitle: false,
@@ -615,7 +628,6 @@ export default {
             cropperY: undefined,
             cropperW: undefined,
             cropperH: undefined,
-            featuredImage: undefined,
             dropOptions: {
                 url: "/api/media/image-preload/",
                 maxFilesize: 50, // MB
@@ -630,6 +642,16 @@ export default {
             dropVisible: true
         };
     },
+
+    asyncData({ $axios }) {
+        return $axios
+            .$get("api/profile/post-fields?action=create")
+            .then(resp => {
+                let fields = resp.fields;
+                return { fields };
+            });
+    },
+
     validations: {
         title: {
             required,
@@ -644,6 +666,9 @@ export default {
         }
     },
     methods: {
+        errorCrop(er, er2) {
+            console.log(er, er2);
+        },
         searchOptions(query) {
             if (query) {
                 this.isLoading = true;
@@ -690,10 +715,10 @@ export default {
         },
 
         addFields() {
-            this.$http
-                .get("api/profile/post-fields?action=create")
+            this.$axios
+                .$get("api/profile/post-fields?action=create")
                 .then(({ data }) => {
-                    this.fields = data.fields;
+                    fields: data.fields;
                 })
                 .catch(error => {
                     // this.errorMessage = error.response.data.message;
@@ -715,9 +740,7 @@ export default {
 
         getOptions() {
             this.$http
-                .get(
-                    "https://dev.api.verdict.org/posts/create-helpers/verdict-options/"
-                )
+                .get("https://dev.api.verdict.org/posts/create-helpers/verdict-options/")
                 .then(({ data }) => {
                     this.options = data.data;
 
@@ -763,32 +786,7 @@ export default {
         },
 
         trigerInputUpload() {
-            this.$refs.img.click();
-        },
-
-        uploadImg() {
-            this.loadingDrop = true;
-
-            const formData = new FormData();
-
-            formData.append("image", this.$refs.img.files[0]);
-            formData.append("postId", this.postId);
-
-            this.$http
-                .post("/api/media/image-preload/", formData)
-                .then(res => {
-                    // console.log(this.$refs.img.files[0]);
-                    this.imgCrop = res.data.file;
-
-                    console.log(this.imgCrop);
-
-                    this.dropVisible = false;
-                    this.loadingDrop = false;
-
-                    this.$refs.clipper.setTL$.next({ left: 1, top: 1 });
-                    this.$refs.clipper.setWH$.next({ width: 50, height: 50 });
-                })
-                .catch(error => console.error(error));
+            this.$refs.imgUploadInpt.click();
         },
 
         clipperLoaded() {
@@ -814,7 +812,26 @@ export default {
         },
 
         afterComplete(file, res) {
+            this.imgCrop = undefined;
+
             this.imgCrop = res.file;
+        },
+
+        async uploadImg() {
+            this.loadingDrop = true;
+            this.imgCrop = undefined;
+
+            const formData = new FormData();
+
+            formData.append("image", this.$refs.imgUploadInpt.files[0]);
+            formData.append("postId", this.postId);
+
+            await this.$http
+                .post("/api/media/image-preload/", formData)
+                .then(res => {
+                    this.imgCrop = res.data.file;
+                })
+                .catch(error => console.error(error));
         },
 
         saveDraft() {
@@ -1006,7 +1023,7 @@ export default {
             this.minutes.push(("0" + i).slice(-2));
         }
 
-        this.addFields();
+        // this.addFields();
         this.getCategories();
         this.getOptions();
 
