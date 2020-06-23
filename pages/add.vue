@@ -740,9 +740,7 @@ export default {
 
         getOptions() {
             this.$http
-                .get(
-                    "https://dev.api.verdict.org/posts/create-helpers/verdict-options/"
-                )
+                .get("https://dev.api.verdict.org/posts/create-helpers/verdict-options/")
                 .then(({ data }) => {
                     this.options = data.data;
 

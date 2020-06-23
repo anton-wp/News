@@ -79,7 +79,7 @@
 				</div>
 			</div>
 		</div>
-		<div class="wrapper-block-news" v-if="pagination.next">
+		<div class="wrapper-block-news" v-if="pagination && pagination.next">
 			<div class="container">
 				<div class="row">
 					<div class="col-12">
@@ -108,8 +108,7 @@
 		},
 		data() {
 			return {
-				arrayPosts: [],
-				pagination: Object,
+				pagination: null,
 				page: 1,
 				limit: 19,
 				loadMoreText: 'load more'
@@ -117,7 +116,17 @@
 		},
 		created() {
 			this.$store.commit('SET_BREADCRUMBS')
-			this.getPosts()
+			// this.getPosts()
+		},
+		asyncData({ $axios }) {
+			return $axios.$get(`/api/posts/?limit=19&page=1`)
+				.then((response) => {
+					let arrayPosts = [response.data];
+					let pagination = response.pagination;
+
+					return { arrayPosts, pagination }
+				})
+				.catch(error => console.error(error))
 		},
 		methods: {
 			loadMore() {
