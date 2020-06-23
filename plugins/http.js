@@ -7,7 +7,9 @@ const token = Cookies.get('auth._token.local');
 
 let http = axios;
 
-if (token) {
+// console.log(token);
+
+if (token && token != 'false') {
 	http = axios.create({
 		headers: {
 			'Authorization': token

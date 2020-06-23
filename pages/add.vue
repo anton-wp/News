@@ -373,7 +373,11 @@
                                             <svg width="10" height="10" v-if="forcePublish">
                                                 <use xlink:href="#checkbox" />
                                             </svg>
-                                            <input type="checkbox" v-model="forcePublish" />
+                                            <input
+                                                type="checkbox"
+                                                v-model="forcePublish"
+                                                @change="saveDraft"
+                                            />
                                         </div>
 
                                         <div class="categoryTitle ml-2">force publish</div>
@@ -464,6 +468,7 @@
                             ref="clipper"
                             class="croper"
                             @load="clipperLoaded"
+                            v-model="defImg"
                         ></clipper-basic>
                     </div>
 
@@ -542,15 +547,17 @@ import { maxLength, minLength, required } from "vuelidate/lib/validators";
 import { months } from "~/constants/dates";
 import Multiselect from "vue-multiselect";
 import Dropzone from "nuxt-dropzone";
-import { mapGetters } from "vuex";
+// import { mapGetters } from "vuex";
 
 export default {
+    middleware: "auth",
     components: {
         Multiselect,
         Dropzone
     },
     data() {
         return {
+            defImg: undefined,
             postId: undefined,
             date: {
                 month: null,
@@ -770,7 +777,10 @@ export default {
             this.$http
                 .post("/api/media/image-preload/", formData)
                 .then(res => {
-                    this.imgCrop = res.data.blob;
+                    // console.log(this.$refs.img.files[0]);
+                    this.imgCrop = res.data.file;
+
+                    console.log(this.imgCrop);
 
                     this.dropVisible = false;
                     this.loadingDrop = false;
@@ -804,7 +814,7 @@ export default {
         },
 
         afterComplete(file, res) {
-            this.imgCrop = res.blob;
+            this.imgCrop = res.file;
         },
 
         saveDraft() {
@@ -859,7 +869,7 @@ export default {
         }
     },
     computed: {
-        ...mapGetters(["loggedInUser"]),
+        // ...mapGetters(["loggedInUser"]),
 
         daysInMonth() {
             return new Date(this.date.year, this.date.month + 1, 0).getDate();
@@ -1013,8 +1023,6 @@ export default {
             });
     },
     mounted() {
-        this.clipperChanged();
-
         this.$store.commit("SET_BREADCRUMBS", [{ title: "Add" }]);
     }
 };
