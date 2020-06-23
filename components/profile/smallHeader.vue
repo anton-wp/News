@@ -18,8 +18,8 @@
           {{$store.state.profile.firstName}} {{$store.state.profile.lastName}}
         </h4>
         <p class="member-since">
-          rank since:
           {{$store.state.profile.rank}}
+          since:
           <time class="member-since">
         		{{ new Date($store.state.profile.createdAt).toDateString()}}
         	</time>

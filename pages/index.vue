@@ -111,7 +111,8 @@
 				pagination: null,
 				page: 1,
 				limit: 19,
-				loadMoreText: 'load more'
+				loadMoreText: 'load more',
+				arrayPosts: []
 			};
 		},
 		created() {

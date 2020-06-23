@@ -37,34 +37,32 @@ export default {
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .sort {
   margin-bottom: 20px;
   .verdicts-posts {
     margin-right: 10px;
   }
+	.click-for-follow {
+		font-size: .75rem;
+		padding: .55em 1.4em;
+		text-transform: none;
+		letter-spacing: .9px;
+		border-radius: 5px;
+		vertical-align: text-top;
+		margin-bottom: 0;
+		font-weight: 400;
+		pointer-events: all;
+		background: 0 0;
+		border: 1px solid;
+		line-height: 1;
+		text-align: center;
+		transition: 0.3s;
+		cursor: pointer;
+		margin-top: 0.5em;
+	}
 }
-.profile {
-  margin-bottom: 3.2em;
-}
-.click-for-follow {
-  font-size: .75rem;
-  padding: .55em 1.4em;
-  text-transform: none;
-  letter-spacing: .9px;
-  border-radius: 5px;
-  vertical-align: text-top;
-  margin-bottom: 0;
-  font-weight: 400;
-  pointer-events: all;
-  background: 0 0;
-  border: 1px solid;
-  line-height: 1;
-  text-align: center;
-  transition: 0.3s;
-  cursor: pointer;
-  margin-top: 0.5em;
-}
+
 .active {
   background-color: #bc2d2d;
   color: #fff !important;

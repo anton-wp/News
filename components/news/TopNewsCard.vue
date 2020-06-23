@@ -36,7 +36,7 @@ export default {
 	},
 	provide() {
 		return {
-			id: this.post.id
+			id: this.post.id,
 		}
 	}
 }

@@ -74,13 +74,13 @@
         <div class="third-block col-lg-2 col-xl-3 order-4 order-sm-2 order-md-2 order-lg-3 col-12 col-sm-6">
           <div class="wrapper-market-icon">
             <button class="market-place-button">
-              <img class="market-place-icon" src="/image/app-store-badge.svg" alt="Verdict">
+              <!-- <img class="market-place-icon" src="/image/app-store-badge.svg" alt="Verdict"> -->
               <!-- TODO link to application and move link to config-->
             </button>
           </div>
           <div class="wrapper-market-icon">
             <button class="market-place-button">
-              <img class="market-place-icon google-play" src="/image/google-play-badge.svg" alt="Verdict">
+              <!-- <img class="market-place-icon google-play" src="/image/google-play-badge.svg" alt="Verdict"> -->
               <!-- TODO link to application and move link to config-->
             </button>
           </div>

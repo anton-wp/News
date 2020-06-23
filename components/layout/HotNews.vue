@@ -6,7 +6,7 @@
       </div>
       <div class="hot-news-item-list-wrapper">
         <div class="hot-news-item-list" :class="hoverClass || ''" @mouseenter="hoverClass='stop-animation'" @mouseleave="hoverClass=''">
-          <div class="hot-news-item" v-for="(item, index) in tags" :key="index">
+          <div class="hot-news-item" v-for="(item, index) in header.news" :key="index">
             <nuxt-link class="hot-news-link" v-bind:to="`/l/${item.slug}`">
               {{ item.name }}
             </nuxt-link>
@@ -24,6 +24,7 @@
 </template>
 
 <script>
+import {mapState} from 'vuex'
 import SearchPopup from '~/components/universal-components/popup-search.vue'
 
 export default {
@@ -37,12 +38,20 @@ export default {
       tags: []
     }
   },
-  beforeMount () {
-     this.$http.get(`/api/tags/featured-tags`)
-    .then(res => this.tags = [...res.data.data, ...res.data.data])
-    .catch(error => console.error(error))
-  },
+  created () {
+		if(this.header.news.length === 0) {
+			this.getHotNews()
+		}
+	},
+	computed: {
+		...mapState(['header'])
+	},
   methods: {
+		getHotNews () {
+			this.$http.get(`/api/tags/featured-tags`)
+				.then(res => this.$store.commit('SET_HEADER_HOT_NEWS', res.data.data))
+				.catch(error => console.error(error))
+		},
     openSearch () {
       this.showPopusSearch = true
     },
