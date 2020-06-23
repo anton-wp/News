@@ -2,6 +2,12 @@ export default {
 	SET_PROFILE: (state, profile) => {
 		state.profile = profile;
 	},
+	SET_HEADER_MENU: (state, menu) => {
+		state.header.menu = menu;
+	},
+	SET_HEADER_HOT_NEWS: (state, news) => {
+		state.header.news = [...news, ...news];
+	},
 	SET_MODAL: (state, modal) => {
 		state.modal = modal;
 	},
@@ -43,6 +49,16 @@ export default {
 		state.tabs.map(tab =>
 			tab.title === id ? (tab.status = !tab.status) : null
 		);
+	},
+	UPDATE_COUNTER_TABS: (state, data) => {
+		state.tabs.map(tab => {
+			if(tab.title === data.title && data.type) {
+				tab.counter = tab.counter + 1
+			}
+			if(tab.title === data.title && !data.type) {
+				tab.counter = tab.counter - 1
+			}
+		})
 	},
 	CLEAR_PROFILE: (state) => {
 		state.profile = Object;

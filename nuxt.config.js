@@ -1,6 +1,6 @@
 module.exports = {
 	mode: 'universal',
-	cache: true,
+	// cache: true,
 	/*
 	** Headers of the page
 	*/
@@ -32,6 +32,7 @@ module.exports = {
 	** Plugins to load before mounting the App
 	*/
 	plugins: [
+		{ src: '~/plugins/jsonld' },
 		{ src: '~/plugins/editor', ssr: false },
 	],
 	/*

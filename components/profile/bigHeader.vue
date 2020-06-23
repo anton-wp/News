@@ -33,7 +33,7 @@
       </div>
       <div class="col-12 col-sm-5">
         <h4 class="your-name">{{$store.state.profile.firstName}} {{$store.state.profile.lastName}}</h4>
-        <p class="member-since">{{ new Date($store.state.profile.createdAt).toDateString()}}</p>
+        <p class="member-since">{{$store.state.profile.rank}} since: {{ new Date($store.state.profile.createdAt).toDateString()}}</p>
         <div class="mail-content">
           <div class="mail-wrapper">
             social
@@ -75,37 +75,16 @@ export default {
   },
   created() {
     this.slug = this.$route.params.slug;
-    this.updateProfile();
-  },
+	},
+	computed: {
+
+	},
   methods: {
-    updateProfile() {
-      if (!this.slug && !this.$store.state.profile.id) {
-        this.getProfileFull();
-      } else if (this.slug && this.$store.state.profile.slug !== this.slug) {
-        this.getProfile();
-      }
-    },
-    getProfileFull() {
+		getProfileFull() {
       this.$http
         .get(`/api/profile/full`)
         .then(res => {
           this.$store.dispatch("GET_PROFILE", res.data.data);
-
-          this.$store.commit("SET_BREADCRUMBS", [
-            { title: `${res.data.data.firstName} ${res.data.data.lastName}` }
-          ]);
-        })
-        .catch(error => console.error(error));
-    },
-    getProfile() {
-      this.$http
-        .get(`/api/author/${this.slug}`)
-        .then(res => {
-          this.$store.dispatch("GET_PROFILE", res.data.data);
-
-          this.$store.commit("SET_BREADCRUMBS", [
-            { title: `${res.data.data.firstName} ${res.data.data.lastName}` }
-          ]);
         })
         .catch(error => console.error(error));
     },
@@ -119,7 +98,7 @@ export default {
         .then(res => {
           this.$toasted.show(res.data.message);
           this.$store.dispatch("CLEAR_PROFILE");
-          this.updateProfile();
+          this.getProfileFull();
         })
         .catch(error => console.error(error));
     },
@@ -129,6 +108,14 @@ export default {
     },
     submitFile() {
       document.getElementById("file").click();
+		},
+		typeTabs() {
+      switch (this.$route.matched[0].components.default.extendOptions.layout) {
+        case 'author':
+        return false;
+        default:
+        return true;
+      }
     }
   }
 };

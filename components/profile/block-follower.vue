@@ -16,9 +16,6 @@
     <div class="col-12 col-lg-auto aboutAuthor" @mouseleave="hide">
       <div class="user-popup" v-if="showPopup">
         <author-info :authorId="post.id" />
-        <!-- <ng-container>
-          <vrd-poi></vrd-poi>
-        </ng-container> -->
       </div>
       <span class="d-flex justify-content-center justify-content-lg-start" @mouseover="toggle">
         <nuxt-link v-bind:to="`/m/${post.slug}/posts`">{{post.firstName}} {{post.lastName}}</nuxt-link>
@@ -29,25 +26,12 @@
       </div>
       <div class="d-flex justify-content-center justify-content-lg-start">
         <span class="verdicts-posts">
-          <!-- verdictsCount  -->
           {{post.verdictsCount}} verdicts /
-          <!-- postsCount  -->
           {{post.postsCount}} posts
         </span>
       </div>
       <div v-if="type === 'following'" class="d-flex justify-content-center justify-content-lg-start">
-        <button class="click-for-follow unfollow">
-          Unfollow
-        </button>
-      </div>
-      <div v-if="type === 'followers'" class="d-flex justify-content-center justify-content-lg-start">
-        <!-- <button  class="click-for-follow follow">Follow</button> -->
-        <button class="click-for-follow unfollow">
-          Unfollow
-        </button>
-        <button class="click-for-follow follow">
-          Follow
-        </button>
+        <follow-buttons :id="post.id"/>
       </div>
     </div>
   </div>
@@ -55,10 +39,12 @@
 
 <script>
 import AuthorInfo from '~/components/universal-components/popup-user-info'
+import FollowButtons from '~/components/universal-components/Follow-Buttons'
 
 export default {
   components: {
-    AuthorInfo
+		AuthorInfo,
+		FollowButtons
   },
   props: {
 	type: String,

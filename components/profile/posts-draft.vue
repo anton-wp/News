@@ -1,30 +1,41 @@
 <template>
   <div class="block">
-    <img src="/image/default_image_landscape.png" alt>
+		<nuxt-link class="link" :to="`/draft/${post.id}`">
+			<img v-if="!post.featured.original" src="/image/default_image_landscape.png" alt>
+    	<img v-if="post.featured.original" :src="post.featured.original" alt>
+		</nuxt-link>
     <!-- <img *ngIf="post.featured.original" [src]="post.featured.landscape" alt /> -->
     <div class="content">
-      <h5>title</h5>
+      <nuxt-link class="link" :to="`/draft/${post.id}`">
+				<h5>{{post.title}}</h5>
+			</nuxt-link>
       <span class="bottom">
-        <svg class="icon" width="17" height="17">
-          <use xlink:href="#clock-o" />
-        </svg>
-        <p>
-          time
-          <!-- <time
-            datetime="{{post.publishedAt}}"
-            class="date-created"
-          >{{post.publishedAt | date:'MMM d,y h:mm a' }}</time> -->
-        </p>
-        <button>
+        <nuxt-link class="link" :to="`/draft/${post.id}`" style="display: flex; align-items: center;">
+					<svg class="icon" width="17" height="17">
+						<use xlink:href="#clock-o" />
+					</svg>
+					<p class="date-created">
+						{{ new Date(post.publishedAt).toDateString() }}
+					</p>
+        </nuxt-link>
+        <nuxt-link class="button-edit" :to="`/draft/${post.id}`">
           <svg class="icon" width="17" height="17">
             <use xlink:href="#pencil" />
           </svg>
           Edit
-        </button>
+        </nuxt-link>
       </span>
     </div>
   </div>
 </template>
+
+<script>
+export default {
+	props: {
+		post: Object
+	}
+}
+</script>
 
 <style lang="scss" scoped>
 .block {
@@ -46,6 +57,10 @@
       display: flex;
       align-items: center;
     }
+		.link {
+			text-decoration: none;
+			color: inherit;
+		}
     h5{
       color: #0a0a0a;
       box-sizing: inherit;
@@ -62,7 +77,7 @@
         color: #575757;
       }
     }
-    button{
+    .button-edit{
       margin-left: auto;
       padding: .35em .9em;
       border-radius: 3px;

@@ -33,12 +33,12 @@ export default {
         .then(responce => {
           this.$store.commit("DEL_SUBSCRIPTION", this.id);
           this.$toasted.show(responce.data.message);
-          this.loading = false;
+					this.loading = false;
+					if(this.$store.getters.IS_TABS.filter(tab => tab.title === 'Following').length > 0) {
+						this.$store.commit('UPDATE_COUNTER_TABS', { title: 'Following', type: false});
+					}
         })
-        .catch(error => {
-          // this.loading = false;
-          // this.errorMessage = error.response.data.message;
-        });
+        .catch(error => console.log(error));
     },
     Subscribe() {
       this.loading = true;
@@ -47,7 +47,10 @@ export default {
         .then(responce => {
           this.$store.commit("ADD_SUBSCRIPTION", this.id);
           this.$toasted.show(responce.data.message);
-          this.loading = false;
+					this.loading = false;
+					if(this.$store.getters.IS_TABS.filter(tab => tab.title === 'Following').length > 0) {
+						this.$store.commit('UPDATE_COUNTER_TABS', { title: 'Following', type: true});
+					}
         })
         .catch(error => {});
     }
