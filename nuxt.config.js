@@ -76,7 +76,7 @@ module.exports = {
 
 	proxy: {
 		'/api/': {
-			target: 'https://dev.api.verdict.org/',
+			target: 'http://0.0.0.0:9999',
 			pathRewrite: { '^/api/': '' }
 		}
 	},
