@@ -40,7 +40,7 @@ export default {
 	middleware: "auth",
   components: {
     DefaultNewsCard
-  },
+	},
   data () {
     return {
       sort: 'DESC',

@@ -55,22 +55,24 @@ export default {
   data() {
     return {
 			slug: String,
-			path: '/profile'
+			path: '/profile',
+			type: Boolean
     };
-  },
+	},
+	watch: {
+			'$route.fullPath'() {
+				this.activTabsStart(this.$store.state.tabs)
+    }
+	},
   methods: {
     openCloseTabs(id) {
 			this.$store.dispatch('OPEN_CLOSE_TABS', id);
     },
     activTabsStart(res, rout2, rout3) {
-			console.log(res)
-			console.log(rout2)
-			console.log(rout3)
       let rout = [];
       if (!rout2) {
-        if(!this.slug){
+        if(this.typeTabs()){
 					let str = "";
-					console.log(this.$route)
 					rout = this.$route.fullPath.split("/");
 					rout = rout.map(rout => (rout = str.concat("/", rout)));
 					rout = rout.map(rout => rout === '/' ? rout = undefined : rout );
@@ -200,22 +202,35 @@ export default {
 					this.sortTabs(res);
 				})
 				.catch(error => console.error(error));
-		}
+    },
+    typeTabs() {
+      switch (this.$route.matched[0].components.default.extendOptions.layout) {
+        case 'author':
+        return false;
+        default:
+        return true;
+      }
+    }
   },
   created () {
-		this.slug = this.$route.params.slug
-		if(!this.slug && !this.$store.state.profile.id){
+		this.type = this.typeTabs();
+		if(this.typeTabs() && !this.$store.state.profile.id){
 			this.getTabsFull()
 			this.path = '/profile'
-		}else if(!this.slug && this.$store.state.profile.id){
-			this.getTabsFull()
+		}else if(this.typeTabs() && this.$store.state.profile.id) {
+			this.activTabsStart(this.$store.state.tabs)
 			this.path = '/profile'
-		}else if(this.slug && this.$store.state.profile.slug !== this.slug) {
-			this.getTabs()
+		}else if(!this.typeTabs()) {
+			this.slug = this.$route.params.slug
 			this.path = `/m/${this.slug}`
+			this.getTabs()
 		}
-		console.log(this.path)
-  }
+	},
+	destroyed () {
+		if(!this.type){
+			this.$store.dispatch('CLEAR_PROFILE');
+		}
+	}
 };
 </script>
 

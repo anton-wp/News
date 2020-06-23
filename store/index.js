@@ -16,6 +16,10 @@ const store = () => new Vuex.Store({
 		breadcrumbs: [],
 		bookmarks: [],
 		subscriptions: [],
+		header: {
+			menu: [],
+			news: [],
+		}
 	},
 	getters: {
 		IS_TOKEN: state => {
@@ -23,6 +27,9 @@ const store = () => new Vuex.Store({
 		},
 		TOKEN_INFO: state => {
 			return state.tokenInfo;
+		},
+		IS_TABS: state => {
+			return state.tabs;
 		},
 	},
 	actions,

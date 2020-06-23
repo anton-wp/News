@@ -15,7 +15,7 @@
         <ul id="menu" class="nav-item-list d-none d-sm-none d-md-none d-lg-flex">
           <li
             class="nav-item"
-            v-for="category of categories.slice(0, cropMenu)"
+            v-for="category of header.menu.slice(0, cropMenu)"
             :key="category.order"
           >
             <nuxt-link :to="`/${category.path}`" class="general-nav-item-link">{{ category.title }}</nuxt-link>
@@ -31,7 +31,7 @@
               <ul>
                 <li
                   class="nav-item"
-                  v-for="category of categories.slice(cropMenu, categories.length)"
+                  v-for="category of header.menu.slice(cropMenu, header.menu.length)"
                   :key="category.order"
                 >
                   <nuxt-link :to="`/${category.path}`" class="nav-item-link">{{ category.title }}</nuxt-link>
@@ -70,7 +70,7 @@
             </svg>
           </div>
           <ul class="menu">
-            <li v-for="item of categories" :key="item.order">
+            <li v-for="item of header.menu" :key="item.order">
               <nuxt-link class="general-nav-item-link" :to="`/${item.path}`">{{ item.title }}</nuxt-link>
             </li>
             <li>
@@ -114,6 +114,7 @@
 </template>
 
 <script>
+import {mapState} from 'vuex'
 import UserProfile from "~/components/user/UserProfile";
 import LoginPopup from "~/components/layout/LoginPopup";
 import Cookies from "js-cookie";
@@ -130,7 +131,7 @@ export default {
       loginPopupActive: false,
       typeLoginPopup: "",
       popupMore: false,
-      categories: [],
+      // categories: [],
       isToken: false,
       windowWidth: 0,
       cropMenu: 0,
@@ -138,34 +139,47 @@ export default {
     };
   },
   mounted() {
-    this.$http
-      .get(`/api/menu/header`)
-      .then(res => (this.categories = res.data.data))
-      .catch(error => console.error(error));
-
+		if(this.header.menu.length === 0) {
+			this.getMenu()
+		}
+		if(this.bookmarks.length === 0) {
+			this.getBookmarks()
+		}
+		if(this.subscriptions.length === 0) {
+			this.getSubscriptions()
+		}
     this.$nextTick(function() {
       window.addEventListener("resize", this.getWindowWidth);
-      // window.addEventListener('resize', this.getWindowHeight);
-
       //Init
       this.getWindowWidth();
-      // this.getWindowHeight()
-
-      this.$http
-        .get(`/api/profile/bookmarks/ids`)
-        .then(res => {
-          this.$store.dispatch("GET_BOOKMARK", res.data.data);
-        })
-        .catch(error => console.error(error));
-      this.$http
-        .get(`/api/profile/subscriptions/ids`)
-        .then(res => {
-          this.$store.dispatch("GET_SUBSCRIPTIONS", res.data.data);
-        })
-        .catch(error => console.error(error));
     });
-  },
+	},
+	computed: {
+		...mapState(['header', 'bookmarks', 'subscriptions'])
+	},
   methods: {
+		async	getBookmarks () {
+			await this.$http
+		  .get(`/api/profile/bookmarks/ids`)
+		  .then(res => {
+		    this.$store.dispatch("GET_BOOKMARK", res.data.data);
+		  })
+		  .catch(error => console.error(error));
+		},
+		async getSubscriptions () {
+			await this.$http
+		  .get(`/api/profile/subscriptions/ids`)
+		  .then(res => {
+		    this.$store.dispatch("GET_SUBSCRIPTIONS", res.data.data);
+		  })
+		  .catch(error => console.error(error));
+		},
+		async getMenu () {
+			await this.$http
+      .get(`/api/menu/header`)
+      .then(res => (this.$store.commit('SET_HEADER_MENU', res.data.data)))
+			.catch(error => console.error(error));
+		},
     disabledSideBarMenu() {
       this.SideBarMenu = false;
     },
