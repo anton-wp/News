@@ -214,19 +214,6 @@ export default {
         };
     },
     // jsonld() {
-    //     const webSite = {
-    //         "@context": "https://schema.org",
-    //         "@type": "WebSite",
-    //         url: "https://celebrityinsider.org",
-    //         name: "Celebrity Insider Inc.",
-    //         description:
-    //             "Top independent celebrity news network with access to breaking celebrity news, celebrity entertainment news, rumors, latest celebrity gossip, hollywood news.",
-    //         potentialAction: {
-    //             "@type": "SearchAction",
-    //             target: "https://celebrityinsider.org/?s={search_term}",
-    //             "query-input": "required name=search_term"
-    //         }
-    //     };
 
     //     const organization = {
     //         "@context": "https://schema.org",
