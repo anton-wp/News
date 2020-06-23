@@ -131,7 +131,7 @@ export default {
       loginPopupActive: false,
       typeLoginPopup: "",
       popupMore: false,
-      // categories: [],
+      categories: [],
       isToken: false,
       windowWidth: 0,
       cropMenu: 0,
