@@ -76,17 +76,3 @@ export default {
     }
 };
 </script>
-
-
-<style lang="scss" scoped>
-#editor {
-    border: 1px solid #ccc;
-    border-radius: 10px;
-    margin-top: 20px;
-    padding: 20px;
-}
-
-.ce-block__content {
-    max-width: 100%;
-}
-</style>

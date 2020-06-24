@@ -1,0 +1,50 @@
+.socialBlock {
+  justify-content: space-around;
+
+  @media (max-width: 992px) {
+    justify-content: space-between;
+  }
+
+  @media (max-width: 576px) {
+    justify-content: space-around;
+  }
+  .social-icon-round {
+    width: 45px;
+    height: 45px;
+    border-radius: 25px;
+    position: relative;
+    margin: 0 auto 15px;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    fill: $white;
+  }
+  .instagram {
+    background-color: $millbrook;
+  }
+
+  .twitter {
+    background-color: $pictonBlue;
+  }
+
+  .feed {
+    background-color: $flamingo;
+  }
+
+  .pinterest {
+    background-color: $cardinal;
+  }
+
+  .news-icon {
+    background-color: $lochmara;
+  }
+
+  .facebook {
+    background-color: $chambray;
+  }
+
+  .feedburner {
+    background-color: $feedburner;
+  }
+}

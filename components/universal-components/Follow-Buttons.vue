@@ -1,5 +1,5 @@
 <template>
-  <div style="display: contents;">
+  <div class="follow-buttons">
     <button
       class="button-followed" :class="full ? 'follow-full' : 'follow'"
       v-if="!$store.state.subscriptions.includes(this.id) && !loading"
@@ -57,51 +57,3 @@ export default {
   }
 };
 </script>
-
-<style lang="scss">
-.follow {
-  color: #ff4242;
-  border-color: #ff4242;
-	background-color: #fff;
-  &:hover {
-    background-color: #bc2d2d;
-    color: #fff;
-  }
-}
-.follow-full {
-  color: #fff;
-  // border-color: #ff4242;
-	background-color: #ff4242;
-  &:hover {
-    background-color: #bc2d2d;
-    color: #fff;
-  }
-}
-.unfollow {
-	color: #474747;
-  border-color: #474747;
-	background-color: #fff;
-
-  &:hover {
-    background-color: #474747;
-    color: #fff;
-  }
-}
-.unfollow-full {
-  color: #fff;
-  // border-color: #474747;
-	background-color: #8d8d8d;
-  &:hover {
-    background-color: #474747;
-    color: #fff;
-  }
-}
-.button-followed {
-  font-size: 12px;
-  width: 88px;
-  height: 28px;
-  float: right;
-  border: 1px solid;
-  border-radius: 5px;
-}
-</style>

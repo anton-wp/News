@@ -1,17 +1,19 @@
 <template>
-  <div class="row">
-    <div v-for="icon in social" :key="icon" class="col-12 col-sm-6">
-      <div class="social-button">
-        <a href="#">
-          <div class="icon" :class="icon">
-            <svg width="29" height="29">
-              <use v-bind:xlink:href="`#${icon}`" />
-            </svg>
-          </div>
-          <div :class="icon + '-color'" class="social-name">
-            <span>Using {{ icon }}</span>
-          </div>
-        </a>
+  <div class="login-social-button">
+    <div class="row">
+      <div v-for="icon in social" :key="icon" class="col-12 col-sm-6">
+        <div class="social-button">
+          <a href="#">
+            <div class="icon" :class="icon">
+              <svg width="29" height="29">
+                <use v-bind:xlink:href="`#${icon}`" />
+              </svg>
+            </div>
+            <div :class="icon + '-color'" class="social-name">
+              <span>Using {{ icon }}</span>
+            </div>
+          </a>
+        </div>
       </div>
     </div>
   </div>
@@ -19,91 +21,11 @@
 
 <script>
 export default {
-  data () {
+  data() {
     return {
-      social: ['facebook', 'google', 'twitter', 'linkedin']
-    }
+      social: ["facebook", "google", "twitter", "linkedin"]
+    };
   }
-}
+};
 </script>
 
-<style lang="scss">
-@import "../../assets/utils/variables";
-@import "../../assets/utils/colors";
-
-.social-button {
-  border-radius: 4px;
-  background-color: $social_button_background_whiteF8;
-  margin: 0.6em 0 0 0;
-  overflow: hidden;
-  align-items: center;
-  transition: background-color 0.2s ease-in-out;
-  height: 45px;
-  cursor: pointer;
-  text-decoration: none;
-
-  &:hover {
-    background-color: #f1f1f1;
-  }
-
-  a {
-    display: flex;
-    align-items: center;
-
-    &:hover {
-      text-decoration: none;
-    }
-  }
-  .icon {
-    text-align: center;
-    line-height: 45px;
-    width: 45px;
-    height: 45px;
-    margin-right: 10px;
-    border-radius: 4px;
-    color: $white;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 25px;
-
-    svg{
-      fill: $white;
-    }
-  }
-  .social-name {
-    display: inline-block;
-    font-size: 14px;
-    font-weight: 600;
-    font-family: "Open Sans";
-    user-select: none;
-    text-size-adjust: 100%;
-    -webkit-box-direction: normal;
-    -webkit-font-smoothing: antialiased;
-  }
-  .facebook {
-    background: #3b5998;
-  }
-  .google {
-    background: #dc4e41;
-  }
-  .twitter {
-    background: #55acee;
-  }
-  .linkedin {
-    background: #0e76a8;
-  }
-  .facebook-color {
-    color: #3b5998;
-  }
-  .google-color {
-    color: #dc4e41;
-  }
-  .twitter-color {
-    color: #55acee;
-  }
-  .linkedin-color {
-    color: #0e76a8;
-  }
-}
-</style>

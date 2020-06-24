@@ -5,9 +5,7 @@
         <use xlink:href="#comment" />
       </svg>
       <span class="text">
-        <a class="reviews-link dark" href="#">
-          {{author.commentsCount}}
-        </a>
+        <a class="reviews-link dark" href="#">{{author.commentsCount}}</a>
       </span>
     </span>
     <span class="mark-news">
@@ -15,9 +13,7 @@
         <use xlink:href="#votes" />
       </svg>
       <span class="text">
-        <a class="reviews-link dark" href="#">
-          {{author.verdictsCount}}
-        </a>
+        <a class="reviews-link dark" href="#">{{author.verdictsCount}}</a>
       </span>
     </span>
     <span class="mark-news">
@@ -25,14 +21,11 @@
         <use xlink:href="#eye" />
       </svg>
       <span class="text">
-        <a class="reviews-link dark" href="#">
-					{{author.followersCount}}
-        </a>
+        <a class="reviews-link dark" href="#">{{author.followersCount}}</a>
       </span>
     </span>
     <span class="bookmark-news">
-
-			<bookmark />
+      <bookmark />
     </span>
   </div>
 </template>
@@ -41,76 +34,11 @@
 import Bookmark from "~/components/universal-components/Bookmark";
 
 export default {
-	components: {
-		Bookmark
-	},
-	props:{
-		author: Object
-	}
-}
+  components: {
+    Bookmark
+  },
+  props: {
+    author: Object
+  }
+};
 </script>
-
-<style lang="scss" scoped>
-  @import "../../assets/utils/colors";
-
-  .marks {
-    margin-left: auto;
-
-    @media screen and (max-width: 490px) {
-      text-align: center;
-    }
-
-    .reviews-link {
-      cursor: pointer;
-      text-decoration: none;
-      font-weight: 400;
-      transition: color 0.3s;
-      color: black;
-
-      &:hover {
-        color: $primary_color;
-      }
-    }
-
-    .text {
-      font-size: 20px;
-      font-family: Open Sans, sans-serif !important;
-    }
-
-    .mark-news {
-      padding: 0 5px;
-      fill: $primary_color;
-      cursor: pointer;
-
-      .text {
-        padding-left: 3px;
-        transition: 0.3s;
-        font-weight: 400;
-        font-size: 20px;
-      }
-
-      &:hover {
-        .text {
-          color: $primary_color;
-        }
-      }
-    }
-
-    svg{
-      vertical-align: text-top;
-    }
-  }
-
-  .bookmark-news {
-    padding-left: 10px;
-
-    .bookmark {
-      fill: $primary_color;
-      background: transparent;
-      border: none;
-      outline: none;
-      padding: 0;
-
-    }
-  }
-</style>

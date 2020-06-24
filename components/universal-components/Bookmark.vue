@@ -69,14 +69,3 @@ export default {
 };
 </script>
 
-<style lang="scss" >
-@import "../../assets/utils/variables";
-
-.bookmark {
-  fill: $primary_color;
-  background: transparent;
-  border: none;
-  outline: none;
-  padding: 0;
-}
-</style>

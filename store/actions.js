@@ -31,6 +31,28 @@ export default {
 	CLEAR_PROFILE: (context) => {
 		context.commit('CLEAR_PROFILE');
 	},
+
+
+
+	getHeader(context) {
+    return this.$axios
+      .$get('/api/menu/header')
+      .then((res) => {
+        context.commit('SET_HEADER_MENU', res.data)
+      })
+	},
+	getHotNews(context) {
+    return this.$axios
+      .$get('/api/tags/featured-tags')
+      .then((res) => {
+        context.commit('SET_HEADER_HOT_NEWS', res.data)
+      })
+	},
+	async nuxtServerInit(vuexContext) {
+    await vuexContext.dispatch('getHeader', { root: true })
+    await vuexContext.dispatch('getHotNews', { root: true })
+  }
+
 }
 
 

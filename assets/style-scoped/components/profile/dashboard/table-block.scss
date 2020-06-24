@@ -1,0 +1,32 @@
+.table-block-component {
+	.row {
+		padding: 1em 1em 0px 0px;
+		align-items: baseline;
+		border-bottom: 1px solid;
+		border-color: #DEDEDE;
+		margin-left: 0px;
+		@media (max-width: 991px) {
+			display: none;
+		}
+	}
+	.checkbox {
+		padding-right: 0px;
+		padding-left: 0px;
+		cursor: pointer;
+	}
+	h6 {
+		line-height: 1.5;
+		font-family: open sans,Helvetica Neue,Helvetica,Roboto,Arial,sans-serif;
+		border-collapse: collapse;
+		text-align: left;
+		font-size: 90%;
+		font-weight: 600;
+		box-sizing: inherit;
+		text-decoration: none;
+		color: inherit;
+		background-color: transparent;
+	}
+	.active {
+		cursor: pointer;
+	}
+}
