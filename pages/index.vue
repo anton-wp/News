@@ -1,5 +1,8 @@
 <template>
-    <div>
+    <div v-if="$isAMP">
+        <p>lkgfkgkglgklk</p>
+    </div>
+    <div v-else>
         <div v-for="(posts, index) of arrayPosts" :key="index">
             <div class="wrapper-block-news">
                 <div class="container">
@@ -114,6 +117,9 @@ export default {
         GorizontalNewsCard,
         followBlock
     },
+
+    amp: "hybrid",
+    ampLayout: "index.amp",
 
     data() {
         return {
@@ -322,6 +328,7 @@ export default {
     }
 };
 </script>
+
 
 <style lang="scss" scoped>
 @import "../assets/utils/variables";
