@@ -27,8 +27,8 @@
       </div>
     </div>
     <div @mouseover="getPopUp" @mouseleave="hidePopUp" style="position: relative;">
-      <img v-if="!$store.state.auth.user.avatar" class="default-avatar" src="/image/default-avatar-original.png" />
-      <img v-if="$store.state.auth.user.avatar" class="default-avatar" :src="$store.state.auth.user.avatar.small" />
+      <img v-if="!$store.state.auth.user || !$store.state.auth.user.avatar"  class="default-avatar" src="/image/default-avatar-original.png" />
+      <img v-if="$store.state.auth.user && $store.state.auth.user.avatar" class="default-avatar" :src="$store.state.auth.user.avatar.small" />
       <div class="icon">
         <svg width="12" height="15">
           <use xlink:href="#chevron-down" />

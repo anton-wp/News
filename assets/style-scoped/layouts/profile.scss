@@ -1,0 +1,43 @@
+.profile-layout {
+	.container {
+		font-family: open sans, Helvetica Neue, Helvetica, Roboto, Arial, sans-serif;
+		max-width: 1310px;
+
+		.content {
+			margin-top: 30px;
+			@media (max-width: 480px) {
+				margin-top: 10px;
+				max-width: 70%;
+			}
+		}
+
+		.line {
+			border-top: 1px solid #9b9b9b;
+			margin-top: 2.4em;
+			margin-right: 20px;
+		}
+
+		.profile-bottom {
+			padding-bottom: 2.2em;
+		}
+
+		.sideBar {
+			padding: 0 0 0 2.5em;
+			@media (max-width: 991px) {
+				padding: 0 0 0 1.1em;
+			}
+			@media (max-width: 768px) {
+				padding: 0 0 0 1.1em;
+			}
+			@media (max-width: 639px) {
+				margin-left: 15px;
+				margin-right: 15px;
+				padding: 0 0 0 0;
+			}
+
+			.active {
+				color: #ff4242 !important;
+			}
+		}
+	}
+}
