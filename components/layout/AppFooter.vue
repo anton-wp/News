@@ -16,7 +16,7 @@
               <nuxt-link class="footer-general-link" to="/">HOME</nuxt-link>
               <nuxt-link class="footer-general-link" to="/about-verdict">ABOUT VERDICT</nuxt-link>
               <nuxt-link class="footer-general-link" to="/terms-of-service">TERMS OF SERVICE</nuxt-link>
-              <nuxt-link class="footer-general-link" to="/privacy-policy">PRIVACY POLICYT</nuxt-link>
+              <nuxt-link class="footer-general-link" to="/privacy-policy">PRIVACY POLICY</nuxt-link>
               <nuxt-link class="footer-general-link" to="/contact">CONTACT</nuxt-link>
               <a class="footer-general-link">RSS</a>
               <a class="footer-general-link">SITEMAP</a>
