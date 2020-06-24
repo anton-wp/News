@@ -14,10 +14,17 @@ const store = () => new Vuex.Store({
 		breadcrumbs: [],
 		bookmarks: [],
 		subscriptions: [],
+		header: {
+			menu: [],
+			news: [],
+		}
 	},
 	getters: {
 		isAuthenticated(state) {
 			return state.auth.loggedIn
+		},
+		IS_TABS: state => {
+			return state.tabs;
 		},
 		loggedInUser(state) {
 			return state.auth.user

@@ -1,39 +1,55 @@
 <template>
   <div>
     <div class="row">
-      <!-- <div class="col-12 sort">
-        <span class="verdicts-posts">Sort by:</span>
-        <button class="click-for-follow follow">
-          latest
-        </button>
-        <button class="click-for-follow follow">
-          top voted
-        </button>
-      </div> -->
       <div class="container">
         <div class="row">
-          <div class="col-lg-4">
-            <draft-post />
+          <div class="col-lg-4" v-for="post in posts" :key="post.id">
+            <draft-post :post="post"/>
           </div>
-          <!-- <div *ngIf="profileStore.pagination" class="block-counter">
-            <vrd-pcpb *ngIf="profileStore.pagination.pagesCount > 1" [rout]="rout"></vrd-pcpb>
-          </div> -->
         </div>
       </div>
     </div>
-    <!-- <div>
-    </div> -->
+		<pagination  v-if="pagination" :pagination="pagination" @openPage="openPage" />
   </div>
 </template>
 
 <script>
 import DraftPost from '~/components/profile/posts-draft'
+import Pagination from '~/components/profile/pagination'
 
 export default {
   components: {
-    DraftPost
+		DraftPost,
+		Pagination
   },
-  layout: 'profile'
+	layout: 'profile',
+	data () {
+		return {
+			page: 1,
+			posts: [],
+			pagination: null,
+			default: null
+		}
+	},
+	created () {
+		if(this.$route.query.page){
+			this.page = this.$route.query.page
+		}
+		this.getPosts()
+	},
+	methods: {
+		openPage(page) {
+			this.page = page
+			this.getPosts()
+		},
+		getPosts () {
+			this.$http.get(`/api/profile/posts?status=Draft&page=${this.page}&limit=12`)
+				.then(res => {
+					this.posts = res.data.data
+					this.pagination = res.data.pagination
+			})
+		}
+	}
 }
 </script>
 

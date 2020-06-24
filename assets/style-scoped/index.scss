@@ -1,0 +1,62 @@
+@import "pages/home.scss",
+				"pages/about-verdict.scss",
+				"pages/contact.scss",
+				"pages/privacy-policy.scss",
+				"pages/search.scss",
+				"pages/terms-of-service.scss";
+
+@import "components/layout/AppHeader.scss",
+				"components/layout/Category.scss",
+				"components/layout/HotNews.scss",
+				"components/layout/Post.scss",
+				"components/layout/LoginPopup.scss",
+				"components/layout/Breadcrumbs.scss",
+				"components/layout/AppFooter.scss";
+
+@import "components/Login/social-button.scss";
+
+@import "components/editor/Editor.scss";
+
+@import "components/making-post/MakingPost.scss";
+
+@import "components/user/UserProfile.scss";
+
+@import "components/news/DefaultNewsCard.scss",
+				"components/news/GorizontalNewsCard.scss",
+				"components/news/NewsCardFooter.scss",
+				"components/news/NewsCardHeader.scss",
+				"components/news/NewsCardHeaderMarks.scss",
+				"components/news/TopNewsCard.scss";
+
+@import "components/singlePost/authorBlock.scss",
+				"components/singlePost/buttonBlockHead.scss",
+				"components/singlePost/marks.scss",
+				"components/singlePost/prevNext.scss",
+				"components/singlePost/socialBlock.scss";
+
+@import "components/universal-components/socialBlock.scss",
+				"components/universal-components/sidebar-with-posts.scss",
+				"components/universal-components/popup-user-info.scss",
+				"components/universal-components/popup-search.scss",
+				"components/universal-components/modalWindow.scss",
+				"components/universal-components/followBlock.scss",
+				"components/universal-components/Follow-Buttons.scss",
+				"components/universal-components/Bookmark.scss";
+
+@import "components/profile/bigHeader.scss",
+				"components/profile/block-follower.scss",
+				"components/profile/block-note.scss",
+				"components/profile/block-notification.scss",
+				"components/profile/following.scss",
+				"components/profile/not-found.scss",
+				"components/profile/pagination.scss",
+				"components/profile/posts-draft.scss",
+				"components/profile/smallHeader.scss",
+				"components/profile/tabs.scss";
+
+@import "components/profile/dashboard/search.scss",
+				"components/profile/dashboard/table-block.scss",
+				"components/profile/dashboard/table-header.scss";
+
+
+// @import "../../node_modules/vue-multiselect/dist/vue-multiselect.min.css";

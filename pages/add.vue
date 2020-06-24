@@ -864,7 +864,7 @@ export default {
         publishedPost() {
             this.$v.$touch();
 
-            console.log(this.$v);
+            console.log(this.content);
 
             if (this.$v.$invalid) {
                 this.errorNotif = true;
@@ -930,7 +930,8 @@ export default {
                 if (
                     el.type !== "linkTool" &&
                     el.type !== "image" &&
-                    el.type !== "list"
+                    el.type !== "list" &&
+                    el.type !== "embed"
                 ) {
                     counter = el.data.text.length;
                     return counter + prev;

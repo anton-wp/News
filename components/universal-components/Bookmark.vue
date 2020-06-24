@@ -41,6 +41,9 @@ export default {
           this.$store.commit("ADD_BOOKMARK", this.id);
 					this.$toasted.show(res.data.message);
 					this.disabled = false
+					if(this.$store.getters.IS_TABS.filter(tab => tab.title === 'Bookmarks').length > 0) {
+						this.$store.commit('UPDATE_COUNTER_TABS', { title: 'Bookmarks', type: true});
+					}
         })
         .catch(error => {
           console.log(error);
@@ -54,6 +57,9 @@ export default {
           this.$store.commit("DEL_BOOKMARK", this.id);
 					this.$toasted.show(res.data.message);
 					this.disabled = false
+					if(this.$store.getters.IS_TABS.filter(tab => tab.title === 'Bookmarks').length > 0) {
+						this.$store.commit('UPDATE_COUNTER_TABS', { title: 'Bookmarks', type: false});
+					}
         })
         .catch(error => {
           console.log(error);
@@ -63,14 +69,3 @@ export default {
 };
 </script>
 
-<style lang="scss" >
-@import "../../assets/utils/variables";
-
-.bookmark {
-  fill: $primary_color;
-  background: transparent;
-  border: none;
-  outline: none;
-  padding: 0;
-}
-</style>

@@ -1,19 +1,6 @@
 <template>
-  <div>
-    <p>
-      Sorry, nothing was found
-    </p>
+  <div class="not-found">
+    <p>Sorry, nothing was found</p>
   </div>
 </template>
 
-<style lang="scss" scoped>
-p{
-  font-weight: 400;
-  line-height: 1.5;
-  font-family: open sans,Helvetica Neue,Helvetica,Roboto,Arial,sans-serif;
-  font-size: 1.5em;
-  color: #7a7a7a;
-  text-align: center;
-  box-sizing: inherit;
-}
-</style>

@@ -8,6 +8,7 @@ import Header from "@editorjs/header";
 import LinkTool from "@editorjs/link";
 import List from "@editorjs/list";
 import ImageTool from "@editorjs/image";
+import Embed from "@editorjs/embed";
 
 export default {
     props: {
@@ -41,7 +42,7 @@ export default {
                 linkTool: {
                     class: LinkTool,
                     config: {
-                        endpoint: "/" // Your backend endpoint for url data fetching
+                        endpoint: "/api/" // Your backend endpoint for url data fetching
                     }
                 },
                 image: {
@@ -62,6 +63,18 @@ export default {
                 list: {
                     class: List,
                     inlineToolbar: true
+                },
+                embed: {
+                    class: Embed,
+                    config: {
+                        services: {
+                            youtube: true,
+                            facebook: true,
+                            twitter: true,
+                            instagram: true,
+
+                        }
+                    }
                 }
             },
 
@@ -76,17 +89,3 @@ export default {
     }
 };
 </script>
-
-
-<style lang="scss" scoped>
-#editor {
-    border: 1px solid #ccc;
-    border-radius: 10px;
-    margin-top: 20px;
-    padding: 20px;
-}
-
-.ce-block__content {
-    max-width: 100%;
-}
-</style>

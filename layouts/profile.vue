@@ -5,6 +5,7 @@
     <hot-news />
     <breadcrumbs />
     <big-header />
+		<get-profile />
     <div class="container">
       <div class="row">
         <div class="col-12 profile-bottom">
@@ -32,8 +33,10 @@ import Breadcrumbs from '~/components/layout/Breadcrumbs'
 import AppFooter from '~/components/layout/AppFooter'
 import NotFound from '~/components/profile/not-found'
 import Tabs from '~/components/profile/tabs'
+import getProfile from '~/components/profile/getProfile'
 
 export default {
+	name: 'profile',
   components: {
     CustomSvg,
     AppHeader,
@@ -41,7 +44,8 @@ export default {
     HotNews,
     BigHeader,
     Breadcrumbs,
-    NotFound,
+		NotFound,
+		getProfile,
     Tabs
 	},
 }

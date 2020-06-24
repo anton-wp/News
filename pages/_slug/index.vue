@@ -41,7 +41,7 @@
 					return { tag, type, data, term, pagination };
 				})
 				.catch(error => {
-					$router.push('/');
+					// $router.push('/');
 				});
 		},
 	}
