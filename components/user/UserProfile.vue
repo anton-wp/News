@@ -70,7 +70,7 @@ export default {
       showPopup: false,
       modalNotification: false
     };
-  },
+	},
   methods: {
     openLoginPopup(type) {
       this.$emit("openLoginPopup", type);
