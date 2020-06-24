@@ -139,13 +139,10 @@ export default {
     };
   },
   mounted() {
-    // if (this.header.menu.length === 0) {
-    //   this.getMenu();
-    // }
-    if (this.bookmarks.length === 0) {
+    if (this.bookmarks.length === 0 && this.$store.state.auth.loggedIn) {
       this.getBookmarks();
     }
-    if (this.subscriptions.length === 0) {
+    if (this.subscriptions.length === 0 && this.$store.state.auth.loggedIn) {
       this.getSubscriptions();
     }
     this.$nextTick(function() {
