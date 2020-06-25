@@ -1,0 +1,37 @@
+.pagination {
+  .pagination-container {
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+  }
+  .link {
+    display: inline-block;
+    line-height: 1.5;
+    border-collapse: collapse;
+    text-align: center;
+    font-size: 1.4em;
+    box-sizing: inherit;
+    text-decoration: none;
+    background-color: transparent;
+    padding: 0 0.65em;
+    transition: color 0.25s;
+    font-weight: 600;
+    color: #444;
+    cursor: pointer;
+    &:hover {
+      color: #ff4242;
+    }
+  }
+  .active-link {
+    color: #ff4242;
+  }
+  .button-arrow {
+    border: none;
+    background-color: inherit;
+  }
+  .active-arrow {
+    &:hover {
+      color: #ff4242;
+    }
+  }
+}

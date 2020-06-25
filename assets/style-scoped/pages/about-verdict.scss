@@ -1,0 +1,115 @@
+.about-verdict {
+	.background {
+		background-color: $secondary-bgcolor;
+	}
+
+	.policy-wrapper {
+		width: 100%;
+
+		.container {
+			max-width: $global-width;
+
+			.wrapper-terms {
+				padding-left: 15px;
+			}
+
+			.policy-page-title {
+				left: -15px;
+				text-transform: uppercase;
+				font-size: 1.9em;
+				// margin: 0;
+				line-height: 1.5;
+				position: relative;
+				color: $dark-gray;
+				font-family: "Open Sans";
+				font-weight: bold;
+				text-size-adjust: 100%;
+				-webkit-box-direction: normal;
+				-webkit-font-smoothing: antialiased;
+				margin: 0 15px 15px 0;
+				&:after {
+					content: "";
+					background-color: $primary_color;
+					height: 3px;
+					width: 1.9em;
+					position: absolute;
+					left: 0.04em;
+					bottom: 1px;
+				}
+
+				@media (max-width: 576px) {
+					left: 0;
+				}
+			}
+
+			.paragraph {
+				li {
+					margin: 50px 0;
+					.text {
+						margin-bottom: 0;
+					}
+				}
+
+				h5 {
+					padding-bottom: 20px;
+				}
+
+				.in-text-ul {
+					padding-left: 50px;
+				}
+			}
+
+			.text {
+				box-sizing: border-box;
+				color: rgb(10, 10, 10);
+				font-family: "Open Sans", sans-serif;
+				font-size: 18px;
+				font-weight: 400;
+				line-height: 27px;
+				text-size-adjust: 100%;
+				-webkit-box-direction: normal;
+				-webkit-font-smoothing: antialiased;
+
+				.terms-text-link {
+					color: $primary_color;
+					text-decoration: underline;
+				}
+			}
+
+			.tab {
+				padding-left: 30px;
+			}
+
+			.title-hot {
+				position: relative;
+				color: $doveGray;
+				font-size: 1.4em;
+				font-weight: 700;
+				line-height: 16px;
+				width: 100%;
+				margin: 45px 0 30px;
+				display: flex;
+				justify-content: space-between;
+
+				span {
+					background-color: $white;
+					position: relative;
+					z-index: 5;
+					padding: 0 10px;
+					cursor: pointer;
+				}
+
+				&::before {
+					content: "";
+					position: absolute;
+					display: block;
+					top: 8px;
+					height: 1px;
+					width: 100%;
+					background-color: $doveGray;
+					z-index: 2;
+				}
+			}
+		}
+	}
+}
