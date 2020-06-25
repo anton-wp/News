@@ -1,6 +1,64 @@
 <template>
     <div v-if="$isAMP">
-        <p>lkgfkgkglgklk</p>
+        <div class="container">
+            <div v-for="(posts, index) of arrayPosts" :key="index">
+                <div class="article" v-for="post in posts" :key="post.id">
+                    <nuxt-link :to="`/${post.slug}`" class="article__img">
+                        <amp-img
+                            :src="post.featured.landscape"
+                            layout="responsive"
+                            width="990"
+                            height="550"
+                        />
+                    </nuxt-link>
+                    <div class="article-header">
+                        <nuxt-link
+                            class="post-cat"
+                            :to="`/${post.category.slug}`"
+                        >{{ post.category.name }}</nuxt-link>
+
+                        <div class="post-icons">
+                            <a href="#" class="post-icons__item">
+                                <svg width="15" height="15">
+                                    <use xlink:href="#comment" />
+                                </svg>
+                                0
+                            </a>
+                            <a href="#" class="post-icons__item">
+                                <svg width="15" height="15">
+                                    <use xlink:href="#votes" />
+                                </svg>
+                                0
+                            </a>
+                            <a href="#" class="post-icons__item">
+                                <svg width="15" height="15">
+                                    <use xlink:href="#eye" />
+                                </svg>
+                                0
+                            </a>
+                        </div>
+                    </div>
+                    <nuxt-link class="article-title" :to="`/${post.slug}`">{{ post.title }}</nuxt-link>
+
+                    <p class="article-content" v-if="post.shortContent">{{ post.shortContent }}[...]</p>
+
+                    <div class="article-author">
+                        By:
+                        <nuxt-link
+                            v-bind:to="`/m/${post.author.slug}/posts`"
+                        >{{ post.author.firstName }} {{ post.author.lastName }}</nuxt-link>
+                        <time class="published-date">{{ new Date(post.publishedAt).toDateString() }}</time>
+                    </div>
+                </div>
+            </div>
+            <!-- <gorizontal-news-card
+                v-for="post in posts"
+                :key="post.id"
+                type="full-block"
+                :post="post"
+                :background="true"
+            />-->
+        </div>
     </div>
     <div v-else>
         <div v-for="(posts, index) of arrayPosts" :key="index">

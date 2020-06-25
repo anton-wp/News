@@ -132,5 +132,5 @@ export default {
 </script>
 
 <style lang="scss">
-@import "../assets/app.amp";
+@import "../assets/amp.scss";
 </style>
