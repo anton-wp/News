@@ -1,63 +1,73 @@
 <template>
     <div v-if="$isAMP">
         <div class="container">
-            <div class="row">
+            <nuxt-link class="post-cat" :to="`/amp/${data.category.slug}`">{{ data.category.name }}</nuxt-link>
+            <div class="col-lg-12">
+                <h1 class="post-page-title">{{data.title}}</h1>
+                <h2>{{data.subTitle}}</h2>
+            </div>
+
+            <div class="d-flex w-100 align-center">
+                <author-block :author="data.author" :publishedAt="data.publishedAt" />
+
+                <marks :author="data.author" />
+            </div>
+
+            <div class="d-flex">
+                <social-block @changeFontSize="changeFontSize" />
+            </div>
+
+            <amp-img
+                v-if="data.featured.wide"
+                :src="data.featured.wide"
+                layout="responsive"
+                width="990"
+                height="550"
+                class="w-100"
+            ></amp-img>
+
+            <div class="sing-post-source">source: {{data.featured.source}}</div>
+
+            <p class="text" v-html="data.body" :style="{fontSize: bodySize + '%'}">
+                <!-- {{data.body}} -->
+            </p>
+
+            <div class="d-flex">
+                <social-block @changeFontSize="changeFontSize" />
+            </div>
+
+            <div class="tag-links">
+                <h2 class="tag-links__title">linked</h2>
                 <nuxt-link
-                    class="post-cat"
-                    :to="`/amp/${data.category.slug}`"
-                >{{ data.category.name }}</nuxt-link>
-                <div class="col-lg-12">
-                    <h1 class="post-page-title">{{data.title}}</h1>
-                    <h2>{{data.subTitle}}</h2>
+                    v-for="tag in data.tags"
+                    :key="tag.id"
+                    :to="`/amp/l/${tag.slug}`"
+                    class="tag-links__item"
+                >{{tag.name}}</nuxt-link>
+            </div>
+            <!-- <social-block [(fontSize)]="bodySize" class="col-lg-12"></social-block> -->
+            <div class="row">
+                <div class="col-6" v-if="prev">
+                    <nuxt-link class="d-flex sibling-post" :to="`/amp/${prev.slug}`">
+                        <svg class="sibling-post__icon" width="40" height="40">
+                            <use xlink:href="#angle-left" />
+                        </svg>
+                        <div class="h-100">
+                            <div class="sibling-post__label">Previous Post</div>
+                            <h3 class="sibling-post__title">{{prev.title}}</h3>
+                        </div>
+                    </nuxt-link>
                 </div>
-
-                <div class="d-flex w-100 align-center">
-                    <author-block :author="data.author" :publishedAt="data.publishedAt" />
-
-                    <marks :author="data.author" />
-                </div>
-
-                <div class="d-flex">
-                    <social-block @changeFontSize="changeFontSize" />
-                </div>
-
-                <amp-img
-                    v-if="data.featured.wide"
-                    :src="data.featured.wide"
-                    layout="responsive"
-                    width="990"
-                    height="550"
-                    class="w-100"
-                ></amp-img>
-
-                <div class="sing-post-source">source: {{data.featured.source}}</div>
-
-                <p class="text" v-html="data.body" :style="{fontSize: bodySize + '%'}">
-                    <!-- {{data.body}} -->
-                </p>
-
-                <div class="d-flex">
-                    <social-block @changeFontSize="changeFontSize" />
-                </div>
-
-                <div class="tag-links">
-                    <h2 class="tag-links__title">linked</h2>
-                    <nuxt-link
-                        v-for="tag in data.tags"
-                        :key="tag.id"
-                        :to="`/amp/l/${tag.slug}`"
-                        class="tag-links__item"
-                    >{{tag.name}}</nuxt-link>
-                </div>
-                <!-- <social-block [(fontSize)]="bodySize" class="col-lg-12"></social-block> -->
-                <div class="col-lg-12">
-                    <prev-next :slug="data.slug" />
-                </div>
-                <div class="col-lg-12">
-                    <div class="related-title">
-                        <span>related</span>
-                    </div>
-                    <related-block />
+                <div class="col-6" v-if="next">
+                    <nuxt-link class="d-flex sibling-post justify-end" :to="`/amp/${next.slug}`">
+                        <div class="h-100">
+                            <div class="sibling-post__label">Next Post</div>
+                            <h3 class="sibling-post__title">{{next.title}}</h3>
+                        </div>
+                        <svg class="sibling-post__icon" width="40" height="40">
+                            <use xlink:href="#angle-right" />
+                        </svg>
+                    </nuxt-link>
                 </div>
             </div>
         </div>
@@ -204,7 +214,15 @@ export default {
     },
     props: {
         data: Object,
-        slug: String
+        slug: String,
+        prev: {
+            type: Object,
+            default: null
+        },
+        next: {
+            type: Object,
+            default: null
+        }
     },
     provide() {
         return {

@@ -1,6 +1,6 @@
 <template>
     <div>
-        <!-- <custom-svg /> -->
+        <custom-svg />
 
         <app-header />
 

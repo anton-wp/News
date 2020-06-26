@@ -6,6 +6,8 @@
         :slug="$route.params.slug"
         :term="term"
         :pagination="pagination"
+        :prev="prev"
+        :next="next"
     />
 </template>
 
@@ -26,7 +28,9 @@ export default {
             data: null,
             pagination: null,
             term: null,
-            tag: false
+            tag: false,
+            prev: null,
+            next: null
         };
     },
     asyncData({ $axios, $router, params }) {
@@ -42,7 +46,10 @@ export default {
                 const term = response.term || { name: "news" };
                 const pagination = response.pagination;
 
-                return { tag, type, data, term, pagination };
+                const prev = response.previous;
+                const next = response.next;
+
+                return { tag, type, data, term, pagination, prev, next };
             })
             .catch(error => {
                 // $router.push('/');

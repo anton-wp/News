@@ -111,4 +111,20 @@
 			letter-spacing: 0.8px;
 		}
 	}
+
+	.sibling-post {
+		height: 100%;
+		align-items: center;
+		color: #696969;
+
+		&__icon {
+			margin: 0 15px;
+		}
+
+		&__label {
+			font-size: 12px;
+			font-weight: bold;
+			margin-bottom: auto;
+		}
+	}
 }
