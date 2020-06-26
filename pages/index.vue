@@ -3,7 +3,7 @@
         <div class="container">
             <div v-for="(posts, index) of arrayPosts" :key="index">
                 <div class="article" v-for="post in posts" :key="post.id">
-                    <nuxt-link :to="`/${post.slug}`" class="article__img">
+                    <nuxt-link :to="`/amp/${post.slug}`" class="article__img">
                         <amp-img
                             :src="post.featured.landscape"
                             layout="responsive"
@@ -14,7 +14,7 @@
                     <div class="article-header">
                         <nuxt-link
                             class="post-cat"
-                            :to="`/${post.category.slug}`"
+                            :to="`/amp/${post.category.slug}`"
                         >{{ post.category.name }}</nuxt-link>
 
                         <div class="post-icons">
@@ -38,14 +38,14 @@
                             </a>
                         </div>
                     </div>
-                    <nuxt-link class="article-title" :to="`/${post.slug}`">{{ post.title }}</nuxt-link>
+                    <nuxt-link class="article-title" :to="`/amp/${post.slug}`">{{ post.title }}</nuxt-link>
 
                     <p class="article-content" v-if="post.shortContent">{{ post.shortContent }}[...]</p>
 
                     <div class="article-author">
                         By:
                         <nuxt-link
-                            v-bind:to="`/m/${post.author.slug}/posts`"
+                            v-bind:to="`/amp/m/${post.author.slug}/posts`"
                         >{{ post.author.firstName }} {{ post.author.lastName }}</nuxt-link>
                         <time class="published-date">{{ new Date(post.publishedAt).toDateString() }}</time>
                     </div>
@@ -177,7 +177,7 @@ export default {
     },
 
     amp: "hybrid",
-    ampLayout: "index.amp",
+    ampLayout: "default.amp",
 
     data() {
         return {
