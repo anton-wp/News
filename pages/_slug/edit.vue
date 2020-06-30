@@ -77,8 +77,9 @@
                                 </label>
 
                                 <editor
-                                    v-if="postId"
+                                    v-if="postId && editContent"
                                     :postid="postId"
+                                    :editContent="editContent"
                                     v-model="content"
                                     @editor:saved="saveDraft"
                                     :class="(errorNotif && countContent < 1000) ? 'error' : ''"
@@ -569,7 +570,8 @@ export default {
             years: [],
             now: new Date(),
 
-            content: [],
+            content: null,
+            editContent: null,
 
             title: "",
             subtitle: "",
@@ -628,7 +630,7 @@ export default {
 
     async asyncData({ $axios }) {
         const fields = await $axios.$get(
-            "api/profile/post-fields?action=create"
+            "/api/profile/post-fields?action=create"
         );
 
         const cat = await $axios.$get("/api/categories/");
@@ -641,8 +643,8 @@ export default {
             fields: fields.fields,
             categories: cat.data,
             selectedCategory: cat.data[0].id,
-            options: opt.data,
-            selectedOption: opt.data[0].title
+            options: opt.data
+            // selectedOption: opt.data[0].title
         };
     },
 
@@ -660,9 +662,7 @@ export default {
         }
     },
     methods: {
-        errorCrop(er, er2) {
-            console.log(er, er2);
-        },
+        errorCrop(er, er2) {},
         searchOptions(query) {
             if (query) {
                 this.isLoading = true;
@@ -921,29 +921,31 @@ export default {
 
         countContent() {
             let cContent = 0;
-            cContent = this.content.reduce(function(prev, el) {
-                let counter = 0;
+            if (this.content) {
+                cContent = this.content.blocks.reduce(function(prev, el) {
+                    let counter = 0;
 
-                if (
-                    el.type !== "linkTool" &&
-                    el.type !== "image" &&
-                    el.type !== "list" &&
-                    el.type !== "embed"
-                ) {
-                    counter = el.data.text.length;
+                    if (
+                        el.type !== "linkTool" &&
+                        el.type !== "image" &&
+                        el.type !== "list" &&
+                        el.type !== "embed"
+                    ) {
+                        counter = el.data.text.length;
+                        return counter + prev;
+                    }
+
+                    if (el.type === "list" && el.data.items.length > 0) {
+                        counter = el.data.items.reduce(function(previus, elem) {
+                            return elem.length + previus;
+                        }, 0);
+                    } else {
+                        counter = 0;
+                    }
+
                     return counter + prev;
-                }
-
-                if (el.type === "list" && el.data.items.length > 0) {
-                    counter = el.data.items.reduce(function(previus, elem) {
-                        return elem.length + previus;
-                    }, 0);
-                } else {
-                    counter = 0;
-                }
-
-                return counter + prev;
-            }, 0);
+                }, 0);
+            }
 
             return cContent;
         },
@@ -978,7 +980,7 @@ export default {
             }
 
             if (this.imgCrop) {
-                newData.featuredImage = this.imgCrop;
+                newData.featuredImage = this.imgId;
             }
 
             if (this.$v.imgDescript.$model) {
@@ -1021,27 +1023,32 @@ export default {
             this.minutes.push(("0" + i).slice(-2));
         }
 
-        // this.addFields();
-        // this.getCategories();
-        // this.getOptions();
-
         this.dropOptions.headers.Authorization = this.$auth.getToken("local");
 
-        this.$http
-            .post("/api/posts/")
-            .then(resp => {
-                this.postId = resp.data.id;
-                this.dropOptions.params.postId = resp.data.id;
-            })
-            .catch(error => {
-                console.log(error);
-            });
+        // this.$http
+        //     .post("/api/posts/")
+        //     .then(resp => {
+        //         this.postId = resp.data.id;
+        //         this.dropOptions.params.postId = resp.data.id;
+        //     })
+        //     .catch(error => {
+        //         console.log(error);
+        //     });
 
         this.$http
             .get(`/api/posts/${this.$route.params.slug}/edit`)
             .then(resp => {
                 console.log(resp);
 
+                this.postId = resp.data.data.id;
+                // this.selectedCategory = resp.data.data
+                this.selectedOption = resp.data.data.verdictOption;
+                this.title = resp.data.data.title;
+                this.editContent = resp.data.data.bodyJson;
+                this.content = resp.data.data.bodyJson;
+                this.featuredImage = resp.data.data.source;
+
+                console.log(this.editorContent);
             })
             .catch(error => {
                 console.log(error);

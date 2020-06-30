@@ -569,7 +569,7 @@ export default {
             years: [],
             now: new Date(),
 
-            content: [],
+            content: null,
 
             title: "",
             subtitle: "",
@@ -606,6 +606,7 @@ export default {
             isLoadingAuthor: false,
 
             // cropper
+            imgId: undefined,
             imgCrop: undefined,
             cropperX: undefined,
             cropperY: undefined,
@@ -637,15 +638,15 @@ export default {
             "/api/posts/create-helpers/verdict-options/"
         );
 
-        const regPost = await $axios.$post("/api/posts/");
+        // const regPost = await $axios.$post("/api/posts/");
 
         return {
             fields: fields.fields,
             categories: cat.data,
             selectedCategory: cat.data[0].id,
             options: opt.data,
-            selectedOption: opt.data[0].title,
-            postId: regPost.id
+            selectedOption: opt.data[0].title
+            // postId: regPost.id
         };
     },
 
@@ -814,12 +815,15 @@ export default {
         },
 
         afterComplete(file, res) {
+            console.log("111", res);
+
             this.imgCrop = undefined;
 
             this.imgCrop = res.file;
+            this.imgId = res.mediaId;
         },
 
-        async uploadImg() {
+        uploadImg() {
             this.loadingDrop = true;
             this.imgCrop = undefined;
 
@@ -828,9 +832,12 @@ export default {
             formData.append("image", this.$refs.imgUploadInpt.files[0]);
             formData.append("postId", this.postId);
 
-            await this.$http
+            this.$http
                 .post("/api/media/image-preload/", formData)
                 .then(res => {
+                    console.log("222", res);
+
+                    this.imgId = res.data.mediaId;
                     this.imgCrop = res.data.file;
                 })
                 .catch(error => console.error(error));
@@ -924,29 +931,31 @@ export default {
 
         countContent() {
             let cContent = 0;
-            cContent = this.content.reduce(function(prev, el) {
-                let counter = 0;
+            if (this.content) {
+                cContent = this.content.blocks.reduce(function(prev, el) {
+                    let counter = 0;
 
-                if (
-                    el.type !== "linkTool" &&
-                    el.type !== "image" &&
-                    el.type !== "list" &&
-                    el.type !== "embed"
-                ) {
-                    counter = el.data.text.length;
+                    if (
+                        el.type !== "linkTool" &&
+                        el.type !== "image" &&
+                        el.type !== "list" &&
+                        el.type !== "embed"
+                    ) {
+                        counter = el.data.text.length;
+                        return counter + prev;
+                    }
+
+                    if (el.type === "list" && el.data.items.length > 0) {
+                        counter = el.data.items.reduce(function(previus, elem) {
+                            return elem.length + previus;
+                        }, 0);
+                    } else {
+                        counter = 0;
+                    }
+
                     return counter + prev;
-                }
-
-                if (el.type === "list" && el.data.items.length > 0) {
-                    counter = el.data.items.reduce(function(previus, elem) {
-                        return elem.length + previus;
-                    }, 0);
-                } else {
-                    counter = 0;
-                }
-
-                return counter + prev;
-            }, 0);
+                }, 0);
+            }
 
             return cContent;
         },
@@ -960,14 +969,14 @@ export default {
             if (this.$v.subtitle.$model) {
                 newData.subTitle = this.$v.subtitle.$model;
             }
-            if (this.content.length) {
-                newData.body = JSON.stringify(this.content);
+            if (this.content) {
+                newData.bodyJson = this.content;
             }
             if (this.formatTags().length) {
                 newData.tags = this.formatTags();
             }
             if (this.selectedCategory) {
-                newData.category = this.selectedCategory;
+                newData.category = +this.selectedCategory;
             }
             if (this.selectedOption) {
                 newData.verdictOption = this.selectedOption;
@@ -981,7 +990,7 @@ export default {
             }
 
             if (this.imgCrop) {
-                newData.featuredImage = this.imgCrop;
+                newData.featuredImage = this.imgId;
             }
 
             if (this.$v.imgDescript.$model) {
@@ -1028,20 +1037,20 @@ export default {
         // this.getCategories();
         // this.getOptions();
 
-        // this.$http
-        //     .post("/api/posts/")
-        //     .then(resp => {
-        //         this.postId = resp.data.id;
-        //         this.dropOptions.params.postId = resp.data.id;
-        //     })
-        //     .catch(error => {
-        //         console.log(error);
-        //     });
+        this.$http
+            .post("/api/posts/")
+            .then(resp => {
+                this.postId = resp.data.id;
+                this.dropOptions.params.postId = resp.data.id;
+            })
+            .catch(error => {
+                console.log(error);
+            });
     },
     mounted() {
         this.$store.commit("SET_BREADCRUMBS", [{ title: "Add" }]);
         this.dropOptions.headers.Authorization = this.$auth.getToken("local");
-        this.dropOptions.params.postId = this.postId
+        // this.dropOptions.params.postId = this.postId
     }
 };
 </script>

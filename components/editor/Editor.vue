@@ -12,7 +12,8 @@ import Embed from "@editorjs/embed";
 
 export default {
     props: {
-        postid: Number | String
+        postid: Number | String,
+        editContent: Object | String
     },
     data() {
         return {
@@ -24,8 +25,8 @@ export default {
     },
     methods: {
         save() {
-            this.editor.save().then(({ blocks }) => {
-                this.$emit("input", blocks);
+            this.editor.save().then(content => {
+                this.$emit("input", content);
                 this.$emit("editor:saved");
             });
         }
@@ -93,6 +94,8 @@ export default {
                     }
                 }
             },
+
+            data: this.editContent,
 
             onChange: () => {
                 this.save();
