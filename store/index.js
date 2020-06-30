@@ -17,6 +17,11 @@ const store = () => new Vuex.Store({
 		header: {
 			menu: [],
 			news: [],
+		},
+		dashboard: {
+			posts: [],
+			paginations: Object,
+			ids: []
 		}
 	},
 	getters: {

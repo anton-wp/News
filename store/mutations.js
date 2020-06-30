@@ -17,11 +17,29 @@ export default {
 	SET_SUBSCRIPTIONS: (state, subscriptions) => {
 		state.subscriptions = subscriptions;
 	},
+	SET_DASHBOARD_POSTS: (state, posts) => {
+		state.dashboard.posts = posts;
+	},
+	SET_DASHBOARD_PAGINATIONS: (state, paginations) => {
+		state.dashboard.paginations = paginations;
+	},
+	ADD_IDS: (state, ids) => {
+		state.dashboard.ids = state.dashboard.ids.concat(ids);
+	},
+	DEL_IDS: (state, ids) => {
+		state.dashboard.ids = state.dashboard.ids.filter(id => !ids.includes(id));
+	},
 	DEL_SUBSCRIPTION: (state, id) => {
 		state.subscriptions = state.subscriptions.filter(subscription => subscription !== id);
 	},
 	DEL_BOOKMARK: (state, id) => {
 		state.bookmarks = state.bookmarks.filter(bookmark => bookmark !== id);
+	},
+	DEL_POST_DASHBOARD: (state, id) => {
+		state.dashboard.posts = state.dashboard.posts.filter(post => post.id !== id)
+	},
+	DEL_POSTS_DASHBOARD: (state, id) => {
+		state.dashboard.posts = state.dashboard.posts.filter(post => !id.includes(post.id))
 	},
 	ADD_SUBSCRIPTION: (state, id) => {
 		state.subscriptions = state.subscriptions.concat(id);
@@ -60,7 +78,13 @@ export default {
 			}
 		})
 	},
+	UPDATE_FEATURED: (state, id) => {
+		state.dashboard.posts.map(post => post.id === id ?  post.featured = !post.featured : null)
+	},
 	CLEAR_PROFILE: (state) => {
 		state.profile = Object;
+	},
+	CLEAR_DASHBOARD_IDS: (state) => {
+		state.dashboard.ids = [];
 	},
 }

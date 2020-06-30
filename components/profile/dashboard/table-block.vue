@@ -1,69 +1,134 @@
 <template>
-  <div class="table-block-component">
-    <div class="row">
-      <!-- (click)="changeCheck()"
-      *ngIf="!checkboxBig"-->
-      <div class="col-lg-auto checkbox">
-        <!-- <fa-icon *ngIf="!check" [icon]="faSquare"></fa-icon>
-        <fa-icon *ngIf="check" [icon]="faCheckSquare"></fa-icon>-->
+  <div class="row table-block-component" @mouseenter="toggle" @mouseleave="toggle">
+    <div class="col-lg-auto checkbox">
+      <div class="categoryCheckbox" @click="checkboxChange">
+        <svg width="10" height="10" v-if="dashboard.ids.includes(id)">
+          <use xlink:href="#checkbox" />
+        </svg>
       </div>
-      <!-- <div *ngIf="checkboxBig" class="col-lg-2 checkbox" (click)="changeCheck()"> -->
-      <!-- <fa-icon *ngIf="!check" [icon]="faSquare"></fa-icon>
-      <fa-icon *ngIf="check" [icon]="faCheckSquare"></fa-icon>-->
-      <!-- </div> -->
-      <!-- *ngIf="title"
-      (click)="sortTitle()"
-      [routerLink]="'/profile' + rout"
-      [queryParams]="{
-          q: profileStore.search,
-          status: profileStore.statusSearch,
-          category: profileStore.categorySearch,
-          author: profileStore.user,
-          sort: 'titleSort',
-          direction: profileStore.sort === 'titleSort'  && profileStore.typeSort !== 'DESC' ? 'DESC' : 'ASC',
-          page: 1
-      }"-->
-      <div class="col-lg title active">
-        <h6>Title</h6>
-        <p>by author</p>
-      </div>
-      <!-- *ngIf="category"  -->
-      <div class="col-lg-4 category">
-        <h6>Category</h6>
-      </div>
-      <!-- <div class="col-lg-3 category">
-      <h6>Category</h6>
-      </div>-->
-
-      <div class="col-lg-2 category">
-        <h6>Response To</h6>
-      </div>
-      <!-- *ngIf="published"
-      (click)="sortDate()"
-      [routerLink]="'/profile' + rout"
-      [queryParams]="{
-          q: profileStore.search,
-          status: profileStore.statusSearch,
-          category: profileStore.categorySearch,
-          author: profileStore.user,
-          sort: 'publishedAtSort',
-          direction: profileStore.sort === 'publishedAtSort'  && profileStore.typeSort !== 'DESC' ? 'DESC' : 'ASC',
-          page: 1
-      }"-->
-      <div class="col-lg-2 published active">
-        <h6>Published At</h6>
-      </div>
-      <!-- *ngIf="created"
-      (click)="sortDate()"
-      [routerLink]="'/profile' + rout"
-      [queryParams]="{
-          q: profileStore.search,
-          author: profileStore.user,
-          sort: 'publishedAtSort',
-          direction: profileStore.sort === 'publishedAtSort'  && profileStore.typeSort !== 'DESC' ? 'DESC' : 'ASC',
-          page: 1
-      }"-->
+    </div>
+    <div class="col-lg active" v-if="title" @mouseleave="showPopup = false">
+      <h6 class="header">{{header.title}}</h6>
+      <h6 class="title">{{title}}</h6>
+      <small class="author" @mouseenter="showPopup = true" v-if="author">
+        <div v-if="showPopup" id="1" class="user-popup active">
+          <div>
+            <popup-user-info :authorId="author.id" />
+          </div>
+        </div>by
+        <nuxt-link class="link" :to="`/m/${author.slug}`">{{author.firstName}} {{author.lastName}}</nuxt-link>
+      </small>
+    </div>
+    <div class="col-lg-4 category" v-if="description">
+      <h6 class="header">{{header.description}}</h6>
+      <h6>{{description}}</h6>
+    </div>
+    <div class="col-lg-3 category" v-if="category">
+      <h6 class="header">{{header.response}}</h6>
+      <h6>{{category.name}}</h6>
+    </div>
+    <div class="col-lg-2 category" v-if="date">
+      <h6 class="header">{{header.date}}</h6>
+      <h6 v-if="typeof date !== 'object'">{{ new Date(date).toDateString() }}</h6>
+      <h6 v-if="typeof date === 'object'">{{date.name}}</h6>
+    </div>
+    <div class="col-lg-2 status active" v-if="status">
+      <h6 class="header">{{header.status}}</h6>
+      <h6 v-if="header.status !== 'Featured'">{{status}}</h6>
+      <button
+        v-if="header.status === 'Featured'"
+        @click="updateFeatured(id)"
+        :disabled="disabledFeatured"
+      >
+        <svg v-if="!featured" width="20" height="20">
+          <use xlink:href="#star-empty" />
+        </svg>
+        <svg v-if="featured" width="20" height="20">
+          <use xlink:href="#star" />
+        </svg>
+      </button>
+    </div>
+    <div v-if="show && links" class="col-12 showSettingBlock">
+      <span class="links-block">
+        <span v-if="links.view" @click="view" class="link">{{ links.view }}</span>
+        <span v-if="links.view" class="line-links">|</span>
+        <span
+          v-if="links.edit"
+					@click="edit"
+          class="link"
+        >{{ links.edit }}</span>
+        <span v-if="links.edit" class="line-links">|</span>
+        <span v-if="links.delete" class="delete" @click="deletePosts()">{{ links.delete }}</span>
+      </span>
     </div>
   </div>
 </template>
+
+<script>
+import { mapState } from "vuex";
+import PopupUserInfo from "~/components/universal-components/popup-user-info";
+
+export default {
+  components: {
+    PopupUserInfo
+  },
+  data() {
+    return {
+      show: false,
+      checkboxActive: false,
+      showPopup: false,
+      disabledFeatured: false
+    };
+  },
+  computed: {
+    ...mapState(["dashboard"])
+  },
+  props: {
+    id: String,
+    slug: String,
+    title: String,
+    description: String,
+    category: Object,
+    author: Object,
+    date: String | Object,
+    status: String | Boolean,
+    header: Object,
+    featured: Object | Boolean,
+    links: Object
+  },
+  methods: {
+    toggle() {
+      this.show = !this.show;
+    },
+    updateFeatured(id) {
+      this.disabledFeatured = true;
+      this.$http
+        .put(`/api/admin/tags/${id}/featured`)
+        .then(res => {
+          console.log(res);
+          this.disabledFeatured = false;
+          this.$toasted.show(res.data.message);
+          this.$store.commit("UPDATE_FEATURED", id);
+        })
+        .catch(error => console.error(error));
+    },
+    view() {
+      this.$emit("view", this.slug, this.status);
+    },
+    edit() {
+      this.$emit("edit", this.slug, this.id);
+    },
+    deletePosts() {
+      this.$emit("deletePosts", this.id);
+    },
+    checkboxChange() {
+      if (this.dashboard.ids.includes(this.id)) {
+        this.$store.commit("DEL_IDS", [this.id]);
+      } else {
+        this.$store.commit("ADD_IDS", [this.id]);
+      }
+    }
+  }
+};
+</script>
 

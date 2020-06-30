@@ -20,7 +20,27 @@
 		.profile-bottom {
 			padding-bottom: 2.2em;
 		}
+		ul {
+			position: sticky;
+			top: 25px;
+			z-index: 1;
+			padding-left: 0;
+			margin-top: -15px;
+			@media (max-width: 768px) {
+				margin-top: -40px;
+			}
+		}
+		li {
+			display: block;
+			margin-top: 20px;
 
+			@media (max-width: 768px) {
+				text-align: center;
+			}
+			@media (max-width: 639px) {
+				margin-top: 5px;
+			}
+		}
 		.sideBar {
 			padding: 0 0 0 2.5em;
 			@media (max-width: 991px) {
@@ -37,6 +57,48 @@
 
 			.active {
 				color: #ff4242 !important;
+			}
+			.blockSubMenu {
+				@media (max-width: 768px) {
+					display: flex;
+					position: absolute;
+					width: calc(100vw - 100% - 0.9375rem);
+					overflow-x: scroll;
+					left: 66px;
+					top: 25px;
+					background-color: #f4f4f4;
+					cursor: pointer;
+				}
+				@media (max-width: 639px) {
+					left: 30px;
+					top: 35px;
+					width: calc(100vw - 100% - 1rem);
+				}
+				.subMenu {
+					list-style-type: none;
+					color: #7a7a7a;
+					// color: #ff4242;
+					font-weight: 700;
+					cursor: pointer;
+					transition: color 0.25s;
+					font-size: 16px;
+					margin-left: 60px;
+					text-transform: none;
+					@media (max-width: 768px) {
+						margin-left: 0px;
+						margin-top: 0px;
+						padding: 0.4em 1em 0.8em;
+						display: list-item;
+						white-space: nowrap;
+					}
+					@media (max-width: 639px) {
+						font-size: 11.5px;
+					}
+
+					&:hover {
+						color: #ff4242;
+					}
+				}
 			}
 		}
 	}
