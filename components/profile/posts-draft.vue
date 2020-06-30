@@ -1,7 +1,7 @@
 <template>
   <div class="posts-draft">
     <div class="block">
-      <nuxt-link class="link" :to="`/draft/${post.id}`">
+      <nuxt-link class="link" :to="`/${post.slug}/edit`">
         <img v-if="!post.featured.original" src="/image/default_image_landscape.png" alt />
         <img v-if="post.featured.original" :src="post.featured.original" alt />
       </nuxt-link>
