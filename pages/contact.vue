@@ -1,5 +1,5 @@
 <template>
-    <div v-if="$isAMP" class="text-page container">
+    <div v-if="$isAMP" class="text-page container contacts">
         <h1 class="post-cat">CONTACT</h1>
 
         <div class="contact-item">
@@ -50,7 +50,7 @@
             </p>
         </div>
 
-
+        <nuxt-link to="/contact" class="btn">Contact us</nuxt-link>
     </div>
     <div v-else class="contact">
         <div class="terms-wrapper">

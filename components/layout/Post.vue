@@ -224,6 +224,44 @@ export default {
             default: null
         }
     },
+
+    head() {
+        return {
+            title: this.data.title,
+            meta: [
+                {
+                    hid: "description",
+                    name: "description",
+                    content: this.data.seoDescription
+                },
+                {
+                    hid: "og:title",
+                    name: "og:title",
+                    content: this.data.title
+                },
+                {
+                    hid: "og:description",
+                    name: "og:description",
+                    content: this.data.seoDescription
+                },
+                {
+                    hid: "og:url",
+                    name: "og:url",
+                    content: this.$route.fullPath
+                },
+                {
+                    hid: "og:image",
+                    name: "og:image",
+                    content: this.data.featured.thumbnail
+                },
+                {
+                    hid: "og:type",
+                    name: "og:type",
+                    content: "article"
+                }
+            ]
+        };
+    },
     provide() {
         return {
             id: this.data.id

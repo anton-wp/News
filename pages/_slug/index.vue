@@ -43,11 +43,18 @@ export default {
                 const type =
                     response.type === "feed" ? "category" : response.type;
                 const data = response.data;
-                const term = response.term || { name: "news" };
+                let term = response.term || { name: "news" };
+
+                if (type === "post") {
+                    term = null;
+                }
                 const pagination = response.pagination;
 
                 const prev = response.previous;
                 const next = response.next;
+
+				console.log(term);
+
 
                 return { tag, type, data, term, pagination, prev, next };
             })

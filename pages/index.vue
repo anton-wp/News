@@ -5,6 +5,7 @@
                 <div class="article" v-for="post in posts" :key="post.id">
                     <nuxt-link :to="`/amp/${post.slug}`" class="article__img">
                         <amp-img
+                            v-if="post.featured.landscape"
                             :src="post.featured.landscape"
                             layout="responsive"
                             width="990"
