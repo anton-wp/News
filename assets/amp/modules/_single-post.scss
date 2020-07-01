@@ -1,0 +1,130 @@
+.__amp {
+	.author {
+		&__photo {
+			border-radius: 50%;
+			margin-right: 20px;
+		}
+
+		&-info {
+			display: inline-flex;
+			flex-direction: column;
+			font-weight: 400;
+			&__name {
+				font-size: 16px;
+				color: #212529;
+			}
+
+			&__role {
+				font-size: 12px;
+				margin: 5px 0;
+			}
+
+			&__date {
+				font-size: 16px;
+			}
+		}
+	}
+
+	.facebook {
+		background-color: #3b5998;
+	}
+
+	.twitter {
+		background-color: #55acee;
+	}
+	.pinterest {
+		background-color: #cb2027;
+	}
+	.reddit-alien {
+		background-color: #000;
+	}
+	.linkedin {
+		background-color: #0e76a8;
+	}
+	.tumblr {
+		background-color: #395976;
+	}
+	.flipboard {
+		background-color: #cb2027;
+	}
+	.mail {
+		background-color: #ffbb28;
+	}
+
+	.shared-link {
+		margin: 20px 0;
+		&__item {
+			margin-right: 10px;
+			height: 40px;
+			width: 40px;
+			border-radius: 50%;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			color: #fff;
+			svg {
+				fill: #fff;
+			}
+			&--big {
+				border-radius: 100px;
+				width: auto;
+				padding: 0 15px;
+			}
+		}
+	}
+
+	.sing-post-source {
+		text-align: right;
+		font-size: 12px;
+		margin-top: 5px;
+		margin-bottom: 20px;
+		width: 100%;
+	}
+
+	.tag-links {
+		width: 100%;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		flex-wrap: wrap;
+		&__title {
+			width: 100%;
+			display: flex;
+			align-items: center;
+			color: #696969;
+			&:after {
+				content: "";
+				height: 2px;
+				flex-grow: 1;
+				background-color: #696969;
+				margin-left: 10px;
+			}
+		}
+
+		&__item {
+			padding: 12px 20px;
+			text-transform: uppercase;
+			font-weight: bold;
+			color: #fff;
+			background-color: #ff4242;
+			margin: 10px;
+			letter-spacing: 0.8px;
+		}
+	}
+
+	.sibling-post {
+		height: 100%;
+		align-items: center;
+		color: #696969;
+
+		&__icon {
+			margin: 0 15px;
+		}
+
+		&__label {
+			font-size: 12px;
+			font-weight: bold;
+			margin-bottom: auto;
+		}
+	}
+}

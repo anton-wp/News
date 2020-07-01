@@ -12,8 +12,12 @@ module.exports = {
 			{ hid: 'description', name: 'description', content: process.env.npm_package_description || '' }
 		],
 		link: [
-			{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
-		]
+			{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
+			{ hid: 'canonical', rel: 'canonical', href: '/' }
+		],
+		script: [
+			// { src: 'https://cdn.ampproject.org/v0/amp-mega-menu-0.1.js', customElement: "amp-mega-menu" }
+		  ],
 	},
 	/*
 	** Customize the progress-bar color

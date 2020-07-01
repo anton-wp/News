@@ -45,6 +45,7 @@ export default {
     return this.$axios
       .$get('/api/tags/featured-tags')
       .then((res) => {
+				console.log(res)
         context.commit('SET_HEADER_HOT_NEWS', res.data)
       })
 	},

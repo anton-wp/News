@@ -1,10 +1,10 @@
 <template>
   <div class="dashboard-search-component">
     <div class="form">
-      <div class="form-wrap">
+      <div class="form-wrap" v-if="searchProps.search">
         <input class="form-input search-input" placeholder="SEARCH" v-model="search" />
       </div>
-      <div class="form-wrap">
+      <div class="form-wrap" v-if="searchProps.status">
         <select class="form-input select" v-model="selectedStatus">
           <option v-for="status of statuses" :value="status.key" :key="status.key">
             <span v-if="status.count">{{status.title}} ({{status.count}})</span>
@@ -12,7 +12,7 @@
           </option>
         </select>
       </div>
-      <div class="form-wrap">
+      <div class="form-wrap" v-if="searchProps.category">
         <select class="form-input select" v-model="selectedCategory">
           <option
             v-for="category of categories"
@@ -21,7 +21,7 @@
           >{{category.name}}</option>
         </select>
       </div>
-      <div class="form-wrap">
+      <div class="form-wrap" v-if="searchProps.author">
         <multiselect
           v-model="selectedAuthor"
           id="author"
@@ -46,13 +46,6 @@
         </multiselect>
       </div>
       <div class="form-wrap button-block">
-        <!-- [routerLink]="'/profile' + rout"
-        [queryParams]="{
-              q: searchForm.get('search').value,
-              status: profileStore.initialDashboardStatuses?.title,
-              category: profileStore.initialDashboardCategories?.id,
-              author: searchForm.get('authors').value?.id }"
-        (click)="searchClick()"-->
         <button class="search" @click="searchClick">Search</button>
         <button class="reset" @click="resetClick">Reset</button>
       </div>
@@ -80,14 +73,27 @@ export default {
       isLoadingAuthor: false
     };
   },
+  props: {
+    type: "",
+    searchProps: Object
+  },
   created() {
-    this.getCategories();
-    this.getStatus();
+    switch (this.type) {
+      case "posts":
+				this.getStatus()
+				this.getCategories();
+				break;
+      case "tags":
+				this.getStatusTags()
+				break;
+      default:
+        '';
+    }
   },
   methods: {
     getCategories() {
       this.$http
-        .get("https://dev.api.verdict.org/categories/")
+        .get("/api/categories/")
         .then(({ data }) => {
           this.categories = data.data;
           data.data.unshift({ name: "Choose Category", id: "" });
@@ -99,7 +105,20 @@ export default {
     },
     getStatus() {
       this.$http
-        .get("https://dev.api.verdict.org/admin/posts/statuses")
+        .get("/api/admin/posts/statuses")
+        .then(({ data }) => {
+          data.data = data.data.filter(status => status.title !== "Draft");
+          this.statuses = data.data;
+          data.data.unshift({ title: "Choose Status", key: "" });
+          this.selectedStatus = this.statuses[0].key;
+        })
+        .catch(error => {
+          // this.errorMessage = error.response.data.message;
+        });
+    },
+    getStatusTags() {
+      this.$http
+        .get("/api/admin/tags/statuses")
         .then(({ data }) => {
           this.statuses = data.data;
           data.data.unshift({ title: "Choose Status", key: "" });
@@ -113,10 +132,7 @@ export default {
       this.isLoadingAuthor = true;
 
       this.$http
-        .get(
-          "https://dev.api.verdict.org/posts/create-helpers/authors-search?search=" +
-            query
-        )
+        .get("/api/posts/create-helpers/authors-search?search=" + query)
         .then(({ data }) => {
           this.authorsOption = data.data;
 
@@ -130,10 +146,14 @@ export default {
       this.selectedAuthor = "";
     },
     searchClick() {
-      console.log(this.search);
-      console.log(this.selectedStatus);
-      console.log(this.selectedCategory);
-      console.log(this.selectedAuthor);
+			console.log(this.selectedStatus)
+      let search = {
+        search: this.search,
+        status: this.selectedStatus,
+        category: this.selectedCategory,
+        author: this.selectedAuthor.id
+      };
+      this.$emit("getSearch", search);
     }
   }
 };

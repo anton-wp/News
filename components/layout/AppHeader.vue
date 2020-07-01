@@ -1,5 +1,12 @@
 <template>
-  <header class="app-header">
+  <header v-if="$isAMP">
+    <div class="container d-flex justify-center">
+      <nuxt-link to="/amp/" class="header-logo">
+        <amp-img src="/image/logo.svg" alt="Verdict - Main Logo" width="177" height="35"></amp-img>
+      </nuxt-link>
+    </div>
+  </header>
+  <header v-else class="app-header">
     <template class="wrapper-header">
       <div class="main-header container">
         <div class="burger-icon d-lg-none" @click="activeSideBarMenu">
@@ -41,11 +48,7 @@
           </li>
         </ul>
         <div class="nav-signup">
-          <user-profile
-            v-if="true"
-            @openLoginPopup="openLoginPopup"
-            :authorization="$store.state.auth.loggedIn"
-          />
+          <user-profile v-if="true" :authorization="$store.state.auth.loggedIn" />
           <!-- <user-profile
                         v-if="!true"
                         @openLoginPopup="openLoginPopup"
@@ -103,12 +106,7 @@
         </div>
       </div>-->
 
-      <login-popup
-        v-if="loginPopupActive"
-        @closeLoginPopup="closeLoginPopup"
-        @changeLoginPopup="changeLoginPopup"
-        :type="typeLoginPopup"
-      />
+      <login-popup v-if="loginModal.open" />
     </template>
   </header>
 </template>
@@ -121,6 +119,9 @@ import SocialBlock from "~/components/universal-components/socialBlock.vue";
 import { mapGetters } from "vuex";
 
 export default {
+  amp: "hybrid",
+  ampLayout: "default.amp",
+
   components: {
     UserProfile,
     LoginPopup,
@@ -128,8 +129,8 @@ export default {
   },
   data() {
     return {
-      loginPopupActive: false,
-      typeLoginPopup: "",
+      // loginPopupActive: false,
+      // typeLoginPopup: "",
       popupMore: false,
       // categories: [],
       isToken: false,
@@ -152,7 +153,7 @@ export default {
     });
   },
   computed: {
-    ...mapState(["header", "bookmarks", "subscriptions"])
+    ...mapState(["header", "bookmarks", "subscriptions", "loginModal"])
   },
   methods: {
     async getBookmarks() {
@@ -197,14 +198,25 @@ export default {
       }
     },
     openLoginPopup(type) {
-      this.typeLoginPopup = type;
-      this.loginPopupActive = true;
+      let data = {
+        open: true,
+        type: type
+      };
+      this.$store.commit("UPDATE_LIGIN_POPUP", data);
     },
     closeLoginPopup() {
-      this.loginPopupActive = false;
+      let data = {
+        open: false,
+        type: ""
+      };
+      this.$store.commit("UPDATE_LIGIN_POPUP", data);
     },
     changeLoginPopup(type) {
-      this.typeLoginPopup = type;
+      let data = {
+        open: true,
+        type: type
+      };
+      this.$store.commit("UPDATE_LIGIN_POPUP", data);
     },
     popupMoreOn() {
       setTimeout(() => {

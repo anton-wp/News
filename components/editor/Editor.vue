@@ -12,7 +12,8 @@ import Embed from "@editorjs/embed";
 
 export default {
     props: {
-        postid: Number | String
+        postid: Number | String,
+        editContent: Object | String
     },
     data() {
         return {
@@ -24,8 +25,8 @@ export default {
     },
     methods: {
         save() {
-            this.editor.save().then(({ blocks }) => {
-                this.$emit("input", blocks);
+            this.editor.save().then(content => {
+                this.$emit("input", content);
                 this.$emit("editor:saved");
             });
         }
@@ -42,7 +43,7 @@ export default {
                 linkTool: {
                     class: LinkTool,
                     config: {
-                        endpoint: "/api/" // Your backend endpoint for url data fetching
+                        endpoint: "/api/posts/create-helpers/link-meta" // Your backend endpoint for url data fetching
                     }
                 },
                 image: {
@@ -69,14 +70,32 @@ export default {
                     config: {
                         services: {
                             youtube: true,
-                            facebook: true,
-                            twitter: true,
-                            instagram: true,
-
+                            coub: true,
+                            twitter: {
+                                regex: /^https?:\/\/twitter\.com\/(?:#!\/)?(\w+)\/status(?:es)?\/(\d+)(?:\/.*)?$/,
+                                embedUrl:
+                                    "https://twitframe.com/show?url=https://twitter.com/<%= remote_id %>",
+                                html:
+                                    '<iframe width="600" height="600" style="margin: 0 auto;" frameborder="0" scrolling="no" allowtransparency="true"></iframe>',
+                                height: 300,
+                                width: 600,
+                                id: ids => ids.join("/status/")
+                            },
+                            instagram: {
+                                regex: /https?:\/\/www\.instagram\.com\/p\/([^\/\?\&]+)\/?/,
+                                embedUrl:
+                                    "https://www.instagram.com/p/<%= remote_id %>/embed",
+                                html:
+                                    '<iframe width="400" height="505" style="margin: 0 auto;" frameborder="0" scrolling="no" allowtransparency="true"></iframe>',
+                                height: 505,
+                                width: 400
+                            }
                         }
                     }
                 }
             },
+
+            data: this.editContent,
 
             onChange: () => {
                 this.save();

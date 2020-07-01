@@ -110,7 +110,10 @@
                                     class="col-sm-auto col-lg-8"
                                     style="padding-left: 0px; padding-right: 0px;"
                                 >
-                                    <div class="schedule-date-col schedule-date">
+                                    <div
+                                        class="schedule-date-col schedule-date"
+                                        v-if="fields.publishedAt"
+                                    >
                                         <label>Date</label>
                                         <div class="date-select-wrap">
                                             <div class="select-wrap month-select">
@@ -230,7 +233,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="input-wrapper">
+                        <div class="input-wrapper" v-if="fields.category">
                             <div class="arrow">
                                 <span>
                                     <!-- <fa-icon [icon]="faCaretDown"></fa-icon> -->
@@ -257,7 +260,7 @@
                             </select>
                         </div>
 
-                        <div class="input-wrapper">
+                        <div class="input-wrapper" v-if="fields.verdictOption">
                             <div class="arrow">
                                 <!-- <fa-icon [icon]="faCaretDown"></fa-icon> -->
                                 <svg class="icon" width="17" height="17">
@@ -281,7 +284,7 @@
                             </select>
                         </div>
 
-                        <div class="input-wrapper input-block">
+                        <div class="input-wrapper input-block" v-if="fields.tags">
                             <label>
                                 Links
                                 <span class="required">*</span>
@@ -320,7 +323,7 @@
                             >Please add at least 1 link</div>
                         </div>
 
-                        <div class="input-wrapper author">
+                        <div class="input-wrapper author" v-if="fields.author">
                             <label>
                                 Author
                                 <span class="required">*</span>
@@ -359,15 +362,7 @@
                         <div class="buttons-wrapp">
                             <!-- <button class="button-add draft-button">Save Draft</button> -->
                             <div>
-                                <div class="buttons-forse">
-                                    <!-- <div class="forse">
-                                        <div class="fa-icon">
-                                            <fa-icon [icon]="faSquare"></fa-icon>
-                                            <fa-icon [icon]="faCheckSquare"></fa-icon>
-                                        </div>
-                                        <p>force publish</p>
-                                    </div>-->
-
+                                <div class="buttons-forse" v-if="fields.forcePublish">
                                     <label class="d-flex align-items-center w-100">
                                         <div class="categoryCheckbox">
                                             <svg width="10" height="10" v-if="forcePublish">
@@ -404,7 +399,7 @@
                     </div>
                     <!-- [disabled]="addPostForm.status === 'INVALID'" -->
 
-                    <div class="col-12 col-lg-7 col-xl-8">
+                    <div class="col-12 col-lg-7 col-xl-8" v-if="fields.cropper">
                         <div class="buttons-wrapp input-wrapper">
                             <label>
                                 Featured Image
@@ -469,27 +464,15 @@
                             @load="clipperLoaded"
                             @error="errorCrop"
                         >No image</clipper-basic>
-
-                        <!-- <clipper-basic
-                            v-if="imgCrop"
-                            :src="imgCrop"
-                            preview="preview"
-                            :grid="true"
-                            :ratio="16/9"
-                            :touch-create="false"
-                            ref="clipper"
-                            class="croper"
-                            @load="clipperLoaded"
-                        >No image</clipper-basic>-->
                     </div>
 
                     <div class="col-12 col-lg-5 col-xl-4">
-                        <div class="animation prev-img-block" v-if="imgCrop">
-                            <clipper-preview name="preview"></clipper-preview>
+                        <div class="animation prev-img-block">
+                            <clipper-preview name="preview" v-if="imgCrop && fields.cropper"></clipper-preview>
 
-                            <div class="header-metadata" v-if="selectedCategory">
+                            <div class="header-metadata" v-if="categories">
                                 <span class="category js--post-category-preview">
-                                    <span>{{ categories[selectedCategory] }}</span>
+                                    <span>{{ categories.find(x => x.id === selectedCategory ).slug }}</span>
                                 </span>
                                 <div class="news-item-metadata">
                                     <span class="metadata-block">
@@ -526,7 +509,7 @@
                         </div>
                     </div>
                     <div class="col-12 col-lg-7 col-xl-8">
-                        <div class="input-wrapper">
+                        <div class="input-wrapper" v-if="fields.featuredImage">
                             <label>
                                 Featured Image source
                                 <span class="required">*</span>
@@ -586,7 +569,7 @@ export default {
             years: [],
             now: new Date(),
 
-            content: [],
+            content: null,
 
             title: "",
             subtitle: "",
@@ -623,6 +606,7 @@ export default {
             isLoadingAuthor: false,
 
             // cropper
+            imgId: undefined,
             imgCrop: undefined,
             cropperX: undefined,
             cropperY: undefined,
@@ -643,13 +627,27 @@ export default {
         };
     },
 
-    asyncData({ $axios }) {
-        return $axios
-            .$get("api/profile/post-fields?action=create")
-            .then(resp => {
-                let fields = resp.fields;
-                return { fields };
-            });
+    async asyncData({ $axios }) {
+        const fields = await $axios.$get(
+            "api/profile/post-fields?action=create"
+        );
+
+        const cat = await $axios.$get("/api/categories/");
+
+        const opt = await $axios.$get(
+            "/api/posts/create-helpers/verdict-options/"
+        );
+
+        // const regPost = await $axios.$post("/api/posts/");
+
+        return {
+            fields: fields.fields,
+            categories: cat.data,
+            selectedCategory: cat.data[0].id,
+            options: opt.data,
+            selectedOption: opt.data[0].title
+            // postId: regPost.id
+        };
     },
 
     validations: {
@@ -725,31 +723,33 @@ export default {
                 });
         },
 
-        getCategories() {
-            this.$http
-                .get("https://dev.api.verdict.org/categories/")
-                .then(({ data }) => {
-                    this.categories = data.data;
+        // getCategories() {
+        //     this.$http
+        //         .get("https://dev.api.verdict.org/categories/")
+        //         .then(({ data }) => {
+        //             this.categories = data.data;
 
-                    this.selectedCategory = this.categories[0].id;
-                })
-                .catch(error => {
-                    // this.errorMessage = error.response.data.message;
-                });
-        },
+        //             this.selectedCategory = this.categories[0].id;
+        //         })
+        //         .catch(error => {
+        //             // this.errorMessage = error.response.data.message;
+        //         });
+        // },
 
-        getOptions() {
-            this.$http
-                .get("https://dev.api.verdict.org/posts/create-helpers/verdict-options/")
-                .then(({ data }) => {
-                    this.options = data.data;
+        // getOptions() {
+        //     this.$http
+        //         .get(
+        //             "https://dev.api.verdict.org/posts/create-helpers/verdict-options/"
+        //         )
+        //         .then(({ data }) => {
+        //             this.options = data.data;
 
-                    this.selectedOption = this.options[0].title;
-                })
-                .catch(error => {
-                    // this.errorMessage = error.response.data.message;
-                });
-        },
+        //             this.selectedOption = this.options[0].title;
+        //         })
+        //         .catch(error => {
+        //             // this.errorMessage = error.response.data.message;
+        //         });
+        // },
 
         monthDiff(dateFrom, dateTo) {
             return (
@@ -792,12 +792,15 @@ export default {
         clipperLoaded() {
             this.dropVisible = false;
             this.loadingDrop = false;
+
+            this.clipperChanged();
+
             setTimeout(() => {
                 this.$refs.clipper.setTL$.next({ left: 1, top: 1 });
                 this.$refs.clipper.setWH$.next({ width: 50, height: 50 });
 
                 this.saveDraft();
-            }, 500);
+            }, 200);
         },
 
         clipperChanged() {
@@ -812,12 +815,15 @@ export default {
         },
 
         afterComplete(file, res) {
+            console.log("111", res);
+
             this.imgCrop = undefined;
 
             this.imgCrop = res.file;
+            this.imgId = res.mediaId;
         },
 
-        async uploadImg() {
+        uploadImg() {
             this.loadingDrop = true;
             this.imgCrop = undefined;
 
@@ -826,9 +832,12 @@ export default {
             formData.append("image", this.$refs.imgUploadInpt.files[0]);
             formData.append("postId", this.postId);
 
-            await this.$http
+            this.$http
                 .post("/api/media/image-preload/", formData)
                 .then(res => {
+                    console.log("222", res);
+
+                    this.imgId = res.data.mediaId;
                     this.imgCrop = res.data.file;
                 })
                 .catch(error => console.error(error));
@@ -863,8 +872,6 @@ export default {
 
         publishedPost() {
             this.$v.$touch();
-
-            console.log(this.content);
 
             if (this.$v.$invalid) {
                 this.errorNotif = true;
@@ -924,81 +931,83 @@ export default {
 
         countContent() {
             let cContent = 0;
-            cContent = this.content.reduce(function(prev, el) {
-                let counter = 0;
+            if (this.content) {
+                cContent = this.content.blocks.reduce(function(prev, el) {
+                    let counter = 0;
 
-                if (
-                    el.type !== "linkTool" &&
-                    el.type !== "image" &&
-                    el.type !== "list" &&
-                    el.type !== "embed"
-                ) {
-                    counter = el.data.text.length;
+                    if (
+                        el.type !== "linkTool" &&
+                        el.type !== "image" &&
+                        el.type !== "list" &&
+                        el.type !== "embed"
+                    ) {
+                        counter = el.data.text.length;
+                        return counter + prev;
+                    }
+
+                    if (el.type === "list" && el.data.items.length > 0) {
+                        counter = el.data.items.reduce(function(previus, elem) {
+                            return elem.length + previus;
+                        }, 0);
+                    } else {
+                        counter = 0;
+                    }
+
                     return counter + prev;
-                }
-
-                if (el.type === "list" && el.data.items.length > 0) {
-                    counter = el.data.items.reduce(function(previus, elem) {
-                        return elem.length + previus;
-                    }, 0);
-                } else {
-                    counter = 0;
-                }
-
-                return counter + prev;
-            }, 0);
+                }, 0);
+            }
 
             return cContent;
         },
 
         formData() {
-            const newData = new FormData();
+            const newData = {};
 
             if (this.$v.title.$model) {
-                newData.append("title", this.$v.title.$model);
+                newData.title = this.$v.title.$model;
             }
             if (this.$v.subtitle.$model) {
-                newData.append("subTitle", this.$v.subtitle.$model);
+                newData.subTitle = this.$v.subtitle.$model;
             }
-            if (this.content.length) {
-                newData.append("body", JSON.stringify(this.content));
+            if (this.content) {
+                newData.bodyJson = this.content;
             }
             if (this.formatTags().length) {
-                newData.append("tags", this.formatTags());
+                newData.tags = this.formatTags();
             }
             if (this.selectedCategory) {
-                newData.append("category", this.selectedCategory);
+                newData.category = +this.selectedCategory;
             }
             if (this.selectedOption) {
-                newData.append("verdictOption", this.selectedOption);
+                newData.verdictOption = this.selectedOption;
             }
             if (this.selectedDate) {
-                newData.append("publishedAt", this.selectedDate);
+                newData.publishedAt = this.selectedDate;
             }
 
             if (this.forcePublish) {
-                newData.append("forcePublish", this.forcePublish);
+                newData.forcePublish = this.forcePublish;
             }
 
             if (this.imgCrop) {
-                newData.append("featuredImage", this.imgCrop);
+                newData.featuredImage = this.imgId;
             }
 
             if (this.$v.imgDescript.$model) {
-                newData.append("source", this.$v.imgDescript.$model);
+                newData.source = this.$v.imgDescript.$model;
             }
 
-            if (this.cropperX) {
-                newData.append("cropperX", this.cropperX);
+            if (this.cropperX || this.cropperX == 0) {
+                newData.cropperX = this.cropperX;
             }
-            if (this.cropperY) {
-                newData.append("cropperY", this.cropperY);
+            if (this.cropperY || this.cropperY == 0) {
+                newData.cropperY = this.cropperY;
             }
             if (this.cropperW) {
-                newData.append("cropperWidth", this.cropperW);
+                newData.cropperWidth = this.cropperW;
             }
             if (this.cropperH) {
-                newData.append("cropperHeight", this.cropperH);
+                newData.cropperHeight = this.cropperH;
             }
 
             return newData;
@@ -1025,10 +1034,8 @@ export default {
         }
 
         // this.addFields();
-        this.getCategories();
-        this.getOptions();
-
-        this.dropOptions.headers.Authorization = this.$auth.getToken("local");
+        // this.getCategories();
+        // this.getOptions();
 
         this.$http
             .post("/api/posts/")
@@ -1042,6 +1049,8 @@ export default {
     },
     mounted() {
         this.$store.commit("SET_BREADCRUMBS", [{ title: "Add" }]);
+        this.dropOptions.headers.Authorization = this.$auth.getToken("local");
+        // this.dropOptions.params.postId = this.postId
     }
 };
 </script>

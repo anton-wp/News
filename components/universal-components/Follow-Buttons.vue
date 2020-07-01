@@ -1,12 +1,14 @@
 <template>
   <div class="follow-buttons">
     <button
-      class="button-followed" :class="full ? 'follow-full' : 'follow'"
+      class="button-followed"
+      :class="full ? 'follow-full' : 'follow'"
       v-if="!$store.state.subscriptions.includes(this.id) && !loading"
       @click="Subscribe"
     >Follow</button>
     <button
-      class="button-followed unfollow" :class="full ? 'unfollow-full' : 'unfollow'"
+      class="button-followed unfollow"
+      :class="full ? 'unfollow-full' : 'unfollow'"
       v-if="$store.state.subscriptions.includes(this.id) && !loading"
       @click="Unsubscribe"
     >Unfollow</button>
@@ -17,8 +19,8 @@
 <script>
 export default {
   props: {
-		id: String,
-		full: Boolean,
+    id: String,
+    full: Boolean
   },
   data() {
     return {
@@ -33,27 +35,51 @@ export default {
         .then(responce => {
           this.$store.commit("DEL_SUBSCRIPTION", this.id);
           this.$toasted.show(responce.data.message);
-					this.loading = false;
-					if(this.$store.getters.IS_TABS.filter(tab => tab.title === 'Following').length > 0) {
-						this.$store.commit('UPDATE_COUNTER_TABS', { title: 'Following', type: false});
-					}
+          this.loading = false;
+          if (
+            this.$store.getters.IS_TABS.filter(tab => tab.title === "Following")
+              .length > 0
+          ) {
+            this.$store.commit("UPDATE_COUNTER_TABS", {
+              title: "Following",
+              type: false
+            });
+          }
         })
         .catch(error => console.log(error));
     },
     Subscribe() {
-      this.loading = true;
-      this.$http
-        .post(`/api/author/subscribe`, { authorId: this.id })
-        .then(responce => {
-          this.$store.commit("ADD_SUBSCRIPTION", this.id);
-          this.$toasted.show(responce.data.message);
-					this.loading = false;
-					if(this.$store.getters.IS_TABS.filter(tab => tab.title === 'Following').length > 0) {
-						this.$store.commit('UPDATE_COUNTER_TABS', { title: 'Following', type: true});
-					}
-        })
-        .catch(error => {});
-    }
+      if (this.$store.state.auth.loggedIn) {
+        this.loading = true;
+        this.$http
+          .post(`/api/author/subscribe`, { authorId: this.id })
+          .then(responce => {
+            this.$store.commit("ADD_SUBSCRIPTION", this.id);
+            this.$toasted.show(responce.data.message);
+            this.loading = false;
+            if (
+              this.$store.getters.IS_TABS.filter(
+                tab => tab.title === "Following"
+              ).length > 0
+            ) {
+              this.$store.commit("UPDATE_COUNTER_TABS", {
+                title: "Following",
+                type: true
+              });
+            }
+          })
+          .catch(error => {});
+      } else {
+				this.LogIn();
+      }
+		},
+		LogIn() {
+      let data = {
+        open: true,
+        type: 'logIn'
+      };
+      this.$store.commit("UPDATE_LIGIN_POPUP", data);
+    },
   }
 };
 </script>

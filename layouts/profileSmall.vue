@@ -33,6 +33,7 @@ import Tabs from '~/components/profile/tabs'
 import AppFooter from '~/components/layout/AppFooter'
 
 export default {
+	name: 'profileSmall',
   components: {
     CustomSvg,
     AppHeader,

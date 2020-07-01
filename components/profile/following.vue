@@ -1,7 +1,7 @@
 <template>
   <div class="component-following">
     <div class="container">
-      <div class="row">
+      <div v-if="followers.length > 0" class="row">
         <div class="col-12 sort">
           <span class="verdicts-posts">Sort by:</span>
           <button
@@ -22,23 +22,27 @@
           :post="follow"
           :type="'following'"
         />
-        <div class="col-12 button-block">
+        <div v-if="pagination.next" class="col-12 button-block">
           <button class="loadMore">Load More</button>
         </div>
       </div>
+			<not-found v-if="followers.length === 0"/>
     </div>
   </div>
 </template>
 
 <script>
 import FollowerBlock from "~/components/profile/block-follower";
+import NotFound from "~/components/profile/not-found";
 
 export default {
   components: {
-    FollowerBlock
+		FollowerBlock,
+		NotFound
   },
   props: {
-    type: String
+		type: String,
+		typePage: String
   },
   data() {
     return {
@@ -50,6 +54,7 @@ export default {
     };
   },
   created() {
+		console.log(123)
     if (this.type === "author") {
       this.path = `author/${this.$route.params.slug}`;
     } else {
@@ -61,7 +66,7 @@ export default {
     getFollowing() {
       this.$http
         .get(
-          `/api/${this.path}/subscriptions?created=${this.sort}&page=${this.page}&limit=12`
+          `/api/${this.path}/${this.typePage}?created=${this.sort}&page=${this.page}&limit=12`
         )
         .then(res => {
           this.followers = res.data.data;

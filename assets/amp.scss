@@ -1,9 +1,9 @@
 @import "../static/fonts/font.css";
 
-@import '~/node_modules/normalize.css/normalize';
+@import "~/node_modules/normalize.css/normalize";
 
+@import "./amp/base/base";
+@import "./amp/base/header";
+@import "./amp/base/footer";
 
-@import "./amp/veriables";
-@import "./amp/base";
-@import "./amp/header";
-@import "./amp/footer";
+@import "./amp/modules";
