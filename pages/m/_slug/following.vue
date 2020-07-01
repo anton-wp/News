@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<following :type="'author'"/>
+		<following :type="'author'" :typePage="'subscriptions'"/>
 	</div>
 </template>
 

@@ -52,11 +52,7 @@
       <span class="links-block">
         <span v-if="links.view" @click="view" class="link">{{ links.view }}</span>
         <span v-if="links.view" class="line-links">|</span>
-        <span
-          v-if="links.edit"
-					@click="edit"
-          class="link"
-        >{{ links.edit }}</span>
+        <span v-if="links.edit" @click="edit" class="link">{{ links.edit }}</span>
         <span v-if="links.edit" class="line-links">|</span>
         <span v-if="links.delete" class="delete" @click="deletePosts()">{{ links.delete }}</span>
       </span>
@@ -65,8 +61,8 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
 import PopupUserInfo from "~/components/universal-components/popup-user-info";
+import { mapState } from "vuex";
 
 export default {
   components: {

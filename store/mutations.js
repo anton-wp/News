@@ -81,7 +81,11 @@ export default {
 	UPDATE_FEATURED: (state, id) => {
 		state.dashboard.posts.map(post => post.id === id ?  post.featured = !post.featured : null)
 	},
-	CLEAR_PROFILE: (state) => {
+	UPDATE_LIGIN_POPUP: (state, data) => {
+		state.loginModal.open = data.open;
+		state.loginModal.type = data.type;
+	},
+ 	CLEAR_PROFILE: (state) => {
 		state.profile = Object;
 	},
 	CLEAR_DASHBOARD_IDS: (state) => {
