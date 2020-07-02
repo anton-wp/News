@@ -7,7 +7,7 @@
     <big-header />
 		<get-profile />
     <div class="container">
-      <div id="asdf" class="row">
+      <div class="row" >
         <div class="col-12 profile-bottom">
           <div class="line" />
         </div>

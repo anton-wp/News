@@ -81,7 +81,7 @@ export default {
 	UPDATE_FEATURED: (state, id) => {
 		state.dashboard.posts.map(post => post.id === id ?  post.featured = !post.featured : null)
 	},
-	UPDATE_LIGIN_POPUP: (state, data) => {
+	UPDATE_LOGIN_POPUP: (state, data) => {
 		state.loginModal.open = data.open;
 		state.loginModal.type = data.type;
 	},

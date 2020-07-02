@@ -29,7 +29,7 @@
       </nuxt-link>
       <ul class="blockSubMenu" v-if="item.children && item.status">
         <li class="subMenu" v-for="subTabs in item.children" :key="subTabs.title">
-          <nuxt-link class="link" v-bind:to="`${path}${subTabs.path}`">
+          <nuxt-link class="link" v-bind:to="subTabs.path === '/add' ? `${subTabs.path}` : `${path}${subTabs.path}`">
             <span
               class="subtitle"
               :class="subTabs.status ? 'active-tab' : ''"

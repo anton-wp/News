@@ -202,21 +202,21 @@ export default {
         open: true,
         type: type
       };
-      this.$store.commit("UPDATE_LIGIN_POPUP", data);
+      this.$store.commit("UPDATE_LOGIN_POPUP", data);
     },
     closeLoginPopup() {
       let data = {
         open: false,
         type: ""
       };
-      this.$store.commit("UPDATE_LIGIN_POPUP", data);
+      this.$store.commit("UPDATE_LOGIN_POPUP", data);
     },
     changeLoginPopup(type) {
       let data = {
         open: true,
         type: type
       };
-      this.$store.commit("UPDATE_LIGIN_POPUP", data);
+      this.$store.commit("UPDATE_LOGIN_POPUP", data);
     },
     popupMoreOn() {
       setTimeout(() => {

@@ -89,7 +89,7 @@ export default {
         open: true,
         type: type
       };
-      this.$store.commit("UPDATE_LIGIN_POPUP", data);
+      this.$store.commit("UPDATE_LOGIN_POPUP", data);
     },
     getPopUp() {
       setTimeout(() => {

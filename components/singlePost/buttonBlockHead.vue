@@ -4,12 +4,12 @@
             <h5 class="category-name">{{category.name}}</h5>
         </nuxt-link>
         <div class="blockAction">
-            <a class="action" v-if="actions.review">
+            <nuxt-link class="action" v-if="actions.review" :to="`/${slug}/review`">
                 <svg width="12" height="15">
                     <use xlink:href="#delete" />
                 </svg>
                 review
-            </a>
+            </nuxt-link>
             <a class="action" v-if="actions.remove" @click="removePost">
                 <svg width="12" height="15">
                     <use xlink:href="#delete" />
