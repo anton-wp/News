@@ -3,12 +3,12 @@
     <div class="form-wrapper">
       <div class="form">
         <div class="close-form" @click="closeLoginPopup">×</div>
-        <div v-if="type !== 'forgotPassword'" style="padding: 2.4rem 3rem 0em;">
+        <div v-if="loginModal.type !== 'forgotPassword'" style="padding: 2.4rem 3rem 0em;">
           <div class="container in-form-container">
             <div class="row">
               <div class="col-12">
-                <h3 v-if="type === 'logIn'" class="form-title">Log In to Verdict</h3>
-                <h3 v-if="type === 'signUp'" class="form-title">Sign Up for Verdict</h3>
+                <h3 v-if="loginModal.type === 'logIn'" class="form-title">Log In to Verdict</h3>
+                <h3 v-if="loginModal.type === 'signUp'" class="form-title">Sign Up for Verdict</h3>
               </div>
             </div>
             <div class="row buttons-wrapper">
@@ -20,7 +20,7 @@
               </div>
               <div class="col-12">
                 <form
-                  v-if="type === 'logIn'"
+                  v-if="loginModal.type === 'logIn'"
                   @submit.prevent="checkForm"
                   id="authorizationForm"
                   class="primary-form"
@@ -76,7 +76,7 @@
                   </div>
                 </form>
                 <form
-                  v-if="type === 'signUp'"
+                  v-if="loginModal.type === 'signUp'"
                   id="registrationForm"
                   class="primary-form"
                   @submit.prevent="checkForm"
@@ -172,17 +172,17 @@
             </div>
           </div>
         </div>
-        <div v-if="type !== 'forgotPassword'" class="trigger-form">
-          <span v-if="type === 'logIn'">
+        <div v-if="loginModal.type !== 'forgotPassword'" class="trigger-form">
+          <span v-if="loginModal.type === 'logIn'">
             Don't have an account?
             <a @click="changeLoginPopup('signUp')">Sign Up</a>.
           </span>
-          <span v-if="type === 'signUp'">
+          <span v-if="loginModal.type === 'signUp'">
             Already have an account?
             <a @click="changeLoginPopup('logIn')">Log In</a>.
           </span>
         </div>
-        <div v-if="type === 'forgotPassword'" class="forgot-password">
+        <div v-if="loginModal.type === 'forgotPassword'" class="forgot-password">
           <h3 class="form-title">Forgot your password?</h3>
           <h4>Enter your email address, and we’ll send a link to choose a new password.</h4>
           <div class="input-block">
@@ -200,6 +200,7 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
 import Social from "~/components/login/social-button.vue";
 import Cookies from "js-cookie";
 import jwt_decode from "jwt-decode";
@@ -227,8 +228,11 @@ export default {
       confirmPassword: ""
     };
   },
-  props: {
-    type: String
+  // props: {
+  //   type: String
+  // },
+  computed: {
+    ...mapState(["loginModal"])
   },
   methods: {
     checkForm() {
@@ -273,10 +277,18 @@ export default {
     },
 
     closeLoginPopup() {
-      this.$emit("closeLoginPopup");
+      let data = {
+        open: false,
+        type: ""
+      };
+      this.$store.commit("UPDATE_LIGIN_POPUP", data);
     },
     changeLoginPopup(type) {
-      this.$emit("changeLoginPopup", type);
+      let data = {
+        open: true,
+        type: type
+      };
+      this.$store.commit("UPDATE_LIGIN_POPUP", data);
       this.clearForm();
     },
     clearForm() {

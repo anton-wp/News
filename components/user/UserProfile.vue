@@ -27,8 +27,16 @@
       </div>
     </div>
     <div @mouseover="getPopUp" @mouseleave="hidePopUp" style="position: relative;">
-      <img v-if="!$store.state.auth.user || !$store.state.auth.user.avatar"  class="default-avatar" src="/image/default-avatar-original.png" />
-      <img v-if="$store.state.auth.user && $store.state.auth.user.avatar" class="default-avatar" :src="$store.state.auth.user.avatar.small" />
+      <img
+        v-if="!$store.state.auth.user || !$store.state.auth.user.avatar"
+        class="default-avatar"
+        src="/image/default-avatar-original.png"
+      />
+      <img
+        v-if="$store.state.auth.user && $store.state.auth.user.avatar"
+        class="default-avatar"
+        :src="$store.state.auth.user.avatar.small"
+      />
       <div class="icon">
         <svg width="12" height="15">
           <use xlink:href="#chevron-down" />
@@ -51,6 +59,7 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
 import Cookies from "js-cookie";
 import BlockNotification from "~/components/profile/block-notification";
 import ClickOutside from "vue-click-outside";
@@ -70,10 +79,17 @@ export default {
       showPopup: false,
       modalNotification: false
     };
-	},
+  },
+  computed: {
+    ...mapState(["loginModal"])
+  },
   methods: {
     openLoginPopup(type) {
-      this.$emit("openLoginPopup", type);
+      let data = {
+        open: true,
+        type: type
+      };
+      this.$store.commit("UPDATE_LIGIN_POPUP", data);
     },
     getPopUp() {
       setTimeout(() => {

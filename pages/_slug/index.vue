@@ -2,7 +2,7 @@
     <component
         :is="type"
         :data="data"
-        :tag="tag"
+        tag
         :slug="$route.params.slug"
         :term="term"
         :pagination="pagination"

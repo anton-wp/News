@@ -60,7 +60,7 @@ export default {
     };
   },
   watch: {
-    "$route.fullPath"() {
+    "$route.path"() {
       this.activTabsStart(this.$store.state.tabs);
     }
   },
@@ -73,12 +73,12 @@ export default {
       if (!rout2) {
         if (this.typeTabs()) {
           let str = "";
-          rout = this.$route.fullPath.split("/");
+          rout = this.$route.path.split("/");
           rout = rout.map(rout => (rout = str.concat("/", rout)));
           rout = rout.map(rout => (rout === "/" ? (rout = undefined) : rout));
         } else {
           let str = "";
-          rout = this.$route.fullPath.split("/");
+          rout = this.$route.path.split("/");
           rout = rout.map(rout => (rout = str.concat("/", rout)));
           rout = rout.slice(1, 5);
         }

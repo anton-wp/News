@@ -93,10 +93,6 @@ export default {
     },
     openPage(page) {
       this.$emit("openPage", page);
-      this.$router.push({
-        path: "/profile/posts/draft/",
-        query: { page: page }
-      });
     }
   }
 };

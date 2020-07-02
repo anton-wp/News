@@ -17,11 +17,11 @@
     }
   }
 
-  .text {
-    font-size: 20px;
-    font-family: Open Sans, sans-serif !important;
-		vertical-align: bottom;
-  }
+  // .text {
+  //   font-size: 20px;
+  //   font-family: Open Sans, sans-serif !important;
+	// 	vertical-align: bottom;
+  // }
 
   .mark-news {
     padding: 0 5px;
@@ -31,9 +31,8 @@
     .text {
       padding-left: 3px;
       transition: 0.3s;
-      font-weight: 400;
-			font-size: 20px;
 			a {
+				font-weight: 600;
 				color: inherit;
 			}
     }

@@ -42,11 +42,18 @@ export default {
 			this.page = page
 			this.getPosts()
 		},
+		query () {
+			this.$router.push({
+        path: "/profile/posts/draft/",
+        query: { page: this.page }
+      });
+		},
 		getPosts () {
 			this.$http.get(`/api/profile/posts?status=Draft&page=${this.page}&limit=12`)
 				.then(res => {
 					this.posts = res.data.data
 					this.pagination = res.data.pagination
+					this.query()
 			})
 		}
 	}
