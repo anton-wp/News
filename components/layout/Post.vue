@@ -280,6 +280,9 @@ export default {
             },
             { title: this.data.title }
         ]);
+
+		console.log(this.data);
+
     },
     methods: {
         changeFontSize() {

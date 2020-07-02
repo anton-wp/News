@@ -1,17 +1,17 @@
 import Vue from 'vue'
 
 import Editor from '../components/editor/Editor';
-import VuejsClipper from 'vuejs-clipper';
+// import VuejsClipper from 'vuejs-clipper';
 import Toasted from 'vue-toasted';
 
 Vue.component('editor', Editor)
 
-Vue.use(VuejsClipper, {
-	components: {
-		clipperBasic: true,
-		clipperPreview: true
-	}
-})
+// Vue.use(VuejsClipper, {
+// 	components: {
+// 		clipperBasic: true,
+// 		clipperPreview: true
+// 	}
+// })
 
 let Options = {
 	position: 'bottom-center',

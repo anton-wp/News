@@ -77,7 +77,7 @@
                                 </label>
 
                                 <editor
-                                    v-if="postId && editContent"
+                                    v-if="postId"
                                     :postid="postId"
                                     :editContent="editContent"
                                     v-model="content"
@@ -314,7 +314,8 @@
                                 :max="5"
                                 @tag="addTag"
                                 @search-change="searchOptions"
-                                @select="saveDraft"
+                                @remove="saveDraft"
+                                @close="saveDraft"
                                 :class="(errorNotif && selectedLinkOption.length < 1) ? 'error' : ''"
                             ></multiselect>
 
@@ -455,21 +456,23 @@
                             </div>
                         </dropzone>
 
-                        <clipper-basic
+                        <vue-cropper
+                            v-if="imgCrop"
+                            ref="cropper"
                             :src="imgCrop"
-                            preview="preview"
-                            :grid="true"
-                            :ratio="16/9"
-                            ref="clipper"
-                            class="croper"
-                            @load="clipperLoaded"
-                            @error="errorCrop"
-                        >No image</clipper-basic>
+                            preview=".preview"
+                            @ready="clipperReady"
+                            @cropend="saveDraft"
+                            :movable="false"
+                            :rotatable="false"
+                            :zoomable="false"
+                            :aspect-ratio="16 / 9"
+                        />
                     </div>
 
                     <div class="col-12 col-lg-5 col-xl-4">
                         <div class="animation prev-img-block">
-                            <clipper-preview name="preview" v-if="imgCrop && fields.cropper"></clipper-preview>
+                            <div class="preview"></div>
 
                             <div class="header-metadata" v-if="categories">
                                 <span class="category js--post-category-preview">
@@ -543,14 +546,16 @@ import { months } from "~/constants/dates";
 import Multiselect from "vue-multiselect";
 import Dropzone from "nuxt-dropzone";
 import { clipperUpload } from "vuejs-clipper";
-// import { mapGetters } from "vuex";
+
+import VueCropper from "vue-cropperjs";
+import "cropperjs/dist/cropper.css";
 
 export default {
     middleware: "auth",
     components: {
         Multiselect,
         Dropzone,
-        clipperUpload
+        VueCropper
     },
 
     data() {
@@ -609,6 +614,7 @@ export default {
 
             // cropper
             imgCrop: undefined,
+            imgId: "1333",
             cropperX: undefined,
             cropperY: undefined,
             cropperW: undefined,
@@ -643,8 +649,8 @@ export default {
             fields: fields.fields,
             categories: cat.data,
             selectedCategory: cat.data[0].id,
-            options: opt.data
-            // selectedOption: opt.data[0].title
+            options: opt.data,
+            selectedOption: opt.data[0].title
         };
     },
 
@@ -708,6 +714,20 @@ export default {
             this.selectedLinkOption.push(tag);
         },
 
+        formatTags() {
+            const tagsForFormdata = this.selectedLinkOption.map(function(item) {
+                if (item.type === "created") {
+                    return item.name;
+                } else {
+                    return item.id;
+                }
+            });
+
+            console.log(tagsForFormdata);
+
+            return tagsForFormdata.toString();
+        },
+
         addFields() {
             this.$axios
                 .$get("api/profile/post-fields?action=create")
@@ -718,34 +738,6 @@ export default {
                     // this.errorMessage = error.response.data.message;
                 });
         },
-
-        // getCategories() {
-        //     this.$http
-        //         .get("https://dev.api.verdict.org/categories/")
-        //         .then(({ data }) => {
-        //             this.categories = data.data;
-
-        //             this.selectedCategory = this.categories[0].id;
-        //         })
-        //         .catch(error => {
-        //             // this.errorMessage = error.response.data.message;
-        //         });
-        // },
-
-        // getOptions() {
-        //     this.$http
-        //         .get(
-        //             "https://dev.api.verdict.org/posts/create-helpers/verdict-options/"
-        //         )
-        //         .then(({ data }) => {
-        //             this.options = data.data;
-
-        //             this.selectedOption = this.options[0].title;
-        //         })
-        //         .catch(error => {
-        //             // this.errorMessage = error.response.data.message;
-        //         });
-        // },
 
         monthDiff(dateFrom, dateTo) {
             return (
@@ -769,45 +761,22 @@ export default {
             this.date.minutes = this.now.getMinutes();
         },
 
-        formatTags() {
-            const tagsForFormdata = this.selectedLinkOption.map(function(item) {
-                if (item.type) {
-                    return item.name;
-                } else {
-                    return item.id;
-                }
-            });
-
-            return tagsForFormdata.toString();
-        },
-
         trigerInputUpload() {
             this.$refs.imgUploadInpt.click();
         },
 
-        clipperLoaded() {
+        clipperReady() {
             this.dropVisible = false;
             this.loadingDrop = false;
 
-            this.clipperChanged();
-
-            setTimeout(() => {
-                this.$refs.clipper.setTL$.next({ left: 1, top: 1 });
-                this.$refs.clipper.setWH$.next({ width: 50, height: 50 });
-
-                this.saveDraft();
-            }, 200);
-        },
-
-        clipperChanged() {
-            this.$refs.clipper.onChange$.subscribe(() => {
-                const cropPos = this.$refs.clipper.getDrawPos();
-
-                this.cropperX = Math.floor(cropPos.pos.sx);
-                this.cropperY = Math.floor(cropPos.pos.sy);
-                this.cropperW = Math.floor(cropPos.pos.swidth);
-                this.cropperH = Math.floor(cropPos.pos.sheight);
-            });
+            if (this.imgCrop) {
+                this.$refs.cropper.setCropBoxData({
+                    left: this.cropperX,
+                    top: this.cropperY,
+                    width: this.cropperW,
+                    height: this.cropperH
+                });
+            }
         },
 
         afterComplete(file, res) {
@@ -834,30 +803,87 @@ export default {
         },
 
         saveDraft() {
-            if (this.postId) {
-                this.$http
-                    .patch(`/api/posts/${this.postId}`, this.formData)
-                    .then(resp => {
-                        this.$toasted.show(resp.data.message);
-                        // console.log(resp);
-                    })
-                    .catch(error => {
-                        console.log(error);
-                        this.$toasted.show(error.data.message);
-                    });
+            if (this.$refs.cropper) {
+                const cropData = this.$refs.cropper.getCropBoxData();
 
-                return;
+                console.log(cropData);
+
+                this.cropperX = cropData.left;
+                this.cropperY = cropData.top;
+                this.cropperW = cropData.width;
+                this.cropperH = cropData.height;
+            }
+
+            const newData = {};
+
+            if (this.$v.title.$model) {
+                newData.title = this.$v.title.$model;
+            }
+            if (this.$v.subtitle.$model) {
+                newData.subtitle = this.$v.subtitle.$model;
+            }
+            if (this.content) {
+                newData.bodyJson = this.content;
+            }
+            if (this.selectedLinkOption.length) {
+                const tagsForFormdata = this.selectedLinkOption.map(function(
+                    item
+                ) {
+                    if (item.type === "created") {
+                        return item.name;
+                    } else {
+                        return item.id;
+                    }
+                });
+
+                newData.tags = tagsForFormdata.toString();
+            }
+            if (this.selectedCategory) {
+                newData.category = this.selectedCategory;
+            }
+            if (this.selectedOption) {
+                newData.verdictOption = this.selectedOption;
+            }
+            if (this.selectedDate && this.fields.publishedAt) {
+                newData.publishedAt = this.selectedDate;
+            }
+
+            if (this.forcePublish) {
+                newData.forcePublish = this.forcePublish;
+            }
+
+            if (this.imgCrop) {
+                newData.media = this.imgId;
+            }
+
+            if (this.$v.imgDescript.$model) {
+                newData.source = this.$v.imgDescript.$model;
+            }
+
+            if (this.cropperX || this.cropperX == 0) {
+                newData.cropperX = this.cropperX;
+            }
+            if (this.cropperY || this.cropperY == 0) {
+                newData.cropperY = this.cropperY;
+            }
+            if (this.cropperW) {
+                newData.cropperWidth = this.cropperW;
+            }
+            if (this.cropperH) {
+                newData.cropperHeight = this.cropperH;
             }
 
             this.$http
-                .post("/api/posts/", this.formData)
+                .patch(`/api/posts/${this.postId}`, newData)
                 .then(resp => {
-                    this.postId = resp.data.id;
                     this.$toasted.show(resp.data.message);
                 })
                 .catch(error => {
                     console.log(error);
+                    this.$toasted.show(error.data.message);
                 });
+
+            console.log(newData);
         },
 
         publishedPost() {
@@ -897,6 +923,7 @@ export default {
                 this.date.minutes
             );
         },
+
         disabledDates() {
             const diffs = {
                 months: this.monthDiff(this.now, this.selectedDate),
@@ -948,59 +975,6 @@ export default {
             }
 
             return cContent;
-        },
-
-        formData() {
-            const newData = {};
-
-            if (this.$v.title.$model) {
-                newData.title = this.$v.title.$model;
-            }
-            if (this.$v.subtitle.$model) {
-                newData.subTitle = this.$v.subtitle.$model;
-            }
-            if (this.content.length) {
-                newData.body = JSON.stringify(this.content);
-            }
-            if (this.formatTags().length) {
-                newData.tags = this.formatTags();
-            }
-            if (this.selectedCategory) {
-                newData.category = this.selectedCategory;
-            }
-            if (this.selectedOption) {
-                newData.verdictOption = this.selectedOption;
-            }
-            if (this.selectedDate) {
-                newData.publishedAt = this.selectedDate;
-            }
-
-            if (this.forcePublish) {
-                newData.forcePublish = this.forcePublish;
-            }
-
-            if (this.imgCrop) {
-                newData.featuredImage = this.imgId;
-            }
-
-            if (this.$v.imgDescript.$model) {
-                newData.source = this.$v.imgDescript.$model;
-            }
-
-            if (this.cropperX || this.cropperX == 0) {
-                newData.cropperX = this.cropperX;
-            }
-            if (this.cropperY || this.cropperY == 0) {
-                newData.cropperY = this.cropperY;
-            }
-            if (this.cropperW) {
-                newData.cropperWidth = this.cropperW;
-            }
-            if (this.cropperH) {
-                newData.cropperHeight = this.cropperH;
-            }
-
-            return newData;
         }
     },
 
@@ -1025,39 +999,39 @@ export default {
 
         this.dropOptions.headers.Authorization = this.$auth.getToken("local");
 
-        // this.$http
-        //     .post("/api/posts/")
-        //     .then(resp => {
-        //         this.postId = resp.data.id;
-        //         this.dropOptions.params.postId = resp.data.id;
-        //     })
-        //     .catch(error => {
-        //         console.log(error);
-        //     });
-
         this.$http
             .get(`/api/posts/${this.$route.params.slug}/edit`)
             .then(resp => {
                 console.log(resp);
 
                 this.postId = resp.data.data.id;
-                // this.selectedCategory = resp.data.data
                 this.selectedOption = resp.data.data.verdictOption;
                 this.title = resp.data.data.title;
                 this.editContent = resp.data.data.bodyJson;
                 this.content = resp.data.data.bodyJson;
                 this.featuredImage = resp.data.data.source;
-
-                console.log(this.editorContent);
+                this.selectedCategory = resp.data.data.category.id;
+                this.selectedOption = resp.data.data.verdictOption;
+                this.selectedLinkOption = resp.data.data.tags;
+                if (
+                    resp.data.data.featured.original &&
+                    resp.data.data.cropData
+                ) {
+                    this.cropperX = resp.data.data.cropData.x;
+                    this.cropperY = resp.data.data.cropData.y;
+                    this.cropperW = resp.data.data.cropData.width;
+                    this.cropperH = resp.data.data.cropData.height;
+                    this.imgCrop = resp.data.data.featured.original;
+                }
+                this.imgDescript = resp.data.data.featured.source;
+                this.subtitle = resp.data.data.subtitle;
             })
             .catch(error => {
                 console.log(error);
             });
-
-        // console.log(this.$route, "65656565");
     },
     mounted() {
-        this.$store.commit("SET_BREADCRUMBS", [{ title: "Add" }]);
+        this.$store.commit("SET_BREADCRUMBS", [{ title: "Edit" }]);
     }
 };
 </script>
@@ -1068,7 +1042,50 @@ export default {
 // @import "nuxt-dropzone/dropzone.css";
 @import "../../assets/utils/variables";
 @import "../../assets/utils/colors";
-
+.cropper-area {
+    width: 614px;
+}
+.actions {
+    margin-top: 1rem;
+}
+.actions a {
+    display: inline-block;
+    padding: 5px 15px;
+    background: #0062cc;
+    color: white;
+    text-decoration: none;
+    border-radius: 3px;
+    margin-right: 1rem;
+    margin-bottom: 1rem;
+}
+textarea {
+    width: 100%;
+    height: 100px;
+}
+.preview-area {
+    width: 307px;
+}
+.preview-area p {
+    font-size: 1.25rem;
+    margin: 0;
+    margin-bottom: 1rem;
+}
+.preview-area p:last-of-type {
+    margin-top: 1rem;
+}
+.preview {
+    width: 100%;
+    height: calc(372px * (9 / 16));
+    overflow: hidden;
+}
+.crop-placeholder {
+    width: 100%;
+    height: 200px;
+    background: #ccc;
+}
+.cropped-image img {
+    max-width: 100%;
+}
 .categoryCheckbox {
     width: 16px;
     height: 16px;
