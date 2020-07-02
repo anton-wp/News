@@ -165,7 +165,7 @@
           </div>
           <div class="col-lg-4">
             <follow v-if="!review"/>
-            <asideReview v-if="review"/>
+            <asideReview :postData="data" v-if="review"/>
           </div>
         </div>
       </div>

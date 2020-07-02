@@ -617,7 +617,7 @@ export default {
 
             // cropper
             imgCrop: undefined,
-            imgId: "1333",
+            imgId: null,
             cropperX: undefined,
             cropperY: undefined,
             cropperW: undefined,
@@ -1027,15 +1027,13 @@ export default {
                 this.selectedCategory = resp.data.category.id;
                 this.selectedOption = resp.data.verdictOption;
                 this.selectedLinkOption = resp.data.tags;
-                if (
-                    resp.data.featured.original &&
-                    resp.data.cropData
-                ) {
+                if (resp.data.featured.original && resp.data.cropData) {
                     this.cropperX = resp.data.cropData.x;
                     this.cropperY = resp.data.cropData.y;
                     this.cropperW = resp.data.cropData.width;
                     this.cropperH = resp.data.cropData.height;
                     this.imgCrop = resp.data.featured.original;
+                    this.imgId = resp.data.featured.id;
                 }
                 this.imgDescript = resp.data.featured.source;
                 this.subtitle = resp.data.subtitle;
@@ -1058,12 +1056,12 @@ export default {
 @import "../../assets/utils/colors";
 
 .crop-wrap {
-	position: relative;
-	overflow: hidden;
-	.visible-crop {
-		position: absolute;
-		top: 101%
-	}
+    position: relative;
+    overflow: hidden;
+    .visible-crop {
+        position: absolute;
+        top: 101%;
+    }
 }
 
 .preview-area {
