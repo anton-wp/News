@@ -939,9 +939,12 @@ export default {
 
         titlesLength() {
             const lengthTitle = {
-                title: this.$v.title.$model.length,
-                subtitle: this.$v.subtitle.$model.length
-            };
+                title: 0,
+                subtitle: 0
+						};
+
+						if (this.title) lengthTitle.title =  this.title.length;
+						if (this.subtitle) lengthTitle.subtitle =  this.subtitle.length;
 
             return lengthTitle;
         },
@@ -1007,8 +1010,16 @@ export default {
                 this.postId = resp.data.data.id;
                 this.selectedOption = resp.data.data.verdictOption;
                 this.title = resp.data.data.title;
-                this.editContent = resp.data.data.bodyJson;
-                this.content = resp.data.data.bodyJson;
+                if (resp.data.data.bodyJson !== null) {
+									console.log('1');
+
+                    this.content = resp.data.data.bodyJson;
+                    this.editContent = resp.data.data.bodyJson;
+                } else {
+									console.log("2");
+
+								}
+
                 this.featuredImage = resp.data.data.source;
                 this.selectedCategory = resp.data.data.category.id;
                 this.selectedOption = resp.data.data.verdictOption;

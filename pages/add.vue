@@ -974,9 +974,12 @@ export default {
 
         titlesLength() {
             const lengthTitle = {
-                title: this.$v.title.$model.length,
-                subtitle: this.$v.subtitle.$model.length
-            };
+                title: 0,
+                subtitle: 0
+						};
+
+						if (this.title) lengthTitle.title =  this.title.length;
+						if (this.subtitle) lengthTitle.subtitle =  this.subtitle.length;
 
             return lengthTitle;
         },
