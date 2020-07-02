@@ -77,7 +77,7 @@
                                 </label>
 
                                 <editor
-                                    v-if="postId && editContent"
+                                    v-if="postId"
                                     :postid="postId"
                                     :editContent="editContent"
                                     v-model="content"
@@ -314,7 +314,8 @@
                                 :max="5"
                                 @tag="addTag"
                                 @search-change="searchOptions"
-                                @select="saveDraft"
+                                @remove="saveDraft"
+                                @close="saveDraft"
                                 :class="(errorNotif && selectedLinkOption.length < 1) ? 'error' : ''"
                             ></multiselect>
 
@@ -420,56 +421,61 @@
                             />
                         </div>
 
-                        <dropzone
-                            id="foo"
-                            ref="drope"
-                            :options="dropOptions"
-                            :destroyDropzone="true"
-                            @vdropzone-success="afterComplete"
-                            @vdropzone-processing="loadingDrop=true; imgCrop=''"
-                            :include-styling="false"
-                            class="drop-wrap"
-                            v-if="dropVisible"
-                            :useCustomSlot="true"
-                        >
-                            <h3 class="drop-title text-center">
-                                Drag and drop your image
-                                <br />or
-                            </h3>
-                            <div class="drop-btn my-4">Choose Your Image</div>
+                        <div class="crop-wrap">
+                            <dropzone
+                                id="foo"
+                                ref="drope"
+                                :options="dropOptions"
+                                :destroyDropzone="true"
+                                @vdropzone-success="afterComplete"
+                                @vdropzone-processing="loadingDrop=true; imgCrop=''"
+                                :include-styling="false"
+                                class="drop-wrap"
+                                v-if="dropVisible"
+                                :useCustomSlot="true"
+                            >
+                                <h3 class="drop-title text-center">
+                                    Drag and drop your image
+                                    <br />or
+                                </h3>
+                                <div class="drop-btn my-4">Choose Your Image</div>
 
-                            <p class="drop-subtitle">maximum file size: 50mb</p>
+                                <p class="drop-subtitle">maximum file size: 50mb</p>
 
-                            <div
-                                v-if="errorNotif && !imgCrop"
-                                class="form-field-tip error-tip"
-                            >Featured image is required</div>
+                                <div
+                                    v-if="errorNotif && !imgCrop"
+                                    class="form-field-tip error-tip"
+                                >Featured image is required</div>
 
-                            <div class="cssload-container" v-if="loadingDrop">
-                                <div class="lds-ellipsis">
-                                    <div></div>
-                                    <div></div>
-                                    <div></div>
-                                    <div></div>
+                                <div class="cssload-container" v-if="loadingDrop">
+                                    <div class="lds-ellipsis">
+                                        <div></div>
+                                        <div></div>
+                                        <div></div>
+                                        <div></div>
+                                    </div>
                                 </div>
-                            </div>
-                        </dropzone>
+                            </dropzone>
 
-                        <clipper-basic
-                            :src="imgCrop"
-                            preview="preview"
-                            :grid="true"
-                            :ratio="16/9"
-                            ref="clipper"
-                            class="croper"
-                            @load="clipperLoaded"
-                            @error="errorCrop"
-                        >No image</clipper-basic>
+                            <vue-cropper
+                                v-if="imgCrop"
+                                ref="cropper"
+                                :src="imgCrop"
+                                preview=".preview"
+                                @ready="clipperReady"
+                                @cropend="saveDraft"
+                                :movable="false"
+                                :rotatable="false"
+                                :zoomable="false"
+                                :aspect-ratio="16 / 9"
+                                :class="{'visible-crop' : !visibleCrop}"
+                            />
+                        </div>
                     </div>
 
                     <div class="col-12 col-lg-5 col-xl-4">
                         <div class="animation prev-img-block">
-                            <clipper-preview name="preview" v-if="imgCrop && fields.cropper"></clipper-preview>
+                            <div class="preview"></div>
 
                             <div class="header-metadata" v-if="categories">
                                 <span class="category js--post-category-preview">
@@ -543,14 +549,16 @@ import { months } from "~/constants/dates";
 import Multiselect from "vue-multiselect";
 import Dropzone from "nuxt-dropzone";
 import { clipperUpload } from "vuejs-clipper";
-// import { mapGetters } from "vuex";
+
+import VueCropper from "vue-cropperjs";
+import "cropperjs/dist/cropper.css";
 
 export default {
     middleware: "auth",
     components: {
         Multiselect,
         Dropzone,
-        clipperUpload
+        VueCropper
     },
 
     data() {
@@ -609,10 +617,12 @@ export default {
 
             // cropper
             imgCrop: undefined,
+            imgId: null,
             cropperX: undefined,
             cropperY: undefined,
             cropperW: undefined,
             cropperH: undefined,
+            visibleCrop: false,
             dropOptions: {
                 url: "/api/media/image-preload/",
                 maxFilesize: 50, // MB
@@ -643,8 +653,8 @@ export default {
             fields: fields.fields,
             categories: cat.data,
             selectedCategory: cat.data[0].id,
-            options: opt.data
-            // selectedOption: opt.data[0].title
+            options: opt.data,
+            selectedOption: opt.data[0].title
         };
     },
 
@@ -667,12 +677,12 @@ export default {
             if (query) {
                 this.isLoading = true;
 
-                this.$http
-                    .get(
+                this.$axios
+                    .$get(
                         "https://dev.api.verdict.org/tags/list?search=" + query
                     )
                     .then(({ data }) => {
-                        this.linkOption = data.data;
+                        this.linkOption = data;
                         this.linkOption = [
                             ...this.linkOption,
                             ...this.newLinkOption
@@ -685,13 +695,13 @@ export default {
         searchAuthors(query) {
             this.isLoadingAuthor = true;
 
-            this.$http
-                .get(
+            this.$axios
+                .$get(
                     "https://dev.api.verdict.org/posts/create-helpers/authors-search?search=" +
                         query
                 )
                 .then(({ data }) => {
-                    this.authorsOption = data.data;
+                    this.authorsOption = data;
 
                     this.isLoadingAuthor = false;
                 });
@@ -708,6 +718,20 @@ export default {
             this.selectedLinkOption.push(tag);
         },
 
+        formatTags() {
+            const tagsForFormdata = this.selectedLinkOption.map(function(item) {
+                if (item.type === "created") {
+                    return item.name;
+                } else {
+                    return item.id;
+                }
+            });
+
+            console.log(tagsForFormdata);
+
+            return tagsForFormdata.toString();
+        },
+
         addFields() {
             this.$axios
                 .$get("api/profile/post-fields?action=create")
@@ -718,34 +742,6 @@ export default {
                     // this.errorMessage = error.response.data.message;
                 });
         },
-
-        // getCategories() {
-        //     this.$http
-        //         .get("https://dev.api.verdict.org/categories/")
-        //         .then(({ data }) => {
-        //             this.categories = data.data;
-
-        //             this.selectedCategory = this.categories[0].id;
-        //         })
-        //         .catch(error => {
-        //             // this.errorMessage = error.response.data.message;
-        //         });
-        // },
-
-        // getOptions() {
-        //     this.$http
-        //         .get(
-        //             "https://dev.api.verdict.org/posts/create-helpers/verdict-options/"
-        //         )
-        //         .then(({ data }) => {
-        //             this.options = data.data;
-
-        //             this.selectedOption = this.options[0].title;
-        //         })
-        //         .catch(error => {
-        //             // this.errorMessage = error.response.data.message;
-        //         });
-        // },
 
         monthDiff(dateFrom, dateTo) {
             return (
@@ -769,45 +765,25 @@ export default {
             this.date.minutes = this.now.getMinutes();
         },
 
-        formatTags() {
-            const tagsForFormdata = this.selectedLinkOption.map(function(item) {
-                if (item.type) {
-                    return item.name;
-                } else {
-                    return item.id;
-                }
-            });
-
-            return tagsForFormdata.toString();
-        },
-
         trigerInputUpload() {
             this.$refs.imgUploadInpt.click();
         },
 
-        clipperLoaded() {
+        clipperReady() {
             this.dropVisible = false;
             this.loadingDrop = false;
+            this.visibleCrop = true;
 
-            this.clipperChanged();
+            if (this.imgCrop) {
+                this.$refs.cropper.setCropBoxData({
+                    left: this.cropperX,
+                    top: this.cropperY,
+                    width: this.cropperW,
+                    height: this.cropperH
+                });
+            }
 
-            setTimeout(() => {
-                this.$refs.clipper.setTL$.next({ left: 1, top: 1 });
-                this.$refs.clipper.setWH$.next({ width: 50, height: 50 });
-
-                this.saveDraft();
-            }, 200);
-        },
-
-        clipperChanged() {
-            this.$refs.clipper.onChange$.subscribe(() => {
-                const cropPos = this.$refs.clipper.getDrawPos();
-
-                this.cropperX = Math.floor(cropPos.pos.sx);
-                this.cropperY = Math.floor(cropPos.pos.sy);
-                this.cropperW = Math.floor(cropPos.pos.swidth);
-                this.cropperH = Math.floor(cropPos.pos.sheight);
-            });
+            this.saveDraft();
         },
 
         afterComplete(file, res) {
@@ -816,8 +792,10 @@ export default {
             this.imgCrop = res.file;
         },
 
-        async uploadImg() {
+        uploadImg() {
+            this.dropVisible = true;
             this.loadingDrop = true;
+            this.visibleCrop = false;
             this.imgCrop = undefined;
 
             const formData = new FormData();
@@ -825,39 +803,97 @@ export default {
             formData.append("image", this.$refs.imgUploadInpt.files[0]);
             formData.append("postId", this.postId);
 
-            await this.$http
-                .post("/api/media/image-preload/", formData)
+            this.$axios
+                .$post("/api/media/image-preload/", formData)
                 .then(res => {
-                    this.imgCrop = res.data.file;
+                    this.imgId = res.mediaId;
+                    this.imgCrop = res.file;
                 })
                 .catch(error => console.error(error));
         },
 
         saveDraft() {
-            if (this.postId) {
-                this.$http
-                    .patch(`/api/posts/${this.postId}`, this.formData)
-                    .then(resp => {
-                        this.$toasted.show(resp.data.message);
-                        // console.log(resp);
-                    })
-                    .catch(error => {
-                        console.log(error);
-                        this.$toasted.show(error.data.message);
-                    });
+            if (this.$refs.cropper) {
+                const cropData = this.$refs.cropper.getCropBoxData();
 
-                return;
+                console.log(cropData);
+
+                this.cropperX = cropData.left;
+                this.cropperY = cropData.top;
+                this.cropperW = cropData.width;
+                this.cropperH = cropData.height;
             }
 
-            this.$http
-                .post("/api/posts/", this.formData)
+            const newData = {};
+
+            if (this.$v.title.$model) {
+                newData.title = this.$v.title.$model;
+            }
+            if (this.$v.subtitle.$model) {
+                newData.subtitle = this.$v.subtitle.$model;
+            }
+            if (this.content) {
+                newData.bodyJson = this.content;
+            }
+            if (this.selectedLinkOption.length) {
+                const tagsForFormdata = this.selectedLinkOption.map(function(
+                    item
+                ) {
+                    if (item.type === "created") {
+                        return item.name;
+                    } else {
+                        return item.id;
+                    }
+                });
+
+                newData.tags = tagsForFormdata.toString();
+            }
+            if (this.selectedCategory) {
+                newData.category = this.selectedCategory;
+            }
+            if (this.selectedOption) {
+                newData.verdictOption = this.selectedOption;
+            }
+            if (this.selectedDate && this.fields.publishedAt) {
+                newData.publishedAt = this.selectedDate;
+            }
+
+            if (this.forcePublish) {
+                newData.forcePublish = this.forcePublish;
+            }
+
+            if (this.imgCrop) {
+                newData.media = this.imgId;
+            }
+
+            if (this.$v.imgDescript.$model) {
+                newData.source = this.$v.imgDescript.$model;
+            }
+
+            if (this.cropperX || this.cropperX == 0) {
+                newData.cropperX = this.cropperX;
+            }
+            if (this.cropperY || this.cropperY == 0) {
+                newData.cropperY = this.cropperY;
+            }
+            if (this.cropperW) {
+                newData.cropperWidth = this.cropperW;
+            }
+            if (this.cropperH) {
+                newData.cropperHeight = this.cropperH;
+            }
+
+            this.$axios
+                .$patch(`/api/posts/${this.postId}`, newData)
                 .then(resp => {
-                    this.postId = resp.data.id;
-                    this.$toasted.show(resp.data.message);
+                    this.$toasted.show(resp.message);
                 })
                 .catch(error => {
                     console.log(error);
+                    this.$toasted.show(error.message);
                 });
+
+            console.log(newData);
         },
 
         publishedPost() {
@@ -870,15 +906,15 @@ export default {
 
             this.errorNotif = false;
 
-            this.$http
-                .patch(`/api/posts/${this.postId}/publish`, this.formData)
+            this.$axios
+                .$patch(`/api/posts/${this.postId}/publish`, this.formData)
                 .then(resp => {
                     // console.log(resp);
-                    this.$toasted.show(resp.data.message);
+                    this.$toasted.show(resp.message);
                 })
                 .catch(error => {
                     console.log(error);
-                    this.$toasted.show(error.data.message);
+                    this.$toasted.show(error.message);
                 });
         }
     },
@@ -897,6 +933,7 @@ export default {
                 this.date.minutes
             );
         },
+
         disabledDates() {
             const diffs = {
                 months: this.monthDiff(this.now, this.selectedDate),
@@ -912,9 +949,12 @@ export default {
 
         titlesLength() {
             const lengthTitle = {
-                title: this.$v.title.$model.length,
-                subtitle: this.$v.subtitle.$model.length
+                title: 0,
+                subtitle: 0
             };
+
+            if (this.title) lengthTitle.title = this.title.length;
+            if (this.subtitle) lengthTitle.subtitle = this.subtitle.length;
 
             return lengthTitle;
         },
@@ -948,59 +988,6 @@ export default {
             }
 
             return cContent;
-        },
-
-        formData() {
-            const newData = {};
-
-            if (this.$v.title.$model) {
-                newData.title = this.$v.title.$model;
-            }
-            if (this.$v.subtitle.$model) {
-                newData.subTitle = this.$v.subtitle.$model;
-            }
-            if (this.content.length) {
-                newData.body = JSON.stringify(this.content);
-            }
-            if (this.formatTags().length) {
-                newData.tags = this.formatTags();
-            }
-            if (this.selectedCategory) {
-                newData.category = this.selectedCategory;
-            }
-            if (this.selectedOption) {
-                newData.verdictOption = this.selectedOption;
-            }
-            if (this.selectedDate) {
-                newData.publishedAt = this.selectedDate;
-            }
-
-            if (this.forcePublish) {
-                newData.forcePublish = this.forcePublish;
-            }
-
-            if (this.imgCrop) {
-                newData.featuredImage = this.imgId;
-            }
-
-            if (this.$v.imgDescript.$model) {
-                newData.source = this.$v.imgDescript.$model;
-            }
-
-            if (this.cropperX || this.cropperX == 0) {
-                newData.cropperX = this.cropperX;
-            }
-            if (this.cropperY || this.cropperY == 0) {
-                newData.cropperY = this.cropperY;
-            }
-            if (this.cropperW) {
-                newData.cropperWidth = this.cropperW;
-            }
-            if (this.cropperH) {
-                newData.cropperHeight = this.cropperH;
-            }
-
-            return newData;
         }
     },
 
@@ -1025,39 +1012,38 @@ export default {
 
         this.dropOptions.headers.Authorization = this.$auth.getToken("local");
 
-        // this.$http
-        //     .post("/api/posts/")
-        //     .then(resp => {
-        //         this.postId = resp.data.id;
-        //         this.dropOptions.params.postId = resp.data.id;
-        //     })
-        //     .catch(error => {
-        //         console.log(error);
-        //     });
-
-        this.$http
-            .get(`/api/posts/${this.$route.params.slug}/edit`)
+        this.$axios
+            .$get(`/api/posts/${this.$route.params.slug}/edit`)
             .then(resp => {
-                console.log(resp);
+                this.postId = resp.data.id;
+                this.selectedOption = resp.data.verdictOption;
+                this.title = resp.data.title;
+                if (resp.data.bodyJson) {
+                    this.content = resp.data.bodyJson;
+                    this.editContent = resp.data.bodyJson;
+                }
 
-                this.postId = resp.data.data.id;
-                // this.selectedCategory = resp.data.data
-                this.selectedOption = resp.data.data.verdictOption;
-                this.title = resp.data.data.title;
-                this.editContent = resp.data.data.bodyJson;
-                this.content = resp.data.data.bodyJson;
-                this.featuredImage = resp.data.data.source;
-
-                console.log(this.editorContent);
+                this.featuredImage = resp.data.source;
+                this.selectedCategory = resp.data.category.id;
+                this.selectedOption = resp.data.verdictOption;
+                this.selectedLinkOption = resp.data.tags;
+                if (resp.data.featured.original && resp.data.cropData) {
+                    this.cropperX = resp.data.cropData.x;
+                    this.cropperY = resp.data.cropData.y;
+                    this.cropperW = resp.data.cropData.width;
+                    this.cropperH = resp.data.cropData.height;
+                    this.imgCrop = resp.data.featured.original;
+                    this.imgId = resp.data.featured.id;
+                }
+                this.imgDescript = resp.data.featured.source;
+                this.subtitle = resp.data.subtitle;
             })
             .catch(error => {
                 console.log(error);
             });
-
-        // console.log(this.$route, "65656565");
     },
     mounted() {
-        this.$store.commit("SET_BREADCRUMBS", [{ title: "Add" }]);
+        this.$store.commit("SET_BREADCRUMBS", [{ title: "Edit" }]);
     }
 };
 </script>
@@ -1068,6 +1054,40 @@ export default {
 // @import "nuxt-dropzone/dropzone.css";
 @import "../../assets/utils/variables";
 @import "../../assets/utils/colors";
+
+.crop-wrap {
+    position: relative;
+    overflow: hidden;
+    .visible-crop {
+        position: absolute;
+        top: 101%;
+    }
+}
+
+.preview-area {
+    width: 307px;
+}
+.preview-area p {
+    font-size: 1.25rem;
+    margin: 0;
+    margin-bottom: 1rem;
+}
+.preview-area p:last-of-type {
+    margin-top: 1rem;
+}
+.preview {
+    width: 100%;
+    height: calc(400px * (9 / 16));
+    overflow: hidden;
+}
+.crop-placeholder {
+    width: 100%;
+    height: 200px;
+    background: #ccc;
+}
+.cropped-image img {
+    max-width: 100%;
+}
 
 .categoryCheckbox {
     width: 16px;
@@ -1242,8 +1262,11 @@ select {
     padding-top: 49px;
     position: absolute;
     top: 30px;
+    // opacity: 0.5;
 
     bottom: 30px;
+    // border-bottom-left-radius: 10px;
+    // border-bottom-right-radius: 10px;
     border-radius: 10px;
     z-index: 1;
     pointer-events: none;
@@ -1398,6 +1421,9 @@ select {
 
 .add-post-wrapper {
     margin-top: 10px;
+    // .invalid {
+    //   // opacity: 0.3;
+    // }
 
     width: 100%;
 
@@ -1543,6 +1569,7 @@ select {
                 font-size: 1.2em;
                 letter-spacing: 0.5px;
                 margin-bottom: 0.1em;
+                // font-family: "Open Sans";
 
                 span {
                     font-weight: 600;
@@ -1573,6 +1600,7 @@ select {
             textarea,
             select,
             input {
+                // font-family: "Open Sans";
                 width: 100%;
                 display: block;
                 text-indent: 0;
@@ -1678,6 +1706,7 @@ select {
             line-height: 1.5;
             color: #0a0a0a;
             -webkit-font-smoothing: antialiased;
+            // font-family: open sans, Helvetica Neue, Helvetica, Roboto, Arial, sans-serif;
             -webkit-box-direction: normal;
             font-size: 0.9em;
             text-transform: uppercase;
@@ -1796,6 +1825,7 @@ select {
     .error-tip {
         line-height: 1.5;
         -webkit-font-smoothing: antialiased;
+        // font-family: open sans,Helvetica Neue,Helvetica,Roboto,Arial,sans-serif;
         -webkit-box-direction: normal;
         text-align: center;
         user-select: none;
@@ -1848,9 +1878,12 @@ select {
     right: 0;
     text-align: center;
     z-index: 999;
+    // transition: opacity .3s, visibility .3s, transform .2s ease-out;
     margin-bottom: 50px;
     pointer-events: none;
     padding-top: 10px;
+    // opacity: 1;
+    // transform: translateY(0);
     bottom: 0px;
 
     div {
@@ -1903,6 +1936,18 @@ select {
     }
 }
 
+// :host {
+//   display: block;
+// }
+
+// .open-close-container {
+//   border: 1px solid #dddddd;
+//   margin-top: 1em;
+//   padding: 20px 20px 0px 20px;
+//   color: #000000;
+//   font-weight: bold;
+//   font-size: 20px;
+// }
 .title-posts {
     cursor: pointer;
     font-weight: 700;

@@ -38,12 +38,14 @@ export default {
              */
             holderId: "editor",
 
+            data: this.editContent,
+
             tools: {
                 header: Header,
                 linkTool: {
                     class: LinkTool,
                     config: {
-                        endpoint: "/api/posts/create-helpers/link-meta" // Your backend endpoint for url data fetching
+                        endpoint: "/api/posts/create-helpers/link-meta"
                     }
                 },
                 image: {
@@ -94,8 +96,6 @@ export default {
                     }
                 }
             },
-
-            data: this.editContent,
 
             onChange: () => {
                 this.save();

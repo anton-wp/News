@@ -1,7 +1,6 @@
 <template>
-  <component
+  <post
     v-if="data"
-    :is="type"
     :data="data"
     tag
     :slug="$route.params.slug"
@@ -13,15 +12,11 @@
 </template>
 
 <script>
-import Category from "@/components/layout/Category";
 import Post from "@/components/layout/Post";
 
 export default {
-  amp: "hybrid",
-  ampLayout: "default.amp",
   components: {
-    Post,
-    Category
+    Post
   },
   data() {
     return {
@@ -63,5 +58,3 @@ export default {
   }
 };
 </script>
-
-
