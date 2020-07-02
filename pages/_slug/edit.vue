@@ -804,7 +804,7 @@ export default {
             formData.append("postId", this.postId);
 
             this.$axios
-                .post("/api/media/image-preload/", formData)
+                .$post("/api/media/image-preload/", formData)
                 .then(res => {
                     this.imgId = res.mediaId;
                     this.imgCrop = res.file;
@@ -884,7 +884,7 @@ export default {
             }
 
             this.$axios
-                .patch(`/api/posts/${this.postId}`, newData)
+                .$patch(`/api/posts/${this.postId}`, newData)
                 .then(resp => {
                     this.$toasted.show(resp.message);
                 })
@@ -907,7 +907,7 @@ export default {
             this.errorNotif = false;
 
             this.$axios
-                .patch(`/api/posts/${this.postId}/publish`, this.formData)
+                .$patch(`/api/posts/${this.postId}/publish`, this.formData)
                 .then(resp => {
                     // console.log(resp);
                     this.$toasted.show(resp.message);
@@ -1013,7 +1013,7 @@ export default {
         this.dropOptions.headers.Authorization = this.$auth.getToken("local");
 
         this.$axios
-            .get(`/api/posts/${this.$route.params.slug}/edit`)
+            .$get(`/api/posts/${this.$route.params.slug}/edit`)
             .then(resp => {
                 this.postId = resp.data.id;
                 this.selectedOption = resp.data.verdictOption;
