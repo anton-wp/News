@@ -78,7 +78,7 @@ export default {
         open: true,
         type: 'logIn'
       };
-      this.$store.commit("UPDATE_LIGIN_POPUP", data);
+      this.$store.commit("UPDATE_LOGIN_POPUP", data);
     },
   }
 };

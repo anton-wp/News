@@ -57,6 +57,8 @@
     text-align: center;
 
     span {
+			display: inline-block;
+			min-width: 184px;
       position: relative;
       font-size: 0.95rem;
       padding: 1.15em 2.8em;

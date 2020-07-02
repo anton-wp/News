@@ -1,5 +1,6 @@
 <template>
   <div class="profile-layout">
+		<!-- <a href="#123">kjhg</a> -->
     <custom-svg />
     <app-header />
     <hot-news />
@@ -7,7 +8,7 @@
     <big-header />
 		<get-profile />
     <div class="container">
-      <div class="row">
+      <div class="row" >
         <div class="col-12 profile-bottom">
           <div class="line" />
         </div>
