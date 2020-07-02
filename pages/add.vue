@@ -423,53 +423,55 @@
                             />
                         </div>
 
-                        <dropzone
-                            id="foo"
-                            ref="drope"
-                            :options="dropOptions"
-                            :destroyDropzone="true"
-                            @vdropzone-success="afterComplete"
-                            @vdropzone-processing="loadingDrop=true; imgCrop=''"
-                            :include-styling="false"
-                            class="drop-wrap"
-                            v-if="dropVisible"
-                            :useCustomSlot="true"
-                        >
-                            <h3 class="drop-title text-center">
-                                Drag and drop your image
-                                <br />or
-                            </h3>
-                            <div class="drop-btn my-4">Choose Your Image</div>
+                        <div class="crop-wrap">
+                            <dropzone
+                                id="foo"
+                                ref="drope"
+                                :options="dropOptions"
+                                :destroyDropzone="true"
+                                @vdropzone-success="afterComplete"
+                                @vdropzone-processing="loadingDrop=true; imgCrop=''"
+                                :include-styling="false"
+                                class="drop-wrap"
+                                v-if="dropVisible"
+                                :useCustomSlot="true"
+                            >
+                                <h3 class="drop-title text-center">
+                                    Drag and drop your image
+                                    <br />or
+                                </h3>
+                                <div class="drop-btn my-4">Choose Your Image</div>
 
-                            <p class="drop-subtitle">maximum file size: 50mb</p>
+                                <p class="drop-subtitle">maximum file size: 50mb</p>
 
-                            <div
-                                v-if="errorNotif && !imgCrop"
-                                class="form-field-tip error-tip"
-                            >Featured image is required</div>
+                                <div
+                                    v-if="errorNotif && !imgCrop"
+                                    class="form-field-tip error-tip"
+                                >Featured image is required</div>
 
-                            <div class="cssload-container" v-if="loadingDrop">
-                                <div class="lds-ellipsis">
-                                    <div></div>
-                                    <div></div>
-                                    <div></div>
-                                    <div></div>
+                                <div class="cssload-container" v-if="loadingDrop">
+                                    <div class="lds-ellipsis">
+                                        <div></div>
+                                        <div></div>
+                                        <div></div>
+                                        <div></div>
+                                    </div>
                                 </div>
-                            </div>
-                        </dropzone>
-
-                        <vue-cropper
-                            v-if="imgCrop"
-                            ref="cropper"
-                            :aspect-ratio="16 / 9"
-                            :src="imgCrop"
-                            preview=".preview"
-                            :movable="false"
-                            :rotatable="false"
-                            :zoomable="false"
-                            @ready="clipperReady"
-                            @cropend="saveDraft"
-                        />
+                            </dropzone>
+                            <vue-cropper
+                                v-if="imgCrop"
+                                ref="cropper"
+                                :aspect-ratio="16 / 9"
+                                :src="imgCrop"
+                                preview=".preview"
+                                :movable="false"
+                                :rotatable="false"
+                                :zoomable="false"
+                                @ready="clipperReady"
+                                @cropend="saveDraft"
+                                :class="{'visible-crop' : !visibleCrop}"
+                            />
+                        </div>
                     </div>
 
                     <div class="col-12 col-lg-5 col-xl-4">
@@ -620,6 +622,7 @@ export default {
             cropperY: undefined,
             cropperW: undefined,
             cropperH: undefined,
+            visibleCrop: false,
             dropOptions: {
                 url: "/api/media/image-preload/",
                 maxFilesize: 50, // MB
@@ -679,12 +682,12 @@ export default {
             if (query) {
                 this.isLoading = true;
 
-                this.$http
-                    .get(
+                this.$axios
+                    .$get(
                         "https://dev.api.verdict.org/tags/list?search=" + query
                     )
                     .then(({ data }) => {
-                        this.linkOption = data.data;
+                        this.linkOption = data;
                         this.linkOption = [
                             ...this.linkOption,
                             ...this.newLinkOption
@@ -697,13 +700,13 @@ export default {
         searchAuthors(query) {
             this.isLoadingAuthor = true;
 
-            this.$http
-                .get(
+            this.$axios
+                .$get(
                     "https://dev.api.verdict.org/posts/create-helpers/authors-search?search=" +
                         query
                 )
                 .then(({ data }) => {
-                    this.authorsOption = data.data;
+                    this.authorsOption = data;
 
                     this.isLoadingAuthor = false;
                 });
@@ -745,34 +748,6 @@ export default {
                 });
         },
 
-        // getCategories() {
-        //     this.$http
-        //         .get("https://dev.api.verdict.org/categories/")
-        //         .then(({ data }) => {
-        //             this.categories = data.data;
-
-        //             this.selectedCategory = this.categories[0].id;
-        //         })
-        //         .catch(error => {
-        //             // this.errorMessage = error.response.data.message;
-        //         });
-        // },
-
-        // getOptions() {
-        //     this.$http
-        //         .get(
-        //             "https://dev.api.verdict.org/posts/create-helpers/verdict-options/"
-        //         )
-        //         .then(({ data }) => {
-        //             this.options = data.data;
-
-        //             this.selectedOption = this.options[0].title;
-        //         })
-        //         .catch(error => {
-        //             // this.errorMessage = error.response.data.message;
-        //         });
-        // },
-
         monthDiff(dateFrom, dateTo) {
             return (
                 dateTo.getMonth() -
@@ -802,6 +777,7 @@ export default {
         clipperReady() {
             this.dropVisible = false;
             this.loadingDrop = false;
+            this.visibleCrop = true;
 
             if (this.imgCrop) {
                 this.$refs.cropper.setCropBoxData({
@@ -811,6 +787,8 @@ export default {
                     height: this.cropperH
                 });
             }
+
+            this.saveDraft();
         },
 
         afterComplete(file, res) {
@@ -821,7 +799,9 @@ export default {
         },
 
         uploadImg() {
+            this.dropVisible = true;
             this.loadingDrop = true;
+            this.visibleCrop = false;
             this.imgCrop = undefined;
 
             const formData = new FormData();
@@ -829,11 +809,11 @@ export default {
             formData.append("image", this.$refs.imgUploadInpt.files[0]);
             formData.append("postId", this.postId);
 
-            this.$http
-                .post("/api/media/image-preload/", formData)
+            this.$axios
+                .$post("/api/media/image-preload/", formData)
                 .then(res => {
-                    this.imgId = res.data.mediaId;
-                    this.imgCrop = res.data.file;
+                    this.imgId = res.mediaId;
+                    this.imgCrop = res.file;
                 })
                 .catch(error => console.error(error));
         },
@@ -841,8 +821,6 @@ export default {
         saveDraft() {
             if (this.$refs.cropper) {
                 const cropData = this.$refs.cropper.getCropBoxData();
-
-                console.log(cropData);
 
                 this.cropperX = Math.floor(cropData.left);
                 this.cropperY = Math.floor(cropData.top);
@@ -909,17 +887,15 @@ export default {
                 newData.cropperHeight = this.cropperH;
             }
 
-            this.$http
-                .patch(`/api/posts/${this.postId}`, newData)
+            this.$axios
+                .$patch(`/api/posts/${this.postId}`, newData)
                 .then(resp => {
-                    this.$toasted.show(resp.data.message);
+                    this.$toasted.show(resp.message);
                 })
                 .catch(error => {
                     console.log(error);
-                    this.$toasted.show(error.data.message);
+                    this.$toasted.show(error.message);
                 });
-
-            console.log(newData);
         },
 
         publishedPost() {
@@ -932,15 +908,15 @@ export default {
 
             this.errorNotif = false;
 
-            this.$http
-                .patch(`/api/posts/${this.postId}/publish`, this.formData)
+            this.$axios
+                .$patch(`/api/posts/${this.postId}/publish`, this.formData)
                 .then(resp => {
                     // console.log(resp);
-                    this.$toasted.show(resp.data.message);
+                    this.$toasted.show(resp.message);
                 })
                 .catch(error => {
                     console.log(error);
-                    this.$toasted.show(error.data.message);
+                    this.$toasted.show(error.message);
                 });
         }
     },
@@ -976,10 +952,10 @@ export default {
             const lengthTitle = {
                 title: 0,
                 subtitle: 0
-						};
+            };
 
-						if (this.title) lengthTitle.title =  this.title.length;
-						if (this.subtitle) lengthTitle.subtitle =  this.subtitle.length;
+            if (this.title) lengthTitle.title = this.title.length;
+            if (this.subtitle) lengthTitle.subtitle = this.subtitle.length;
 
             return lengthTitle;
         },
@@ -1035,15 +1011,11 @@ export default {
             this.minutes.push(("0" + i).slice(-2));
         }
 
-        // this.addFields();
-        // this.getCategories();
-        // this.getOptions();
-
-        this.$http
-            .post("/api/posts/")
+        this.$axios
+            .$post("/api/posts/")
             .then(resp => {
-                this.postId = resp.data.id;
-                this.dropOptions.params.postId = resp.data.id;
+                this.postId = resp.id;
+                this.dropOptions.params.postId = resp.id;
             })
             .catch(error => {
                 console.log(error);
@@ -1063,6 +1035,15 @@ export default {
 // @import "nuxt-dropzone/dropzone.css";
 @import "../assets/utils/variables";
 @import "../assets/utils/colors";
+
+.crop-wrap {
+	position: relative;
+	overflow: hidden;
+	.visible-crop {
+		position: absolute;
+		top: 101%
+	}
+}
 
 .preview-area {
     width: 307px;

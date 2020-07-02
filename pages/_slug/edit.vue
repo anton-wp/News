@@ -421,53 +421,56 @@
                             />
                         </div>
 
-                        <dropzone
-                            id="foo"
-                            ref="drope"
-                            :options="dropOptions"
-                            :destroyDropzone="true"
-                            @vdropzone-success="afterComplete"
-                            @vdropzone-processing="loadingDrop=true; imgCrop=''"
-                            :include-styling="false"
-                            class="drop-wrap"
-                            v-if="dropVisible"
-                            :useCustomSlot="true"
-                        >
-                            <h3 class="drop-title text-center">
-                                Drag and drop your image
-                                <br />or
-                            </h3>
-                            <div class="drop-btn my-4">Choose Your Image</div>
+                        <div class="crop-wrap">
+                            <dropzone
+                                id="foo"
+                                ref="drope"
+                                :options="dropOptions"
+                                :destroyDropzone="true"
+                                @vdropzone-success="afterComplete"
+                                @vdropzone-processing="loadingDrop=true; imgCrop=''"
+                                :include-styling="false"
+                                class="drop-wrap"
+                                v-if="dropVisible"
+                                :useCustomSlot="true"
+                            >
+                                <h3 class="drop-title text-center">
+                                    Drag and drop your image
+                                    <br />or
+                                </h3>
+                                <div class="drop-btn my-4">Choose Your Image</div>
 
-                            <p class="drop-subtitle">maximum file size: 50mb</p>
+                                <p class="drop-subtitle">maximum file size: 50mb</p>
 
-                            <div
-                                v-if="errorNotif && !imgCrop"
-                                class="form-field-tip error-tip"
-                            >Featured image is required</div>
+                                <div
+                                    v-if="errorNotif && !imgCrop"
+                                    class="form-field-tip error-tip"
+                                >Featured image is required</div>
 
-                            <div class="cssload-container" v-if="loadingDrop">
-                                <div class="lds-ellipsis">
-                                    <div></div>
-                                    <div></div>
-                                    <div></div>
-                                    <div></div>
+                                <div class="cssload-container" v-if="loadingDrop">
+                                    <div class="lds-ellipsis">
+                                        <div></div>
+                                        <div></div>
+                                        <div></div>
+                                        <div></div>
+                                    </div>
                                 </div>
-                            </div>
-                        </dropzone>
+                            </dropzone>
 
-                        <vue-cropper
-                            v-if="imgCrop"
-                            ref="cropper"
-                            :src="imgCrop"
-                            preview=".preview"
-                            @ready="clipperReady"
-                            @cropend="saveDraft"
-                            :movable="false"
-                            :rotatable="false"
-                            :zoomable="false"
-                            :aspect-ratio="16 / 9"
-                        />
+                            <vue-cropper
+                                v-if="imgCrop"
+                                ref="cropper"
+                                :src="imgCrop"
+                                preview=".preview"
+                                @ready="clipperReady"
+                                @cropend="saveDraft"
+                                :movable="false"
+                                :rotatable="false"
+                                :zoomable="false"
+                                :aspect-ratio="16 / 9"
+                                :class="{'visible-crop' : !visibleCrop}"
+                            />
+                        </div>
                     </div>
 
                     <div class="col-12 col-lg-5 col-xl-4">
@@ -619,6 +622,7 @@ export default {
             cropperY: undefined,
             cropperW: undefined,
             cropperH: undefined,
+            visibleCrop: false,
             dropOptions: {
                 url: "/api/media/image-preload/",
                 maxFilesize: 50, // MB
@@ -673,12 +677,12 @@ export default {
             if (query) {
                 this.isLoading = true;
 
-                this.$http
-                    .get(
+                this.$axios
+                    .$get(
                         "https://dev.api.verdict.org/tags/list?search=" + query
                     )
                     .then(({ data }) => {
-                        this.linkOption = data.data;
+                        this.linkOption = data;
                         this.linkOption = [
                             ...this.linkOption,
                             ...this.newLinkOption
@@ -691,13 +695,13 @@ export default {
         searchAuthors(query) {
             this.isLoadingAuthor = true;
 
-            this.$http
-                .get(
+            this.$axios
+                .$get(
                     "https://dev.api.verdict.org/posts/create-helpers/authors-search?search=" +
                         query
                 )
                 .then(({ data }) => {
-                    this.authorsOption = data.data;
+                    this.authorsOption = data;
 
                     this.isLoadingAuthor = false;
                 });
@@ -768,6 +772,7 @@ export default {
         clipperReady() {
             this.dropVisible = false;
             this.loadingDrop = false;
+            this.visibleCrop = true;
 
             if (this.imgCrop) {
                 this.$refs.cropper.setCropBoxData({
@@ -777,6 +782,8 @@ export default {
                     height: this.cropperH
                 });
             }
+
+            this.saveDraft();
         },
 
         afterComplete(file, res) {
@@ -785,8 +792,10 @@ export default {
             this.imgCrop = res.file;
         },
 
-        async uploadImg() {
+        uploadImg() {
+            this.dropVisible = true;
             this.loadingDrop = true;
+            this.visibleCrop = false;
             this.imgCrop = undefined;
 
             const formData = new FormData();
@@ -794,10 +803,11 @@ export default {
             formData.append("image", this.$refs.imgUploadInpt.files[0]);
             formData.append("postId", this.postId);
 
-            await this.$http
+            this.$axios
                 .post("/api/media/image-preload/", formData)
                 .then(res => {
-                    this.imgCrop = res.data.file;
+                    this.imgId = res.mediaId;
+                    this.imgCrop = res.file;
                 })
                 .catch(error => console.error(error));
         },
@@ -873,14 +883,14 @@ export default {
                 newData.cropperHeight = this.cropperH;
             }
 
-            this.$http
+            this.$axios
                 .patch(`/api/posts/${this.postId}`, newData)
                 .then(resp => {
-                    this.$toasted.show(resp.data.message);
+                    this.$toasted.show(resp.message);
                 })
                 .catch(error => {
                     console.log(error);
-                    this.$toasted.show(error.data.message);
+                    this.$toasted.show(error.message);
                 });
 
             console.log(newData);
@@ -896,15 +906,15 @@ export default {
 
             this.errorNotif = false;
 
-            this.$http
+            this.$axios
                 .patch(`/api/posts/${this.postId}/publish`, this.formData)
                 .then(resp => {
                     // console.log(resp);
-                    this.$toasted.show(resp.data.message);
+                    this.$toasted.show(resp.message);
                 })
                 .catch(error => {
                     console.log(error);
-                    this.$toasted.show(error.data.message);
+                    this.$toasted.show(error.message);
                 });
         }
     },
@@ -941,10 +951,10 @@ export default {
             const lengthTitle = {
                 title: 0,
                 subtitle: 0
-						};
+            };
 
-						if (this.title) lengthTitle.title =  this.title.length;
-						if (this.subtitle) lengthTitle.subtitle =  this.subtitle.length;
+            if (this.title) lengthTitle.title = this.title.length;
+            if (this.subtitle) lengthTitle.subtitle = this.subtitle.length;
 
             return lengthTitle;
         },
@@ -1002,40 +1012,33 @@ export default {
 
         this.dropOptions.headers.Authorization = this.$auth.getToken("local");
 
-        this.$http
+        this.$axios
             .get(`/api/posts/${this.$route.params.slug}/edit`)
             .then(resp => {
-                console.log(resp);
-
-                this.postId = resp.data.data.id;
-                this.selectedOption = resp.data.data.verdictOption;
-                this.title = resp.data.data.title;
-                if (resp.data.data.bodyJson !== null) {
-									console.log('1');
-
-                    this.content = resp.data.data.bodyJson;
-                    this.editContent = resp.data.data.bodyJson;
-                } else {
-									console.log("2");
-
-								}
-
-                this.featuredImage = resp.data.data.source;
-                this.selectedCategory = resp.data.data.category.id;
-                this.selectedOption = resp.data.data.verdictOption;
-                this.selectedLinkOption = resp.data.data.tags;
-                if (
-                    resp.data.data.featured.original &&
-                    resp.data.data.cropData
-                ) {
-                    this.cropperX = resp.data.data.cropData.x;
-                    this.cropperY = resp.data.data.cropData.y;
-                    this.cropperW = resp.data.data.cropData.width;
-                    this.cropperH = resp.data.data.cropData.height;
-                    this.imgCrop = resp.data.data.featured.original;
+                this.postId = resp.data.id;
+                this.selectedOption = resp.data.verdictOption;
+                this.title = resp.data.title;
+                if (resp.data.bodyJson) {
+                    this.content = resp.data.bodyJson;
+                    this.editContent = resp.data.bodyJson;
                 }
-                this.imgDescript = resp.data.data.featured.source;
-                this.subtitle = resp.data.data.subtitle;
+
+                this.featuredImage = resp.data.source;
+                this.selectedCategory = resp.data.category.id;
+                this.selectedOption = resp.data.verdictOption;
+                this.selectedLinkOption = resp.data.tags;
+                if (
+                    resp.data.featured.original &&
+                    resp.data.cropData
+                ) {
+                    this.cropperX = resp.data.cropData.x;
+                    this.cropperY = resp.data.cropData.y;
+                    this.cropperW = resp.data.cropData.width;
+                    this.cropperH = resp.data.cropData.height;
+                    this.imgCrop = resp.data.featured.original;
+                }
+                this.imgDescript = resp.data.featured.source;
+                this.subtitle = resp.data.subtitle;
             })
             .catch(error => {
                 console.log(error);
@@ -1053,26 +1056,16 @@ export default {
 // @import "nuxt-dropzone/dropzone.css";
 @import "../../assets/utils/variables";
 @import "../../assets/utils/colors";
-.cropper-area {
-    width: 614px;
+
+.crop-wrap {
+	position: relative;
+	overflow: hidden;
+	.visible-crop {
+		position: absolute;
+		top: 101%
+	}
 }
-.actions {
-    margin-top: 1rem;
-}
-.actions a {
-    display: inline-block;
-    padding: 5px 15px;
-    background: #0062cc;
-    color: white;
-    text-decoration: none;
-    border-radius: 3px;
-    margin-right: 1rem;
-    margin-bottom: 1rem;
-}
-textarea {
-    width: 100%;
-    height: 100px;
-}
+
 .preview-area {
     width: 307px;
 }
@@ -1086,7 +1079,7 @@ textarea {
 }
 .preview {
     width: 100%;
-    height: calc(372px * (9 / 16));
+    height: calc(400px * (9 / 16));
     overflow: hidden;
 }
 .crop-placeholder {
@@ -1097,6 +1090,7 @@ textarea {
 .cropped-image img {
     max-width: 100%;
 }
+
 .categoryCheckbox {
     width: 16px;
     height: 16px;
@@ -1270,8 +1264,11 @@ select {
     padding-top: 49px;
     position: absolute;
     top: 30px;
+    // opacity: 0.5;
 
     bottom: 30px;
+    // border-bottom-left-radius: 10px;
+    // border-bottom-right-radius: 10px;
     border-radius: 10px;
     z-index: 1;
     pointer-events: none;
@@ -1426,6 +1423,9 @@ select {
 
 .add-post-wrapper {
     margin-top: 10px;
+    // .invalid {
+    //   // opacity: 0.3;
+    // }
 
     width: 100%;
 
@@ -1571,6 +1571,7 @@ select {
                 font-size: 1.2em;
                 letter-spacing: 0.5px;
                 margin-bottom: 0.1em;
+                // font-family: "Open Sans";
 
                 span {
                     font-weight: 600;
@@ -1601,6 +1602,7 @@ select {
             textarea,
             select,
             input {
+                // font-family: "Open Sans";
                 width: 100%;
                 display: block;
                 text-indent: 0;
@@ -1706,6 +1708,7 @@ select {
             line-height: 1.5;
             color: #0a0a0a;
             -webkit-font-smoothing: antialiased;
+            // font-family: open sans, Helvetica Neue, Helvetica, Roboto, Arial, sans-serif;
             -webkit-box-direction: normal;
             font-size: 0.9em;
             text-transform: uppercase;
@@ -1824,6 +1827,7 @@ select {
     .error-tip {
         line-height: 1.5;
         -webkit-font-smoothing: antialiased;
+        // font-family: open sans,Helvetica Neue,Helvetica,Roboto,Arial,sans-serif;
         -webkit-box-direction: normal;
         text-align: center;
         user-select: none;
@@ -1876,9 +1880,12 @@ select {
     right: 0;
     text-align: center;
     z-index: 999;
+    // transition: opacity .3s, visibility .3s, transform .2s ease-out;
     margin-bottom: 50px;
     pointer-events: none;
     padding-top: 10px;
+    // opacity: 1;
+    // transform: translateY(0);
     bottom: 0px;
 
     div {
@@ -1931,6 +1938,18 @@ select {
     }
 }
 
+// :host {
+//   display: block;
+// }
+
+// .open-close-container {
+//   border: 1px solid #dddddd;
+//   margin-top: 1em;
+//   padding: 20px 20px 0px 20px;
+//   color: #000000;
+//   font-weight: bold;
+//   font-size: 20px;
+// }
 .title-posts {
     cursor: pointer;
     font-weight: 700;
