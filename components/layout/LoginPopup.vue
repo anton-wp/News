@@ -10,7 +10,7 @@
 </template>
 
 <script>
-import Login from "~/components/universal-components/Login";
+import Login from "~/components/login/Login";
 export default {
   components: {
     Login
