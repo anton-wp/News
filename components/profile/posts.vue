@@ -68,17 +68,17 @@ export default {
       if (page) {
         this.page = page;
       }
-      this.$http
-        .get(
+      this.$axios
+        .$get(
           `/api/${this.path}/posts?status=${this.typePost}&sort=${this.sort}&page=${this.page}&limit=12`
         )
         .then(res => {
           if (!more) {
-            this.posts = res.data.data;
-            this.pagination = res.data.pagination;
+            this.posts = res.data;
+            this.pagination = res.pagination;
           } else {
-            this.posts = [...this.posts, ...res.data.data];
-            this.pagination = res.data.pagination;
+            this.posts = [...this.posts, ...res.data];
+            this.pagination = res.pagination;
           }
         })
         .catch(error => console.error(error));

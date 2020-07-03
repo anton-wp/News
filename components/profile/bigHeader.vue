@@ -83,10 +83,10 @@ export default {
   computed: {},
   methods: {
     getProfileFull() {
-      this.$http
-        .get(`/api/profile/full`)
+      this.$axios
+        .$get(`/api/profile/full`)
         .then(res => {
-          this.$store.dispatch("GET_PROFILE", res.data.data);
+          this.$store.dispatch("GET_PROFILE", res.data);
         })
         .catch(error => console.error(error));
     },
@@ -95,10 +95,10 @@ export default {
       if (img) {
         formData.append("avatar", img);
       }
-      this.$http
-        .put(`/api/profile/update-avatar`, formData)
+      this.$axios
+        .$put(`/api/profile/update-avatar`, formData)
         .then(res => {
-          this.$toasted.show(res.data.message);
+          this.$toasted.show(res.message);
           this.$store.dispatch("CLEAR_PROFILE");
           this.getProfileFull();
         })

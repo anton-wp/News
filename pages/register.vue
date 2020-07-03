@@ -236,14 +236,14 @@ export default {
     },
     registration(formData) {
       this.errorMessage = Object;
-      this.$http
-        .post(`/api/auth/registration/`, formData)
-        .then(resp => {
+      this.$axios
+        .$post(`/api/auth/registration/`, formData)
+        .then(res => {
           this.loading = false;
           this.login({ email: this.email, password: this.password });
           // this.closeLoginPopup();
         })
-        .catch(error => (this.errorMessage = error.response.data.properties));
+        .catch(error => (this.errorMessage = error.response.properties));
     },
 
     changeLoginPopup(type) {

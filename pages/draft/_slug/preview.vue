@@ -8,6 +8,7 @@
     :pagination="pagination"
     :prev="prev"
     :next="next"
+		draft
   />
 </template>
 

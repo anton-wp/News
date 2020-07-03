@@ -64,13 +64,13 @@ export default {
   },
   methods: {
     getFollowing() {
-      this.$http
-        .get(
+      this.$axios
+        .$get(
           `/api/${this.path}/${this.typePage}?created=${this.sort}&page=${this.page}&limit=12`
         )
         .then(res => {
-          this.followers = res.data.data;
-          this.pagination = res.data.pagination;
+          this.followers = res.data;
+          this.pagination = res.pagination;
           // this.sortTabs(res)
         })
         .catch(error => console.error(error));

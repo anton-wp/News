@@ -88,11 +88,11 @@ export default {
     getModal() {
       this.loading = true;
       this.authorHttp.authorId = this.authorId;
-      this.$http
-        .get(`/api/author/${this.authorId}/modal`)
+      this.$axios
+        .$get(`/api/author/${this.authorId}/modal`)
         .then(responce => {
           this.loading = false;
-          this.$store.dispatch("GET_MODAL", responce.data.data);
+          this.$store.dispatch("GET_MODAL", responce.data);
         })
         .catch(error => {
           // this.loading = false;

@@ -98,12 +98,12 @@ export default {
     },
     updateFeatured(id) {
       this.disabledFeatured = true;
-      this.$http
-        .put(`/api/admin/tags/${id}/featured`)
+      this.$axios
+        .$put(`/api/admin/tags/${id}/featured`)
         .then(res => {
           console.log(res);
           this.disabledFeatured = false;
-          this.$toasted.show(res.data.message);
+          this.$toasted.show(res.message);
           this.$store.commit("UPDATE_FEATURED", id);
         })
         .catch(error => console.error(error));
