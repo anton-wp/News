@@ -20,7 +20,7 @@
 import BlockNotes from "~/components/profile/block-notes";
 
 export default {
-    middleware: "auth",
+    // middleware: "auth",
     layout: "profile",
     components: {
         BlockNotes

@@ -4,60 +4,61 @@
       <div class="container">
         <div class="row">
           <div class="col-lg-4" v-for="post in posts" :key="post.id">
-            <draft-post :post="post"/>
+            <draft-post :post="post" />
           </div>
         </div>
       </div>
     </div>
-		<pagination  v-if="pagination" :pagination="pagination" @openPage="openPage" />
+    <pagination v-if="pagination" :pagination="pagination" @openPage="openPage" />
   </div>
 </template>
 
 <script>
-import DraftPost from '~/components/profile/posts-draft'
-import Pagination from '~/components/profile/pagination'
+import DraftPost from "~/components/profile/posts-draft";
+import Pagination from "~/components/profile/pagination";
 
 export default {
   components: {
-		DraftPost,
-		Pagination
+    DraftPost,
+    Pagination
   },
-	layout: 'profile',
-	data () {
-		return {
-			page: 1,
-			posts: [],
-			pagination: null,
-			default: null
-		}
-	},
-	created () {
-		if(this.$route.query.page){
-			this.page = this.$route.query.page
-		}
-		this.getPosts()
-	},
-	methods: {
-		openPage(page) {
-			this.page = page
-			this.getPosts()
-		},
-		query () {
-			this.$router.push({
+  layout: "profile",
+  data() {
+    return {
+      page: 1,
+      posts: [],
+      pagination: null,
+      default: null
+    };
+  },
+  mounted () {
+    if (this.$route.query.page) {
+      this.page = this.$route.query.page;
+    }
+    this.getPosts();
+  },
+  methods: {
+    openPage(page) {
+      this.page = page;
+      this.getPosts();
+    },
+    query() {
+      this.$router.push({
         path: "/profile/posts/draft/",
         query: { page: this.page }
       });
-		},
-		getPosts () {
-			this.$http.get(`/api/profile/posts?status=Draft&page=${this.page}&limit=12`)
-				.then(res => {
-					this.posts = res.data.data
-					this.pagination = res.data.pagination
-					this.query()
-			})
-		}
-	}
-}
+    },
+    getPosts() {
+			this.$axios
+        .$get(`/api/profile/posts?status=Draft&page=${this.page}&limit=12`)
+        .then(res => {
+					this.posts = res.data;
+          this.pagination = res.pagination;
+					this.query();
+        });
+    }
+  }
+};
 </script>
 
 <style lang="scss">

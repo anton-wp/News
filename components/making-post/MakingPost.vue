@@ -604,9 +604,9 @@ export default {
       if (query) {
         this.isLoading = true;
 
-        this.$http
-          .get("https://dev.api.verdict.org/tags/list?search=" + query)
-          .then(({ data }) => {
+        this.$axios
+          .$get("https://dev.api.verdict.org/tags/list?search=" + query)
+          .then((data) => {
             this.linkOption = data.data;
             this.linkOption = [...this.linkOption, ...this.newLinkOption];
             this.isLoading = false;
@@ -617,12 +617,12 @@ export default {
     searchAuthors(query) {
       this.isLoadingAuthor = true;
 
-      this.$http
-        .get(
+      this.$axios
+        .$get(
           "https://dev.api.verdict.org/posts/create-helpers/authors-search?search=" +
             query
         )
-        .then(({ data }) => {
+        .then((data) => {
           this.authorsOption = data.data;
 
           this.isLoadingAuthor = false;
@@ -641,9 +641,9 @@ export default {
     },
 
     addFields() {
-      this.$http
-        .get("api/profile/post-fields?action=create")
-        .then(({ data }) => {
+      this.$axios
+        .$get("api/profile/post-fields?action=create")
+        .then((data) => {
           this.fields = data.fields;
         })
         .catch(error => {
@@ -652,9 +652,9 @@ export default {
     },
 
     getCategories() {
-      this.$http
-        .get("https://dev.api.verdict.org/categories/")
-        .then(({ data }) => {
+      this.$axios
+        .$get("https://dev.api.verdict.org/categories/")
+        .then((data) => {
           this.categories = data.data;
 
           this.selectedCategory = this.categories[0].id;
@@ -665,11 +665,11 @@ export default {
     },
 
     getOptions() {
-      this.$http
-        .get(
+      this.$axios
+        .$get(
           "https://dev.api.verdict.org/posts/create-helpers/verdict-options/"
         )
-        .then(({ data }) => {
+        .then((data) => {
           this.options = data.data;
 
           this.selectedOption = this.options[0].title;
@@ -725,10 +725,10 @@ export default {
       formData.append("image", this.$refs.img.files[0]);
       formData.append("postId", this.postId);
 
-      this.$http
-        .post("/api/media/image-preload/", formData)
+      this.$axios
+        .$post("/api/media/image-preload/", formData)
         .then(res => {
-          this.imgCrop = res.data.blob;
+          this.imgCrop = res.blob;
 
           this.dropVisible = false;
           this.loadingDrop = false;
@@ -767,25 +767,25 @@ export default {
 
     saveDraft() {
       if (this.postId) {
-        this.$http
-          .patch(`/api/posts/${this.postId}`, this.formData)
+        this.$axios
+          .$patch(`/api/posts/${this.postId}`, this.formData)
           .then(resp => {
-            this.$toasted.show(resp.data.message);
+            this.$toasted.show(resp.message);
             // console.log(resp);
           })
           .catch(error => {
             console.log(error);
-            this.$toasted.show(error.data.message);
+            this.$toasted.show(error.message);
           });
 
         return;
       }
 
-      this.$http
+      this.$axios
         .post("/api/posts/", this.formData)
         .then(resp => {
-          this.postId = resp.data.id;
-          this.$toasted.show(resp.data.message);
+          this.postId = resp.id;
+          this.$toasted.show(resp.message);
         })
         .catch(error => {
           console.log(error);
@@ -804,15 +804,15 @@ export default {
 
       this.errorNotif = false;
 
-      this.$http
-        .patch(`/api/posts/${this.postId}/publish`, this.formData)
+      this.$axios
+        .$patch(`/api/posts/${this.postId}/publish`, this.formData)
         .then(resp => {
           // console.log(resp);
-          this.$toasted.show(resp.data.message);
+          this.$toasted.show(resp.message);
         })
         .catch(error => {
           console.log(error);
-          this.$toasted.show(error.data.message);
+          this.$toasted.show(error.message);
         });
     }
   },
@@ -956,11 +956,11 @@ export default {
 
     this.dropOptions.headers.Authorization = this.$auth.getToken("local");
 
-    this.$http
-      .post("/api/posts/")
+    this.$axios
+      .$post("/api/posts/")
       .then(resp => {
-        this.postId = resp.data.id;
-        this.dropOptions.params.postId = resp.data.id;
+        this.postId = resp.id;
+        this.dropOptions.params.postId = resp.id;
       })
       .catch(error => {
         console.log(error);

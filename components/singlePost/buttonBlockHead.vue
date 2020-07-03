@@ -1,6 +1,6 @@
 <template>
   <div class="col-12 blockHead">
-    <nuxt-link class="link" :to="`/${category.slug}`">
+    <nuxt-link v-if="category" class="link" :to="`/${category.slug}`">
       <h5 class="category-name">{{category.name}}</h5>
     </nuxt-link>
     <div class="blockAction">
@@ -49,9 +49,9 @@ export default {
   },
   methods: {
     getButton() {
-      this.$http
-        .get(`/api/posts/${this.id}/actions`)
-        .then(({ data }) => {
+      this.$axios
+        .$get(`/api/posts/${this.id}/actions`)
+        .then((data) => {
           // console.log(data.data)
           this.actions = data.data;
         })
@@ -60,9 +60,9 @@ export default {
         });
     },
     removePost() {
-      this.$http
-        .delete(`/api/posts/${this.id}/mark-deleted`)
-        .then(({ data }) => {
+      this.$axios
+        .$delete(`/api/posts/${this.id}/mark-deleted`)
+        .then((data) => {
           console.log(data);
         })
         .catch(error => {
@@ -70,9 +70,9 @@ export default {
         });
     },
     deletePost() {
-      this.$http
-        .delete(`/api/posts/${this.id}`)
-        .then(({ data }) => {
+      this.$axios
+        .$delete(`/api/posts/${this.id}`)
+        .then((data) => {
           console.log(data);
         })
         .catch(error => {

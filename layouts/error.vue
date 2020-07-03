@@ -22,7 +22,7 @@
                   name="q"
                   placeholder="Search"
                   @keyup.enter="activeSearch"
-                >
+                />
                 <button class="clear" type="button">
                   <nuxt-link :to="{ path: '/search', query: { q: search }}">
                     <i class="icons color-primary">
@@ -47,9 +47,13 @@
           <div class="col-12">
             <h1 class="category-page-title">latest news</h1>
           </div>
-					<div class="col-sm-12 col-md-6 col-lg-3" v-for="post of posts.slice(0, 4)" :key="post.title">
-						<default-news-card type="first-block" :post="post" :padding="true" />
-					</div>
+          <div
+            class="col-sm-12 col-md-6 col-lg-3"
+            v-for="post of posts.slice(0, 4)"
+            :key="post.title"
+          >
+            <default-news-card type="first-block" :post="post" :padding="true" />
+          </div>
         </div>
       </div>
     </div>
@@ -57,40 +61,40 @@
 </template>
 
 <script>
-import DefaultNewsCard from '~/components/news/DefaultNewsCard'
+import DefaultNewsCard from "~/components/news/DefaultNewsCard";
 
 export default {
-	components: {
-		DefaultNewsCard
-	},
-  props: ['error'],
-  layout: 'blog', // you can set a custom layout for the error page
-  data () {
+  components: {
+    DefaultNewsCard
+  },
+  props: ["error"],
+  layout: "blog", // you can set a custom layout for the error page
+  data() {
     return {
-			search: '',
-			posts: []
-    }
-	},
-	created () {
-		this.getPosts()
-	},
+      search: "",
+      posts: []
+    };
+  },
+  created() {
+    this.getPosts();
+  },
   methods: {
-    activeSearch () {
+    activeSearch() {
       if (this.search) {
-        this.$router.push({ path: '/search', query: { q: this.search } })
+        this.$router.push({ path: "/search", query: { q: this.search } });
       }
-		},
-		getPosts() {
-			this.$http.get(`/api/posts/?limit=4`)
-			.then(({ data }) => {
-				console.log(data.data)
-				this.posts = data.data;
-			})
-			.catch(error => {
-				this.$router.push('/');
-			});
-		}
+    },
+    getPosts() {
+      this.$axios
+        .$get(`/api/posts/?limit=4`)
+        .then((data) => {
+          console.log(data.data);
+          this.posts = data.data;
+        })
+        .catch(error => {
+          this.$router.push("/");
+        });
+    }
   }
-}
-
+};
 </script>

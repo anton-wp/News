@@ -56,11 +56,11 @@ export default {
     },
     bookmarkAdd() {
       this.disabled = true;
-      this.$http
-        .post(`/api/${this.id}/add-bookmark`)
+      this.$axios
+        .$post(`/api/${this.id}/add-bookmark`)
         .then(res => {
           this.$store.commit("ADD_BOOKMARK", this.id);
-          this.$toasted.show(res.data.message);
+          this.$toasted.show(res.message);
           this.disabled = false;
           if (
             this.$store.getters.IS_TABS.filter(tab => tab.title === "Bookmarks")
@@ -78,11 +78,11 @@ export default {
     },
     bookmarkDelete() {
       this.disabled = true;
-      this.$http
-        .delete(`/api/${this.id}/remove-bookmark`)
+      this.$axios
+        .$delete(`/api/${this.id}/remove-bookmark`)
         .then(res => {
           this.$store.commit("DEL_BOOKMARK", this.id);
-          this.$toasted.show(res.data.message);
+          this.$toasted.show(res.message);
           this.disabled = false;
           if (
             this.$store.getters.IS_TABS.filter(tab => tab.title === "Bookmarks")

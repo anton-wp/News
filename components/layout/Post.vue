@@ -1,7 +1,7 @@
 <template>
   <div v-if="$isAMP">
     <div class="container">
-      <nuxt-link class="post-cat" :to="`/amp/${data.category.slug}`">{{ data.category.name }}</nuxt-link>
+      <nuxt-link v-if="data.category" class="post-cat" :to="`/amp/${data.category.slug}`">{{ data.category.name }}</nuxt-link>
       <div class="col-lg-12">
         <h1 class="post-page-title">{{data.title}}</h1>
         <h2>{{data.subTitle}}</h2>
@@ -101,9 +101,10 @@
                 </div>
                 <div class="col-lg-12">
                   <div class="image-wrapper">
-                    <img class="post-image" :src="data.featured.wide" />
+                    <img v-if="data.featured.wide" class="post-image" :src="data.featured.wide" />
+                    <img v-if="!data.featured.wide" class="post-image" src="/image/default_image_landscape.png" />
                     <div class="source">
-                      <span>source: {{data.featured.source}}</span>
+                      <span>source: {{data.featured.source ? data.featured.source : data.author.firstName + ' ' + data.author.lastName}}</span>
                     </div>
                   </div>
                   <p class="text" v-html="data.body" :style="{fontSize: bodySize + '%'}">
@@ -127,13 +128,13 @@
                 <div class="col-lg-12">
                   <prev-next :slug="data.slug" />
                 </div>
-                <div class="col-lg-12">
+                <div v-if="!draft" class="col-lg-12">
                   <div class="related-title">
                     <span>related</span>
                   </div>
                   <related-block />
                 </div>
-                <div class="col-lg-12">
+                <div v-if="!draft" class="col-lg-12">
                   <div class="comment-wrapper">
                     <span class="title">your verdict</span>
                     <span class="about">
@@ -145,7 +146,7 @@
                     class="aboutPopup"
                   >Verdict is top voted comment by all members. One vote per member. Verdict can change over time.</span>
                 </div>
-                <div class="col-12">
+                <div v-if="!draft" class="col-12">
                   <!-- <textarea  formControlName="body"
 													class="form-input with-border"
 													[froalaEditor]="froalaOptions"
@@ -197,7 +198,8 @@ export default {
     prev: {
       type: Object,
       default: null
-    },
+		},
+		draft: Boolean,
     next: {
       type: Object,
       default: null
@@ -252,13 +254,17 @@ export default {
     };
   },
   created() {
-    this.$store.commit("SET_BREADCRUMBS", [
-      {
-        title: this.data.category.name,
-        path: "/" + this.data.category.slug
-      },
-      { title: this.data.title }
-    ]);
+    if (this.data.category) {
+      this.$store.commit("SET_BREADCRUMBS", [
+        {
+          title: this.data.category.name,
+          path: "/" + this.data.category.slug
+        },
+        { title: this.data.title }
+      ]);
+    } else {
+      this.$store.commit("SET_BREADCRUMBS", [{ title: this.data.title }]);
+    }
   },
   methods: {
     changeFontSize() {

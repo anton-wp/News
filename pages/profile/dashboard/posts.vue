@@ -19,7 +19,7 @@
       :header="header"
       :links="links"
     />
-		<table-footer class="action" :actionsBlock="actionsBlock" @aplly="aplly"/>
+    <table-footer class="action" :actionsBlock="actionsBlock" @aplly="aplly" />
     <pagination
       class="pagination"
       v-if="dashboard.paginations"
@@ -39,13 +39,13 @@ import Pagination from "~/components/profile/pagination";
 
 export default {
   layout: "profileSmall",
-  // middleware: "auth",
+  middleware: "auth",
   components: {
     Search,
     TableHeader,
     TableBlock,
-		Pagination,
-		TableFooter
+    Pagination,
+    TableFooter
   },
   data() {
     return {
@@ -76,8 +76,8 @@ export default {
         view: "view",
         edit: "edit",
         delete: "delete"
-			},
-			actionsBlock: ['Delete']
+      },
+      actionsBlock: ["Delete"]
     };
   },
   created() {
@@ -86,20 +86,27 @@ export default {
   },
   computed: {
     ...mapState(["dashboard"])
-	},
+  },
 
   methods: {
-		aplly () {
-			this.$http
-        .post(
-					`/api/admin/posts/delete-multi`, {ids: this.dashboard.ids}
-        )
+    aplly() {
+      this.$axios
+        .$post(`/api/admin/posts/delete-multi`, { ids: this.dashboard.ids })
         .then(res => {
-					this.$toasted.show(res.data.message);
-					this.$store.commit('DEL_POSTS_DASHBOARD', this.dashboard.ids)
+					this.$toasted.show(res.message);
+          this.$store.commit("DEL_POSTS_DASHBOARD", this.dashboard.ids);
+					this.$store.commit("CLEAR_DASHBOARD_IDS");
+          if (this.dashboard.posts.length === 0) {
+            if (this.page > 1) {
+              this.page = this.page - 1;
+              this.getPosts();
+            } else {
+              this.getPosts();
+            }
+          }
         })
         .catch(error => console.error(error));
-		},
+    },
     view(slug, type) {
       if (type === "Published") {
         this.$router.push({
@@ -117,13 +124,11 @@ export default {
       });
     },
     deletePosts(id) {
-      this.$http
-        .delete(
-          `/api/posts/${id}`
-        )
+      this.$axios
+        .$delete(`/api/posts/${id}`)
         .then(res => {
-					this.$toasted.show(res.data.message);
-					this.$store.commit('DEL_POST_DASHBOARD', id)
+          this.$toasted.show(res.message);
+          this.$store.commit("DEL_POST_DASHBOARD", id);
         })
         .catch(error => console.error(error));
     },
@@ -137,20 +142,20 @@ export default {
       this.search.author = this.$route.query.author;
     },
     getPosts() {
-			this.$http
-        .get(
-					`/api/admin/posts?limit=20&page=${
-						this.page
+      this.$axios
+        .$get(
+          `/api/admin/posts?limit=20&page=${
+            this.page
           }${this.updateSearch()}${this.sortUpdate()}`
         )
         .then(res => {
-					this.$store.commit('CLEAR_DASHBOARD_IDS');
-					this.$router.push({
+          this.$store.commit("CLEAR_DASHBOARD_IDS");
+          this.$router.push({
             path: "/profile/dashboard/posts",
             query: this.query()
           });
-          this.$store.commit("SET_DASHBOARD_POSTS", res.data.data);
-          this.$store.commit("SET_DASHBOARD_PAGINATIONS", res.data.pagination);
+          this.$store.commit("SET_DASHBOARD_POSTS", res.data);
+          this.$store.commit("SET_DASHBOARD_PAGINATIONS", res.pagination);
         })
         .catch(error => console.error(error));
     },
@@ -226,7 +231,7 @@ export default {
   order: 2;
 }
 .action {
-	order: 5;
+  order: 5;
 }
 .pagination {
   order: 6;

@@ -81,16 +81,16 @@ export default {
   },
   methods: {
     getSearch(load) {
-      this.$http
-        .get(
+      this.$axios
+        .$get(
           `/api/posts/?search=${this.stringSearch}&limit=${this.limit}&page=${this.page}`
         )
         .then(res => {
-          this.pagination = res.data.pagination;
+          this.pagination = res.pagination;
           if (load) {
-            this.posts = [...this.posts, ...res.data.data];
+            this.posts = [...this.posts, ...res.data];
           } else {
-            this.posts = res.data.data;
+            this.posts = res.data;
           }
         })
         .catch(error => console.error(error));

@@ -375,11 +375,11 @@ export default {
         },
         getPosts() {
             this.loadMoreText = "loading";
-            this.$http
-                .get(`/api/posts/?limit=${this.limit}&page=${this.page}`)
+            this.$axios
+                .$get(`/api/posts/?limit=${this.limit}&page=${this.page}`)
                 .then(res => {
-                    this.arrayPosts.push(res.data.data);
-                    this.pagination = res.data.pagination;
+                    this.arrayPosts.push(res.data);
+                    this.pagination = res.pagination;
                     this.loadMoreText = "load more";
                 })
                 .catch(error => console.error(error));

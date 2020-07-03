@@ -172,11 +172,11 @@ export default {
     methods: {
         getPosts() {
             this.loadMoreText = "loading";
-            this.$http
-                .get(
+            this.$axios
+                .$get(
                     `/api/${this.api}${this.slug}?limit=${this.limit}&page=${this.page}`
                 )
-                .then(({ data }) => {
+                .then((data) => {
                     this.posts.push(data.data);
                     this.paginations = data.pagination;
                     this.loadMoreText = `more ${

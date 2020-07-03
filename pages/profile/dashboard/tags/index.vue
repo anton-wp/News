@@ -18,7 +18,7 @@
       :header="header"
       :links="links"
     />
-		<table-footer class="action" :actionsBlock="actionsBlock" @aplly="aplly" merge/>
+    <table-footer class="action" :actionsBlock="actionsBlock" @aplly="aplly" merge />
     <pagination
       class="pagination"
       v-if="dashboard.paginations"
@@ -42,8 +42,8 @@ export default {
   components: {
     Search,
     TableHeader,
-		TableBlock,
-		TableFooter,
+    TableBlock,
+    TableFooter,
     Pagination
   },
   data() {
@@ -70,8 +70,8 @@ export default {
       links: {
         edit: "edit",
         delete: "delete"
-			},
-			actionsBlock: ['Action:', 'Delete', 'Approve']
+      },
+      actionsBlock: ["Action:", "Delete", "Approve"]
     };
   },
   created() {
@@ -86,38 +86,42 @@ export default {
       this.$router.push({
         path: `/profile/dashboard/tags/${id}/edit`
       });
-		},
-		aplly (type) {
-			if(type === 'Delete') {
-				this.$http
-        .post(
-					`/api/admin/tags/delete-multi`, {ids: this.dashboard.ids}
-        )
-        .then(res => {
-					this.$toasted.show(res.data.message);
-					this.$store.commit('DEL_POSTS_DASHBOARD', this.dashboard.ids)
-        })
-        .catch(error => console.error(error));
-			}
-			if(type === 'Approve') {
-				this.$http
-        .put(
-					`/api/admin/tags/approve`, {ids: this.dashboard.ids}
-        )
-        .then(res => {
-					this.$toasted.show(res.data.message);
-        })
-        .catch(error => console.error(error));
-			}
-		},
+    },
+    aplly(type) {
+      if (type === "Delete") {
+        this.$axios
+          .$post(`/api/admin/tags/delete-multi`, { ids: this.dashboard.ids })
+          .then(res => {
+            this.$toasted.show(res.message);
+						this.$store.commit("DEL_POSTS_DASHBOARD", this.dashboard.ids);
+						this.$store.commit("CLEAR_DASHBOARD_IDS");
+            if (this.dashboard.posts.length === 0) {
+              if (this.page > 1) {
+                this.page = this.page - 1;
+                this.getPosts();
+              } else {
+                this.getPosts();
+              }
+            }
+          })
+          .catch(error => console.error(error));
+      }
+      if (type === "Approve") {
+        this.$axios
+          .put(`/api/admin/tags/approve`, { ids: this.dashboard.ids })
+          .then(res => {
+						this.$toasted.show(res.message);
+						this.$store.commit("CLEAR_DASHBOARD_IDS");
+          })
+          .catch(error => console.error(error));
+      }
+    },
     deletePosts(id) {
-      this.$http
-        .delete(
-          `/api/tags/${id}`
-        )
+      this.$axios
+        .delete(`/api/tags/${id}`)
         .then(res => {
-					this.$toasted.show(res.data.message);
-					this.$store.commit('DEL_POST_DASHBOARD', id)
+          this.$toasted.show(res.message);
+          this.$store.commit("DEL_POST_DASHBOARD", id);
         })
         .catch(error => console.error(error));
     },
@@ -130,19 +134,20 @@ export default {
     },
 
     getPosts() {
-      this.$http
-        .get(
+      this.$axios
+        .$get(
           `/api/admin/tags?limit=20&page=${
             this.page
           }${this.updateSearch()}${this.sortUpdate()}`
         )
         .then(res => {
+          this.$store.commit("CLEAR_DASHBOARD_IDS");
+          this.$store.commit("SET_DASHBOARD_POSTS", res.data);
+          this.$store.commit("SET_DASHBOARD_PAGINATIONS", res.pagination);
           this.$router.push({
             path: "/profile/dashboard/tags",
             query: this.query()
           });
-          this.$store.commit("SET_DASHBOARD_POSTS", res.data.data);
-          this.$store.commit("SET_DASHBOARD_PAGINATIONS", res.data.pagination);
         })
         .catch(error => console.error(error));
     },
@@ -218,7 +223,7 @@ export default {
   order: 2;
 }
 .action {
-	order: 5;
+  order: 5;
 }
 .pagination {
   order: 6;

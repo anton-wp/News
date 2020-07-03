@@ -31,26 +31,26 @@ export default {
       }
 		},
 		getProfileFull() {
-      this.$http
-        .get(`/api/profile/full`)
+      this.$axios
+        .$get(`/api/profile/full`)
         .then(res => {
-          this.$store.dispatch("GET_PROFILE", res.data.data);
+          this.$store.dispatch("GET_PROFILE", res.data);
 
           this.$store.commit("SET_BREADCRUMBS", [
-            { title: `${res.data.data.firstName} ${res.data.data.lastName}` }
+            { title: `${res.data.firstName} ${res.data.lastName}` }
           ]);
         })
         .catch(error => console.error(error));
     },
     getProfile() {
 			this.slug = this.$route.params.slug;
-      this.$http
-        .get(`/api/author/${this.slug}`)
+      this.$axios
+        .$get(`/api/author/${this.slug}`)
         .then(res => {
-          this.$store.dispatch("GET_PROFILE", res.data.data);
+          this.$store.dispatch("GET_PROFILE", res.data);
 
           this.$store.commit("SET_BREADCRUMBS", [
-            { title: `${res.data.data.firstName} ${res.data.data.lastName}` }
+            { title: `${res.data.firstName} ${res.data.lastName}` }
           ]);
         })
         .catch(error => console.error(error));
