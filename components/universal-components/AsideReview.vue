@@ -17,11 +17,7 @@
                                             <use xlink:href="#caret-down" />
                                         </svg>
                                     </div>
-                                    <select
-                                        class="form-input select"
-                                        v-model="date.month"
-                                        @change="saveDraft"
-                                    >
+                                    <select class="form-input select" v-model="date.month">
                                         <option
                                             v-for="(month, index) of months"
                                             :value="index"
@@ -37,11 +33,7 @@
                                             <use xlink:href="#caret-down" />
                                         </svg>
                                     </div>
-                                    <select
-                                        class="form-input select"
-                                        v-model="date.day"
-                                        @change="saveDraft"
-                                    >
+                                    <select class="form-input select" v-model="date.day">
                                         <option
                                             v-for="day of daysInMonth"
                                             :key="day"
@@ -57,11 +49,7 @@
                                             <use xlink:href="#caret-down" />
                                         </svg>
                                     </div>
-                                    <select
-                                        class="form-input select"
-                                        v-model="date.year"
-                                        @change="saveDraft"
-                                    >
+                                    <select class="form-input select" v-model="date.year">
                                         <option
                                             v-for="year of years"
                                             :key="year"
@@ -77,11 +65,7 @@
                             <label>Time</label>
                             <div class="time-select-wrap">
                                 <div class="select-wrap hours-select">
-                                    <select
-                                        class="form-input select"
-                                        v-model="date.hours"
-                                        @change="saveDraft"
-                                    >
+                                    <select class="form-input select" v-model="date.hours">
                                         <option
                                             v-for="hour of hours"
                                             :value="hour"
@@ -98,11 +82,7 @@
                                 </div>
                                 <div class="time-dots">:</div>
                                 <div class="select-wrap minutes-select" style="margin-left: 10px;">
-                                    <select
-                                        class="form-input select"
-                                        v-model="date.minutes"
-                                        @change="saveDraft"
-                                    >
+                                    <select class="form-input select" v-model="date.minutes">
                                         <option
                                             v-for="minute of minutes"
                                             :value="minute"
@@ -193,8 +173,6 @@
                     :max="5"
                     @tag="addTag"
                     @search-change="searchOptions"
-                    @remove="saveDraft"
-                    @close="saveDraft"
                     :class="(errorNotif && selectedLinkOption.length < 1) ? 'error' : ''"
                 ></multiselect>
 
@@ -204,66 +182,22 @@
                 >Please add at least 1 link</div>
             </div>
 
-            <div class="input-wrapper author">
-                <label>
-                    Author
-                    <span class="required">*</span>
-                </label>
-
-                <multiselect
-                    v-model="selectedAuthor"
-                    id="author"
-                    label="firstName"
-                    track-by="id"
-                    placeholder="Type to search"
-                    open-direction="bottom"
-                    :options="authorsOption"
-                    :searchable="true"
-                    :loading="isLoadingAuthor"
-                    :max-height="600"
-                    :show-no-results="false"
-                    :hide-selected="false"
-                    @search-change="searchAuthors"
-                    @select="saveDraft"
-                    :class="(errorNotif && selectedAuthor.length < 1) ? 'error' : ''"
-                >
-                    <template slot="option" slot-scope="props">
-                        <div class="option__desc">
-                            <span class="option__title">{{ props.option.firstName }}</span>
+            <div class="buttons-wrapp d-block">
+                <div class="buttons-forse">
+                    <label class="d-flex align-items-center w-100">
+                        <div class="categoryCheckbox">
+                            <svg width="10" height="10" v-if="forcePublish">
+                                <use xlink:href="#checkbox" />
+                            </svg>
+                            <input type="checkbox" v-model="forcePublish" />
                         </div>
-                    </template>
-                </multiselect>
 
-                <div
-                    class="error-notification"
-                    v-if="errorNotif && selectedAuthor.length < 1"
-                >This field is required</div>
-            </div>
-
-            <div class="buttons-wrapp">
-                <div>
-                    <div class="buttons-forse">
-                        <label class="d-flex align-items-center w-100">
-                            <div class="categoryCheckbox">
-                                <svg width="10" height="10" v-if="forcePublish">
-                                    <use xlink:href="#checkbox" />
-                                </svg>
-                                <input type="checkbox" v-model="forcePublish" @change="saveDraft" />
-                            </div>
-
-                            <div class="categoryTitle ml-2">force publish</div>
-                        </label>
-                    </div>
+                        <div class="categoryTitle ml-2">force publish</div>
+                    </label>
+                </div>
+                <div class="d-flex justify-content-between">
                     <button class="button-add post-button" @click.prevent="publishedPost">Publish</button>
-                    <div class="buttons-forse">
-                        <div class="forse">
-                            <div class="fa-icon">
-                                <!-- <fa-icon *ngIf="!force" [icon]="faSquare"></fa-icon>
-                                <fa-icon *ngIf="force" [icon]="faCheckSquare"></fa-icon>-->
-                            </div>
-                            <!-- <p>force publish</p> -->
-                        </div>
-                    </div>
+                    <button class="button-add post-button" @click.prevent="publishedPost">Publish</button>
                 </div>
             </div>
             <!-- <div class="buttons-wrapp">
@@ -337,17 +271,6 @@ export default {
     },
 
     methods: {
-        getOptions() {
-            this.$axios
-                .$get("/api/posts/create-helpers/verdict-options/")
-                .then(resp => {
-                    this.options = resp.data;
-                })
-                .catch(error => {
-                    this.errorMessage = error;
-                });
-        },
-
         getCategories() {
             this.$axios
                 .$get("/api/categories/")
@@ -378,21 +301,6 @@ export default {
             }
         },
 
-        searchAuthors(query) {
-            this.isLoadingAuthor = true;
-
-            this.$axios
-                .$get(
-                    "https://dev.api.verdict.org/posts/create-helpers/authors-search?search=" +
-                        query
-                )
-                .then(({ data }) => {
-                    this.authorsOption = data;
-
-                    this.isLoadingAuthor = false;
-                });
-        },
-
         addTag(newTag) {
             const tag = {
                 id: Math.floor(Math.random() * 10000000),
@@ -412,8 +320,6 @@ export default {
                     return item.id;
                 }
             });
-
-            console.log(tagsForFormdata);
 
             return tagsForFormdata.toString();
         },
@@ -451,79 +357,6 @@ export default {
             this.date.minutes = this.now.getMinutes();
         },
 
-        saveDraft() {
-            const newData = {};
-
-            if (this.$v.title.$model) {
-                newData.title = this.$v.title.$model;
-            }
-            if (this.$v.subtitle.$model) {
-                newData.subtitle = this.$v.subtitle.$model;
-            }
-            if (this.content) {
-                newData.bodyJson = this.content;
-            }
-            if (this.selectedLinkOption.length) {
-                const tagsForFormdata = this.selectedLinkOption.map(function(
-                    item
-                ) {
-                    if (item.type === "created") {
-                        return item.name;
-                    } else {
-                        return item.id;
-                    }
-                });
-
-                newData.tags = tagsForFormdata.toString();
-            }
-            if (this.selectedCategory) {
-                newData.category = this.selectedCategory;
-            }
-            if (this.selectedOption) {
-                newData.verdictOption = this.selectedOption;
-            }
-            if (this.selectedDate && this.fields.publishedAt) {
-                newData.publishedAt = this.selectedDate;
-            }
-
-            if (this.forcePublish) {
-                newData.forcePublish = this.forcePublish;
-            }
-
-            if (this.imgCrop) {
-                newData.media = this.imgId;
-            }
-
-            if (this.$v.imgDescript.$model) {
-                newData.source = this.$v.imgDescript.$model;
-            }
-
-            if (this.cropperX || this.cropperX == 0) {
-                newData.cropperX = this.cropperX;
-            }
-            if (this.cropperY || this.cropperY == 0) {
-                newData.cropperY = this.cropperY;
-            }
-            if (this.cropperW) {
-                newData.cropperWidth = this.cropperW;
-            }
-            if (this.cropperH) {
-                newData.cropperHeight = this.cropperH;
-            }
-
-            // this.$axios
-            //     .$patch(`/api/posts/${this.postId}`, newData)
-            //     .then(resp => {
-            //         this.$toasted.show(resp.message);
-            //     })
-            //     .catch(error => {
-            //         console.log(error);
-            //         this.$toasted.show(error.message);
-            //     });
-
-            console.log(newData);
-        },
-
         publishedPost() {
             // this.$v.$touch();
             // if (this.$v.$invalid) {
@@ -541,6 +374,9 @@ export default {
             //         console.log(error);
             //         this.$toasted.show(error.message);
             //     });
+
+            const newData = {};
+            console.log(newData);
         }
     },
     computed: {
@@ -589,7 +425,6 @@ export default {
             this.minutes.push(("0" + i).slice(-2));
         }
 
-        this.getOptions();
         this.getCategories();
         this.getFields();
 
@@ -610,7 +445,7 @@ export default {
         this.selectedLinkOption = this.postData.tags;
     },
     mounted() {
-        this.$store.commit("SET_BREADCRUMBS", [{ title: "Add" }]);
+        this.$store.commit("SET_BREADCRUMBS", [{ title: "Review" }]);
     }
 };
 </script>
