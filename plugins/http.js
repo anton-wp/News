@@ -9,7 +9,7 @@ let http = axios;
 
 // console.log(token);
 
-if (token && token != 'false') {
+if (token && token !== 'false') {
 	http = axios.create({
 		headers: {
 			'Authorization': token

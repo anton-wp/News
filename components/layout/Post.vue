@@ -1,7 +1,11 @@
 <template>
   <div v-if="$isAMP">
     <div class="container">
-      <nuxt-link v-if="data.category" class="post-cat" :to="`/amp/${data.category.slug}`">{{ data.category.name }}</nuxt-link>
+      <nuxt-link
+        v-if="data.category"
+        class="post-cat"
+        :to="`/amp/${data.category.slug}`"
+      >{{ data.category.name }}</nuxt-link>
       <div class="col-lg-12">
         <h1 class="post-page-title">{{data.title}}</h1>
         <h2>{{data.subTitle}}</h2>
@@ -102,7 +106,11 @@
                 <div class="col-lg-12">
                   <div class="image-wrapper">
                     <img v-if="data.featured.wide" class="post-image" :src="data.featured.wide" />
-                    <img v-if="!data.featured.wide" class="post-image" src="/image/default_image_landscape.png" />
+                    <img
+                      v-if="!data.featured.wide"
+                      class="post-image"
+                      src="/image/default_image_landscape.png"
+                    />
                     <div class="source">
                       <span>source: {{data.featured.source ? data.featured.source : data.author.firstName + ' ' + data.author.lastName}}</span>
                     </div>
@@ -165,7 +173,8 @@
             </div>
           </div>
           <div class="col-lg-4">
-            <follow />
+            <follow v-if="!review" />
+            <asideReview v-if="data && review" :postData="data" />
           </div>
         </div>
       </div>
@@ -181,6 +190,7 @@ import SocialBlock from "~/components/singlePost/socialBlock.vue";
 import ButtonBlockHead from "~/components/singlePost/buttonBlockHead.vue";
 import Follow from "~/components/universal-components/followBlock.vue";
 import RelatedBlock from "~/components/universal-components/relatedBlock.vue";
+import AsideReview from "~/components/universal-components/asideReview.vue";
 
 export default {
   components: {
@@ -190,7 +200,8 @@ export default {
     AuthorBlock,
     Marks,
     SocialBlock,
-    RelatedBlock
+    RelatedBlock,
+    AsideReview
   },
   props: {
     data: Object,
@@ -198,12 +209,13 @@ export default {
     prev: {
       type: Object,
       default: null
-		},
-		draft: Boolean,
+    },
+    draft: Boolean,
     next: {
       type: Object,
       default: null
-    }
+    },
+    review: Boolean
   },
 
   head() {
@@ -243,14 +255,23 @@ export default {
       ]
     };
   },
-  provide() {
-    return {
-      id: this.data.id
-    };
-  },
   data() {
     return {
       bodySize: 110
+    };
+  },
+  methods: {
+    changeFontSize() {
+      if (this.bodySize === 130) {
+        this.bodySize = 90;
+      } else {
+        this.bodySize = this.bodySize + 10;
+      }
+    }
+  },
+  provide() {
+    return {
+      id: this.data.id
     };
   },
   created() {
@@ -264,15 +285,6 @@ export default {
       ]);
     } else {
       this.$store.commit("SET_BREADCRUMBS", [{ title: this.data.title }]);
-    }
-  },
-  methods: {
-    changeFontSize() {
-      if (this.bodySize === 130) {
-        this.bodySize = 90;
-      } else {
-        this.bodySize = this.bodySize + 10;
-      }
     }
   }
 };

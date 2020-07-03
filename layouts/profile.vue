@@ -1,6 +1,5 @@
 <template>
   <div class="profile-layout">
-		<!-- <a href="#123">kjhg</a> -->
     <custom-svg />
     <app-header />
     <hot-news />

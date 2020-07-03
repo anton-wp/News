@@ -182,7 +182,10 @@
                                     class="col-sm col-lg-4"
                                     style="padding-left: 0px; padding-right: 0px;"
                                 >
-                                    <div class="schedule-date-col schedule-time">
+                                    <div
+                                        class="schedule-date-col schedule-time"
+                                        v-if="fields.publishedAt"
+                                    >
                                         <label>Time</label>
                                         <div class="time-select-wrap">
                                             <div class="select-wrap hours-select">
@@ -313,7 +316,8 @@
                                 :max="5"
                                 @tag="addTag"
                                 @search-change="searchOptions"
-                                @select="saveDraft"
+                                @remove="saveDraft"
+                                @close="saveDraft"
                                 :class="(errorNotif && selectedLinkOption.length < 1) ? 'error' : ''"
                             ></multiselect>
 
@@ -419,56 +423,60 @@
                             />
                         </div>
 
-                        <dropzone
-                            id="foo"
-                            ref="drope"
-                            :options="dropOptions"
-                            :destroyDropzone="true"
-                            @vdropzone-success="afterComplete"
-                            @vdropzone-processing="loadingDrop=true; imgCrop=''"
-                            :include-styling="false"
-                            class="drop-wrap"
-                            v-if="dropVisible"
-                            :useCustomSlot="true"
-                        >
-                            <h3 class="drop-title text-center">
-                                Drag and drop your image
-                                <br />or
-                            </h3>
-                            <div class="drop-btn my-4">Choose Your Image</div>
+                        <div class="crop-wrap">
+                            <dropzone
+                                id="foo"
+                                ref="drope"
+                                :options="dropOptions"
+                                :destroyDropzone="true"
+                                @vdropzone-success="afterComplete"
+                                @vdropzone-processing="loadingDrop=true; imgCrop=''"
+                                :include-styling="false"
+                                class="drop-wrap"
+                                v-if="dropVisible"
+                                :useCustomSlot="true"
+                            >
+                                <h3 class="drop-title text-center">
+                                    Drag and drop your image
+                                    <br />or
+                                </h3>
+                                <div class="drop-btn my-4">Choose Your Image</div>
 
-                            <p class="drop-subtitle">maximum file size: 50mb</p>
+                                <p class="drop-subtitle">maximum file size: 50mb</p>
 
-                            <div
-                                v-if="errorNotif && !imgCrop"
-                                class="form-field-tip error-tip"
-                            >Featured image is required</div>
+                                <div
+                                    v-if="errorNotif && !imgCrop"
+                                    class="form-field-tip error-tip"
+                                >Featured image is required</div>
 
-                            <div class="cssload-container" v-if="loadingDrop">
-                                <div class="lds-ellipsis">
-                                    <div></div>
-                                    <div></div>
-                                    <div></div>
-                                    <div></div>
+                                <div class="cssload-container" v-if="loadingDrop">
+                                    <div class="lds-ellipsis">
+                                        <div></div>
+                                        <div></div>
+                                        <div></div>
+                                        <div></div>
+                                    </div>
                                 </div>
-                            </div>
-                        </dropzone>
-
-                        <clipper-basic
-                            :src="imgCrop"
-                            preview="preview"
-                            :grid="true"
-                            :ratio="16/9"
-                            ref="clipper"
-                            class="croper"
-                            @load="clipperLoaded"
-                            @error="errorCrop"
-                        >No image</clipper-basic>
+                            </dropzone>
+                            <vue-cropper
+                                v-if="imgCrop"
+                                ref="cropper"
+                                :aspect-ratio="16 / 9"
+                                :src="imgCrop"
+                                preview=".preview"
+                                :movable="false"
+                                :rotatable="false"
+                                :zoomable="false"
+                                @ready="clipperReady"
+                                @cropend="saveDraft"
+                                :class="{'visible-crop' : !visibleCrop}"
+                            />
+                        </div>
                     </div>
 
                     <div class="col-12 col-lg-5 col-xl-4">
                         <div class="animation prev-img-block">
-                            <clipper-preview name="preview" v-if="imgCrop && fields.cropper"></clipper-preview>
+                            <div class="preview"></div>
 
                             <div class="header-metadata" v-if="categories">
                                 <span class="category js--post-category-preview">
@@ -542,14 +550,16 @@ import { months } from "~/constants/dates";
 import Multiselect from "vue-multiselect";
 import Dropzone from "nuxt-dropzone";
 import { clipperUpload } from "vuejs-clipper";
-// import { mapGetters } from "vuex";
+
+import VueCropper from "vue-cropperjs";
+import "cropperjs/dist/cropper.css";
 
 export default {
     middleware: "auth",
     components: {
         Multiselect,
         Dropzone,
-        clipperUpload
+        VueCropper
     },
 
     data() {
@@ -612,6 +622,7 @@ export default {
             cropperY: undefined,
             cropperW: undefined,
             cropperH: undefined,
+            visibleCrop: false,
             dropOptions: {
                 url: "/api/media/image-preload/",
                 maxFilesize: 50, // MB
@@ -629,7 +640,7 @@ export default {
 
     async asyncData({ $axios }) {
         const fields = await $axios.$get(
-            "api/profile/post-fields?action=create"
+            "/api/profile/post-fields?action=create"
         );
 
         const cat = await $axios.$get("/api/categories/");
@@ -664,19 +675,16 @@ export default {
         }
     },
     methods: {
-        errorCrop(er, er2) {
-            console.log(er, er2);
-        },
         searchOptions(query) {
             if (query) {
                 this.isLoading = true;
 
-                this.$http
-                    .get(
-                        "https://dev.api.verdict.org/tags/list?search=" + query
+                this.$axios
+                    .$get(
+                        "/api/tags/list?search=" + query
                     )
                     .then(({ data }) => {
-                        this.linkOption = data.data;
+                        this.linkOption = data;
                         this.linkOption = [
                             ...this.linkOption,
                             ...this.newLinkOption
@@ -689,13 +697,13 @@ export default {
         searchAuthors(query) {
             this.isLoadingAuthor = true;
 
-            this.$http
-                .get(
-                    "https://dev.api.verdict.org/posts/create-helpers/authors-search?search=" +
+            this.$axios
+                .$get(
+                    "/api/posts/create-helpers/authors-search?search=" +
                         query
                 )
                 .then(({ data }) => {
-                    this.authorsOption = data.data;
+                    this.authorsOption = data;
 
                     this.isLoadingAuthor = false;
                 });
@@ -712,44 +720,19 @@ export default {
             this.selectedLinkOption.push(tag);
         },
 
-        addFields() {
-            this.$axios
-                .$get("api/profile/post-fields?action=create")
-                .then(({ data }) => {
-                    fields: data.fields;
-                })
-                .catch(error => {
-                    // this.errorMessage = error.response.data.message;
-                });
+        formatTags() {
+            const tagsForFormdata = this.selectedLinkOption.map(function(item) {
+                if (item.type === "created") {
+                    return item.name;
+                } else {
+                    return item.id;
+                }
+            });
+
+            console.log(tagsForFormdata);
+
+            return tagsForFormdata.toString();
         },
-
-        // getCategories() {
-        //     this.$http
-        //         .get("https://dev.api.verdict.org/categories/")
-        //         .then(({ data }) => {
-        //             this.categories = data.data;
-
-        //             this.selectedCategory = this.categories[0].id;
-        //         })
-        //         .catch(error => {
-        //             // this.errorMessage = error.response.data.message;
-        //         });
-        // },
-
-        // getOptions() {
-        //     this.$http
-        //         .get(
-        //             "https://dev.api.verdict.org/posts/create-helpers/verdict-options/"
-        //         )
-        //         .then(({ data }) => {
-        //             this.options = data.data;
-
-        //             this.selectedOption = this.options[0].title;
-        //         })
-        //         .catch(error => {
-        //             // this.errorMessage = error.response.data.message;
-        //         });
-        // },
 
         monthDiff(dateFrom, dateTo) {
             return (
@@ -773,50 +756,28 @@ export default {
             this.date.minutes = this.now.getMinutes();
         },
 
-        formatTags() {
-            const tagsForFormdata = this.selectedLinkOption.map(function(item) {
-                if (item.type) {
-                    return item.name;
-                } else {
-                    return item.id;
-                }
-            });
-
-            return tagsForFormdata.toString();
-        },
-
         trigerInputUpload() {
             this.$refs.imgUploadInpt.click();
         },
 
-        clipperLoaded() {
+        clipperReady() {
             this.dropVisible = false;
             this.loadingDrop = false;
+            this.visibleCrop = true;
 
-            this.clipperChanged();
+            if (this.imgCrop) {
+                this.$refs.cropper.setCropBoxData({
+                    left: this.cropperX,
+                    top: this.cropperY,
+                    width: this.cropperW,
+                    height: this.cropperH
+                });
+            }
 
-            setTimeout(() => {
-                this.$refs.clipper.setTL$.next({ left: 1, top: 1 });
-                this.$refs.clipper.setWH$.next({ width: 50, height: 50 });
-
-                this.saveDraft();
-            }, 200);
-        },
-
-        clipperChanged() {
-            this.$refs.clipper.onChange$.subscribe(() => {
-                const cropPos = this.$refs.clipper.getDrawPos();
-
-                this.cropperX = Math.floor(cropPos.pos.sx);
-                this.cropperY = Math.floor(cropPos.pos.sy);
-                this.cropperW = Math.floor(cropPos.pos.swidth);
-                this.cropperH = Math.floor(cropPos.pos.sheight);
-            });
+            this.saveDraft();
         },
 
         afterComplete(file, res) {
-            console.log("111", res);
-
             this.imgCrop = undefined;
 
             this.imgCrop = res.file;
@@ -824,7 +785,9 @@ export default {
         },
 
         uploadImg() {
+            this.dropVisible = true;
             this.loadingDrop = true;
+            this.visibleCrop = false;
             this.imgCrop = undefined;
 
             const formData = new FormData();
@@ -832,41 +795,92 @@ export default {
             formData.append("image", this.$refs.imgUploadInpt.files[0]);
             formData.append("postId", this.postId);
 
-            this.$http
-                .post("/api/media/image-preload/", formData)
+            this.$axios
+                .$post("/api/media/image-preload/", formData)
                 .then(res => {
-                    console.log("222", res);
-
-                    this.imgId = res.data.mediaId;
-                    this.imgCrop = res.data.file;
+                    this.imgId = res.mediaId;
+                    this.imgCrop = res.file;
                 })
                 .catch(error => console.error(error));
         },
 
         saveDraft() {
-            if (this.postId) {
-                this.$http
-                    .patch(`/api/posts/${this.postId}`, this.formData)
-                    .then(resp => {
-                        this.$toasted.show(resp.data.message);
-                        // console.log(resp);
-                    })
-                    .catch(error => {
-                        console.log(error);
-                        this.$toasted.show(error.data.message);
-                    });
+            if (this.$refs.cropper) {
+                const cropData = this.$refs.cropper.getCropBoxData();
 
-                return;
+                this.cropperX = Math.floor(cropData.left);
+                this.cropperY = Math.floor(cropData.top);
+                this.cropperW = Math.floor(cropData.width);
+                this.cropperH = Math.floor(cropData.height);
             }
 
-            this.$http
-                .post("/api/posts/", this.formData)
+            const newData = {};
+
+            if (this.$v.title.$model) {
+                newData.title = this.$v.title.$model;
+            }
+            if (this.$v.subtitle.$model) {
+                newData.subtitle = this.$v.subtitle.$model;
+            }
+            if (this.content) {
+                newData.bodyJson = this.content;
+            }
+            if (this.selectedLinkOption.length) {
+                const tagsForFormdata = this.selectedLinkOption.map(function(
+                    item
+                ) {
+                    if (item.type === "created") {
+                        return item.name;
+                    } else {
+                        return item.id;
+                    }
+                });
+
+                newData.tags = tagsForFormdata.toString();
+            }
+            if (this.selectedCategory) {
+                newData.category = this.selectedCategory;
+            }
+            if (this.selectedOption) {
+                newData.verdictOption = this.selectedOption;
+            }
+            if (this.selectedDate && this.fields.publishedAt) {
+                newData.publishedAt = this.selectedDate;
+            }
+
+            if (this.forcePublish) {
+                newData.forcePublish = this.forcePublish;
+            }
+
+            if (this.imgCrop) {
+                newData.media = this.imgId;
+            }
+
+            if (this.$v.imgDescript.$model) {
+                newData.source = this.$v.imgDescript.$model;
+            }
+
+            if (this.cropperX || this.cropperX == 0) {
+                newData.cropperX = this.cropperX;
+            }
+            if (this.cropperY || this.cropperY == 0) {
+                newData.cropperY = this.cropperY;
+            }
+            if (this.cropperW) {
+                newData.cropperWidth = this.cropperW;
+            }
+            if (this.cropperH) {
+                newData.cropperHeight = this.cropperH;
+            }
+
+            this.$axios
+                .$patch(`/api/posts/${this.postId}`, newData)
                 .then(resp => {
-                    this.postId = resp.data.id;
-                    this.$toasted.show(resp.data.message);
+                    this.$toasted.show(resp.message);
                 })
                 .catch(error => {
                     console.log(error);
+                    this.$toasted.show(error.message);
                 });
         },
 
@@ -880,15 +894,15 @@ export default {
 
             this.errorNotif = false;
 
-            this.$http
-                .patch(`/api/posts/${this.postId}/publish`, this.formData)
+            this.$axios
+                .$patch(`/api/posts/${this.postId}/publish`, this.formData)
                 .then(resp => {
                     // console.log(resp);
-                    this.$toasted.show(resp.data.message);
+                    this.$toasted.show(resp.message);
                 })
                 .catch(error => {
                     console.log(error);
-                    this.$toasted.show(error.data.message);
+                    this.$toasted.show(error.message);
                 });
         }
     },
@@ -922,9 +936,12 @@ export default {
 
         titlesLength() {
             const lengthTitle = {
-                title: this.$v.title.$model.length,
-                subtitle: this.$v.subtitle.$model.length
+                title: 0,
+                subtitle: 0
             };
+
+            if (this.title) lengthTitle.title = this.title.length;
+            if (this.subtitle) lengthTitle.subtitle = this.subtitle.length;
 
             return lengthTitle;
         },
@@ -958,59 +975,6 @@ export default {
             }
 
             return cContent;
-        },
-
-        formData() {
-            const newData = {};
-
-            if (this.$v.title.$model) {
-                newData.title = this.$v.title.$model;
-            }
-            if (this.$v.subtitle.$model) {
-                newData.subTitle = this.$v.subtitle.$model;
-            }
-            if (this.content) {
-                newData.bodyJson = this.content;
-            }
-            if (this.formatTags().length) {
-                newData.tags = this.formatTags();
-            }
-            if (this.selectedCategory) {
-                newData.category = +this.selectedCategory;
-            }
-            if (this.selectedOption) {
-                newData.verdictOption = this.selectedOption;
-            }
-            if (this.selectedDate) {
-                newData.publishedAt = this.selectedDate;
-            }
-
-            if (this.forcePublish) {
-                newData.forcePublish = this.forcePublish;
-            }
-
-            if (this.imgCrop) {
-                newData.featuredImage = this.imgId;
-            }
-
-            if (this.$v.imgDescript.$model) {
-                newData.source = this.$v.imgDescript.$model;
-            }
-
-            if (this.cropperX || this.cropperX == 0) {
-                newData.cropperX = this.cropperX;
-            }
-            if (this.cropperY || this.cropperY == 0) {
-                newData.cropperY = this.cropperY;
-            }
-            if (this.cropperW) {
-                newData.cropperWidth = this.cropperW;
-            }
-            if (this.cropperH) {
-                newData.cropperHeight = this.cropperH;
-            }
-
-            return newData;
         }
     },
 
@@ -1033,15 +997,11 @@ export default {
             this.minutes.push(("0" + i).slice(-2));
         }
 
-        // this.addFields();
-        // this.getCategories();
-        // this.getOptions();
-
-        this.$http
-            .post("/api/posts/")
+        this.$axios
+            .$post("/api/posts/")
             .then(resp => {
-                this.postId = resp.data.id;
-                this.dropOptions.params.postId = resp.data.id;
+                this.postId = resp.id;
+                this.dropOptions.params.postId = resp.id;
             })
             .catch(error => {
                 console.log(error);
@@ -1055,895 +1015,3 @@ export default {
 };
 </script>
 
-<style src="vue-multiselect/dist/vue-multiselect.min.css"></style>
-
-<style lang="scss" scoped>
-// @import "nuxt-dropzone/dropzone.css";
-@import "../assets/utils/variables";
-@import "../assets/utils/colors";
-
-.categoryCheckbox {
-    width: 16px;
-    height: 16px;
-    display: inline-flex;
-    justify-content: center;
-    align-items: center;
-    vertical-align: middle;
-    border: 1px solid #0a0a0a;
-    border-radius: 5px;
-    input {
-        display: none;
-    }
-    svg {
-        display: block;
-    }
-}
-.categoryTitle {
-    display: inline-block;
-    vertical-align: middle;
-}
-
-.prev-img-block {
-    max-width: 410px;
-    height: 100%;
-    margin: 0 auto;
-}
-
-.cssload-container {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    left: 0;
-    top: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background-color: #ccc;
-    margin-top: 0 !important;
-    z-index: 3;
-    .lds-ellipsis {
-        display: inline-block;
-        position: relative;
-        width: 80px;
-        height: 80px;
-    }
-
-    .lds-ellipsis div {
-        position: absolute;
-        top: 33px;
-        width: 13px;
-        height: 13px;
-        border-radius: 50%;
-        background: grey;
-        animation-timing-function: cubic-bezier(0, 1, 1, 0);
-    }
-
-    .lds-ellipsis div:nth-child(1) {
-        left: 8px;
-        animation: lds-ellipsis1 0.6s infinite;
-    }
-
-    .lds-ellipsis div:nth-child(2) {
-        left: 8px;
-        animation: lds-ellipsis2 0.6s infinite;
-    }
-
-    .lds-ellipsis div:nth-child(3) {
-        left: 32px;
-        animation: lds-ellipsis2 0.6s infinite;
-    }
-
-    .lds-ellipsis div:nth-child(4) {
-        left: 56px;
-        animation: lds-ellipsis3 0.6s infinite;
-    }
-
-    @keyframes lds-ellipsis1 {
-        0% {
-            transform: scale(0);
-        }
-
-        100% {
-            transform: scale(1);
-        }
-    }
-
-    @keyframes lds-ellipsis3 {
-        0% {
-            transform: scale(1);
-        }
-
-        100% {
-            transform: scale(0);
-        }
-    }
-
-    @keyframes lds-ellipsis2 {
-        0% {
-            transform: translate(0, 0);
-        }
-
-        100% {
-            transform: translate(24px, 0);
-        }
-    }
-}
-
-.drop-wrap {
-    height: 400px;
-    width: 100%;
-    background-color: #e5e5e5;
-    position: relative;
-    cursor: pointer;
-    padding-top: 400/850 * 100%;
-    &:after {
-        content: "";
-        position: absolute;
-        top: 20px;
-        left: 20px;
-        right: 20px;
-        bottom: 20px;
-        border: 2px dashed #867f7f;
-        opacity: 0;
-        transition: all 0.5s ease;
-        z-index: 1;
-    }
-    &:hover {
-        &:after {
-            opacity: 1;
-        }
-    }
-}
-
-.drop-btn {
-    display: inline-flex;
-    border: 1px solid #8d8d8d;
-    color: #8d8d8d;
-    text-transform: uppercase;
-    font-weight: bold;
-    padding: 10px 20px;
-    transition: all 0.5s ease;
-    &:hover {
-        color: #e5e5e5;
-        background-color: #8d8d8d;
-    }
-}
-
-.drop-subtitle {
-    font-weight: bold;
-}
-
-.croper {
-    width: 100%;
-}
-select {
-    outline: none;
-}
-
-.time-select-wrap {
-    display: flex;
-}
-
-.error {
-    background-color: rgba(255, 66, 66, 0.25);
-    border: 1px solid #ff4242 !important;
-}
-
-.errorBody {
-    width: 100%;
-    height: calc(100% - 30px);
-    padding-top: 49px;
-    position: absolute;
-    top: 30px;
-    // opacity: 0.5;
-
-    bottom: 30px;
-    // border-bottom-left-radius: 10px;
-    // border-bottom-right-radius: 10px;
-    border-radius: 10px;
-    z-index: 1;
-    pointer-events: none;
-    border: 1px solid #ff4242 !important;
-
-    .body {
-        width: 100%;
-        height: 100%;
-        background: rgba(255, 66, 66, 0.25);
-    }
-}
-
-.blockForm {
-    font-family: open sans, Helvetica Neue, Helvetica, Roboto, Arial, sans-serif;
-
-    @media (max-width: 576px) {
-        padding-left: 10px;
-        padding-right: 10px;
-    }
-
-    .time-select-wrap {
-        align-items: center;
-    }
-
-    .breadcrumbs {
-        font-size: 11px;
-        font-weight: 400;
-        margin-top: 7px;
-
-        span {
-            font-size: 10px;
-            margin: 0 2px;
-        }
-
-        a {
-            text-decoration: none;
-            color: rgb(10, 10, 10);
-
-            &:hover {
-                color: #ff4242;
-            }
-        }
-
-        p {
-            display: contents;
-        }
-    }
-}
-
-.date-select-wrap {
-    display: flex;
-}
-
-.arrow-date {
-    position: absolute;
-    right: 1px;
-    top: 3px;
-    pointer-events: none;
-}
-
-.select-wrap {
-    position: relative;
-    margin-right: 8px;
-}
-
-.date {
-    margin-bottom: 15px;
-    margin-top: 17px;
-
-    label {
-        line-height: 1.5;
-        color: #0a0a0a;
-        font-family: open sans, Helvetica Neue, Helvetica, Roboto, Arial,
-            sans-serif;
-        box-sizing: inherit;
-        display: inline-block;
-        font-weight: 600;
-        font-size: 1.2em;
-        letter-spacing: 0.5px;
-        margin-bottom: 0.1em;
-    }
-
-    select {
-        margin: 0;
-        box-sizing: border-box;
-        width: 100%;
-        font-family: inherit;
-        border: 1px solid #c6c6c6;
-        border-radius: 2px;
-        padding: 0.65em;
-        line-height: 1.25;
-        background: none;
-        font-weight: 700;
-        text-transform: uppercase;
-        letter-spacing: 0.7px;
-        font-size: 0.8em;
-        padding-right: 1.1em;
-        appearance: none;
-        // margin-left: 5px;
-        margin-right: 10px;
-    }
-}
-
-.buttonLoadImg {
-    font-size: 0.9rem;
-    font-weight: 700;
-    letter-spacing: 0.8px;
-    padding: 0.65em 1.4em 0.6em;
-}
-
-.file-size {
-    margin-top: 15px;
-    color: #0a0a0a;
-}
-
-.prevImgBlock {
-    padding-top: 75px;
-
-    @media (max-width: 991px) {
-        padding-top: 45px;
-        padding-bottom: 45px;
-    }
-}
-
-.tags {
-    padding-left: 0px;
-
-    button {
-        border-width: 0px;
-        margin-right: 10px;
-        padding: 0px;
-        background-color: grey;
-        color: white;
-    }
-
-    li {
-        list-style-type: none;
-        display: inline-block;
-        background-color: grey;
-        border-radius: 5px;
-        margin-top: 10px;
-        color: white;
-        padding: 5px 10px;
-        margin-right: 10px;
-    }
-}
-
-.ng-dropdown-panel-items {
-    background: white;
-    padding-left: 15px;
-}
-
-.add-post-wrapper {
-    margin-top: 10px;
-    // .invalid {
-    //   // opacity: 0.3;
-    // }
-
-    width: 100%;
-
-    .modal-about-draft-create {
-        position: fixed;
-        bottom: 30px;
-        background-color: red;
-        left: 50%;
-        transform: translateX(-50%);
-    }
-
-    .container {
-        max-width: $global-width;
-
-        .create-post-title {
-            font-size: 1.9em;
-            margin: 0;
-            position: relative;
-            color: $black;
-            // font-family: "Open Sans";
-            font-weight: bold;
-            text-size-adjust: 100%;
-            -webkit-box-direction: normal;
-            -webkit-font-smoothing: antialiased;
-            margin: 15px 15px 5px 0;
-        }
-
-        .create-post-subtitle {
-            margin-top: 10px;
-            color: $black;
-            font-size: 16px;
-            font-weight: 400;
-            // font-family: "Open Sans";
-            text-size-adjust: 100%;
-            -webkit-box-direction: normal;
-            -webkit-font-smoothing: antialiased;
-            margin-bottom: 0px;
-
-            a {
-                color: $black;
-                text-decoration: none;
-
-                &:hover {
-                    color: #ff4242;
-                }
-            }
-        }
-
-        .with-border {
-            border-top: 5px solid #222222;
-        }
-
-        #file {
-            opacity: 0;
-            display: none;
-        }
-
-        .buttons-wrapp {
-            display: flex;
-            justify-content: space-between;
-            padding-bottom: 5px;
-            margin-bottom: 0 !important;
-
-            .button-add {
-                font-weight: 700;
-                text-transform: uppercase;
-                letter-spacing: 0.8px;
-                -webkit-user-select: none;
-                -moz-user-select: none;
-                -ms-user-select: none;
-                user-select: none;
-                padding: 0.85em 1.4em 0.8em 1.4em;
-                -webkit-transition: background-color 0.25s ease-out,
-                    color 0.25s ease-out;
-                -o-transition: background-color 0.25s ease-out,
-                    color 0.25s ease-out;
-                transition: background-color 0.25s ease-out,
-                    color 0.25s ease-out;
-                line-height: 1;
-                -webkit-appearance: none;
-                font-size: 0.9rem;
-                vertical-align: middle;
-                // font-family: "Open Sans";
-                cursor: pointer;
-                text-align: center;
-            }
-
-            .post-button {
-                border: 1px solid transparent;
-                background-color: #ff4242;
-                color: #fefefe;
-
-                &:hover {
-                    background-color: #bc2d2d;
-                    color: #fefefe;
-                }
-            }
-
-            .draft-button {
-                border: 1px solid #8d8d8d;
-                color: #8d8d8d;
-                background: none;
-                max-height: 40px;
-
-                &:hover {
-                    background-color: #8d8d8d;
-                    color: #fefefe;
-                }
-            }
-        }
-
-        .author {
-            margin-bottom: 40px !important;
-        }
-
-        .title {
-            margin-top: 20px !important;
-        }
-
-        .input-wrapper {
-            position: relative;
-            margin-bottom: 10px;
-            margin-top: 30px;
-
-            .links {
-                letter-spacing: 0px;
-                margin-top: 0px !important;
-                font-weight: 600 !important;
-            }
-
-            .require {
-                font-size: 1em;
-                display: block;
-                margin-top: 10px;
-                color: #6a6a6a;
-                font-weight: 200;
-            }
-
-            label {
-                margin: auto;
-                margin-left: 0;
-                font-weight: 600;
-                font-size: 1.2em;
-                letter-spacing: 0.5px;
-                margin-bottom: 0.1em;
-                // font-family: "Open Sans";
-
-                span {
-                    font-weight: 600;
-                    font-size: 1em;
-                    letter-spacing: 0.5px;
-                }
-            }
-
-            select {
-                border-radius: 0px;
-                padding: 0.65em;
-                line-height: 1.25;
-                background-color: white;
-                height: 35px;
-                font-weight: 700;
-                text-transform: uppercase;
-                letter-spacing: 0.7px;
-                -webkit-appearance: none;
-                color: #000;
-                -moz-appearance: none;
-                appearance: none;
-                margin-bottom: 2em;
-                z-index: 2;
-                position: relative;
-                background: transparent;
-            }
-
-            textarea,
-            select,
-            input {
-                // font-family: "Open Sans";
-                width: 100%;
-                display: block;
-                text-indent: 0;
-                padding: 0.55em 0.65em;
-                border: 1px solid #c6c6c6;
-                font-size: 0.9em;
-            }
-
-            textarea,
-            input {
-                overflow-wrap: normal;
-                word-wrap: normal;
-                word-break: normal;
-                line-break: auto;
-                font-size: 16px;
-                line-height: 24px;
-                text-align: start;
-                text-indent: 0;
-                color: $black;
-                overflow: hidden;
-                outline: 0px solid transparent;
-
-                &::placeholder {
-                    color: #aaaaaa;
-                    opacity: 1;
-                    /* Firefox */
-                }
-            }
-
-            select {
-                border-radius: 3px;
-                padding: 0.55em 0.65em 0.55em;
-            }
-
-            .counter {
-                // border-bottom-right-radius: 10px;
-                background-color: $white;
-                position: absolute;
-                bottom: 1px;
-                padding: 5px;
-                right: 1px;
-                color: #ccc;
-                content: attr(data-chars);
-                font-size: 15px;
-                font-family: "Times New Roman", Georgia, Serif;
-                z-index: 1;
-                border-top: solid 1px #ebebeb;
-                border-left: solid 1px #ebebeb;
-                border-radius: 2px 0 0;
-                -webkit-background-clip: padding-box;
-                background-clip: padding-box;
-            }
-        }
-
-        .error-input-post {
-            margin-bottom: 2em;
-            color: #6a6a6a;
-            -webkit-font-smoothing: antialiased;
-        }
-
-        .arrow {
-            position: absolute;
-            top: 34px;
-            right: 10px;
-        }
-
-        .radius {
-            border-bottom-right-radius: 10px !important;
-        }
-    }
-
-    .news-item-metadata {
-        margin-left: auto;
-
-        .metadata-block {
-            vertical-align: middle;
-            margin-left: 5px;
-
-            span {
-                font-weight: 600;
-                font-size: 0.85em;
-            }
-        }
-    }
-
-    .header-metadata {
-        padding: 0.9em 0;
-        display: flex;
-    }
-
-    .preview {
-        padding: 5px;
-    }
-
-    .preview-img {
-        width: 100%;
-    }
-
-    .js--post-category-preview {
-        position: relative;
-
-        span {
-            line-height: 1.5;
-            color: #0a0a0a;
-            -webkit-font-smoothing: antialiased;
-            // font-family: open sans, Helvetica Neue, Helvetica, Roboto, Arial, sans-serif;
-            -webkit-box-direction: normal;
-            font-size: 0.9em;
-            text-transform: uppercase;
-            font-weight: 700;
-            box-sizing: inherit;
-
-            &::before {
-                content: "";
-                position: absolute;
-                display: block;
-                bottom: -6px;
-                height: 3px;
-                width: 40px;
-                background-color: #ff4242;
-            }
-        }
-    }
-
-    .icons {
-        fill: #ff4242;
-
-        svg {
-            margin-right: 0.25em;
-            width: 15px;
-            height: 15px;
-        }
-    }
-
-    .loader {
-        height: 100%;
-        display: flex;
-
-        .cssload-container {
-            position: absolute;
-            top: 100px;
-            left: 100px;
-        }
-
-        .lds-ellipsis {
-            display: inline-block;
-            position: relative;
-            margin: auto;
-            width: 80px;
-            height: 80px;
-        }
-
-        .lds-ellipsis div {
-            position: absolute;
-            top: 33px;
-            width: 13px;
-            height: 13px;
-            border-radius: 50%;
-            background: grey;
-            animation-timing-function: cubic-bezier(0, 1, 1, 0);
-        }
-
-        .lds-ellipsis div:nth-child(1) {
-            left: 8px;
-            animation: lds-ellipsis1 0.6s infinite;
-        }
-
-        .lds-ellipsis div:nth-child(2) {
-            left: 8px;
-            animation: lds-ellipsis2 0.6s infinite;
-        }
-
-        .lds-ellipsis div:nth-child(3) {
-            left: 32px;
-            animation: lds-ellipsis2 0.6s infinite;
-        }
-
-        .lds-ellipsis div:nth-child(4) {
-            left: 56px;
-            animation: lds-ellipsis3 0.6s infinite;
-        }
-
-        @keyframes lds-ellipsis1 {
-            0% {
-                transform: scale(0);
-            }
-
-            100% {
-                transform: scale(1);
-            }
-        }
-
-        @keyframes lds-ellipsis3 {
-            0% {
-                transform: scale(1);
-            }
-
-            100% {
-                transform: scale(0);
-            }
-        }
-
-        @keyframes lds-ellipsis2 {
-            0% {
-                transform: translate(0, 0);
-            }
-
-            100% {
-                transform: translate(24px, 0);
-            }
-        }
-    }
-
-    .error-notification {
-        font-weight: 600;
-        font-size: 90%;
-        margin-top: 0.3em;
-        color: #ff4142;
-        margin-bottom: 20px;
-    }
-
-    .error-tip {
-        line-height: 1.5;
-        -webkit-font-smoothing: antialiased;
-        // font-family: open sans,Helvetica Neue,Helvetica,Roboto,Arial,sans-serif;
-        -webkit-box-direction: normal;
-        text-align: center;
-        user-select: none;
-        box-sizing: inherit;
-        font-size: 14.4px;
-        margin: 0 auto;
-        display: inline-block;
-        font-weight: 600;
-        padding: 0.3em 1em;
-        margin-top: 1em;
-        border-radius: 2px;
-        background-color: #ff4242;
-        color: #fff;
-    }
-}
-
-.animation {
-    animation: img 1s ease-in-out;
-
-    @keyframes img {
-        0% {
-            opacity: 0;
-        }
-
-        100% {
-            opacity: 1;
-        }
-    }
-}
-
-.options {
-    position: absolute;
-    background-color: white;
-    list-style-type: none;
-    padding-left: 15px;
-    width: 100%;
-    z-index: 1;
-}
-
-.displayed {
-    font-size: 100%;
-    font-weight: normal;
-    line-height: 1.5;
-    -webkit-font-smoothing: antialiased;
-    font-family: "Open Sans", Helvetica Neue, Helvetica, Roboto, Arial,
-        sans-serif;
-    box-sizing: inherit;
-    position: fixed;
-    left: 0;
-    right: 0;
-    text-align: center;
-    z-index: 999;
-    // transition: opacity .3s, visibility .3s, transform .2s ease-out;
-    margin-bottom: 50px;
-    pointer-events: none;
-    padding-top: 10px;
-    // opacity: 1;
-    // transform: translateY(0);
-    bottom: 0px;
-
-    div {
-        visibility: visible;
-        pointer-events: all;
-        display: inline-block;
-        background: #545454;
-        color: #fff;
-        box-shadow: 2px 4px 16px 0 rgba(35, 36, 40, 0.26);
-        font-weight: 600;
-        max-width: 420px;
-        width: 100%;
-        text-align: center;
-        border-left: 6px solid;
-        padding: 1em 1.5em;
-    }
-
-    .modal-error {
-        border-color: #ff4242;
-    }
-
-    .modal-draft {
-        border-color: #51cd42;
-    }
-}
-
-.buttons-forse {
-    margin-top: 16px;
-    display: flex;
-
-    p {
-        display: inline-block;
-        font-size: 16px;
-        font-weight: 400;
-        cursor: pointer;
-        padding-left: 0.6em;
-    }
-
-    .forse {
-        margin-left: auto;
-        margin-right: 0;
-    }
-
-    .fa-icon {
-        display: inline-block;
-    }
-
-    fa-icon {
-        font-size: 20px;
-    }
-}
-
-// :host {
-//   display: block;
-// }
-
-// .open-close-container {
-//   border: 1px solid #dddddd;
-//   margin-top: 1em;
-//   padding: 20px 20px 0px 20px;
-//   color: #000000;
-//   font-weight: bold;
-//   font-size: 20px;
-// }
-.title-posts {
-    cursor: pointer;
-    font-weight: 700;
-    color: #0a0a0a;
-    -webkit-font-smoothing: antialiased;
-    font-family: "Open Sans", Helvetica Neue, Helvetica, Roboto, Arial,
-        sans-serif;
-    -webkit-box-direction: normal;
-    box-sizing: inherit;
-    display: -webkit-box;
-    max-height: calc(1.3em * 3);
-    -webkit-line-clamp: 3;
-    -webkit-box-orient: vertical;
-    text-overflow: ellipsis;
-    overflow: hidden;
-    font-size: 1.3em;
-    letter-spacing: -0.3px;
-    margin: 0;
-    line-height: 1.3;
-    transition: color 0.25s;
-
-    &:hover {
-        color: #575757;
-    }
-}
-</style>
