@@ -79,6 +79,7 @@
                                 <editor
                                     v-if="postId"
                                     :postid="postId"
+									:editContent="editContent"
                                     v-model="content"
                                     @editor:saved="saveDraft"
                                     :class="(errorNotif && countContent < 1000) ? 'error' : ''"
@@ -610,10 +611,10 @@ export default {
             // cropper
             imgId: undefined,
             imgCrop: undefined,
-            cropperX: undefined,
-            cropperY: undefined,
-            cropperW: undefined,
-            cropperH: undefined,
+            cropperX: 0,
+            cropperY: 0,
+            cropperW: 500,
+            cropperH: 500,
             visibleCrop: false,
             dropOptions: {
                 url: "/api/media/image-preload/",
