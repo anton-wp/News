@@ -124,26 +124,6 @@
                 </select>
             </div>
 
-            <div class="input-wrapper">
-                <div class="arrow">
-                    <!-- <fa-icon [icon]="faCaretDown"></fa-icon> -->
-                    <svg class="icon" width="17" height="17">
-                        <use xlink:href="#caret-down" />
-                    </svg>
-                </div>
-                <label>
-                    Verdict Options
-                    <span class="required">*</span>
-                </label>
-                <select class="form-input select" v-model="selectedOption">
-                    <option
-                        v-for="option of options"
-                        :key="option.id"
-                        :value="option.title"
-                    >{{ option.title }}</option>
-                </select>
-            </div>
-
             <div class="input-wrapper input-block">
                 <label>
                     Links
@@ -182,6 +162,25 @@
                 >Please add at least 1 link</div>
             </div>
 
+            <div class="input-wrapper input-block">
+                <label>
+                    Publish to Google News*
+                    <span class="required">*</span>
+                </label>
+
+                <!-- <div class="radio-btn">
+                    <div class="radio-btn__item">
+                        <input type="radio" name="gogle-news" :value="true" v-model="displayInFeed" />
+                        <label for="one">Yes</label>
+                    </div>
+
+                    <div class="radio-btn__item">
+                        <input type="radio" name="gogle-news" :value="false" v-model="displayInFeed" />
+                        <label for="two">No</label>
+                    </div>
+                </div>-->
+            </div>
+
             <div class="buttons-wrapp d-block">
                 <div class="buttons-forse">
                     <label class="d-flex align-items-center w-100">
@@ -196,8 +195,15 @@
                     </label>
                 </div>
                 <div class="d-flex justify-content-between">
-                    <button class="button-add post-button" @click.prevent="publishedPost">Publish</button>
-                    <button class="button-add post-button" @click.prevent="publishedPost">Publish</button>
+                    <button
+                        class="button-add post-button"
+                        @click.prevent="upproved = true; declined = false; publishedPost()"
+                    >Approve</button>
+
+                    <button
+                        class="button-add button-add--decline post-button"
+                        @click.prevent="upproved = false; declined = true; publishedPost"
+                    >Decline</button>
                 </div>
             </div>
             <!-- <div class="buttons-wrapp">
@@ -237,6 +243,11 @@ export default {
             years: [],
             now: new Date(),
 
+            content: null,
+
+            title: "",
+            subtitle: "",
+            imgDescript: "",
             forcePublish: false,
             fields: {
                 title: false,
@@ -257,16 +268,23 @@ export default {
             categories: null,
 
             selectedOption: null,
-            options: null,
 
             selectedLinkOption: [],
             linkOption: [],
             newLinkOption: [],
             isLoading: false,
 
-            selectedAuthor: [],
-            authorsOption: [],
-            isLoadingAuthor: false
+            selectedAuthor: null,
+
+            // cropper
+            imgId: undefined,
+            cropperX: undefined,
+            cropperY: undefined,
+            cropperW: undefined,
+            cropperH: undefined,
+            displayInFeed: false,
+            upproved: false,
+            declined: false
         };
     },
 
@@ -358,24 +376,55 @@ export default {
         },
 
         publishedPost() {
-            // this.$v.$touch();
-            // if (this.$v.$invalid) {
-            //     this.errorNotif = true;
-            //     return;
-            // }
-            // this.errorNotif = false;
+            const newData = {};
+
+            newData.title = this.tuitle;
+            newData.subtitle = this.subtitle;
+            newData.bodyJson = this.content;
+            newData.media = this.imgId;
+            newData.source = this.imgDescript;
+            newData.cropperX = this.cropperX;
+            newData.cropperY = this.cropperY;
+            newData.cropperWidth = this.cropperW;
+            newData.cropperHeight = this.cropperH;
+            newData.verdictOption = this.selectedOption;
+            newData.forcePublish = this.forcePublish;
+            newData.displayInFeed = this.displayInFeed;
+            newData.upproved = this.upproved;
+            newData.declined = this.declined;
+            if (this.selectedLinkOption.length) {
+                const tagsForFormdata = this.selectedLinkOption.map(function(
+                    item
+                ) {
+                    if (item.type === "created") {
+                        return item.name;
+                    } else {
+                        return item.id;
+                    }
+                });
+
+                newData.tags = tagsForFormdata.toString();
+            }
+            if (this.selectedCategory) {
+                newData.category = this.selectedCategory;
+            }
+            if (this.selectedDate) {
+                newData.publishedAt = this.selectedDate;
+            }
+            this.errorNotif = true;
+            if (this.selectedLinkOption.length < 1) {
+                return;
+            }
+            this.errorNotif = false;
             // this.$axios
-            //     .$patch(`/api/posts/${this.postId}/publish`, this.formData)
+            //     .$patch(`/api/posts/${this.postId}/review`, this.formData)
             //     .then(resp => {
-            //         // console.log(resp);
             //         this.$toasted.show(resp.message);
             //     })
             //     .catch(error => {
             //         console.log(error);
             //         this.$toasted.show(error.message);
             //     });
-
-            const newData = {};
             console.log(newData);
         }
     },
@@ -428,21 +477,21 @@ export default {
         this.getCategories();
         this.getFields();
 
-        this.$axios
-            .$post("/api/posts/")
-            .then(resp => {
-                this.postId = resp.id;
-                this.dropOptions.params.postId = resp.id;
-            })
-            .catch(error => {
-                console.log(error);
-            });
-
         this.postId = this.postData.id;
-        this.selectedOption = this.postData.verdictOption;
         this.selectedCategory = this.postData.category.id;
+		this.selectedLinkOption = this.postData.tags;
+
+
+        this.title = this.postData.title;
+        // this.content = this.postData.bodyJson;
         this.selectedOption = this.postData.verdictOption;
-        this.selectedLinkOption = this.postData.tags;
+        // this.cropperX = this.postData.cropData.x;
+        // this.cropperY = this.postData.cropData.y;
+        // this.cropperW = this.postData.cropData.width;
+        // this.cropperH = this.postData.cropData.height;
+        this.imgId = this.postData.featured.id;
+        this.imgDescript = this.postData.featured.source;
+        this.subtitle = this.postData.subtitle;
     },
     mounted() {
         this.$store.commit("SET_BREADCRUMBS", [{ title: "Review" }]);

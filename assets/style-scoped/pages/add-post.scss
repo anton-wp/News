@@ -4,7 +4,28 @@
 
 .add-post-wrapper {
 	margin-top: 10px;
-    width: 100%;
+	width: 100%;
+
+	.multiselect__option--highlight {
+		color: #000;
+		background-color: #f4f4f4;
+	}
+
+	.multiselect__option {
+		padding: 7px 10px;
+		min-height: auto;
+	}
+
+	.multiselect__option--highlight:after {
+		color: silver;
+	}
+
+	.multiselect__option:after {
+		padding: 7px 10px;
+		line-height: initial;
+		background-color: #f4f4f4;
+	}
+
 	.crop-wrap {
 		position: relative;
 		overflow: hidden;
@@ -457,6 +478,16 @@
 				&:hover {
 					background-color: #bc2d2d;
 					color: #fefefe;
+				}
+			}
+
+			.button-add--decline {
+				border: 1px solid #8d8d8d;
+				background-color: transparent;
+				color: #8d8d8d;
+				&:hover {
+					color: #fff;
+					background-color: #8d8d8d;
 				}
 			}
 
