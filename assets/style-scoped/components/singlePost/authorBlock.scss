@@ -2,6 +2,21 @@
 	height: 100%;
 	display: flex;
 
+	.reactionBlock {
+		p {
+			font-size: 90%;
+			font-weight: 700;
+		}
+
+		.agree {
+			color: #54DC7B;
+		}
+
+		.disagree {
+			color: #F63E3C;
+		}
+	}
+
 	.user-popup {
 		padding: 1.5em 1.2em 0.8em 1.2em;
 		border-radius: 2px;
@@ -11,7 +26,7 @@
 		z-index: 3;
 		max-width: 20em;
 		min-height: 300px;
-		min-width: 250px;
+		min-width: 280px;
 		width: 100%;
 		border: 1px solid $dedede;
 		border-radius: 4px;
@@ -37,11 +52,45 @@
 			transform: rotate(45deg);
 		}
 	}
+	.user-popup-top {
+		bottom: 85px;
+		padding: 1.5em 1.2em 0.8em 1.2em;
+		background-color: $white;
+		position: absolute;
+		z-index: 3;
+		max-width: 20em;
+		min-height: 300px;
+		min-width: 280px;
+		width: 100%;
+		border: 1px solid $dedede;
+		border-radius: 4px;
+		opacity: 1;
+		-webkit-box-shadow: 2px 4px 16px 0 $shark026;
+		box-shadow: 2px 4px 16px 0 $shark026;
+		font-family: "Open Sans";
+
+		&:after {
+			content: '';
+			border-right: 1px solid $secondary-bgcolor;
+			border-bottom: 1px solid $secondary-bgcolor;
+			position: absolute;
+			bottom: -8px;
+			right: 80%;
+			background: $whiteFE;
+			width: 15px;
+			height: 15px;
+			z-index: 5;
+			-webkit-transform: rotate(45deg);
+			-ms-transform: rotate(45deg);
+			transform: rotate(45deg);
+		}
+	}
 
 	.element {
 		display: inline-block;
 		margin-right: 1em;
 		height: 100%;
+		position: relative;
 
 		&.information {
 			.role {
@@ -64,6 +113,7 @@
 					color: $primary_color;
 					transition: 0.3s;
 				}
+
 				.link {
 					text-decoration: none;
 					color: inherit;
@@ -90,14 +140,17 @@
 
 		.follow {
 			color: $primary_color;
+
 			&:hover {
 				background-color: $hover_color;
 				color: $white;
 			}
 		}
+
 		.unfollow {
 			color: #474747;
-			border-color:#474747;
+			border-color: #474747;
+
 			&:hover {
 				background-color: #474747;
 				color: $white;
@@ -122,6 +175,7 @@
 			cursor: pointer;
 		}
 	}
+
 	.follow-me {
 		display: flex;
 		align-items: center;

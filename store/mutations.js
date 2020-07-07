@@ -23,6 +23,9 @@ export default {
 	SET_DASHBOARD_PAGINATIONS: (state, paginations) => {
 		state.dashboard.paginations = paginations;
 	},
+	ADD_COMMENT_REPLY: (state, id) => {
+		state.commentsReply = id;
+	},
 	ADD_IDS: (state, ids) => {
 		state.dashboard.ids = state.dashboard.ids.concat(ids);
 	},
@@ -87,6 +90,12 @@ export default {
 	},
  	CLEAR_PROFILE: (state) => {
 		state.profile = Object;
+	},
+ 	CLEAR_BOOKMARKS: (state) => {
+		state.bookmarks = [];
+	},
+ 	CLEAR_SUBSCRIPTION: (state) => {
+		state.subscriptions = [];
 	},
 	CLEAR_DASHBOARD_IDS: (state) => {
 		state.dashboard.ids = [];

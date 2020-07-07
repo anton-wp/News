@@ -13,7 +13,7 @@
             v-if="!pending"
             id="username-link"
             @mouseover="toggle"
-          >{{ author.firstName }} {{ author.lastName }}</span>
+          >&thinsp;{{ author.firstName }} {{ author.lastName }}&thinsp;</span>
         </nuxt-link>
         <time class="author">{{ new Date(this.publishedAt).toDateString() }}</time>
         <br />
@@ -27,15 +27,6 @@
           <news-card-header-marks :colorScheme="colorScheme" :pending="false" />
         </div>
       </span>
-
-      <!-- // after do make role in profile -->
-
-      <!-- <a v-if="$store.getters.USER_TYPE === 'super-admin'" class="action">
-            <svg width="12" height="15">
-                <use xlink:href="#trash" />
-            </svg>
-            delete
-      </a>-->
     </div>
   </div>
 </template>

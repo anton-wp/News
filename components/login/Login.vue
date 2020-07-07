@@ -315,6 +315,8 @@ export default {
           this.loading = false;
 
           this.closeLoginPopup();
+          this.$store.dispatch("getBookmarks");
+          this.$store.dispatch("getSubscriptions");
         });
     },
     registration(formData) {

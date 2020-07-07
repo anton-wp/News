@@ -17,6 +17,7 @@ const store = () => new Vuex.Store({
 		modal: Object,
 		breadcrumbs: [],
 		bookmarks: [],
+		commentsReply: '',
 		subscriptions: [],
 		header: {
 			menu: [],

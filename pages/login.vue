@@ -87,6 +87,7 @@ import Cookies from "js-cookie";
 import jwt_decode from "jwt-decode";
 
 export default {
+	middleware: "notAuth",
   components: {
     Social
   },
@@ -144,6 +145,8 @@ export default {
         })
         .then(resp => {
           this.loading = false;
+          this.$store.dispatch("getBookmarks");
+          this.$store.dispatch("getSubscriptions");
         });
     },
     changeLoginPage(type) {

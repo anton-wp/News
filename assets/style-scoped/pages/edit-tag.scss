@@ -5,6 +5,22 @@
 		align-items: flex-start;
 		margin-bottom: 1.5em;
 
+		.categoryCheckbox {
+			width: 16px;
+			height: 16px;
+			display: inline-flex;
+			justify-content: center;
+			align-items: center;
+			vertical-align: middle;
+			border: 1px solid #0a0a0a;
+			border-radius: 5px;
+			margin-right: 5px;
+
+			svg {
+				display: block;
+			}
+		}
+
 		span {
 			font-size: 100%;
 			font-weight: 400;
@@ -29,9 +45,18 @@
 
 		label {
 			cursor: pointer;
+			margin-bottom: 0px;
 		}
 	}
-
+	.wrap-featured {
+		display: flex;
+		align-items: center;
+		cursor: pointer;
+	}
+	.text-right {
+		display: flex;
+    justify-content: flex-end;
+	}
 	.block-button {
 		button {
 			user-select: none;
