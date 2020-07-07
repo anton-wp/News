@@ -179,28 +179,68 @@
                                 <div v-if="!draft && !review" class="col-lg-12">
                                     <div class="comment-wrapper">
                                         <span class="title">your verdict</span>
-                                        <span class="about">
+                                        <span class="about"@mouseenter="message = true" @mouseleave="message = false">
                                             About Verdict
-                                            img
+                                            <svg class="icon" width="17" height="17">
+                        <use xlink:href="#eclipse-question" />
+                      </svg>
                                         </span>
                                     </div>
                                     <span
-                                        class="aboutPopup"
+                                        v-if="message"class="aboutPopup"
                                     >Verdict is top voted comment by all members. One vote per member. Verdict can change over time.</span>
                                 </div>
                                 <div v-if="!draft && !review" class="col-12">
-                                    <!-- <textarea  formControlName="body"
-													class="form-input with-border"
-													[froalaEditor]="froalaOptions"
-													maxlength="10000" >
-                                    </textarea>-->
-                                    <div class="blockCheckbox">
+                                    <textarea class="form-input with-border" v-model="comment"></textarea>
+                  <div class="blockCheckbox" >
+                                    <label for="checkbox" @click="subscribe = !subscribe">
+                                    <div class="categoryCheckbox">
+                        <svg width="10" height="10" v-if="subscribe">
+                          <use xlink:href="#checkbox" />
+                        </svg>
                                         <input type="checkbox" class="checkbox" />
-                                        <label for="checkbox">subscribe to comments</label>
+                                        </div>subscribe to comments</label>
                                     </div>
                                     <div class="blockButton">
-                                        <button>agree</button>
-                                        <button>disagree</button>
+                                        <button@click="createdComment(true)">agree</button>
+                                        <button@click="createdComment(false)">disagree</button>
+                  </div>
+                  <div class="sort-comments">
+                    <span
+											v-for="(sortAc, index) in sortActions"
+											:key="index"
+                      class="col-6 col-sm-3"
+                      :class="orderBy === sortAc.action ? 'active-sort' : ''"
+                      @click="sortUpdate(sortAc.action)"
+                    >
+                      {{ sortAc.title }}
+                      <div>
+                        <svg
+                          v-if="orderBy !== sortAc.action || orderBy === sortAc.action && order === 'ASC'"
+                          class="carret-up"
+                          width="10"
+                          height="10"
+                        >
+                          <use xlink:href="#caret-down" />
+                        </svg>
+                        <svg
+                          v-if="orderBy !== sortAc.action || orderBy === sortAc.action && order === 'DESC'"
+                          :class="orderBy === sortAc.action && order === 'DESC' ? 'active-down' : ''"
+                          width="10"
+                          height="10"
+                        >
+                          <use xlink:href="#caret-down" />
+                        </svg>
+                      </div>
+                    </span>
+                  </div>
+                  <div
+                    class="comments"
+                    v-for="comment of comments"
+                    :key="comment.id"
+                    :id="comment.id"
+                  >
+                    <comment :postId="data.id" :data="comment" />
                                     </div>
                                 </div>
                             </div>
@@ -219,6 +259,7 @@
 <script>
 import PrevNext from "~/components/singlePost/prevNext.vue";
 import AuthorBlock from "~/components/singlePost/authorBlock.vue";
+import Comment from "~/components/singlePost/comment.vue";
 import Marks from "~/components/singlePost/marks.vue";
 import SocialBlock from "~/components/singlePost/socialBlock.vue";
 import ButtonBlockHead from "~/components/singlePost/buttonBlockHead.vue";
@@ -235,8 +276,8 @@ export default {
         Marks,
         SocialBlock,
         RelatedBlock,
-        AsideReview
-    },
+        AsideReview,
+    Comment},
     props: {
         data: Object,
         slug: String,
@@ -291,24 +332,84 @@ export default {
     },
     data() {
         return {
-            bodySize: 110
-        };
+            bodySize: 110,
+        comment: "",
+      message: false,
+      subscribe: false,
+      comments: [],
+      page: 1,
+      orderBy: "date",
+      order: "ASC",
+			paginations: Object,
+			sortActions: [
+				{
+					title: 'Latest',
+					action: 'date'
+				},
+				{
+					title: 'Top Voted',
+					action: 'voted'
+				},
+				{
+					title: 'Agree',
+					action: 'agree'
+				},
+				{
+					title: 'Disagree',
+					action: 'agree'
+				},
+			]};
     },
-    methods: {
+    methods: {sortUpdate(type) {
+      if (type === this.orderBy) {
+        if (this.order === "ASC") {
+          this.order = "DESC";
+        } else {
+          this.order = "ASC";
+        }
+      } else {
+				this.orderBy = type
+        this.order = "ASC";
+      }
+      this.getComments();
+    },
         changeFontSize() {
             if (this.bodySize === 130) {
                 this.bodySize = 90;
             } else {
                 this.bodySize = this.bodySize + 10;
             }
-        }
+        },
+    createdComment(postReaction) {
+      let data = {
+        body: this.comment,
+        postReaction: postReaction,
+        subscribe: this.subscribe
+      };
+      this.$axios
+        .$post(`/api/posts/${this.data.id}/comments`, data)
+        .then(res => {
+          console.log(res);
+          this.comment = "";
+        });
+    },
+    getComments() {
+      this.$axios
+        .$get(
+          `/api/posts/${this.data.id}/comments?order=${this.order}&orderBy=${this.orderBy}&page=${this.page}`
+        )
+        .then(res => {
+          this.comments = res.data;
+          this.paginations = res.pagination;
+        });
+    }
     },
     provide() {
         return {
             id: this.data.id
         };
     },
-    created() {
+    created() {this.getComments();
         if (this.data.category) {
             this.$store.commit("SET_BREADCRUMBS", [
                 {

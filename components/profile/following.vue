@@ -54,7 +54,6 @@ export default {
     };
   },
   created() {
-		console.log(123)
     if (this.type === "author") {
       this.path = `author/${this.$route.params.slug}`;
     } else {

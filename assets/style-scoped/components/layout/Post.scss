@@ -1,6 +1,110 @@
+@media (max-width: 576px) {
+	.sort-comments:nth-child(n + 2) {
+		border-top: 1px solid #7a7979 !important;
+	}
+}
+
+@media (min-width: 576px) {
+	.sort-comments:nth-last-child(n + 2) {
+		border-top: 1px solid #7a7979 !important;
+	}
+}
+
 .post-layout {
 	.background {
 		background-color: $secondary-bgcolor;
+	}
+
+	.reply-comment {
+		margin-top: 36px;
+	}
+
+	.button-open-replies {
+		display: flex;
+		justify-content: center;
+		margin-top: 36px;
+
+		hr {
+			height: 1px;
+			background-color: #000;
+			color: black;
+			border: none;
+			z-index: 1;
+			position: absolute;
+			width: 100%;
+			bottom: 23px;
+		}
+
+		button {
+			border: none;
+			background-color: white;
+			font-size: 16px;
+			font-weight: 600;
+			cursor: pointer;
+			color: #7a7979;
+			z-index: 2;
+
+			svg {
+				color: #ff4242;
+			}
+		}
+	}
+
+	.sort-comments {
+		display: flex;
+		flex-wrap: wrap;
+		margin-bottom: 15px;
+
+		&:nth-last-child(n + 1) {
+			border-right: 1px solid #7a7979;
+		}
+
+		.active-down {
+			margin-top: 4px;
+		}
+
+		span {
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			border: 1px solid #7a7979;
+			border-right: none;
+			border-top: none;
+			color: #7a7979;
+			letter-spacing: .9px;
+			padding: 0.55em 1.4em;
+			font-weight: 600;
+			font-size: .8rem;
+			transition: background-color .25s ease-out, color .25s ease-out;
+			cursor: pointer;
+
+			&:hover {
+				border-color: #a10000;
+				background-color: #bc2d2d;
+				color: #fff;
+			}
+		}
+
+		.active-sort {
+			border-color: #a10000;
+			background-color: #ff4242;
+			color: #fff;
+		}
+
+		div {
+			display: flex;
+			flex-direction: column;
+			margin-left: 5px;
+
+			svg {
+				margin-top: -4px;
+			}
+
+			.carret-up {
+				margin-top: 2px;
+				transform: rotate(180deg);
+			}
+		}
 	}
 
 	.blockCheckbox {
@@ -8,10 +112,11 @@
 		margin-top: 0.6em;
 
 		label {
+			display: flex;
+			justify-content: center;
+			align-items: center;
 			line-height: 1.5;
-			text-align: center;
 			box-sizing: inherit;
-			display: inline-block;
 			font-size: 0.8em;
 			font-weight: 700;
 			text-transform: uppercase;
@@ -20,6 +125,84 @@
 			padding-left: 0.6em;
 			user-select: none;
 			cursor: pointer;
+
+			.categoryCheckbox {
+				margin-right: 10px;
+			}
+		}
+	}
+
+	.comment {
+		position: relative;
+		padding: 1.5em 1em 1.3em;
+
+		.buttons {
+			margin-top: 1em;
+
+			button {
+				border: none;
+				background-color: inherit;
+				text-transform: uppercase;
+				font-size: .9em;
+				font-weight: 600;
+				line-height: 1.2;
+				color: #929292;
+				transition: color 0.3s;
+				margin-right: 1.8em;
+
+				&:hover {
+					color: #ff4242;
+				}
+
+				svg {
+					fill: #ff4242;
+					color: #ff4242;
+					margin-right: 10px;
+				}
+			}
+		}
+
+		.title {
+			padding-top: 20px;
+
+			p {
+				font-size: 1.2em;
+				font-weight: 400;
+				line-height: 1.6;
+				margin: 5px 0 10px;
+				display: block;
+				text-align: justify;
+				text-indent: 1em;
+			}
+		}
+	}
+
+	.verdict {
+		display: flex;
+		position: absolute;
+		top: 0px;
+		right: 0px;
+		padding-top: 55px;
+		padding-right: 1em;
+
+		div {
+			display: flex;
+			flex-direction: column;
+			// justify-content: center;
+
+			span {
+				font-weight: 600;
+				line-height: 20px;
+				text-align: center;
+			}
+
+			.value {
+				font-size: 23px;
+			}
+
+			.label {
+				font-size: 12px;
+			}
 		}
 	}
 
@@ -65,7 +248,7 @@
 		padding: 3px 5px;
 		font-size: 14px;
 		font-weight: 300;
-		transform: translateY(45px);
+		transform: translateY(35px);
 		z-index: 5;
 		top: 0px;
 		text-align: center;

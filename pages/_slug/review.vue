@@ -34,31 +34,30 @@ export default {
 
         const slug = params.slug;
 
-        return $axios
-            .$get(`/api/posts/${slug}/edit`)
-            .then(response => {
+    return $axios
+      .$get(`/api/posts/${slug}/edit`)
+      .then(response => {
 
-                const tag = response.type === "feed";
-                const type =
-                    response.type === "feed" ? "category" : response.type;
-                const data = response.data;
-                let term = response.term || { name: "news" };
+        const tag = response.type === "feed";
+        const type = response.type === "feed" ? "category" : response.type;
+        const data = response.data;
+        let term = response.term || { name: "news" };
 
-                if (type === "post") {
-                    term = null;
-                }
-                const pagination = response.pagination;
+        if (type === "post") {
+          term = null;
+        }
+        const pagination = response.pagination;
 
-                const prev = response.previous;
-                const next = response.next;
+        const prev = response.previous;
+        const next = response.next;
 
-                // console.log(data);
+        // console.log(data);
 
-                return { tag, type, data, term, pagination, prev, next };
-            })
-            .catch(error => {
-                // $router.push('/');
-            });
-    }
+        return { tag, type, data, term, pagination, prev, next };
+      })
+      .catch(error => {
+        // $router.push('/');
+      });
+  }
 };
 </script>

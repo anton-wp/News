@@ -1,9 +1,9 @@
 <template>
   <button class="bookmark" :disabled="disabled" @click="click">
-    <svg width="20" height="20" v-if="!$store.state.bookmarks.includes(this.id)">
+    <svg width="20" height="20" v-if="!bookmarks.includes(this.id)">
       <use xlink:href="#bookmark-empty" />
     </svg>
-    <svg width="20" height="20" v-if="$store.state.bookmarks.includes(this.id)">
+    <svg width="20" height="20" v-if="bookmarks.includes(this.id)">
       <use xlink:href="#bookmark" />
     </svg>
   </button>
@@ -25,11 +25,17 @@ export default {
       typeLoginPopup: ""
     };
   },
+  computed: {
+    ...mapState(["bookmarks"]),
+    // bookmarkUpdate() {
+    //   return this.bookmarks.includes(this.id);
+    // }
+  },
   methods: {
     LogIn() {
       let data = {
         open: true,
-        type: 'logIn'
+        type: "logIn"
       };
       this.$store.commit("UPDATE_LOGIN_POPUP", data);
     },

@@ -129,10 +129,7 @@ export default {
   },
   data() {
     return {
-      // loginPopupActive: false,
-      // typeLoginPopup: "",
       popupMore: false,
-      // categories: [],
       isToken: false,
       windowWidth: 0,
       cropMenu: 0,
@@ -141,10 +138,8 @@ export default {
   },
   mounted() {
     if (this.bookmarks.length === 0 && this.$store.state.auth.loggedIn) {
-      this.getBookmarks();
-    }
-    if (this.subscriptions.length === 0 && this.$store.state.auth.loggedIn) {
-      this.getSubscriptions();
+      this.$store.dispatch('getBookmarks');
+      this.$store.dispatch('getSubscriptions');
     }
     this.$nextTick(function() {
       window.addEventListener("resize", this.getWindowWidth);
@@ -156,22 +151,22 @@ export default {
     ...mapState(["header", "bookmarks", "subscriptions", "loginModal"])
   },
   methods: {
-    getBookmarks() {
-      this.$axios
-        .$get(`/api/profile/bookmarks/ids`)
-        .then(res => {
-          this.$store.dispatch("GET_BOOKMARK", res.data);
-        })
-        .catch(error => console.error(error));
-    },
-    getSubscriptions() {
-      this.$axios
-        .$get(`/api/profile/subscriptions/ids`)
-        .then(res => {
-          this.$store.dispatch("GET_SUBSCRIPTIONS", res.data);
-        })
-        .catch(error => console.error(error));
-    },
+    // getBookmarks() {
+    //   this.$axios
+    //     .$get(`/api/profile/bookmarks/ids`)
+    //     .then(res => {
+		// 			this.$store.dispatch("GET_BOOKMARK", res.data);
+    //     })
+    //     .catch(error => console.error(error));
+    // },
+    // getSubscriptions() {
+    //   this.$axios
+    //     .$get(`/api/profile/subscriptions/ids`)
+    //     .then(res => {
+    //       this.$store.dispatch("GET_SUBSCRIPTIONS", res.data);
+    //     })
+    //     .catch(error => console.error(error));
+    // },
     getMenu() {
       this.$axios
         .$get(`/api/menu/header`)
