@@ -9,11 +9,6 @@ export default {
     middleware: ["auth", "role"],
     components: {
         MakingPost
-    },
-
-    props: {
-        add: String,
-        edit: String
     }
 };
 </script>

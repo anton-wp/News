@@ -8,7 +8,7 @@
         :pagination="pagination"
         :prev="prev"
         :next="next"
-		review
+        review
     />
 </template>
 
@@ -31,11 +31,13 @@ export default {
         };
     },
     asyncData({ $axios, $router, params }) {
-        const route = params.slug === "news" ? "posts/query/news" : params.slug;
+
+        const slug = params.slug;
 
         return $axios
-            .$get(`/api/${route}?limit=12`)
+            .$get(`/api/posts/${slug}/edit`)
             .then(response => {
+
                 const tag = response.type === "feed";
                 const type =
                     response.type === "feed" ? "category" : response.type;
@@ -50,7 +52,7 @@ export default {
                 const prev = response.previous;
                 const next = response.next;
 
-                console.log(data);
+                // console.log(data);
 
                 return { tag, type, data, term, pagination, prev, next };
             })

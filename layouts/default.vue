@@ -1,12 +1,12 @@
 <template>
-  <div>
-    <custom-svg />
-    <app-header />
-    <hot-news />
-    <breadcrumbs />
-    <nuxt />
-    <app-footer />
-  </div>
+    <div>
+        <custom-svg />
+        <app-header />
+        <hot-news />
+        <breadcrumbs />
+        <nuxt />
+        <app-footer />
+    </div>
 </template>
 
 <script>
@@ -17,14 +17,14 @@ import Breadcrumbs from "~/components/layout/Breadcrumbs";
 import AppFooter from "~/components/layout/AppFooter";
 
 export default {
-  name: "default",
-  components: {
-    CustomSvg,
-    AppHeader,
-    AppFooter,
-    HotNews,
-    Breadcrumbs
-  }
+    name: "default",
+    components: {
+        CustomSvg,
+        AppHeader,
+        AppFooter,
+        HotNews,
+        Breadcrumbs
+    }
 };
 </script>
 <style lang="scss">

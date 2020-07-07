@@ -164,21 +164,33 @@
 
             <div class="input-wrapper input-block">
                 <label>
-                    Publish to Google News*
+                    Publish to Google News
                     <span class="required">*</span>
                 </label>
 
-                <!-- <div class="radio-btn">
-                    <div class="radio-btn__item">
-                        <input type="radio" name="gogle-news" :value="true" v-model="displayInFeed" />
-                        <label for="one">Yes</label>
+                <div class="radio-btn d-flex">
+                    <div class="radio-btn__item mr-4">
+                        <input
+                            id="google-true"
+                            type="radio"
+                            name="gogle-news"
+                            :value="true"
+                            v-model="displayInFeed"
+                        />
+                        <label for="google-true">Yes</label>
                     </div>
 
                     <div class="radio-btn__item">
-                        <input type="radio" name="gogle-news" :value="false" v-model="displayInFeed" />
-                        <label for="two">No</label>
+                        <input
+                            id="google-false"
+                            type="radio"
+                            name="gogle-news"
+                            :value="false"
+                            v-model="displayInFeed"
+                        />
+                        <label for="google-false">No</label>
                     </div>
-                </div>-->
+                </div>
             </div>
 
             <div class="buttons-wrapp d-block">
@@ -202,7 +214,7 @@
 
                     <button
                         class="button-add button-add--decline post-button"
-                        @click.prevent="upproved = false; declined = true; publishedPost"
+                        @click.prevent="upproved = false; declined = true; publishedPost()"
                     >Decline</button>
                 </div>
             </div>
@@ -241,7 +253,8 @@ export default {
             hours: [],
             minutes: [],
             years: [],
-            now: new Date(),
+			now: new Date(),
+			reservedTimes: [],
 
             content: null,
 
@@ -353,6 +366,19 @@ export default {
                 });
         },
 
+        getReservedTimes() {
+            this.$axios
+                .$get("/api/posts/create-helpers/get-reserved-time")
+                .then(resp => {
+                    resp.data.forEach(element => {
+                        this.reservedTimes.push(Date.parse(element));
+                    });
+                })
+                .catch(error => {
+                    console.log(error);
+                });
+        },
+
         monthDiff(dateFrom, dateTo) {
             return (
                 dateTo.getMonth() -
@@ -366,19 +392,35 @@ export default {
             return Math.floor(diffMs / 1000 / 60);
         },
 
-        initDate() {
-            this.date.day = this.now.getDate();
-            this.date.year = this.now.getFullYear();
-            this.date.month = this.now.getMonth();
+        getRoundedDate(minutes, d) {
+            let ms = 1000 * 60 * minutes; // convert minutes to ms
+            let roundedDate = new Date(Math.ceil(d.getTime() / ms) * ms);
 
-            this.date.hours = this.now.getHours();
-            this.date.minutes = this.now.getMinutes();
+            this.date.day = roundedDate.getDate();
+            this.date.year = roundedDate.getFullYear();
+            this.date.month = roundedDate.getMonth();
+
+            this.date.hours = roundedDate.getHours();
+            this.date.minutes = roundedDate.getMinutes();
+        },
+
+        initDate(settedDate = null) {
+            const now = settedDate !== null ? settedDate : this.now;
+
+            console.log(now);
+
+            this.date.day = now.getDate();
+            this.date.year = now.getFullYear();
+            this.date.month = now.getMonth();
+
+            this.date.hours = now.getHours();
+            this.date.minutes = now.getMinutes();
         },
 
         publishedPost() {
             const newData = {};
 
-            newData.title = this.tuitle;
+            newData.title = this.postData.title;
             newData.subtitle = this.subtitle;
             newData.bodyJson = this.content;
             newData.media = this.imgId;
@@ -413,8 +455,11 @@ export default {
             }
             this.errorNotif = true;
             if (this.selectedLinkOption.length < 1) {
+                console.log("232323");
+
                 return;
             }
+
             this.errorNotif = false;
             // this.$axios
             //     .$patch(`/api/posts/${this.postId}/review`, this.formData)
@@ -447,7 +492,10 @@ export default {
                 minutes: this.minutesDiff(this.now, this.selectedDate)
             };
 
-            if (diffs.minutes < 0) {
+            if (this.reservedTimes.includes(Date.parse(this.selectedDate))) {
+                this.$toasted.error("This date is reserved");
+                this.initDate();
+            } else if (diffs.minutes < 0) {
                 this.initDate();
             }
 
@@ -457,6 +505,7 @@ export default {
 
     created() {
         this.initDate();
+        this.getReservedTimes();
 
         for (
             let i = this.now.getFullYear();
@@ -477,18 +526,19 @@ export default {
         this.getCategories();
         this.getFields();
 
+        console.log(this.postData);
+
         this.postId = this.postData.id;
         this.selectedCategory = this.postData.category.id;
-		this.selectedLinkOption = this.postData.tags;
-
+        this.selectedLinkOption = this.postData.tags;
 
         this.title = this.postData.title;
-        // this.content = this.postData.bodyJson;
+        this.content = this.postData.bodyJson;
         this.selectedOption = this.postData.verdictOption;
-        // this.cropperX = this.postData.cropData.x;
-        // this.cropperY = this.postData.cropData.y;
-        // this.cropperW = this.postData.cropData.width;
-        // this.cropperH = this.postData.cropData.height;
+        this.cropperX = this.postData.cropData.x;
+        this.cropperY = this.postData.cropData.y;
+        this.cropperW = this.postData.cropData.width;
+        this.cropperH = this.postData.cropData.height;
         this.imgId = this.postData.featured.id;
         this.imgDescript = this.postData.featured.source;
         this.subtitle = this.postData.subtitle;
