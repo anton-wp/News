@@ -11,11 +11,6 @@ export default {
         MakingPost
     },
 
-    props: {
-        add: String,
-        edit: String
-    },
-
 };
 </script>
 

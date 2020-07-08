@@ -79,7 +79,7 @@
                                 <editor
                                     v-if="postId"
                                     :postid="postId"
-									:editContent="editContent"
+                                    :editContent="editContent"
                                     v-model="content"
                                     @editor:saved="saveDraft"
                                     :class="(errorNotif && countContent < 1000) ? 'error' : ''"
@@ -113,7 +113,7 @@
                                 >
                                     <div
                                         class="schedule-date-col schedule-date"
-                                        v-if="add && fields.publishedAt"
+                                        v-if="fields.publishedAt"
                                     >
                                         <label>Date</label>
                                         <div class="date-select-wrap">
@@ -185,7 +185,7 @@
                                 >
                                     <div
                                         class="schedule-date-col schedule-time"
-                                        v-if="add && fields.publishedAt"
+                                        v-if="fields.publishedAt"
                                     >
                                         <label>Time</label>
                                         <div class="time-select-wrap">
@@ -651,7 +651,7 @@ export default {
             this.$axios
                 .$get("/api/profile/post-fields?action=create")
                 .then(resp => {
-					console.log(resp);
+                    console.log(resp);
 
                     this.fields = resp.fields;
                 })
@@ -778,19 +778,17 @@ export default {
             this.date.minutes = roundedDate.getMinutes();
         },
 
-        initDate() {
-            this.date.day = this.now.getDate();
-            this.date.year = this.now.getFullYear();
-            this.date.month = this.now.getMonth();
+        initDate(settedDate = null) {
+            const now = settedDate !== null ? settedDate : this.now;
 
-            this.date.hours = this.now.getHours();
-            this.date.minutes = this.now.getMinutes();
+            console.log(now);
 
-            if (this.fields.publishInterval == 10) {
-                this.getRoundedDate(10, this.selectedDate);
+            this.date.day = now.getDate();
+            this.date.year = now.getFullYear();
+            this.date.month = now.getMonth();
 
-                return;
-            }
+            this.date.hours = now.getHours();
+            this.date.minutes = now.getMinutes();
         },
 
         trigerInputUpload() {
@@ -881,7 +879,7 @@ export default {
             if (this.selectedOption) {
                 newData.verdictOption = this.selectedOption;
             }
-            if (this.selectedDate && this.fields.publishedAt) {
+            if (this.fields.publishedAt) {
                 newData.publishedAt = this.selectedDate.toString();
             }
 
@@ -935,10 +933,39 @@ export default {
 
             this.errorNotif = false;
 
+            const newData = {};
+
+            newData.title = this.$v.title.$model;
+            newData.subtitle = this.$v.subtitle.$model;
+            newData.bodyJson = this.content;
+
+            if (this.selectedLinkOption.length) {
+                const tagsForFormdata = this.selectedLinkOption.map(function(
+                    item
+                ) {
+                    if (item.type === "created") {
+                        return item.name;
+                    } else {
+                        return item.id;
+                    }
+                });
+
+                newData.tags = tagsForFormdata.toString();
+            }
+            newData.category = this.selectedCategory;
+            newData.verdictOption = this.selectedOption;
+            newData.publishedAt = this.selectedDate.toString();
+            newData.forcePublish = this.forcePublish;
+            newData.media = this.imgId;
+            newData.source = this.$v.imgDescript.$model;
+            newData.cropperY = this.cropperY;
+            newData.cropperX = this.cropperX;
+            newData.cropperWidth = this.cropperW;
+            newData.cropperHeight = this.cropperH;
+
             this.$axios
-                .$patch(`/api/posts/${this.postId}/publish`, this.formData)
+                .$patch(`/api/posts/${this.postId}/publish`, newData)
                 .then(resp => {
-                    // console.log(resp);
                     this.$toasted.show(resp.message);
                 })
                 .catch(error => {
@@ -1023,8 +1050,6 @@ export default {
     },
 
     created() {
-        this.initDate();
-
         this.getFields();
         this.getCategories();
         this.getOptions();
@@ -1051,6 +1076,7 @@ export default {
         }
 
         if (this.add) {
+            this.initDate();
             this.$axios
                 .$post("/api/posts/")
                 .then(resp => {
@@ -1092,6 +1118,8 @@ export default {
                     }
                     this.imgDescript = resp.data.featured.source;
                     this.subtitle = resp.data.subtitle;
+
+                    this.initDate(new Date(resp.data.publishedAt));
                 })
                 .catch(error => {
                     console.log(error);

@@ -94,13 +94,17 @@
                       <div class="col-lg-6">
                         <author-block :author="data.author" :publishedAt="data.publishedAt" />
                       </div>
-                      <div class="col-lg-6" style="align-items: center; display: flex;">
+                      <div
+                        class="col-lg-6"
+                        style="align-items: center; display: flex;"
+                        v-if="!review"
+                      >
                         <marks :author="data.author" />
                       </div>
                     </div>
                   </div>
                 </div>
-                <div class="col-12">
+                <div class="col-12" v-if="!review">
                   <social-block v-if="data" :post="data" @changeFontSize="changeFontSize" />
                 </div>
                 <div class="col-lg-12">
@@ -119,11 +123,11 @@
                     <!-- {{data.body}} -->
                   </p>
                 </div>
-                <div class="col-12">
+                <div class="col-12" v-if="!review">
                   <social-block v-if="data" :post="data" @changeFontSize="changeFontSize" />
                 </div>
                 <!-- <social-block [(fontSize)]="bodySize" class="col-lg-12"></social-block> -->
-                <div class="col-lg-12" style="margin-top: 25px;">
+                <div class="col-lg-12" style="margin-top: 25px;" v-if="!review">
                   <div class="linked-title">
                     <span>linked</span>
                   </div>
@@ -133,16 +137,16 @@
                     </div>
                   </div>
                 </div>
-                <div class="col-lg-12">
+                <div class="col-lg-12" v-if="!review">
                   <prev-next :slug="data.slug" />
                 </div>
-                <div v-if="!draft" class="col-lg-12">
+                <div v-if="!draft && !review" class="col-lg-12">
                   <div class="related-title">
                     <span>related</span>
                   </div>
                   <related-block />
                 </div>
-                <div v-if="!draft" class="col-lg-12">
+                <div v-if="!draft && !review" class="col-lg-12">
                   <div class="comment-wrapper">
                     <span class="title">your verdict</span>
                     <span class="about" @mouseenter="message = true" @mouseleave="message = false">
@@ -157,7 +161,7 @@
                     class="aboutPopup"
                   >Verdict is top voted comment by all members. One vote per member. Verdict can change over time.</span>
                 </div>
-                <div v-if="!draft" class="col-12">
+                <div v-if="!draft && !review" class="col-12">
                   <textarea class="form-input with-border" v-model="comment"></textarea>
                   <div class="blockCheckbox">
                     <label for="checkbox" @click="subscribe = !subscribe">
@@ -227,9 +231,6 @@
                     :id="comment.id"
                   >
                     <comment :postId="data.id" :data="comment" />
-                  </div>
-                  <div class="button-block" v-if="paginations.next">
-                    <button class="loadMore" @click="loadMore">Load More</button>
                   </div>
                 </div>
               </div>
@@ -347,25 +348,14 @@ export default {
         },
         {
           title: "Disagree",
-          action: "disagree"
+          action: "agree"
         }
       ]
     };
   },
   methods: {
-    loadMore() {
-      this.page = this.page + 1;
-      this.getComments();
-    },
     sortUpdate(type) {
-      this.disabled = true;
-      if (type === "agree") {
-        this.orderBy = "agree";
-        this.order = "DESC";
-      } else if (type === "disagree") {
-        this.orderBy = "disagree";
-        this.order = "ASC";
-      } else if (type === this.orderBy) {
+      if (type === this.orderBy) {
         if (this.order === "ASC") {
           this.order = "DESC";
         } else {
