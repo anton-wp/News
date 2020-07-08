@@ -30,7 +30,7 @@
         </svg>
         Reply
       </button>
-      <button>
+      <button @click="openReport">
         <svg width="14" height="17">
           <use xlink:href="#flag" />
         </svg>
@@ -44,29 +44,80 @@
       </button>
     </div>
     <div class="replies">
-      <reply-comment v-if="commentsReply === data.id" :postId="postId" :id="data.id" />
+      <reply-comment
+        v-if="commentsReply === data.id"
+        :postId="postId"
+        :id="data.id"
+        @createComments="createComments"
+      />
     </div>
     <div v-if="data.hasReplies" class="button-open-replies">
-			<hr/>
-      <button @click="getCommentReplies">
+      <hr v-if="replies" />
+      <button v-if="replies" @click="getCommentReplies">
         See all replies
         <svg width="15" height="15">
           <use xlink:href="#caret-down" />
         </svg>
       </button>
     </div>
+    <div class="comments comment-2-replise">
+      <comment-replies
+        v-for="comment in dataReplies"
+        :key="comment.id"
+        :data="comment"
+        :postId="postId"
+        :index="1"
+      />
+    </div>
+    <modal-window v-if="report" @closeModal="closeReport">
+      <div class="report">
+        <label v-for="item in reportArr" :key="item">
+          <input type="radio" :value="item" v-model="reportValue" />
+          {{ item }}
+        </label>
+        <button class="report-button" @click="reportClick">Report</button>
+      </div>
+    </modal-window>
+    <modal-window v-if="reportInput" @closeModal="closeReportInput">
+      <div class="report">
+        <textarea class="something-else" v-model="somethingElse"></textarea>
+        <button class="report-button" @click="reportsComents(somethingElse)">Report</button>
+      </div>
+    </modal-window>
   </div>
 </template>
 
 <script>
 import { mapState } from "vuex";
+import CommentReplies from "~/components/singlePost/comment-replies.vue";
 import AuthorBlock from "~/components/singlePost/authorBlock.vue";
 import ReplyComment from "~/components/singlePost/reply-comment.vue";
+import modalWindow from "~/components/universal-components/modalWindow.vue";
 
 export default {
+  name: "comment",
   components: {
     AuthorBlock,
-    ReplyComment
+    ReplyComment,
+    CommentReplies,
+    modalWindow
+  },
+  data() {
+    return {
+      dataReplies: [],
+      replies: true,
+			report: false,
+			reportInput: false,
+			reportValue: "",
+			somethingElse: '',
+      reportArr: [
+        "spam",
+        "sexually explicit or suggestive",
+        "violent or dangerous",
+        "hate speech, harassment, or bullying",
+        "something else"
+      ]
+    };
   },
   props: {
     data: Object,
@@ -75,12 +126,52 @@ export default {
   computed: {
     ...mapState(["commentsReply"])
   },
+  created() {
+    this.reportValue = this.reportArr[0];
+  },
   methods: {
+    reportClick() {
+      if (this.reportValue === "something else") {
+				this.report = false
+				this.reportInput = true;
+      } else {
+				this.reportsComents()
+      }
+    },
+    reportsComents(reportMessage) {
+      let data = reportMessage
+        ? { reportType: this.reportValue, reportMessage: reportMessage }
+        : { reportType: this.reportValue };
+      this.$axios
+        .$post(`/api/comments/${this.data.id}/reports`, data)
+        .then(res => {
+          console.log(res);
+        })
+        .catch(error => {
+          console.log(error);
+        });
+    },
+    openReport() {
+      this.report = true;
+    },
+    closeReport() {
+      this.report = false;
+    },
+    closeReportInput() {
+      this.reportInput = false;
+    },
+    createComments(data) {
+      this.dataReplies.push(data);
+    },
     getCommentReplies() {
       this.$axios
         .$get(`/api/posts/${this.postId}/comments/${this.data.id}`)
         .then(res => {
-          console.log(res);
+          this.dataReplies = res.data;
+          this.replies = false;
+        })
+        .catch(error => {
+          console.log(error);
         });
     },
     reply() {

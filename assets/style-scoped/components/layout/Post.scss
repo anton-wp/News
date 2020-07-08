@@ -49,6 +49,82 @@
 			}
 		}
 	}
+	.something-else {
+		width: 100%;
+    margin: 1em 0;
+	}
+
+	.report {
+		display: flex;
+		flex-direction: column;
+		align-items: flex-start;
+		padding: 0 1em;
+
+		label {
+			margin-bottom: 2em;
+			font-weight: 600;
+			font-size: 1.2em;
+			letter-spacing: .5px;
+			display: inline-block;
+			white-space: nowrap;
+			cursor: pointer;
+
+			input {
+				margin-right: 5px;
+			}
+		}
+
+		.report-button {
+			font-weight: 700;
+			text-transform: uppercase;
+			letter-spacing: .8px;
+			padding: .85em 1.4em .8em;
+			font-size: .9rem;
+			line-height: 1;
+			background-color: #ff4242;
+			color: #fefefe;
+			transition: background-color .25s ease-out, color .25s ease-out;
+			border: none;
+
+			&:hover {
+				background-color: #bc2d2d;
+			}
+		}
+	}
+
+	.button-block {
+		display: flex;
+		justify-content: center;
+
+		.loadMore {
+			box-sizing: inherit;
+			overflow: visible;
+			background: 0 0;
+			display: inline-block;
+			vertical-align: middle;
+			margin: 0 0 1rem;
+			font-family: inherit;
+			border: 1px solid transparent;
+			border-radius: 0;
+			transition: background-color 0.25s ease-out, color 0.25s ease-out;
+			line-height: 1;
+			text-align: center;
+			cursor: pointer;
+			background-color: #ff4242;
+			color: #fefefe;
+			font-weight: 700;
+			text-transform: uppercase;
+			letter-spacing: 0.8px;
+			user-select: none;
+			padding: 0.85em 1.4em 0.8em;
+			font-size: 0.75rem;
+			position: relative;
+
+			&:hover {
+				background-color: #bc2d2d;
+			}
+		}
+	}
 
 	.sort-comments {
 		display: flex;
@@ -63,13 +139,14 @@
 			margin-top: 4px;
 		}
 
-		span {
+		button {
 			display: flex;
 			justify-content: center;
 			align-items: center;
 			border: 1px solid #7a7979;
 			border-right: none;
 			border-top: none;
+			background-color: inherit;
 			color: #7a7979;
 			letter-spacing: .9px;
 			padding: 0.55em 1.4em;
@@ -132,9 +209,17 @@
 		}
 	}
 
+	.comment-1-replise {
+		padding-left: 1em;
+	}
+
+	.comment-2-replise {
+		padding-left: 1.7em;
+	}
+
 	.comment {
 		position: relative;
-		padding: 1.5em 1em 1.3em;
+		padding: 1.5em 0em 1.3em;
 
 		.buttons {
 			margin-top: 1em;

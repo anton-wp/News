@@ -40,6 +40,7 @@ export default {
 				.then(res => {
 					console.log(res)
 					this.comment = ''
+					this.$emit('createComments', res.data)
 				})
 		}
 	}
