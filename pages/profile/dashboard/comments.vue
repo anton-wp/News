@@ -129,7 +129,8 @@ export default {
           `/api/admin/comments${this.sortUpdate()}&type=${this.type}&limit=20&page=${
             this.page
           }${this.updateSearch()}`
-        )
+				)
+
         .then(res => {
 					this.$store.commit("CLEAR_DASHBOARD_IDS");
           this.$store.commit("SET_DASHBOARD_POSTS", res.data);
