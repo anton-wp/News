@@ -53,8 +53,6 @@ export default {
         const prev = response.previous;
         const next = response.next;
 
-        console.log(data);
-
         return { tag, type, data, term, pagination, prev, next };
       })
       .catch(error => {

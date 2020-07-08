@@ -34,20 +34,20 @@ export default {
 
 
 
-	getHeader(context) {
-    return this.$axios
-      .$get('/api/menu/header')
-      .then((res) => {
-        context.commit('SET_HEADER_MENU', res.data)
-      })
-	},
-	getHotNews(context) {
-    return this.$axios
-      .$get('/api/tags/featured-tags')
-      .then((res) => {
-        context.commit('SET_HEADER_HOT_NEWS', res.data)
-      })
-	},
+	// getHeader(context) {
+  //   return this.$axios
+  //     .$get('/api/menu/header')
+  //     .then((res) => {
+  //       context.commit('SET_HEADER_MENU', res.data)
+  //     })
+	// },
+	// getHotNews(context) {
+  //   return this.$axios
+  //     .$get('/api/tags/featured-tags')
+  //     .then((res) => {
+  //       context.commit('SET_HEADER_HOT_NEWS', res.data)
+  //     })
+	// },
 	getBookmarks(context) {
 		this.$axios
 			.$get(`/api/profile/bookmarks/ids`)
@@ -69,10 +69,10 @@ export default {
 
 
 
-	async nuxtServerInit(vuexContext) {
-    await vuexContext.dispatch('getHeader', { root: true })
-		await vuexContext.dispatch('getHotNews', { root: true })
-  }
+	// async nuxtServerInit(vuexContext) {
+  //   await vuexContext.dispatch('getHeader', { root: true })
+	// 	await vuexContext.dispatch('getHotNews', { root: true })
+  // }
 
 }
 

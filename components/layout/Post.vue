@@ -174,15 +174,16 @@
                     <button @click="createdComment(false)">disagree</button>
                   </div>
                   <div class="sort-comments">
-                    <span
-											v-for="(sortAc, index) in sortActions"
-											:key="index"
+                    <button
+                      v-for="(sortAc, index) in sortActions"
+                      :key="index"
                       class="col-6 col-sm-3"
                       :class="orderBy === sortAc.action ? 'active-sort' : ''"
                       @click="sortUpdate(sortAc.action)"
+                      :disabled="disabled"
                     >
                       {{ sortAc.title }}
-                      <div>
+                      <div v-if="sortAc.action !== 'agree' && sortAc.action !== 'disagree'">
                         <svg
                           v-if="orderBy !== sortAc.action || orderBy === sortAc.action && order === 'ASC'"
                           class="carret-up"
@@ -200,15 +201,35 @@
                           <use xlink:href="#caret-down" />
                         </svg>
                       </div>
-                    </span>
+                      <div v-else>
+                        <svg
+                          v-if="orderBy !== sortAc.action "
+                          class="carret-up"
+                          width="10"
+                          height="10"
+                        >
+                          <use xlink:href="#caret-down" />
+                        </svg>
+                        <svg
+                          :class="orderBy === sortAc.action ? 'active-down' : ''"
+                          width="10"
+                          height="10"
+                        >
+                          <use xlink:href="#caret-down" />
+                        </svg>
+                      </div>
+                    </button>
                   </div>
                   <div
-                    class="comments"
+                    class="comments comment-1-replise"
                     v-for="comment of comments"
                     :key="comment.id"
                     :id="comment.id"
                   >
                     <comment :postId="data.id" :data="comment" />
+                  </div>
+                  <div class="button-block" v-if="paginations.next">
+                    <button class="loadMore" @click="loadMore">Load More</button>
                   </div>
                 </div>
               </div>
@@ -305,41 +326,53 @@ export default {
       comment: "",
       message: false,
       subscribe: false,
+      disabled: false,
       comments: [],
       page: 1,
       orderBy: "date",
       order: "ASC",
-			paginations: Object,
-			sortActions: [
-				{
-					title: 'Latest',
-					action: 'date'
-				},
-				{
-					title: 'Top Voted',
-					action: 'voted'
-				},
-				{
-					title: 'Agree',
-					action: 'agree'
-				},
-				{
-					title: 'Disagree',
-					action: 'agree'
-				},
-			]
+      paginations: Object,
+      sortActions: [
+        {
+          title: "Latest",
+          action: "date"
+        },
+        {
+          title: "Top Voted",
+          action: "voted"
+        },
+        {
+          title: "Agree",
+          action: "agree"
+        },
+        {
+          title: "Disagree",
+          action: "disagree"
+        }
+      ]
     };
   },
   methods: {
+    loadMore() {
+      this.page = this.page + 1;
+      this.getComments();
+    },
     sortUpdate(type) {
-      if (type === this.orderBy) {
+      this.disabled = true;
+      if (type === "agree") {
+        this.orderBy = "agree";
+        this.order = "DESC";
+      } else if (type === "disagree") {
+        this.orderBy = "disagree";
+        this.order = "ASC";
+      } else if (type === this.orderBy) {
         if (this.order === "ASC") {
           this.order = "DESC";
         } else {
           this.order = "ASC";
         }
       } else {
-				this.orderBy = type
+        this.orderBy = type;
         this.order = "ASC";
       }
       this.getComments();
@@ -360,18 +393,26 @@ export default {
       this.$axios
         .$post(`/api/posts/${this.data.id}/comments`, data)
         .then(res => {
-          console.log(res);
+          this.comments.push(res.data);
           this.comment = "";
         });
     },
     getComments() {
       this.$axios
         .$get(
-          `/api/posts/${this.data.id}/comments?order=${this.order}&orderBy=${this.orderBy}&page=${this.page}`
+          `/api/posts/${this.data.id}/comments?order=${this.order}&orderBy=${
+            this.orderBy !== "agree" && this.orderBy !== "disagree"
+              ? this.orderBy
+              : "reaction"
+          }&page=${this.page}`
         )
         .then(res => {
-          this.comments = res.data;
+          this.comments = [...this.comments, ...res.data];
           this.paginations = res.pagination;
+          this.disabled = false;
+        })
+        .catch(error => {
+          console.log(error);
         });
     }
   },
