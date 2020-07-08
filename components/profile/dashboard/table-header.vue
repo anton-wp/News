@@ -2,7 +2,7 @@
   <div class="table-header-component">
     <div class="sort">
       Sort by
-      <select class="form-input select" v-model="sort">
+      <select class="form-input select" v-model="sort" @change="sortUpdate">
         <option v-for="(sort, index) of sortArr" :value="sort" :key="index">{{sort.title}}</option>
       </select>
     </div>
@@ -52,12 +52,7 @@ export default {
   props: {
     header: Object
   },
-  watch: {
-    sort() {
-      this.$emit("getSort", { name: this.sort.name, type: this.sort.type });
-    }
-  },
-  mounted() {
+  created () {
     for (let head in this.header) {
       if (head === "response") {
         continue;
@@ -81,6 +76,9 @@ export default {
     }
   },
   methods: {
+		sortUpdate() {
+      this.$emit("getSort", { name: this.sort.name, type: this.sort.type });
+    },
     getName(name) {
       // console.log(name[0].toLowerCase())
       name = name.split("");

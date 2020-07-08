@@ -1,0 +1,96 @@
+.edit-form-tag {
+	.wrap {
+		width: 100%;
+		display: flex;
+		align-items: flex-start;
+		margin-bottom: 1.5em;
+
+		.categoryCheckbox {
+			width: 16px;
+			height: 16px;
+			display: inline-flex;
+			justify-content: center;
+			align-items: center;
+			vertical-align: middle;
+			border: 1px solid #0a0a0a;
+			border-radius: 5px;
+			margin-right: 5px;
+
+			svg {
+				display: block;
+			}
+		}
+
+		span {
+			font-size: 100%;
+			font-weight: 400;
+			line-height: 1.5;
+			color: #0a0a0a;
+			box-sizing: inherit;
+			flex-basis: 22%;
+			max-width: 22%;
+		}
+
+		input,
+		textarea {
+			border: 1px solid #c6c6c6;
+			border-radius: 2px;
+			padding: .65em;
+			line-height: 1.25;
+			flex-basis: 88%;
+			max-width: 88%;
+			margin-left: 1em;
+			margin-right: 1em;
+		}
+
+		label {
+			cursor: pointer;
+			margin-bottom: 0px;
+		}
+	}
+	.wrap-featured {
+		display: flex;
+		align-items: center;
+		cursor: pointer;
+	}
+	.text-right {
+		display: flex;
+    justify-content: flex-end;
+	}
+	.block-button {
+		button {
+			user-select: none;
+			padding: 0.5em 1.4em 0.5em 1.4em;
+			font-weight: 700;
+			text-transform: uppercase;
+			letter-spacing: 0.8px;
+			color: #fefefe;
+			border: none;
+			margin-left: 5px;
+			transition: background-color 0.25s;
+			font-size: 0.9rem;
+			background-color: white;
+		}
+
+		.update {
+			border: 1px solid #8d8d8d;
+			color: #8d8d8d;
+
+			&:hover {
+				background-color: #606060;
+				color: white;
+			}
+		}
+
+		.delete {
+			border: 1px solid #ff4242;
+			color: #ff4242;
+
+			&:hover {
+				background-color: #bc2d2d;
+				border-color: #a10000;
+				color: white;
+			}
+		}
+	}
+}

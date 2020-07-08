@@ -155,6 +155,54 @@
         d="M1437 913q0 208-87 370.5t-248 254-369 91.5q-149 0-285-58t-234-156-156-234-58-285 58-285 156-234 234-156 285-58q286 0 491 192l-199 191q-117-113-292-113-123 0-227.5 62t-165.5 168.5-61 232.5 61 232.5 165.5 168.5 227.5 62q83 0 152.5-23t114.5-57.5 78.5-78.5 49-83 21.5-74h-416v-252h692q12 63 12 122zm867-122v210h-209v209h-210v-209h-209v-210h209v-209h210v209h209z"
       />
     </symbol>
+    <!-- singlePost comments -->
+    <symbol id="eclipse-question" viewBox="0 0 19 19">
+      <metadata />
+      <image
+        id="_"
+        data-name="?"
+        width="19"
+        height="19"
+        xlink:href="data:img/png;base64,iVBORw0KGgoAAAANSUhEUgAAABMAAAATCAMAAABFjsb+AAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAArlBMVEX/QkIAAAD/QkL/QkL/QkL/QkL/QkL/QkL/QkL/QkL/QkL/QkL/QkL/QkL/QkL/QkL/QkL/QkL/QkL/QkL/QkL/QkL/QkL/QkL/QkL/AAD/AAD/AAD/AAD/AAD/QkL/QkL/AAD/AAD/QkL/AAD/AAD/QkL/QkL/QkL/AAD/QkL/QkL/AAD/AAD/QkL/QkL/QkL/QkL/QkL/QkL/QkL/QkL/QkL/QkL/QkL/AAAAAACRM0UTAAAAN3RSTlMAAB+AxOX5wXcIjvoJFc79pk0Gx90zFh40EFCAcCD7pc/vSEAwxuYUnxnt32CB3I/IGgqQ7vzC3IzseQAAAAFiS0dEAf8CLd4AAAAJcEhZcwAACxIAAAsSAdLdfvwAAAAHdElNRQfhCxAEKyPlGyDOAAAA2ElEQVQY001Q63qCMBQ7B8Q5EBFEEbzgRN2cirfN9P2fzLaUav70NF+anoRIwXE7Xtf76DnU4tMP0CDw+w0VDhAN45DCeBhhECoqGSEdmxfjFKNEnj7SibWZpPCJsiCayktezOYLJppGy4xclEqwEkJ8LeRQwqUO1oqrNlyImRzW2NIO34pjzn+E0u3xS11oc85Xhw2rNQCrq0TFbHTGjzWMn/mXj6LQXIkTZUu9X8vp/WSO+i1HjXOTt7Z5a1ySVy/XZB+XbS9Et7Pt736zNo67/fv3HqbnJwT9GI9x3569AAAAAElFTkSuQmCC"
+      />
+    </symbol>
+    <symbol id="verdict-icon-custom" viewBox="0 0 27 27">
+      <g>
+        <rect x="0" y="0" width="27" height="27" fill="currentColor" />
+        <path
+          fill-rule="evenodd"
+          d="M 17.31 27.01C 17.31 27.01 26.99 0.01 26.99 0.01 26.99 0.01 19.38 0.01 19.38 0.01 19.38 0.01 13.66 18.69 13.66 18.69 13.66 18.69 7.94 0.01 7.94 0.01 7.94 0.01 0.01 0.01 0.01 0.01 0.01 0.01 9.59 27.01 9.59 27.01 9.59 27.01 17.31 27.01 17.31 27.01Z"
+          fill="rgb(255,255,255)"
+        />
+      </g>
+    </symbol>
+    <symbol id="verdict-icon-selected" viewBox="0 0 27 27">
+      <g>
+        <rect x="0" y="0" width="27" height="27" fill="rgb(255,255,255)" />
+        <path
+          fill-rule="evenodd"
+          d="M 17.31 27.01C 17.31 27.01 26.99 0.01 26.99 0.01 26.99 0.01 19.38 0.01 19.38 0.01 19.38 0.01 13.66 18.69 13.66 18.69 13.66 18.69 7.94 0.01 7.94 0.01 7.94 0.01 0.01 0.01 0.01 0.01 0.01 0.01 9.59 27.01 9.59 27.01 9.59 27.01 17.31 27.01 17.31 27.01Z"
+          fill="rgb(255,65,65)"
+        />
+      </g>
+    </symbol>
+    <symbol id="reply" viewBox="0 0 1792 1792">
+      <path
+        fill="currentColor"
+        d="M1792 1120q0 166-127 451-3 7-10.5 24t-13.5 30-13 22q-12 17-28 17-15 0-23.5-10t-8.5-25q0-9 2.5-26.5t2.5-23.5q5-68 5-123 0-101-17.5-181t-48.5-138.5-80-101-105.5-69.5-133-42.5-154-21.5-175.5-6h-224v256q0 26-19 45t-45 19-45-19l-512-512q-19-19-19-45t19-45l512-512q19-19 45-19t45 19 19 45v256h224q713 0 875 403 53 134 53 333z"
+      />
+    </symbol>
+    <symbol id="flag" viewBox="0 0 1792 1792">
+      <path
+        d="M320 256q0 72-64 110v1266q0 13-9.5 22.5t-22.5 9.5h-64q-13 0-22.5-9.5t-9.5-22.5v-1266q-64-38-64-110 0-53 37.5-90.5t90.5-37.5 90.5 37.5 37.5 90.5zm1472 64v763q0 25-12.5 38.5t-39.5 27.5q-215 116-369 116-61 0-123.5-22t-108.5-48-115.5-48-142.5-22q-192 0-464 146-17 9-33 9-26 0-45-19t-19-45v-742q0-32 31-55 21-14 79-43 236-120 421-120 107 0 200 29t219 88q38 19 88 19 54 0 117.5-21t110-47 88-47 54.5-21q26 0 45 19t19 45z"
+      />
+    </symbol>
+    <symbol id="share-alt" viewBox="0 0 1792 1792">
+      <path
+        d="M1344 1024q133 0 226.5 93.5t93.5 226.5-93.5 226.5-226.5 93.5-226.5-93.5-93.5-226.5q0-12 2-34l-360-180q-92 86-218 86-133 0-226.5-93.5t-93.5-226.5 93.5-226.5 226.5-93.5q126 0 218 86l360-180q-2-22-2-34 0-133 93.5-226.5t226.5-93.5 226.5 93.5 93.5 226.5-93.5 226.5-226.5 93.5q-126 0-218-86l-360 180q2 22 2 34t-2 34l360 180q92-86 218-86z"
+      />
+    </symbol>
+
     <!-- error 404 -->
     <symbol id="error404" viewBox="0 0 465.1 179.1">
       <path

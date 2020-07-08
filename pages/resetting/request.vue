@@ -30,6 +30,7 @@
 <script>
 import { email, required } from "vuelidate/lib/validators";
 export default {
+  middleware: "notAuth",
   data() {
     return {
       email: "",
@@ -42,7 +43,16 @@ export default {
 
       if (this.$v.$invalid) {
         this.errorNotif = true;
+      } else {
+				this.resetPassword()
+					.then(res => {
+						this.$router.push({ path: "/resetting/check-email" });
+					})
+					.cath
       }
+    },
+    resetPassword() {
+      this.$axios.$post("/api/auth/reset-password/", { email: this.email});
     }
   },
   validations: {

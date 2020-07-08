@@ -3,13 +3,14 @@
     <button
       class="button-followed"
       :class="full ? 'follow-full' : 'follow'"
-      v-if="!$store.state.subscriptions.includes(this.id) && !loading"
+      v-if="!subscriptions.includes(id) && !loading"
       @click="Subscribe"
+      :disabled="disabled()"
     >Follow</button>
     <button
       class="button-followed unfollow"
       :class="full ? 'unfollow-full' : 'unfollow'"
-      v-if="$store.state.subscriptions.includes(this.id) && !loading"
+      v-if="subscriptions.includes(id) && !loading"
       @click="Unsubscribe"
     >Unfollow</button>
     <button class="button-followed unfollow" v-if="loading">Loading</button>
@@ -17,6 +18,8 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
+
 export default {
   props: {
     id: String,
@@ -27,14 +30,22 @@ export default {
       loading: false
     };
   },
+  computed: {
+    ...mapState(["auth", "subscriptions"])
+  },
   methods: {
+    disabled() {
+			if(this.auth.user) {
+				return this.id === this.auth.user.id ? true : false
+			}
+		},
     Unsubscribe() {
       this.loading = true;
-      this.$http
-        .post(`/api/author/unsubscribe`, { authorId: this.id })
+      this.$axios
+        .$post(`/api/author/unsubscribe`, { authorId: this.id })
         .then(responce => {
           this.$store.commit("DEL_SUBSCRIPTION", this.id);
-          this.$toasted.show(responce.data.message);
+          this.$toasted.show(responce.message);
           this.loading = false;
           if (
             this.$store.getters.IS_TABS.filter(tab => tab.title === "Following")
@@ -51,11 +62,11 @@ export default {
     Subscribe() {
       if (this.$store.state.auth.loggedIn) {
         this.loading = true;
-        this.$http
-          .post(`/api/author/subscribe`, { authorId: this.id })
+        this.$axios
+          .$post(`/api/author/subscribe`, { authorId: this.id })
           .then(responce => {
             this.$store.commit("ADD_SUBSCRIPTION", this.id);
-            this.$toasted.show(responce.data.message);
+            this.$toasted.show(responce.message);
             this.loading = false;
             if (
               this.$store.getters.IS_TABS.filter(
@@ -70,16 +81,16 @@ export default {
           })
           .catch(error => {});
       } else {
-				this.LogIn();
+        this.LogIn();
       }
-		},
-		LogIn() {
+    },
+    LogIn() {
       let data = {
         open: true,
-        type: 'logIn'
+        type: "logIn"
       };
       this.$store.commit("UPDATE_LOGIN_POPUP", data);
-    },
+    }
   }
 };
 </script>

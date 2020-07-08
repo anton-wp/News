@@ -157,13 +157,13 @@ export default {
       let childrenComments;
       let childrenPosts;
 
-      res.data.data.map(tab =>
+      res.data.map(tab =>
         tab.title === "Dashboard" ? (childrenDashboard = tab.children) : null
       );
-      res.data.data.map(tab =>
+      res.data.map(tab =>
         tab.title === "Comments" ? (childrenComments = tab.children) : null
       );
-      res.data.data.map(tab =>
+      res.data.map(tab =>
         tab.title === "Posts" ? (childrenPosts = tab.children) : null
       );
 
@@ -186,20 +186,20 @@ export default {
         childrenPosts.sort((l, r) => posts[l.sort] - posts[r.sort]);
       }
 
-      res.data.data.sort((l, r) => example[l.title] - example[r.title]);
-      this.activTabsStart(res.data.data);
+      res.data.sort((l, r) => example[l.title] - example[r.title]);
+      this.activTabsStart(res.data);
     },
     getTabsFull() {
-      this.$http
-        .get(`/api/profile/tabs`)
+      this.$axios
+        .$get(`/api/profile/tabs`)
         .then(res => {
           this.sortTabs(res);
         })
         .catch(error => console.error(error));
     },
     getTabs() {
-      this.$http
-        .get(`/api/author/${this.slug}/tabs`)
+      this.$axios
+        .$get(`/api/author/${this.slug}/tabs`)
         .then(res => {
           this.sortTabs(res);
         })

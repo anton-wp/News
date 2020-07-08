@@ -23,9 +23,9 @@ export default {
   },
   methods: {
     getPosts() {
-      this.$http
-        .get(`/api/posts/?limit=4`)
-        .then(({ data }) => {
+      this.$axios
+        .$get(`/api/posts/?limit=4`)
+        .then((data) => {
           this.posts = data.data;
         })
         .catch(error => {

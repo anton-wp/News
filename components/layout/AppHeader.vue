@@ -129,10 +129,7 @@ export default {
   },
   data() {
     return {
-      // loginPopupActive: false,
-      // typeLoginPopup: "",
       popupMore: false,
-      // categories: [],
       isToken: false,
       windowWidth: 0,
       cropMenu: 0,
@@ -141,10 +138,8 @@ export default {
   },
   mounted() {
     if (this.bookmarks.length === 0 && this.$store.state.auth.loggedIn) {
-      this.getBookmarks();
-    }
-    if (this.subscriptions.length === 0 && this.$store.state.auth.loggedIn) {
-      this.getSubscriptions();
+      this.$store.dispatch('getBookmarks');
+      this.$store.dispatch('getSubscriptions');
     }
     this.$nextTick(function() {
       window.addEventListener("resize", this.getWindowWidth);
@@ -156,26 +151,26 @@ export default {
     ...mapState(["header", "bookmarks", "subscriptions", "loginModal"])
   },
   methods: {
-    async getBookmarks() {
-      await this.$http
-        .get(`/api/profile/bookmarks/ids`)
-        .then(res => {
-          this.$store.dispatch("GET_BOOKMARK", res.data.data);
-        })
-        .catch(error => console.error(error));
-    },
-    async getSubscriptions() {
-      await this.$http
-        .get(`/api/profile/subscriptions/ids`)
-        .then(res => {
-          this.$store.dispatch("GET_SUBSCRIPTIONS", res.data.data);
-        })
-        .catch(error => console.error(error));
-    },
-    async getMenu() {
-      await this.$http
-        .get(`/api/menu/header`)
-        .then(res => this.$store.commit("SET_HEADER_MENU", res.data.data))
+    // getBookmarks() {
+    //   this.$axios
+    //     .$get(`/api/profile/bookmarks/ids`)
+    //     .then(res => {
+		// 			this.$store.dispatch("GET_BOOKMARK", res.data);
+    //     })
+    //     .catch(error => console.error(error));
+    // },
+    // getSubscriptions() {
+    //   this.$axios
+    //     .$get(`/api/profile/subscriptions/ids`)
+    //     .then(res => {
+    //       this.$store.dispatch("GET_SUBSCRIPTIONS", res.data);
+    //     })
+    //     .catch(error => console.error(error));
+    // },
+    getMenu() {
+      this.$axios
+        .$get(`/api/menu/header`)
+        .then(res => this.$store.commit("SET_HEADER_MENU", res.data))
         .catch(error => console.error(error));
     },
     disabledSideBarMenu() {
@@ -194,7 +189,7 @@ export default {
       } else if (document.documentElement.offsetWidth < 1200) {
         this.cropMenu = Math.floor(menu.offsetWidth / 100 - 1);
       } else {
-        this.cropMenu = Math.floor(menu.offsetWidth / 100);
+        this.cropMenu = Math.floor(menu.offsetWidth / 100 - 0.1);
       }
     },
     openLoginPopup(type) {

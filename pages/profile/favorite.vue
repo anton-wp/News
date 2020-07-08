@@ -4,26 +4,32 @@
       <div class="row">
         <div class="col-12 sort">
           <span class="verdicts-posts">Sort by:</span>
-          <button class="click-for-follow follow" :class="sort === 'DESC' ? 'active' : ''" @click="updateSort('DESC')">
-            latest
-          </button>
-          <button class="click-for-follow follow" :class="sort === 'ASC' ? 'active' : ''" @click="updateSort('ASC')">
-            top voted
-          </button>
+          <button
+            class="click-for-follow follow"
+            :class="sort === 'DESC' ? 'active' : ''"
+            @click="updateSort('DESC')"
+          >latest</button>
+          <button
+            class="click-for-follow follow"
+            :class="sort === 'ASC' ? 'active' : ''"
+            @click="updateSort('ASC')"
+          >top voted</button>
         </div>
         <div class="container">
           <div class="row">
             <!-- post -->
-            <template >
+            <template>
               <div class="col-12 col-md-6 col-lg-4" v-for="post in posts" :key="post.id">
                 <default-news-card :post="post" :padding="true" />
                 <!-- <vrd-vdc type="second-block" [defaultPost]="post" [padding]="true" [profile]="true"></vrd-vdc> -->
               </div>
             </template>
             <div class="col-12 button-block">
-              <button class="loadMore" v-if="pagination && pagination.next" @click="morePosts()">
-                Load More
-              </button>
+              <button
+                class="loadMore"
+                v-if="pagination && pagination.next"
+                @click="morePosts()"
+              >Load More</button>
             </div>
           </div>
         </div>
@@ -33,53 +39,56 @@
 </template>
 
 <script>
-import DefaultNewsCard from '~/components/news/DefaultNewsCard'
+import DefaultNewsCard from "~/components/news/DefaultNewsCard";
 
 export default {
-  layout: 'profile',
-	middleware: "auth",
+  layout: "profile",
+  middleware: "auth",
   components: {
     DefaultNewsCard
-	},
-  data () {
+  },
+  data() {
     return {
-      sort: 'DESC',
+      sort: "DESC",
       posts: [],
       pagination: null,
-      page: 1,
-    }
+      page: 1
+    };
   },
   methods: {
-    updateSort (sort) {
-      this.sort = sort
-      this.page = 1
-      this.getPosts()
+    updateSort(sort) {
+      this.sort = sort;
+      this.page = 1;
+      this.getPosts();
     },
     morePosts() {
-      this.getPosts('more', this.page + 1)
+      this.getPosts("more", this.page + 1);
     },
-    getPosts (more, page) {
-      if(page) {
-        this.page = page
+    getPosts(more, page) {
+      if (page) {
+        this.page = page;
       }
-       this.$http.get(`/api/profile/bookmarks?sort=${this.sort}&page=${this.page}&limit=12`)
-      .then(res => {
-        // console.log(res)
-        if(!more) {
-          this.posts = res.data.data
-          this.pagination = res.data.pagination
-        }else {
-          this.posts = [...this.posts, ...res.data.data]
-          this.pagination = res.data.pagination
-        }
-      })
-      .catch(error => console.error(error))
+      this.$axios
+        .$get(
+          `/api/profile/bookmarks?sort=${this.sort}&page=${this.page}&limit=12`
+        )
+        .then(res => {
+          // console.log(res)
+          if (!more) {
+            this.posts = res.data;
+            this.pagination = res.pagination;
+          } else {
+            this.posts = [...this.posts, ...res.data];
+            this.pagination = res.pagination;
+          }
+        })
+        .catch(error => console.error(error));
     }
   },
-  beforeMount () {
-    this.getPosts()
+  beforeMount() {
+    this.getPosts();
   }
-}
+};
 </script>
 
 <style lang="scss" scoped>
@@ -115,10 +124,10 @@ export default {
     margin-right: 10px;
   }
   .click-for-follow {
-    font-size: .75rem;
-    padding: .55em 1.4em;
+    font-size: 0.75rem;
+    padding: 0.55em 1.4em;
     text-transform: none;
-    letter-spacing: .9px;
+    letter-spacing: 0.9px;
     border-radius: 5px;
     vertical-align: text-top;
     margin-bottom: 0;
@@ -137,7 +146,7 @@ a {
   line-height: 1.5;
   color: #0a0a0a;
   text-decoration: none;
-  margin: .3em 0 0;
+  margin: 0.3em 0 0;
   font-size: 1.4em;
   font-weight: 700;
 }
@@ -168,7 +177,7 @@ a {
 
 .unfollow {
   color: #474747;
-  border-color:#474747;
+  border-color: #474747;
   &:hover {
     background-color: #474747;
     color: #fff;
@@ -176,7 +185,7 @@ a {
 }
 
 .user-popup {
-  top: -295px ;
+  top: -295px;
   padding: 1.5em 1.2em 0.8em 1.2em;
   // border-radius: 2px;
   background-color: $white;
@@ -197,7 +206,7 @@ a {
   font-family: "Open Sans";
 
   &:after {
-    content: '';
+    content: "";
     border-right: 1px solid $secondary-bgcolor;
     border-bottom: 1px solid $secondary-bgcolor;
     position: absolute;
@@ -213,7 +222,7 @@ a {
   }
 }
 
-.button-block{
+.button-block {
   display: flex;
   justify-content: center;
   .loadMore {
@@ -226,7 +235,7 @@ a {
     font-family: inherit;
     border: 1px solid transparent;
     border-radius: 0;
-    transition: background-color .25s ease-out,color .25s ease-out;
+    transition: background-color 0.25s ease-out, color 0.25s ease-out;
     line-height: 1;
     text-align: center;
     cursor: pointer;
@@ -234,10 +243,10 @@ a {
     color: #fefefe;
     font-weight: 700;
     text-transform: uppercase;
-    letter-spacing: .8px;
+    letter-spacing: 0.8px;
     user-select: none;
-    padding: .85em 1.4em .8em;
-    font-size: .75rem;
+    padding: 0.85em 1.4em 0.8em;
+    font-size: 0.75rem;
     position: relative;
     &:hover {
       background-color: #bc2d2d;

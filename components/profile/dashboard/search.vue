@@ -92,9 +92,9 @@ export default {
   },
   methods: {
     getCategories() {
-      this.$http
-        .get("/api/categories/")
-        .then(({ data }) => {
+      this.$axios
+        .$get("/api/categories/")
+        .then((data) => {
           this.categories = data.data;
           data.data.unshift({ name: "Choose Category", id: "" });
           this.selectedCategory = this.categories[0].id;
@@ -104,9 +104,9 @@ export default {
         });
     },
     getStatus() {
-      this.$http
-        .get("/api/admin/posts/statuses")
-        .then(({ data }) => {
+      this.$axios
+        .$get("/api/admin/posts/statuses")
+        .then((data) => {
           data.data = data.data.filter(status => status.title !== "Draft");
           this.statuses = data.data;
           data.data.unshift({ title: "Choose Status", key: "" });
@@ -117,9 +117,9 @@ export default {
         });
     },
     getStatusTags() {
-      this.$http
-        .get("/api/admin/tags/statuses")
-        .then(({ data }) => {
+      this.$axios
+        .$get("/api/admin/tags/statuses")
+        .then((data) => {
           this.statuses = data.data;
           data.data.unshift({ title: "Choose Status", key: "" });
           this.selectedStatus = this.statuses[0].key;
@@ -131,9 +131,9 @@ export default {
     searchAuthors(query) {
       this.isLoadingAuthor = true;
 
-      this.$http
-        .get("/api/posts/create-helpers/authors-search?search=" + query)
-        .then(({ data }) => {
+      this.$axios
+        .$get("/api/posts/create-helpers/authors-search?search=" + query)
+        .then((data) => {
           this.authorsOption = data.data;
 
           this.isLoadingAuthor = false;

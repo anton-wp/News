@@ -11,12 +11,12 @@
       <div class="delete-form-wrap" id="confirm-delete-modal">
         <div class="form-header">
           <h4>
-						{{ selectedAction }}
+            {{ selectedAction }}
             confirmation
           </h4>
           <p>
             Are you sure you want to
-						{{ selectedAction }}
+            {{ selectedAction }}
             this?
           </p>
         </div>
@@ -29,13 +29,9 @@
     <modal-window v-if="mergeOn" @closeModal="mergeClose">
       <div class="delete-form-wrap" id="confirm-delete-modal">
         <div class="form-header">
-          <h4>
-						Merge Tag
-          </h4>
-          <p class="text-left">
-            Select new Tag name for:
-          </p>
-					<input type="text" class="text-left" placeholder="New Tag name">
+          <h4>Merge Tag</h4>
+          <p class="text-left">Select new Tag name for:</p>
+          <input type="text" class="text-left" placeholder="New Tag name" v-model="mergeValue"/>
         </div>
         <div class="form-wrap">
           <span @click="mergeTag" class="yes">Merge</span>
@@ -48,6 +44,7 @@
 
 <script>
 import ModalWindow from "~/components/universal-components/modalWindow";
+import { mapState } from "vuex";
 
 export default {
   components: {
@@ -56,36 +53,51 @@ export default {
   data() {
     return {
       selectedAction: "",
-			modal: false,
-			mergeOn: false
+      modal: false,
+			mergeOn: false,
+			mergeValue: ''
     };
   },
   props: {
     actionsBlock: Array,
-		merge: Boolean
+    merge: Boolean
+  },
+  computed: {
+    ...mapState(["dashboard"])
   },
   created() {
     this.selectedAction = this.actionsBlock[0];
   },
   methods: {
-		mergeOpen () {
-			this.mergeOn = true
-		},
-		mergeClose () {
-			this.mergeOn = false
-		},
-		mergeTag () {
+    mergeOpen() {
+      this.mergeOn = true;
+    },
+    mergeClose() {
+      this.mergeOn = false;
+    },
+    mergeTag() {
+			console.log(this.mergeValue)
+			console.log(this.dashboard.ids)
+			this.$axios
+          .$put(`/api/admin/tags/merge`, { name: this.mergeValue, tags: this.dashboard.ids })
+          .then(res => {
+						this.$toasted.show(res.message);
+						this.$store.commit("CLEAR_DASHBOARD_IDS");
+						this.mergeClose()
+          })
+          .catch(error => console.error(error));
 
 		},
     aplly() {
-			if(this.selectedAction === 'Action:'){
-				this.modal = false;
-			}else {
-				this.modal = true;
-			}
+      if (this.selectedAction === "Action:") {
+        this.modal = false;
+      } else {
+        this.modal = true;
+      }
     },
     yes() {
       this.$emit("aplly", this.selectedAction);
+      this.modal = false;
     },
     no() {
       this.modal = false;

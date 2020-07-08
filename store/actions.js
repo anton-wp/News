@@ -19,12 +19,12 @@ export default {
 	GET_MODAL: (context, modal) => {
 		context.commit('SET_MODAL', modal);
 	},
-	GET_SUBSCRIPTIONS: (context, subscriptions) => {
-		context.commit('SET_SUBSCRIPTIONS', subscriptions);
-	},
-	GET_BOOKMARK: (context, bookmarks) => {
-		context.commit('SET_BOOKMARK', bookmarks);
-	},
+	// GET_SUBSCRIPTIONS: (context, subscriptions) => {
+	// 	context.commit('SET_SUBSCRIPTIONS', subscriptions);
+	// },
+	// GET_BOOKMARK: (context, bookmarks) => {
+	// 	context.commit('SET_BOOKMARK', bookmarks);
+	// },
 	OPEN_CLOSE_TABS: (context, id) => {
 		context.commit('OPEN_CLOSE_TABS', id);
 	},
@@ -48,9 +48,30 @@ export default {
         context.commit('SET_HEADER_HOT_NEWS', res.data)
       })
 	},
+	getBookmarks(context) {
+		this.$axios
+			.$get(`/api/profile/bookmarks/ids`)
+			.then(res => {
+				context.commit("SET_BOOKMARK", res.data);
+			})
+			.catch(error => console.error(error));
+	},
+	getSubscriptions(context) {
+		this.$axios
+			.$get(`/api/profile/subscriptions/ids`)
+			.then(res => {
+				context.commit("SET_SUBSCRIPTIONS", res.data);
+			})
+			.catch(error => console.error(error));
+	},
+
+
+
+
+
 	async nuxtServerInit(vuexContext) {
     await vuexContext.dispatch('getHeader', { root: true })
-    await vuexContext.dispatch('getHotNews', { root: true })
+		await vuexContext.dispatch('getHotNews', { root: true })
   }
 
 }
