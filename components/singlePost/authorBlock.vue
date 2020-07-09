@@ -1,6 +1,6 @@
 <template>
   <div v-if="$isAMP" class="author col-auto d-flex align-center">
-    <amp-img
+    <!-- <amp-img
       v-if="!author.avatar.small"
       src="/image/default-avatar-original.png"
       class="author__photo"
@@ -13,7 +13,7 @@
       class="author__photo"
       width="50"
       height="50"
-    ></amp-img>
+    ></amp-img> -->
 
     <div class="author-info">
       <nuxt-link
@@ -29,14 +29,14 @@
   <div v-else class="about-user-in-post">
     <div class="element photo">
       <img
-        v-if="!author.avatar.small"
+        v-if="!author.avatar || !author.avatar.small "
         src="/image/default-avatar-original.png"
         class="user-profile-info"
       />
-      <img v-if="author.avatar.small" :src="author.avatar.small" class="user-profile-info" />
+      <img v-else :src="author.avatar.small" class="user-profile-info" />
     </div>
     <div class="element information" @mouseleave="hide">
-      <div v-if="showPopup" :class="type === 'comment' ? 'user-popup-top' : 'user-popup'">
+      <div v-if="showPopup" :class="type === 'comment' || type === 'comment-replies' ? 'user-popup-top' : 'user-popup'">
         <popup-user-info :authorId="author.id" />
       </div>
       <span class="name" @mouseover="toggle">
@@ -59,7 +59,7 @@
 				<p v-if="!postReaction" class="disagree">Disagree</p>
 			</div>
     </div>
-    <div class="element follow-me" v-if="type !== 'comment'">
+    <div class="element follow-me" v-if="!type">
       <follow-buttons :id="author.id" />
     </div>
   </div>

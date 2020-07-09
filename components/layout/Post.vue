@@ -40,66 +40,60 @@
                 <social-block v-if="data" :post="data" @changeFontSize="changeFontSize" />
             </div>
 
-            <div class="tag-links">
-                <h2 class="tag-links__title">linked</h2>
-                <nuxt-link
-                    v-for="tag in data.tags"
-                    :key="tag.id"
-                    :to="`/amp/l/${tag.slug}`"
-                    class="tag-links__item"
-                >{{tag.name}}</nuxt-link>
+      <div class="tag-links">
+        <h2 class="tag-links__title">linked</h2>
+        <nuxt-link
+          v-for="tag in data.tags"
+          :key="tag.id"
+          :to="`/amp/l/${tag.slug}`"
+          class="tag-links__item"
+        >{{tag.name}}</nuxt-link>
+      </div>
+      <!-- <social-block [(fontSize)]="bodySize" class="col-lg-12"></social-block> -->
+      <div class="row">
+        <div class="col-6" v-if="prev">
+          <nuxt-link class="d-flex sibling-post" :to="`/amp/${prev.slug}`">
+            <svg class="sibling-post__icon" width="40" height="40">
+              <use xlink:href="#angle-left" />
+            </svg>
+            <div class="h-100">
+              <div class="sibling-post__label">Previous Post</div>
+              <h3 class="sibling-post__title">{{prev.title}}</h3>
             </div>
-            <!-- <social-block [(fontSize)]="bodySize" class="col-lg-12"></social-block> -->
-            <div class="row">
-                <div class="col-6" v-if="prev">
-                    <nuxt-link class="d-flex sibling-post" :to="`/amp/${prev.slug}`">
-                        <svg class="sibling-post__icon" width="40" height="40">
-                            <use xlink:href="#angle-left" />
-                        </svg>
-                        <div class="h-100">
-                            <div class="sibling-post__label">Previous Post</div>
-                            <h3 class="sibling-post__title">{{prev.title}}</h3>
-                        </div>
-                    </nuxt-link>
-                </div>
-                <div class="col-6" v-if="next">
-                    <nuxt-link class="d-flex sibling-post justify-end" :to="`/amp/${next.slug}`">
-                        <div class="h-100">
-                            <div class="sibling-post__label">Next Post</div>
-                            <h3 class="sibling-post__title">{{next.title}}</h3>
-                        </div>
-                        <svg class="sibling-post__icon" width="40" height="40">
-                            <use xlink:href="#angle-right" />
-                        </svg>
-                    </nuxt-link>
-                </div>
-            </div>
+          </nuxt-link>
         </div>
+        <div class="col-6" v-if="next">
+          <nuxt-link class="d-flex sibling-post justify-end" :to="`/amp/${next.slug}`">
+            <div class="h-100">
+              <div class="sibling-post__label">Next Post</div>
+              <h3 class="sibling-post__title">{{next.title}}</h3>
+            </div>
+            <svg class="sibling-post__icon" width="40" height="40">
+              <use xlink:href="#angle-right" />
+            </svg>
+          </nuxt-link>
+        </div>
+      </div>
     </div>
-    <div v-else class="post-layout">
-        <div class="policy-wrapper">
-            <div class="container">
-                <div class="row">
-                    <div class="col-12 col-lg-8">
-                        <div class="container pad0">
-                            <div class="row">
-                                <button-block-head
-                                    :id="data.id"
-                                    :slug="data.slug"
-                                    :category="data.category"
-                                />
-                                <div class="col-lg-12">
-                                    <h1 class="post-page-title">{{data.title}}</h1>
-                                    <h2>{{data.subTitle}}</h2>
-                                </div>
-                                <div class="col-lg-12">
-                                    <div class="container">
-                                        <div class="row" style="margin-bottom: 3.1em;">
-                                            <div class="col-lg-6">
-                                                <author-block
-                                                    :author="data.author"
-                                                    :publishedAt="data.publishedAt"
-                                                />
+  </div>
+  <div v-else class="post-layout">
+    <div class="policy-wrapper">
+      <div class="container">
+        <div class="row">
+          <div class="col-12 col-lg-8">
+            <div class="container pad0">
+              <div class="row">
+                <button-block-head :id="data.id" :slug="data.slug" :category="data.category" />
+                <div class="col-lg-12">
+                  <h1 class="post-page-title">{{data.title}}</h1>
+                  <h2>{{data.subTitle}}</h2>
+                </div>
+                <div class="col-lg-12">
+                  <div class="container">
+                    <div class="row" style="margin-bottom: 3.1em;">
+                      <div class="col-lg-6">
+                        <author-block :author="data.author" :publishedAt="data.publishedAt" />
+
                                             </div>
                                             <div
                                                 class="col-lg-6"
@@ -137,29 +131,21 @@
                                     <p
                                         class="text"
                                         v-html="data.body"
-                                        :style="{fontSize: bodySize + '%'}"
-                                    >
-                                        <!-- {{data.body}} -->
-                                    </p>
-                                </div>
-                                <div class="col-12" v-if="!review">
-                                    <social-block
-                                        v-if="data"
-                                        :post="data"
-                                        @changeFontSize="changeFontSize"
-                                    />
-                                </div>
-                                <!-- <social-block [(fontSize)]="bodySize" class="col-lg-12"></social-block> -->
-                                <div class="col-lg-12" style="margin-top: 25px;" v-if="!review">
-                                    <div class="linked-title">
-                                        <span>linked</span>
-                                    </div>
-                                    <div class="tags">
-                                        <div
-                                            class="tag-wrapper"
-                                            v-for="tag in data.tags"
-                                            :key="tag.id"
-                                        >
+                                        :style="{fontSize: bodySize + '%'}">
+                    <!-- {{data.body}} -->
+                  </p>
+                </div>
+                <div class="col-12" v-if="!review">
+                  <social-block v-if="data" :post="data" @changeFontSize="changeFontSize" />
+                </div>
+                <!-- <social-block [(fontSize)]="bodySize" class="col-lg-12"></social-block> -->
+                <div class="col-lg-12" style="margin-top: 25px;" v-if="!review">
+                  <div class="linked-title">
+                    <span>linked</span>
+                  </div>
+                  <div class="tags">
+                    <div class="tag-wrapper" v-for="tag in data.tags" :key="tag.id">
+
                                             <nuxt-link
                                                 :to="`/l/${tag.slug}`"
                                                 class="tag-name"
@@ -212,15 +198,15 @@
                                         <button @click="createdComment(false)">disagree</button>
                                     </div>
                                     <div class="sort-comments">
-                                        <span
+                                        <button
                                             v-for="(sortAc, index) in sortActions"
                                             :key="index"
                                             class="col-6 col-sm-3"
                                             :class="orderBy === sortAc.action ? 'active-sort' : ''"
                                             @click="sortUpdate(sortAc.action)"
-                                        >
+                                        :disabled="disabled">
                                             {{ sortAc.title }}
-                                            <div>
+                                            <divv-if="sortAc.action !== 'agree' && sortAc.action !== 'disagree'">
                                                 <svg
                                                     v-if="orderBy !== sortAc.action || orderBy === sortAc.action && order === 'ASC'"
                                                     class="carret-up"
@@ -238,10 +224,27 @@
                                                     <use xlink:href="#caret-down" />
                                                 </svg>
                                             </div>
-                                        </span>
+                                        <div v-else>
+                        <svg
+                          v-if="orderBy !== sortAc.action "
+                          class="carret-up"
+                          width="10"
+                          height="10"
+                        >
+                          <use xlink:href="#caret-down" />
+                        </svg>
+                        <svg
+                          :class="orderBy === sortAc.action ? 'active-down' : ''"
+                          width="10"
+                          height="10"
+                        >
+                          <use xlink:href="#caret-down" />
+                        </svg>
+                      </div>
+                    </button>
                                     </div>
                                     <div
-                                        class="comments"
+                                        class="commentscomment-1-replise"
                                         v-for="comment of comments"
                                         :key="comment.id"
                                         :id="comment.id"
@@ -285,153 +288,163 @@ export default {
         RelatedBlock,
         AsideReview,
         Comment
-    },
-    props: {
-        data: Object,
-        slug: String,
-        prev: {
-            type: Object,
-            default: null
-        },
-        draft: Boolean,
-        next: {
-            type: Object,
-            default: null
-        },
-        review: Boolean
-    },
 
-    head() {
-        return {
-            title: this.data.title,
-            meta: [
-                {
-                    hid: "description",
-                    name: "description",
-                    content: this.data.seoDescription
-                },
-                {
-                    hid: "og:title",
-                    name: "og:title",
-                    content: this.data.title
-                },
-                {
-                    hid: "og:description",
-                    name: "og:description",
-                    content: this.data.seoDescription
-                },
-                {
-                    hid: "og:url",
-                    name: "og:url",
-                    content: this.$route.fullPath
-                },
-                {
-                    hid: "og:image",
-                    name: "og:image",
-                    content: this.data.featured.thumbnail
-                },
-                {
-                    hid: "og:type",
-                    name: "og:type",
-                    content: "article"
-                }
-            ]
-        };
+  },
+  props: {
+    data: Object,
+    slug: String,
+    prev: {
+      type: Object,
+      default: null
     },
-    data() {
-        return {
-            bodySize: 110,
-            comment: "",
-            message: false,
-            subscribe: false,
-            comments: [],
-            page: 1,
-            orderBy: "date",
-            order: "ASC",
-            paginations: Object,
-            sortActions: [
-                {
-                    title: "Latest",
-                    action: "date"
-                },
-                {
-                    title: "Top Voted",
-                    action: "voted"
-                },
-                {
-                    title: "Agree",
-                    action: "agree"
-                },
-                {
-                    title: "Disagree",
-                    action: "agree"
-                }
-            ]
-        };
+    draft: Boolean,
+    next: {
+      type: Object,
+      default: null
     },
-    methods: {
-        sortUpdate(type) {
-            if (type === this.orderBy) {
-                if (this.order === "ASC") {
-                    this.order = "DESC";
-                } else {
-                    this.order = "ASC";
-                }
-            } else {
-                this.orderBy = type;
-                this.order = "ASC";
-            }
-            this.getComments();
+    review: Boolean
+  },
+
+  head() {
+    return {
+      title: this.data.title,
+      meta: [
+        {
+          hid: "description",
+          name: "description",
+          content: this.data.seoDescription
         },
-        changeFontSize() {
-            if (this.bodySize === 130) {
-                this.bodySize = 90;
-            } else {
-                this.bodySize = this.bodySize + 10;
-            }
+        {
+          hid: "og:title",
+          name: "og:title",
+          content: this.data.title
         },
-        createdComment(postReaction) {
-            let data = {
-                body: this.comment,
-                postReaction: postReaction,
-                subscribe: this.subscribe
-            };
-            this.$axios
-                .$post(`/api/posts/${this.data.id}/comments`, data)
-                .then(res => {
-                    console.log(res);
-                    this.comment = "";
-                });
+        {
+          hid: "og:description",
+          name: "og:description",
+          content: this.data.seoDescription
         },
-        getComments() {
-            this.$axios
-                .$get(
-                    `/api/posts/${this.data.id}/comments?order=${this.order}&orderBy=${this.orderBy}&page=${this.page}`
-                )
-                .then(res => {
-                    this.comments = res.data;
-                    this.paginations = res.pagination;
-                });
+        {
+          hid: "og:url",
+          name: "og:url",
+          content: this.$route.fullPath
+        },
+        {
+          hid: "og:image",
+          name: "og:image",
+          content: this.data.featured.thumbnail
+        },
+        {
+          hid: "og:type",
+          name: "og:type",
+          content: "article"
         }
-    },
-    provide() {
-        return {
-            id: this.data.id
-        };
-    },
-    created() {
-        this.getComments();
-        if (this.data.category) {
-            this.$store.commit("SET_BREADCRUMBS", [
-                {
-                    title: this.data.category.name,
-                    path: "/" + this.data.category.slug
-                },
-                { title: this.data.title }
-            ]);
+      ]
+    };
+  },
+  data() {
+    return {
+      bodySize: 110,
+      comment: "",
+      message: false,
+      subscribe: false,
+      disabled: false,
+      comments: [],
+      page: 1,
+      orderBy: "date",
+      order: "ASC",
+      paginations: Object,
+      sortActions: [
+        {
+          title: "Latest",
+          action: "date"
+        },
+        {
+          title: "Top Voted",
+          action: "voted"
+        },
+        {
+          title: "Agree",
+          action: "agree"
+        },
+        {
+          title: "Disagree",
+          action: "agree"
+        }
+      ]
+    };
+  },
+  methods: {
+    sortUpdate(type) {
+      if (type === this.orderBy) {
+        if (this.order === "ASC") {
+          this.order = "DESC";
         } else {
-            this.$store.commit("SET_BREADCRUMBS", [{ title: this.data.title }]);
+          this.order = "ASC";
         }
+      } else {
+        this.orderBy = type;
+        this.order = "ASC";
+      }
+      this.getComments();
+    },
+    changeFontSize() {
+      if (this.bodySize === 130) {
+        this.bodySize = 90;
+      } else {
+        this.bodySize = this.bodySize + 10;
+      }
+    },
+    createdComment(postReaction) {
+      let data = {
+        body: this.comment,
+        postReaction: postReaction,
+        subscribe: this.subscribe
+      };
+      this.$axios
+        .$post(`/api/posts/${this.data.id}/comments`, data)
+        .then(res => {
+          this.comments.push(res.data);
+          this.comment = "";
+        });
+    },
+    getComments() {
+      this.$axios
+        .$get(
+          `/api/posts/${this.data.id}/comments?order=${this.order}&orderBy=${
+            this.orderBy !== "agree" && this.orderBy !== "disagree"
+              ? this.orderBy
+              : "reaction"
+          }&page=${this.page}`
+        )
+        .then(res => {
+          this.comments = [...this.comments, ...res.data];
+          this.paginations = res.pagination;
+          this.disabled = false;
+        })
+        .catch(error => {
+          console.log(error);
+        });
     }
+  },
+  provide() {
+    return {
+      id: this.data.id
+    };
+  },
+  created() {
+    this.getComments();
+    if (this.data.category) {
+      this.$store.commit("SET_BREADCRUMBS", [
+        {
+          title: this.data.category.name,
+          path: "/" + this.data.category.slug
+        },
+        { title: this.data.title }
+      ]);
+    } else {
+      this.$store.commit("SET_BREADCRUMBS", [{ title: this.data.title }]);
+    }
+  }
 };
 </script>
