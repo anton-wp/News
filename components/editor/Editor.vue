@@ -73,6 +73,16 @@ export default {
                         services: {
                             youtube: true,
                             coub: true,
+                            codepen: {
+                                regex: /https?:\/\/codepen.io\/([^\/\?\&]*)\/pen\/([^\/\?\&]*)/,
+                                embedUrl:
+                                    "https://codepen.io/<%= remote_id %>?height=300&theme-id=0&default-tab=css,result&embed-version=2",
+                                html:
+                                    "<iframe height='300' scrolling='no' frameborder='no' allowtransparency='true' allowfullscreen='true' style='width: 100%;'></iframe>",
+                                height: 300,
+                                width: 600,
+                                id: groups => groups.join("/embed/")
+                            },
                             twitter: {
                                 regex: /^https?:\/\/twitter\.com\/(?:#!\/)?(\w+)\/status(?:es)?\/(\d+)(?:\/.*)?$/,
                                 embedUrl:
@@ -83,14 +93,30 @@ export default {
                                 width: 600,
                                 id: ids => ids.join("/status/")
                             },
+
                             instagram: {
-                                regex: /https?:\/\/www\.instagram\.com\/p\/([^\/\?\&]+)\/?/,
+                                regex: /(?:https?:\/\/(?:www\.)?)?instagram\.com(\/p\/\w+\/?)\/\?utm_source=ig_web_copy_link/,
                                 embedUrl:
-                                    "https://www.instagram.com/p/<%= remote_id %>/embed",
+                                    "https://www.instagram.com<%= remote_id %>/embed",
                                 html:
                                     '<iframe width="400" height="505" style="margin: 0 auto;" frameborder="0" scrolling="no" allowtransparency="true"></iframe>',
                                 height: 505,
                                 width: 400
+                                // /(https?:\/\/(www\.)?)?instagram\.com(\/p\/\w+\/?)/,
+
+                                // /https?:\/\/www\.instagram\.com\/p\/([^\/\?\&]+)\/?/
+
+                                // embedUrl:
+                                //     "https://www.instagram.com/p/<%= remote_id[3].substr(3) %>/embed",
+                                // html:
+                                //     '<iframe width="400" height="505" style="margin: 0 auto;" frameborder="0" scrolling="no" allowtransparency="true"></iframe>',
+
+                                // html:
+                                // 	'<iframe width="320" height="440" src="http://instagram.com/p/qbq6fIJMVZ/embed" frameborder="0"></iframe>',
+
+                                // https://www.instagram.com/p/CCYVrjVFYjS/?utm_source=ig_web_copy_link
+
+                                // https://www.instagram.com/p/CCYVrjVFYjS/?utm_source=ig_web_button_share_sheet
                             }
                         }
                     }
@@ -99,6 +125,8 @@ export default {
 
             onChange: () => {
                 this.save();
+
+                // console.log('https://www.instagram.com/p/CCYVrjVFYjS/?utm_source=ig_web_button_share_sheet'.match(/(https?:\/\/(www\.)?)?instagram\.com(\/p\/\w+\/?)/)[3].substr(3))
             }
         });
         console.log(this.postId);

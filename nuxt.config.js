@@ -17,7 +17,7 @@ module.exports = {
 		],
 		script: [
 			// { src: 'https://cdn.ampproject.org/v0/amp-mega-menu-0.1.js', customElement: "amp-mega-menu" }
-		  ],
+		],
 	},
 	/*
 	** Customize the progress-bar color
@@ -91,10 +91,12 @@ module.exports = {
 	 * load info to vuex
 	 */
 	router: {
+		linkActiveClass: 'active-link',
+		linkExactActiveClass: 'your-custom-exact-active-link',
 	},
 	env: {
-    baseUrl: process.env.BASE_URL || 'http://localhost:3000'
-  },
+		baseUrl: process.env.BASE_URL || 'http://localhost:3000'
+	},
 
 
 	/*

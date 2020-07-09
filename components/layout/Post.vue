@@ -104,7 +104,7 @@
                                             <div
                                                 class="col-lg-6"
                                                 style="align-items: center; display: flex;"
-												v-if="!review"
+                                                v-if="!review"
                                             >
                                                 <marks :author="data.author" />
                                             </div>
@@ -179,68 +179,74 @@
                                 <div v-if="!draft && !review" class="col-lg-12">
                                     <div class="comment-wrapper">
                                         <span class="title">your verdict</span>
-                                        <span class="about"@mouseenter="message = true" @mouseleave="message = false">
+                                        <span
+                                            class="about"
+                                            @mouseenter="message = true"
+                                            @mouseleave="message = false"
+                                        >
                                             About Verdict
                                             <svg class="icon" width="17" height="17">
-                        <use xlink:href="#eclipse-question" />
-                      </svg>
+                                                <use xlink:href="#eclipse-question" />
+                                            </svg>
                                         </span>
                                     </div>
                                     <span
-                                        v-if="message"class="aboutPopup"
+                                        v-if="message"
+                                        class="aboutPopup"
                                     >Verdict is top voted comment by all members. One vote per member. Verdict can change over time.</span>
                                 </div>
                                 <div v-if="!draft && !review" class="col-12">
                                     <textarea class="form-input with-border" v-model="comment"></textarea>
-                  <div class="blockCheckbox" >
-                                    <label for="checkbox" @click="subscribe = !subscribe">
-                                    <div class="categoryCheckbox">
-                        <svg width="10" height="10" v-if="subscribe">
-                          <use xlink:href="#checkbox" />
-                        </svg>
-                                        <input type="checkbox" class="checkbox" />
-                                        </div>subscribe to comments</label>
+                                    <div class="blockCheckbox">
+                                        <label for="checkbox" @click="subscribe = !subscribe">
+                                            <div class="categoryCheckbox">
+                                                <svg width="10" height="10" v-if="subscribe">
+                                                    <use xlink:href="#checkbox" />
+                                                </svg>
+                                                <input type="checkbox" class="checkbox" />
+                                            </div>subscribe to comments
+                                        </label>
                                     </div>
                                     <div class="blockButton">
-                                        <button@click="createdComment(true)">agree</button>
-                                        <button@click="createdComment(false)">disagree</button>
-                  </div>
-                  <div class="sort-comments">
-                    <span
-											v-for="(sortAc, index) in sortActions"
-											:key="index"
-                      class="col-6 col-sm-3"
-                      :class="orderBy === sortAc.action ? 'active-sort' : ''"
-                      @click="sortUpdate(sortAc.action)"
-                    >
-                      {{ sortAc.title }}
-                      <div>
-                        <svg
-                          v-if="orderBy !== sortAc.action || orderBy === sortAc.action && order === 'ASC'"
-                          class="carret-up"
-                          width="10"
-                          height="10"
-                        >
-                          <use xlink:href="#caret-down" />
-                        </svg>
-                        <svg
-                          v-if="orderBy !== sortAc.action || orderBy === sortAc.action && order === 'DESC'"
-                          :class="orderBy === sortAc.action && order === 'DESC' ? 'active-down' : ''"
-                          width="10"
-                          height="10"
-                        >
-                          <use xlink:href="#caret-down" />
-                        </svg>
-                      </div>
-                    </span>
-                  </div>
-                  <div
-                    class="comments"
-                    v-for="comment of comments"
-                    :key="comment.id"
-                    :id="comment.id"
-                  >
-                    <comment :postId="data.id" :data="comment" />
+                                        <button @click="createdComment(true)">agree</button>
+                                        <button @click="createdComment(false)">disagree</button>
+                                    </div>
+                                    <div class="sort-comments">
+                                        <span
+                                            v-for="(sortAc, index) in sortActions"
+                                            :key="index"
+                                            class="col-6 col-sm-3"
+                                            :class="orderBy === sortAc.action ? 'active-sort' : ''"
+                                            @click="sortUpdate(sortAc.action)"
+                                        >
+                                            {{ sortAc.title }}
+                                            <div>
+                                                <svg
+                                                    v-if="orderBy !== sortAc.action || orderBy === sortAc.action && order === 'ASC'"
+                                                    class="carret-up"
+                                                    width="10"
+                                                    height="10"
+                                                >
+                                                    <use xlink:href="#caret-down" />
+                                                </svg>
+                                                <svg
+                                                    v-if="orderBy !== sortAc.action || orderBy === sortAc.action && order === 'DESC'"
+                                                    :class="orderBy === sortAc.action && order === 'DESC' ? 'active-down' : ''"
+                                                    width="10"
+                                                    height="10"
+                                                >
+                                                    <use xlink:href="#caret-down" />
+                                                </svg>
+                                            </div>
+                                        </span>
+                                    </div>
+                                    <div
+                                        class="comments"
+                                        v-for="comment of comments"
+                                        :key="comment.id"
+                                        :id="comment.id"
+                                    >
+                                        <comment :postId="data.id" :data="comment" />
                                     </div>
                                 </div>
                             </div>
@@ -268,6 +274,7 @@ import RelatedBlock from "~/components/universal-components/relatedBlock.vue";
 import AsideReview from "~/components/universal-components/asideReview.vue";
 
 export default {
+
     components: {
         PrevNext,
         Follow,
@@ -277,7 +284,8 @@ export default {
         SocialBlock,
         RelatedBlock,
         AsideReview,
-    Comment},
+        Comment
+    },
     props: {
         data: Object,
         slug: String,
@@ -333,46 +341,48 @@ export default {
     data() {
         return {
             bodySize: 110,
-        comment: "",
-      message: false,
-      subscribe: false,
-      comments: [],
-      page: 1,
-      orderBy: "date",
-      order: "ASC",
-			paginations: Object,
-			sortActions: [
-				{
-					title: 'Latest',
-					action: 'date'
-				},
-				{
-					title: 'Top Voted',
-					action: 'voted'
-				},
-				{
-					title: 'Agree',
-					action: 'agree'
-				},
-				{
-					title: 'Disagree',
-					action: 'agree'
-				},
-			]};
+            comment: "",
+            message: false,
+            subscribe: false,
+            comments: [],
+            page: 1,
+            orderBy: "date",
+            order: "ASC",
+            paginations: Object,
+            sortActions: [
+                {
+                    title: "Latest",
+                    action: "date"
+                },
+                {
+                    title: "Top Voted",
+                    action: "voted"
+                },
+                {
+                    title: "Agree",
+                    action: "agree"
+                },
+                {
+                    title: "Disagree",
+                    action: "agree"
+                }
+            ]
+        };
     },
-    methods: {sortUpdate(type) {
-      if (type === this.orderBy) {
-        if (this.order === "ASC") {
-          this.order = "DESC";
-        } else {
-          this.order = "ASC";
-        }
-      } else {
-				this.orderBy = type
-        this.order = "ASC";
-      }
-      this.getComments();
-    },
+    methods: {
+        sortUpdate(type) {
+            if (type === this.orderBy) {
+                if (this.order === "ASC") {
+                    this.order = "DESC";
+                } else {
+                    this.order = "ASC";
+                }
+            } else {
+                this.orderBy = type;
+                this.order = "ASC";
+            }
+            this.getComments();
+        },
         changeFontSize() {
             if (this.bodySize === 130) {
                 this.bodySize = 90;
@@ -380,36 +390,37 @@ export default {
                 this.bodySize = this.bodySize + 10;
             }
         },
-    createdComment(postReaction) {
-      let data = {
-        body: this.comment,
-        postReaction: postReaction,
-        subscribe: this.subscribe
-      };
-      this.$axios
-        .$post(`/api/posts/${this.data.id}/comments`, data)
-        .then(res => {
-          console.log(res);
-          this.comment = "";
-        });
-    },
-    getComments() {
-      this.$axios
-        .$get(
-          `/api/posts/${this.data.id}/comments?order=${this.order}&orderBy=${this.orderBy}&page=${this.page}`
-        )
-        .then(res => {
-          this.comments = res.data;
-          this.paginations = res.pagination;
-        });
-    }
+        createdComment(postReaction) {
+            let data = {
+                body: this.comment,
+                postReaction: postReaction,
+                subscribe: this.subscribe
+            };
+            this.$axios
+                .$post(`/api/posts/${this.data.id}/comments`, data)
+                .then(res => {
+                    console.log(res);
+                    this.comment = "";
+                });
+        },
+        getComments() {
+            this.$axios
+                .$get(
+                    `/api/posts/${this.data.id}/comments?order=${this.order}&orderBy=${this.orderBy}&page=${this.page}`
+                )
+                .then(res => {
+                    this.comments = res.data;
+                    this.paginations = res.pagination;
+                });
+        }
     },
     provide() {
         return {
             id: this.data.id
         };
     },
-    created() {this.getComments();
+    created() {
+        this.getComments();
         if (this.data.category) {
             this.$store.commit("SET_BREADCRUMBS", [
                 {

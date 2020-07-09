@@ -1,0 +1,27 @@
+.__amp .author-page {
+	.tabs {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		flex-wrap: wrap;
+		&__item {
+			padding: 10px 15px;
+			margin: 15px;
+			display: inline-flex;
+			align-items: center;
+			color: #333;
+			font-weight: bold;
+			svg {
+				fill: #333333;
+				margin-right: 5px;
+			}
+
+			&--active {
+				color: #ff4242;
+				svg {
+					fill: #ff4242;
+				}
+			}
+		}
+	}
+}

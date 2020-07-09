@@ -461,15 +461,15 @@ export default {
             }
 
             this.errorNotif = false;
-            // this.$axios
-            //     .$patch(`/api/posts/${this.postId}/review`, this.formData)
-            //     .then(resp => {
-            //         this.$toasted.show(resp.message);
-            //     })
-            //     .catch(error => {
-            //         console.log(error);
-            //         this.$toasted.show(error.message);
-            //     });
+            this.$axios
+                .$patch(`/api/posts/${this.postId}/review`, newData)
+                .then(resp => {
+                    this.$toasted.show(resp.message);
+                })
+                .catch(error => {
+                    console.log(error);
+                    this.$toasted.show(error.message);
+                });
             console.log(newData);
         }
     },
