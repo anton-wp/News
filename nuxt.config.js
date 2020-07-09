@@ -1,6 +1,6 @@
 module.exports = {
 	mode: 'universal',
-	// cache: true,
+	cache: true,
 	/*
 	** Headers of the page
 	*/
