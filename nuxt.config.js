@@ -21,7 +21,7 @@ module.exports = {
 			}
 		],
 		script: [
-			{ src: 'https://cdn.ampproject.org/v0/amp-sidebar-0.1.js' }
+			{ src: 'https://cdn.ampproject.org/v0/amp-sidebar-0.1.js', defer: true }
 		  ],
 	},
 	/*

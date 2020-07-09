@@ -1,5 +1,13 @@
 <template>
     <div v-if="$isAMP" class="container">
+        <amp-sidebar id="sidebar1" layout="nodisplay" side="left" class="nav-menu">
+            <nuxt-link
+                :to="'/amp/' + menuLink.path"
+                v-for="(menuLink, index) of headerMenu"
+                :key="index"
+            >{{ menuLink.title }}</nuxt-link>
+        </amp-sidebar>
+
         <big-header :userAuthor="userInfo" />
 
         <div class="tabs">
@@ -105,7 +113,8 @@ export default {
             userInfo: undefined,
             ampPosts: undefined,
             tag: true,
-            slug: this.$route.params.slug
+            slug: this.$route.params.slug,
+            headerMenu: null
         };
     },
 
@@ -116,9 +125,12 @@ export default {
             `/api/author/${params.slug}/posts?status=Published&sort=DESC&page=1&limit=12`
         );
 
+        const headerMenu = await $axios.$get(`/api/menu/header`);
+
         return {
             userInfo: userInfo.data,
-            ampPosts: posts.data
+            ampPosts: posts.data,
+            headerMenu: headerMenu.data
         };
     }
 };

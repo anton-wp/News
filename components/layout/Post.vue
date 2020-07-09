@@ -1,5 +1,13 @@
 <template>
     <div v-if="$isAMP">
+        <amp-sidebar id="sidebar1" layout="nodisplay" side="left" class="nav-menu">
+            <nuxt-link
+                :to="'/amp/' + menuLink.path"
+                v-for="(menuLink, index) of headerMenu"
+                :key="index"
+            >{{ menuLink.title }}</nuxt-link>
+        </amp-sidebar>
+
         <div class="container">
             <nuxt-link
                 v-if="data.category"
@@ -317,7 +325,8 @@ export default {
             type: Object,
             default: null
         },
-        review: Boolean
+        review: Boolean,
+        headerMenu: Array
     },
 
     head() {

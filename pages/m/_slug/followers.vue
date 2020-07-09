@@ -1,5 +1,13 @@
 <template>
     <div v-if="$isAMP" class="container">
+        <amp-sidebar id="sidebar1" layout="nodisplay" side="left" class="nav-menu">
+            <nuxt-link
+                :to="'/amp/' + menuLink.path"
+                v-for="(menuLink, index) of headerMenu"
+                :key="index"
+            >{{ menuLink.title }}</nuxt-link>
+        </amp-sidebar>
+
         <big-header :userAuthor="userInfo" />
 
         <div class="tabs">
@@ -64,6 +72,10 @@
                 </div>
             </div>
         </div>
+
+		<p class="text-center" v-if="ampFollowers < 1">
+			No results!
+		</p>
     </div>
     <div v-else>
         <following :type="'author'" :typePage="'subscribers'" />
@@ -87,7 +99,8 @@ export default {
         return {
             userInfo: undefined,
             slug: this.$route.params.slug,
-            ampFollowers: []
+            ampFollowers: [],
+            headerMenu: null
         };
     },
 
@@ -100,11 +113,12 @@ export default {
             `/api/author/${params.slug}/subscribers?created=DESC&page=1&limit=12`
         );
 
-        console.log(followers);
+        const headerMenu = await $axios.$get(`/api/menu/header`);
 
         return {
             userInfo: userInfo.data,
-            ampFollowers: followers.data
+            ampFollowers: followers.data,
+            headerMenu: headerMenu.data
         };
     }
 };

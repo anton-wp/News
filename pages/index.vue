@@ -202,29 +202,6 @@ export default {
 
         // this.getPosts()
     },
-    // asyncData({ $axios }) {
-    //     return (
-    //         $axios
-    //             // .$get(`/api/posts/?limit=19&page=1`)
-    //             .$get(`/api/home`)
-    //             .then(response => {
-    //                 // let arrayPosts = [response.data];
-    //                 // let pagination = response.pagination;
-    //                 let arrayPosts = [response.data.posts.items];
-    //                 let pagination = response.data.posts.pagination;
-
-    //                 let menu = response.data.menu;
-    //                 let tags = response.data.tags;
-
-    //                 return { arrayPosts, pagination, menu, tags };
-    //             })
-    //             .catch(error => console.error(error))
-
-    //         // let headerMenu = $axios.$get("/api/menu/header").then(res => {
-    //         //         context.commit("SET_HEADER_MENU", res.data);
-    //         //     });
-    //     );
-    // },
 
     async asyncData({ $axios, params }) {
         const homePageInfo = await $axios.$get(`/api/home`);
