@@ -51,6 +51,8 @@ module.exports = {
 		// Doc: https://github.com/nuxt-community/dotenv-module
 		'@nuxtjs/dotenv',
 		'@nuxtjs/auth',
+		'@nuxtjs/amp',
+		'vue-social-sharing/nuxt',
 
 	],
 	/*
@@ -89,7 +91,11 @@ module.exports = {
 	/**
 	 * load info to vuex
 	 */
-	router: {},
+	router: {
+	},
+	env: {
+    baseUrl: process.env.BASE_URL || 'http://localhost:3000'
+  },
 
 
 	/*

@@ -8,10 +8,12 @@ import Header from "@editorjs/header";
 import LinkTool from "@editorjs/link";
 import List from "@editorjs/list";
 import ImageTool from "@editorjs/image";
+import Embed from "@editorjs/embed";
 
 export default {
     props: {
-        postid: Number | String
+        postid: Number | String,
+        editContent: Object | String
     },
     data() {
         return {
@@ -23,8 +25,8 @@ export default {
     },
     methods: {
         save() {
-            this.editor.save().then(({ blocks }) => {
-                this.$emit("input", blocks);
+            this.editor.save().then(content => {
+                this.$emit("input", content);
                 this.$emit("editor:saved");
             });
         }
@@ -36,12 +38,14 @@ export default {
              */
             holderId: "editor",
 
+            data: this.editContent,
+
             tools: {
                 header: Header,
                 linkTool: {
                     class: LinkTool,
                     config: {
-                        endpoint: "/" // Your backend endpoint for url data fetching
+                        endpoint: "/api/posts/create-helpers/link-meta"
                     }
                 },
                 image: {
@@ -62,6 +66,34 @@ export default {
                 list: {
                     class: List,
                     inlineToolbar: true
+                },
+                embed: {
+                    class: Embed,
+                    config: {
+                        services: {
+                            youtube: true,
+                            coub: true,
+                            twitter: {
+                                regex: /^https?:\/\/twitter\.com\/(?:#!\/)?(\w+)\/status(?:es)?\/(\d+)(?:\/.*)?$/,
+                                embedUrl:
+                                    "https://twitframe.com/show?url=https://twitter.com/<%= remote_id %>",
+                                html:
+                                    '<iframe width="600" height="600" style="margin: 0 auto;" frameborder="0" scrolling="no" allowtransparency="true"></iframe>',
+                                height: 300,
+                                width: 600,
+                                id: ids => ids.join("/status/")
+                            },
+                            instagram: {
+                                regex: /https?:\/\/www\.instagram\.com\/p\/([^\/\?\&]+)\/?/,
+                                embedUrl:
+                                    "https://www.instagram.com/p/<%= remote_id %>/embed",
+                                html:
+                                    '<iframe width="400" height="505" style="margin: 0 auto;" frameborder="0" scrolling="no" allowtransparency="true"></iframe>',
+                                height: 505,
+                                width: 400
+                            }
+                        }
+                    }
                 }
             },
 
@@ -76,17 +108,3 @@ export default {
     }
 };
 </script>
-
-
-<style lang="scss" scoped>
-#editor {
-    border: 1px solid #ccc;
-    border-radius: 10px;
-    margin-top: 20px;
-    padding: 20px;
-}
-
-.ce-block__content {
-    max-width: 100%;
-}
-</style>

@@ -8,15 +8,25 @@ Vue.use(Vuex)
 const store = () => new Vuex.Store({
 
 	state: {
+		loginModal: {
+			open: false,
+			type: 'signUp'
+		},
 		profile: Object,
 		tabs: [],
 		modal: Object,
 		breadcrumbs: [],
 		bookmarks: [],
+		commentsReply: '',
 		subscriptions: [],
 		header: {
 			menu: [],
 			news: [],
+		},
+		dashboard: {
+			posts: [],
+			paginations: Object,
+			ids: []
 		}
 	},
 	getters: {

@@ -415,10 +415,10 @@ export default {
           profile_visibility: this.profileVisibility
         }
       };
-      this.$http
-        .patch(`/api/profile`, settings)
+      this.$axios
+        .$patch(`/api/profile`, settings)
         .then(res => {
-          this.$toasted.show(res.data.message);
+          this.$toasted.show(res.message);
         })
         .catch(error => console.error(error));
     },
@@ -426,10 +426,10 @@ export default {
       this.changePassword = !this.changePassword;
     },
     getFollowingCategories() {
-      this.$http
-        .get(`/api/categories/list`)
+      this.$axios
+        .$get(`/api/categories/list`)
         .then(res => {
-          this.followingCategories = res.data.data;
+          this.followingCategories = res.data;
         })
         .catch(error => console.error(error));
 		},
@@ -438,10 +438,10 @@ export default {
 				country: this.results.countryCallingCode,
 				phone: this.results.nationalNumber
 			}
-      this.$http
-        .post(`/api/phone/verify`, phone)
+      this.$axios
+        .$post(`/api/phone/verify`, phone)
 					.then(res => {
-						this.$toasted.show(res.data.message);
+						this.$toasted.show(res.message);
 						this.typeModal = "code modal";
 					})
 					.catch(error => console.error(error));
@@ -453,25 +453,25 @@ export default {
 				countryCodeLetters: this.results.countryCode,
 				phone: this.results.nationalNumber
 			}
-      this.$http
-        .post(`/api/phone/verify-code`, phone)
+      this.$axios
+        .$post(`/api/phone/verify-code`, phone)
 					.then(res => {
-						if(res.data.success) {
-							this.$toasted.show(res.data.message);
+						if(res.success) {
+							this.$toasted.show(res.message);
 							this.typeModal = "number check";
 							this.activeModal = false
 							this.verified = true;
 						}else {
-							this.$toasted.error(res.data.message);
+							this.$toasted.error(res.message);
 						}
 					})
 					.catch(error => console.error(error));
     },
     getProfileFull() {
-      this.$http
-        .get(`/api/profile/full`)
+      this.$axios
+        .$get(`/api/profile/full`)
         .then(res => {
-          this.OutputSettings(res.data.data);
+          this.OutputSettings(res.data);
         })
         .catch(error => console.error(error));
     },
@@ -481,12 +481,12 @@ export default {
 				newPassword: this.newPassword,
 				oldPassword: this.password,
 			}
-      this.$http
+      this.$axios
         .post(`/api/auth/change-password`, params)
         .then(res => {
-					this.$toasted.show(res.data.message)
+					this.$toasted.show(res.message)
         })
-        .catch(error => this.$toasted.error(error.response.data.message));
+        .catch(error => this.$toasted.error(error.response.message));
     },
     OutputSettings(data) {
       this.email = data.email;

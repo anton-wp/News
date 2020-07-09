@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<following :type="'profile'" />
+		<following :type="'profile'" :typePage="'subscriptions'" />
 	</div>
 </template>
 

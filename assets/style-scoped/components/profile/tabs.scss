@@ -1,0 +1,132 @@
+.tabs {
+  .menu {
+    margin-right: 10px;
+    .menu-block {
+      display: flex;
+      align-items: center;
+      @media (max-width: 768px) {
+        display: inline;
+      }
+    }
+  }
+
+  .open {
+    transform: rotate(180deg);
+  }
+
+  .counter {
+    margin-left: 5px;
+  }
+
+  .icon {
+    color: #919191;
+    display: block;
+    margin-left: 10px !important;
+    @media (max-width: 768px) {
+      display: none !important;
+    }
+  }
+
+  .active-tab {
+    color: #ff4242;
+	}
+
+
+
+  li {
+    display: block;
+    margin-top: 20px;
+    @media (max-width: 768px) {
+      text-align: center;
+    }
+    @media (max-width: 639px) {
+      margin-top: 5px;
+    }
+  }
+
+  .title {
+    vertical-align: middle;
+    display: contents;
+    @media (max-width: 639px) {
+      display: none;
+      margin-top: 25px;
+    }
+  }
+
+  .link {
+    text-decoration: none;
+    color: inherit;
+  }
+
+  .menu {
+    color: #0a0a0a;
+    text-transform: uppercase;
+    font-weight: 700;
+    cursor: pointer;
+    transition: color 0.25s;
+    @media (max-width: 768px) {
+      text-transform: none;
+      font-size: 0.7em;
+      font-weight: 400;
+    }
+    &:hover {
+      color: #ff4242;
+    }
+    svg {
+      margin: 8px 0;
+      margin-right: 1.2em;
+      @media (max-width: 768px) {
+        margin-right: 0;
+        margin: 0 auto;
+        display: block;
+      }
+      @media (max-width: 639px) {
+        width: 25px;
+        height: 25px;
+        margin-top: 10px;
+        margin-bottom: 10px;
+      }
+    }
+  }
+
+  .blockSubMenu {
+    @media (max-width: 768px) {
+      display: flex;
+      position: absolute;
+      width: calc(100vw - 100% - 0.9375rem);
+      overflow-x: scroll;
+      left: 85px;
+      top: 25px;
+      background-color: #f4f4f4;
+      cursor: pointer;
+    }
+    @media (max-width: 639px) {
+      left: 50px;
+      top: 35px;
+      width: calc(100vw - 100% - 1rem);
+    }
+    .subMenu {
+      list-style-type: none;
+      color: #7a7a7a;
+      font-weight: 700;
+      cursor: pointer;
+      transition: color 0.25s;
+      font-size: 16px;
+      margin-left: 60px;
+      text-transform: none;
+      @media (max-width: 768px) {
+        margin-left: 0px;
+        margin-top: 0px;
+        padding: 0.4em 1em 0.8em;
+        display: list-item;
+        white-space: nowrap;
+      }
+      @media (max-width: 639px) {
+        font-size: 11.5px;
+      }
+      &:hover {
+        color: #ff4242;
+      }
+    }
+  }
+}
