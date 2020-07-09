@@ -53,7 +53,7 @@ module.exports = {
 		'@nuxtjs/auth',
 		'@nuxtjs/amp',
 		'vue-social-sharing/nuxt',
-
+		['@nuxtjs/component-cache', { maxAge: 1000 * 60 * 60 }]
 	],
 	/*
 	** Axios module configuration
@@ -91,11 +91,10 @@ module.exports = {
 	/**
 	 * load info to vuex
 	 */
-	router: {
-	},
+	router: {},
 	env: {
-    baseUrl: process.env.BASE_URL || 'http://localhost:3000'
-  },
+		baseUrl: process.env.BASE_URL || 'http://localhost:3000'
+	},
 
 
 	/*
