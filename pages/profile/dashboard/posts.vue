@@ -93,9 +93,9 @@ export default {
       this.$axios
         .$post(`/api/admin/posts/delete-multi`, { ids: this.dashboard.ids })
         .then(res => {
-					this.$toasted.show(res.message);
+          this.$toasted.show(res.message);
           this.$store.commit("DEL_POSTS_DASHBOARD", this.dashboard.ids);
-					this.$store.commit("CLEAR_DASHBOARD_IDS");
+          this.$store.commit("CLEAR_DASHBOARD_IDS");
           if (this.dashboard.posts.length === 0) {
             if (this.page > 1) {
               this.page = this.page - 1;
@@ -142,6 +142,7 @@ export default {
       this.search.author = this.$route.query.author;
     },
     getPosts() {
+			this.updateRouter()
       this.$axios
         .$get(
           `/api/admin/posts?limit=20&page=${
@@ -150,15 +151,18 @@ export default {
         )
         .then(res => {
           this.$store.commit("CLEAR_DASHBOARD_IDS");
-          this.$router.push({
-            path: "/profile/dashboard/posts",
-            query: this.query()
-          });
+
           this.$store.commit("SET_DASHBOARD_POSTS", res.data);
           this.$store.commit("SET_DASHBOARD_PAGINATIONS", res.pagination);
         })
         .catch(error => console.error(error));
-    },
+		},
+		updateRouter () {
+			  this.$router.push({
+        path: "/profile/dashboard/posts",
+        query: this.query()
+      });
+		},
     sortUpdate() {
       if (this.sort.name && this.sort.type) {
         return `&${this.sort.name}Sort=${this.sort.type}`;

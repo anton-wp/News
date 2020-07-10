@@ -1,6 +1,6 @@
 <template>
   <div class="posts">
-    <search class="search" @getSearch="getSearch" :type="'drafts'" :searchProps="searchProps" />
+    <search class="search" @getSearch="getSearch" :type="'comments'" :searchProps="searchProps" />
     <table-header class="header" :header="header" @getSort="getSort" />
     <table-block
       class="table-block"
@@ -11,10 +11,9 @@
       :key="index"
       :title="post.title"
       :category="post.category"
-      :date="post.publishedAt"
-      :status="post.publishedAt"
+      :date="post.createdAt"
+      :status="post.status"
       :id="post.id"
-      :slug="post.slug"
       :author="post.author"
       :header="header"
       :links="links"
@@ -89,7 +88,7 @@ export default {
   methods: {
     aplly() {
       this.$axios
-        .$post(`/api/admin/posts/delete-multi`, { ids: this.dashboard.ids })
+        .$post(`/api/admin/comments/delete-multi`, { ids: this.dashboard.ids })
         .then(res => {
 					this.$toasted.show(res.message);
 					this.$store.commit("DEL_POSTS_DASHBOARD", this.dashboard.ids);
@@ -104,7 +103,7 @@ export default {
     },
     edit(slug) {
       this.$router.push({
-        path: `/draft/${slug}/`
+        path: `/profile/dashboard/comment/${slug}/edit`
       });
     },
     deletePosts(id) {
@@ -121,9 +120,11 @@ export default {
       this.sort.name = this.$route.query.sort ? this.$route.query.sort : this.sort.name;
       this.sort.type = this.$route.query.direction ? this.$route.query.direction : this.sort.type;
       this.search.search = this.$route.query.q;
+      this.search.status = this.$route.query.status;
       this.search.author = this.$route.query.author;
     },
     getPosts() {
+			this.updateRouter();
       this.$axios
         .$get(
           `/api/admin/comments${this.sortUpdate()}&type=${this.type}&limit=20&page=${
@@ -135,8 +136,7 @@ export default {
 					this.$store.commit("CLEAR_DASHBOARD_IDS");
           this.$store.commit("SET_DASHBOARD_POSTS", res.data);
           this.$store.commit("SET_DASHBOARD_PAGINATIONS", res.pagination);
-          this.updateRouter();
-          if (this.dashboard.posts.length === 0) {
+          if (this.dashboard.posts.length === 0 && this.pagination && this.pagination.pagesCount > 0) {
             if (this.page > 1) {
               this.page = this.page - 1;
               this.getPosts();
@@ -154,8 +154,6 @@ export default {
       });
     },
     sortUpdate() {
-			console.log(this.sort.name)
-			console.log(this.sort.type)
       if (this.sort.name && this.sort.type) {
         return `?orderBy=${this.sort.name}&order=${this.sort.type}`;
       }
@@ -165,6 +163,9 @@ export default {
       let search = "";
       if (this.search.search) {
         search = search + `&search=${this.search.search}`;
+      }
+      if (this.search.status) {
+        search = search + `&status=${this.search.status}`;
       }
       if (this.search.author) {
         search = search + `&user=${this.search.author}`;
@@ -194,6 +195,9 @@ export default {
       }
       if (this.search.search) {
         res["q"] = this.search.search;
+      }
+      if (this.search.status) {
+        res["status"] = this.search.status;
       }
       if (this.search.author) {
         res["author"] = this.search.author;

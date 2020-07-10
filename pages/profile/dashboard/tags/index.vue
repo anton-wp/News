@@ -93,8 +93,8 @@ export default {
           .$post(`/api/admin/tags/delete-multi`, { ids: this.dashboard.ids })
           .then(res => {
             this.$toasted.show(res.message);
-						this.$store.commit("DEL_POSTS_DASHBOARD", this.dashboard.ids);
-						this.$store.commit("CLEAR_DASHBOARD_IDS");
+            this.$store.commit("DEL_POSTS_DASHBOARD", this.dashboard.ids);
+            this.$store.commit("CLEAR_DASHBOARD_IDS");
             if (this.dashboard.posts.length === 0) {
               if (this.page > 1) {
                 this.page = this.page - 1;
@@ -110,8 +110,8 @@ export default {
         this.$axios
           .put(`/api/admin/tags/approve`, { ids: this.dashboard.ids })
           .then(res => {
-						this.$toasted.show(res.message);
-						this.$store.commit("CLEAR_DASHBOARD_IDS");
+            this.$toasted.show(res.message);
+            this.$store.commit("CLEAR_DASHBOARD_IDS");
           })
           .catch(error => console.error(error));
       }
@@ -134,6 +134,7 @@ export default {
     },
 
     getPosts() {
+			this.updateRouter()
       this.$axios
         .$get(
           `/api/admin/tags?limit=20&page=${
@@ -144,12 +145,14 @@ export default {
           this.$store.commit("CLEAR_DASHBOARD_IDS");
           this.$store.commit("SET_DASHBOARD_POSTS", res.data);
           this.$store.commit("SET_DASHBOARD_PAGINATIONS", res.pagination);
-          this.$router.push({
-            path: "/profile/dashboard/tags",
-            query: this.query()
-          });
         })
         .catch(error => console.error(error));
+    },
+    updateRouter() {
+      this.$router.push({
+        path: "/profile/dashboard/tags",
+        query: this.query()
+      });
     },
     sortUpdate() {
       if (this.sort.name && this.sort.type) {

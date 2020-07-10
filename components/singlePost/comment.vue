@@ -36,11 +36,14 @@
         </svg>
         Report
       </button>
-      <button>
+      <button @click="openShareBlock = !openShareBlock">
         <svg width="14" height="17">
           <use xlink:href="#share-alt" />
         </svg>
         Share
+        <div class="block__share" v-if="openShareBlock">
+          <comment-share />
+        </div>
       </button>
     </div>
     <div class="replies">
@@ -81,7 +84,7 @@
     <modal-window v-if="reportInput" @closeModal="closeReportInput">
       <div class="report">
         <textarea class="something-else" v-model="somethingElse"></textarea>
-        <button class="report-button" @click="reportsComents(somethingElse)">Report</button>
+        <button class="report-button" @click="reportsComments(somethingElse)">Report</button>
       </div>
     </modal-window>
   </div>
@@ -90,6 +93,7 @@
 <script>
 import { mapState } from "vuex";
 import CommentReplies from "~/components/singlePost/comment-replies.vue";
+import CommentShare from "~/components/singlePost/comment-share.vue";
 import AuthorBlock from "~/components/singlePost/authorBlock.vue";
 import ReplyComment from "~/components/singlePost/reply-comment.vue";
 import modalWindow from "~/components/universal-components/modalWindow.vue";
@@ -100,16 +104,18 @@ export default {
     AuthorBlock,
     ReplyComment,
     CommentReplies,
-    modalWindow
+    modalWindow,
+    CommentShare
   },
   data() {
     return {
       dataReplies: [],
       replies: true,
-			report: false,
+      report: false,
 			reportInput: false,
-			reportValue: "",
-			somethingElse: '',
+			openShareBlock: false,
+      reportValue: "",
+      somethingElse: "",
       reportArr: [
         "spam",
         "sexually explicit or suggestive",
@@ -132,13 +138,13 @@ export default {
   methods: {
     reportClick() {
       if (this.reportValue === "something else") {
-				this.report = false
-				this.reportInput = true;
+        this.report = false;
+        this.reportInput = true;
       } else {
-				this.reportsComents()
+        this.reportsComments();
       }
     },
-    reportsComents(reportMessage) {
+    reportsComments(reportMessage) {
       let data = reportMessage
         ? { reportType: this.reportValue, reportMessage: reportMessage }
         : { reportType: this.reportValue };

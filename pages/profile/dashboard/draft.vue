@@ -117,6 +117,7 @@ export default {
       this.search.author = this.$route.query.author;
     },
     getPosts() {
+			this.updateRouter();
       this.$axios
         .$get(
           `/api/admin/drafts?limit=20&page=${
@@ -127,7 +128,6 @@ export default {
 					this.$store.commit("CLEAR_DASHBOARD_IDS");
           this.$store.commit("SET_DASHBOARD_POSTS", res.data);
           this.$store.commit("SET_DASHBOARD_PAGINATIONS", res.pagination);
-          this.updateRouter();
           if (this.dashboard.posts.length === 0) {
             if (this.page > 1) {
               this.page = this.page - 1;

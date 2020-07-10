@@ -112,7 +112,11 @@ export default {
       this.$emit("view", this.slug, this.status);
     },
     edit() {
-      this.$emit("edit", this.slug, this.id);
+			if(this.slug) {
+				this.$emit("edit", this.slug, this.id);
+			}else{
+				this.$emit("edit", this.id);
+			}
     },
     deletePosts() {
       this.$emit("deletePosts", this.id);

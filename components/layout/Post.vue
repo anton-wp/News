@@ -233,6 +233,9 @@
                     <comment :postId="data.id" :data="comment" />
                   </div>
                 </div>
+                <div v-if="paginations.next" class="col-12 button-block">
+                  <button class="loadMore" @click="moreComments">Load More</button>
+                </div>
               </div>
             </div>
           </div>
@@ -255,7 +258,7 @@ import SocialBlock from "~/components/singlePost/socialBlock.vue";
 import ButtonBlockHead from "~/components/singlePost/buttonBlockHead.vue";
 import Follow from "~/components/universal-components/followBlock.vue";
 import RelatedBlock from "~/components/universal-components/relatedBlock.vue";
-import AsideReview from "~/components/universal-components/asideReview.vue";
+import AsideReview from "~/components/universal-components/AsideReview.vue";
 
 export default {
   components: {
@@ -354,6 +357,10 @@ export default {
     };
   },
   methods: {
+		moreComments () {
+			this.page = this.page + 1
+			this.getComments()
+		},
     sortUpdate(type) {
       if (type === this.orderBy) {
         if (this.order === "ASC") {
