@@ -17,6 +17,7 @@
       :author="post.author"
       :header="header"
       :links="links"
+			:post="post.post"
     />
     <table-footer class="action" :actionsBlock="actionsBlock" @aplly="aplly" />
     <pagination
@@ -38,7 +39,7 @@ import Pagination from "~/components/profile/pagination";
 
 export default {
   layout: "profileSmall",
-  // middleware: "auth",
+  middleware: "auth",
   components: {
     Search,
     TableHeader,
@@ -97,8 +98,9 @@ export default {
         .catch(error => console.error(error));
     },
     view(slug) {
+			console.log(slug)
       this.$router.push({
-        path: `/draft/${slug}/preview/`
+        path: `/${slug}/comments/`
       });
     },
     edit(slug) {
@@ -108,7 +110,7 @@ export default {
     },
     deletePosts(id) {
       this.$axios
-        .$delete(`/api/posts/${id}`)
+        .$delete(`/api/comments/${id}/delete`)
         .then(res => {
           this.$toasted.show(res.message);
           this.$store.commit("DEL_POST_DASHBOARD", id);
@@ -133,6 +135,7 @@ export default {
 				)
 
         .then(res => {
+					console.log(res)
 					this.$store.commit("CLEAR_DASHBOARD_IDS");
           this.$store.commit("SET_DASHBOARD_POSTS", res.data);
           this.$store.commit("SET_DASHBOARD_PAGINATIONS", res.pagination);

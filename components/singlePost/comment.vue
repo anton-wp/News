@@ -42,7 +42,7 @@
         </svg>
         Share
         <div class="block__share" v-if="openShareBlock">
-          <comment-share />
+          <comment-share :post="data" />
         </div>
       </button>
     </div>
@@ -69,7 +69,9 @@
         :key="comment.id"
         :data="comment"
         :postId="postId"
+				:parenPostId="data.id"
         :index="1"
+				@updateCommentReplies="updateCommentReplies()"
       />
     </div>
     <modal-window v-if="report" @closeModal="closeReport">
@@ -112,8 +114,8 @@ export default {
       dataReplies: [],
       replies: true,
       report: false,
-			reportInput: false,
-			openShareBlock: false,
+      reportInput: false,
+      openShareBlock: false,
       reportValue: "",
       somethingElse: "",
       reportArr: [
@@ -136,6 +138,9 @@ export default {
     this.reportValue = this.reportArr[0];
   },
   methods: {
+		updateCommentReplies() {
+			this.getCommentReplies()
+		},
     reportClick() {
       if (this.reportValue === "something else") {
         this.report = false;

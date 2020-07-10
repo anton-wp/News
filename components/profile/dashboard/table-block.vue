@@ -90,7 +90,8 @@ export default {
     status: String | Boolean,
     header: Object,
     featured: Object | Boolean,
-    links: Object
+    links: Object,
+    post: Object
   },
   methods: {
     toggle() {
@@ -109,14 +110,18 @@ export default {
         .catch(error => console.error(error));
     },
     view() {
-      this.$emit("view", this.slug, this.status);
+      if (this.post.slug) {
+        this.$emit("view", this.post.slug);
+      } else {
+        this.$emit("view", this.slug, this.status);
+      }
     },
     edit() {
-			if(this.slug) {
-				this.$emit("edit", this.slug, this.id);
-			}else{
-				this.$emit("edit", this.id);
-			}
+      if (this.slug) {
+        this.$emit("edit", this.slug, this.id);
+      } else {
+        this.$emit("edit", this.id);
+      }
     },
     deletePosts() {
       this.$emit("deletePosts", this.id);

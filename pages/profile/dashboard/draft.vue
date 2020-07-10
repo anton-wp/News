@@ -37,7 +37,7 @@ import Pagination from "~/components/profile/pagination";
 
 export default {
   layout: "profileSmall",
-  // middleware: "auth",
+  middleware: "auth",
   components: {
     Search,
     TableHeader,

@@ -1,18 +1,6 @@
 <template>
   <div class="comment">
     <author-block :author="data.user" :publishedAt="data.createdAt" :type="'comment-replies'" />
-    <!-- <div class="verdict">
-      <svg v-if="!data.isVerdict" width="40" height="40">
-        <use xlink:href="#verdict-icon-custom" />
-      </svg>
-      <svg v-if="data.isVerdict" width="40" height="40">
-        <use xlink:href="#verdict-icon-selected" />
-      </svg>
-      <div style="margin-left: 10px">
-        <span class="value">1</span>
-        <span class="label">VOTE(S)</span>
-      </div>
-    </div>-->
     <div class="title">
       <p>{{data.body}}</p>
       <p></p>
@@ -25,17 +13,20 @@
         </svg>
         Reply
       </button>
-      <button>
+      <button @click="openReport">
         <svg width="14" height="17">
           <use xlink:href="#flag" />
         </svg>
         Report
       </button>
-      <button>
+      <button @click="openShareBlock = !openShareBlock">
         <svg width="14" height="17">
           <use xlink:href="#share-alt" />
         </svg>
         Share
+        <div class="block__share" v-if="openShareBlock">
+          <comment-share :parenPostId="parenPostId" :post="data" />
+        </div>
       </button>
     </div>
     <div class="replies">
@@ -44,6 +35,7 @@
         :postId="postId"
         :id="data.id"
         @createComments="createComments"
+        @updateCommentReplies="updateCommentReplies()"
       />
     </div>
     <div class="comments" :class="index === 1 ? 'comment-2-replise' : null" v-if="data.hasReplies">
@@ -52,9 +44,26 @@
         :key="comment.id"
         :data="comment"
         :postId="postId"
+				:parenPostId="parenPostId"
         :index="index + 1"
+        @updateCommentReplies="updateCommentReplies()"
       />
     </div>
+    <modal-window v-if="report" @closeModal="closeReport">
+      <div class="report">
+        <label v-for="item in reportArr" :key="item">
+          <input type="radio" :value="item" v-model="reportValue" />
+          {{ item }}
+        </label>
+        <button class="report-button" @click="reportClick">Report</button>
+      </div>
+    </modal-window>
+    <modal-window v-if="reportInput" @closeModal="closeReportInput">
+      <div class="report">
+        <textarea class="something-else" v-model="somethingElse"></textarea>
+        <button class="report-button" @click="reportsComments(somethingElse)">Report</button>
+      </div>
+    </modal-window>
   </div>
 </template>
 
@@ -62,30 +71,47 @@
 import { mapState } from "vuex";
 import AuthorBlock from "~/components/singlePost/authorBlock.vue";
 import ReplyComment from "~/components/singlePost/reply-comment.vue";
+import CommentShare from "~/components/singlePost/comment-share.vue";
+import modalWindow from "~/components/universal-components/modalWindow.vue";
 
 export default {
   name: "comment-replies",
   components: {
     AuthorBlock,
-    ReplyComment
+    ReplyComment,
+    CommentShare,
+    modalWindow
   },
   data() {
     return {
-      dataReplies: []
+      openShareBlock: false,
+      report: false,
+      reportInput: false,
+      reportValue: "",
+      somethingElse: "",
+      dataReplies: [],
+      reportArr: [
+        "spam",
+        "sexually explicit or suggestive",
+        "violent or dangerous",
+        "hate speech, harassment, or bullying",
+        "something else"
+      ]
     };
   },
   props: {
     data: Object,
-    postId: String,
+		postId: String,
+		parenPostId: String,
     index: Number
   },
   computed: {
     ...mapState(["commentsReply"])
   },
-  mounted() {
-    console.log(this.data);
-  },
   methods: {
+    updateCommentReplies() {
+      this.$emit("updateCommentReplies");
+    },
     createComments(data) {
       this.dataReplies.push(data);
     },
@@ -95,10 +121,41 @@ export default {
       } else {
         this.$store.commit("ADD_COMMENT_REPLY", "");
       }
+    },
+    reportClick() {
+      if (this.reportValue === "something else") {
+        this.report = false;
+        this.reportInput = true;
+      } else {
+        this.reportsComments();
+      }
+    },
+    reportsComments(reportMessage) {
+      let data = reportMessage
+        ? { reportType: this.reportValue, reportMessage: reportMessage }
+        : { reportType: this.reportValue };
+      this.$axios
+        .$post(`/api/comments/${this.data.id}/reports`, data)
+        .then(res => {
+          console.log(res);
+        })
+        .catch(error => {
+          console.log(error);
+        });
+    },
+    openReport() {
+      this.report = true;
+    },
+    closeReport() {
+      this.report = false;
+    },
+    closeReportInput() {
+      this.reportInput = false;
     }
   },
-  mounted() {
-    // console.log(this.data)
+  created() {
+		console.log(this.parenPostId)
+    this.reportValue = this.reportArr[0];
   }
 };
 </script>

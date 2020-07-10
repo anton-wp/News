@@ -360,14 +360,20 @@ export default {
         },
         {
           title: "Disagree",
-          action: "agree"
+          action: "disagree"
         }
       ]
     };
   },
   methods: {
     sortUpdate(type) {
-      if (type === this.orderBy) {
+			if(type === 'agree'){
+				this.orderBy = type;
+        this.order = "DESC";
+			}else if (type === 'disagree') {
+				this.orderBy = type;
+        this.order = "ASC";
+			}else if (type === this.orderBy) {
         if (this.order === "ASC") {
           this.order = "DESC";
         } else {
@@ -404,16 +410,7 @@ export default {
       this.page = this.page + 1;
       this.getComments();
     },
-    sortUpdate(type) {
-      if (type === this.orderBy) {
-        if (this.order === "ASC") {
-          this.order = "DESC";
-        } else {
-          this.order = "ASC";
-        }
-      }
-    },
-    getComments() {
+    getComments(loadMore) {
       this.$axios
         .$get(
           `/api/posts/${this.data.id}/comments?order=${this.order}&orderBy=${
@@ -423,8 +420,12 @@ export default {
           }&page=${this.page}`
         )
         .then(res => {
-          this.comments = [...this.comments, ...res.data];
-          this.paginations = res.pagination;
+          if(loadMore) {
+						this.comments = [...this.comments, ...res.data];
+					}else {
+						this.comments = res.data;
+					}
+					this.paginations = res.pagination;
           this.disabled = false;
         })
         .catch(error => {

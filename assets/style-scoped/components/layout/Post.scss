@@ -49,9 +49,10 @@
 			}
 		}
 	}
+
 	.something-else {
 		width: 100%;
-    margin: 1em 0;
+		margin: 1em 0;
 	}
 
 	.report {
@@ -223,6 +224,7 @@
 
 		.buttons {
 			margin-top: 1em;
+			position: relative;
 
 			button {
 				border: none;
@@ -245,9 +247,8 @@
 					margin-right: 10px;
 				}
 			}
-			.block__share{
-				position: absolute;
-			}
+
+
 		}
 
 		.title {
@@ -633,6 +634,94 @@
 							z-index: 1;
 						}
 					}
+				}
+			}
+		}
+
+		.block__share {
+			position: absolute;
+			bottom: -60px;
+			z-index: 5;
+			left: 0;
+
+			&::before {
+				content: '';
+				border-left: 1px solid #f4f4f4;
+				border-top: 1px solid #f4f4f4;
+				position: absolute;
+				top: -8px;
+				right: 11em;
+				background: #fefefe;
+				width: 15px;
+				height: 15px;
+				z-index: 5;
+				transform: rotate(45deg);
+			}
+			@media (max-width: 449px) {
+				bottom: -100px;
+			}
+		}
+
+		.comment-share {
+			display: flex;
+			padding: 10px 10px 5px 10px;
+			flex-wrap: wrap;
+			justify-content: space-around;
+
+
+			a {
+				margin-bottom: 5px;
+
+				i {
+					width: 35px;
+					height: 35px;
+					margin-left: 5px;
+					margin-right: 5px;
+					border-radius: 21px;
+					display: flex;
+					justify-content: center;
+					align-items: center;
+					@media (max-width: 992px) {
+						margin-left: 2.5px;
+						margin-right: 2.5px;
+					}
+				}
+
+				svg {
+					fill: $white;
+					margin-right: 0px;
+				}
+
+				.facebook {
+					background-color: $facebook-color;
+				}
+
+				.twitter {
+					background-color: $pictonBlue;
+				}
+
+				.pinterest {
+					background-color: $pinterest-color;
+				}
+
+				.reddit-alien {
+					background-color: $black;
+				}
+
+				.tumblr {
+					background-color: $tumblr-color;
+				}
+
+				.linkedin {
+					background-color: $linkedin-color;
+				}
+
+				.flipboard {
+					background-color: $flipboard-color;
+				}
+
+				.envelope-o {
+					background-color: $envelope-color;
 				}
 			}
 		}
