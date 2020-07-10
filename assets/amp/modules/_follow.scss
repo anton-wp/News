@@ -1,0 +1,32 @@
+.__amp {
+	.follow {
+		display: flex;
+		flex-wrap: wrap;
+		&-item {
+			display: inline-flex;
+			align-items: center;
+			padding: 20px;
+			&__avatar {
+				border-radius: 50%;
+				margin-right: 15px;
+			}
+
+			&__info {
+				.name {
+					display: inline-block;
+					font-size: 18px;
+					font-weight: bold;
+				}
+
+				.rep {
+					span {
+						margin-right: 5px;
+						font-size: 16px;
+						font-weight: bold;
+						color: #e0a31b;
+					}
+				}
+			}
+		}
+	}
+}

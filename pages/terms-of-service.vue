@@ -1,5 +1,13 @@
 <template>
     <div v-if="$isAMP" class="text-page container">
+        <amp-sidebar id="sidebar1" layout="nodisplay" side="left" class="nav-menu">
+            <nuxt-link
+                :to="'/amp/' + menuLink.path"
+                v-for="(menuLink, index) of headerMenu"
+                :key="index"
+            >{{ menuLink.title }}</nuxt-link>
+        </amp-sidebar>
+
         <h1 class="post-cat">TERMS OF SERVICE</h1>
         <p class="text">
             Welcome to Verdict, a social networking platform operated by Verdict, LLC a Delaware Limited Liability
@@ -1771,6 +1779,21 @@ export default {
     components: {
         Follow
     },
+
+    data() {
+        return {
+            headerMenu: null
+        };
+    },
+
+    async asyncData({ $axios }) {
+        const headerMenu = await $axios.$get(`/api/menu/header`);
+
+        return {
+            headerMenu: headerMenu.data
+        };
+    },
+
     created() {
         this.$store.commit("SET_BREADCRUMBS", [{ title: "Terms of Service" }]);
     }

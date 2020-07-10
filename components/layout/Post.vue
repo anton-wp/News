@@ -1,5 +1,13 @@
 <template>
   <div v-if="$isAMP">
+    <amp-sidebar id="sidebar1" layout="nodisplay" side="left" class="nav-menu">
+      <nuxt-link
+        :to="'/amp/' + menuLink.path"
+        v-for="(menuLink, index) of headerMenu"
+        :key="index"
+      >{{ menuLink.title }}</nuxt-link>
+    </amp-sidebar>
+
     <div class="container">
       <nuxt-link
         v-if="data.category"
@@ -225,7 +233,7 @@
                     </button>
                   </div>
                   <div
-                    class="comments comment-1-replise"
+                    class="commentscomment-1-replise"
                     v-for="comment of comments"
                     :key="comment.id"
                     :id="comment.id"
@@ -284,7 +292,8 @@ export default {
       type: Object,
       default: null
     },
-    review: Boolean
+    review: Boolean,
+    headerMenu: Array
   },
 
   head() {
@@ -329,7 +338,7 @@ export default {
       bodySize: 110,
       comment: "",
       message: false,
-      subscribe: false,
+      subscribe: true,
       disabled: false,
       comments: [],
       page: 1,
@@ -357,10 +366,6 @@ export default {
     };
   },
   methods: {
-		moreComments () {
-			this.page = this.page + 1
-			this.getComments()
-		},
     sortUpdate(type) {
       if (type === this.orderBy) {
         if (this.order === "ASC") {
@@ -393,6 +398,20 @@ export default {
           this.comments.push(res.data);
           this.comment = "";
         });
+    },
+
+    moreComments() {
+      this.page = this.page + 1;
+      this.getComments();
+    },
+    sortUpdate(type) {
+      if (type === this.orderBy) {
+        if (this.order === "ASC") {
+          this.order = "DESC";
+        } else {
+          this.order = "ASC";
+        }
+      }
     },
     getComments() {
       this.$axios

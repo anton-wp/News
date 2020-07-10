@@ -1,0 +1,58 @@
+.__amp .author-page {
+	.author-img {
+		width: 200px;
+		height: 200px;
+		display: inline-block;
+		border-radius: 50%;
+		margin-bottom: 20px;
+	}
+
+	.author-info {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		flex-direction: row;
+		width: 100%;
+		margin-bottom: 30px;
+		&__rank {
+			font-size: 20px;
+			font-weight: bold;
+			margin: 0;
+			margin-right: 30px;
+		}
+
+		&__points {
+			margin: 0;
+			span {
+				font-size: 22px;
+				font-weight: bold;
+				color: #e0a31b;
+			}
+		}
+	}
+
+	.author-stats {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		margin-bottom: 30px;
+		&__item {
+			margin: 0 30px;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			flex-direction: column;
+			width: auto;
+			min-width: 50px;
+			p {
+				margin: 0;
+			}
+			.count {
+				font-size: 22px;
+				font-weight: bold;
+				color: #e0a31b;
+				margin-bottom: 10px;
+			}
+		}
+	}
+}
