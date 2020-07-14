@@ -9,23 +9,24 @@
       @edit="edit"
       @deletePosts="deletePosts"
       :key="index"
-      :title="post.title"
-      :category="post.category"
+      :titleComment="post.body"
+      :commentResponse="post"
       :date="post.createdAt"
       :status="post.status"
       :id="post.id"
-      :author="post.author"
+      :author="post.user"
       :header="header"
       :links="links"
 			:post="post.post"
     />
-    <table-footer class="action" :actionsBlock="actionsBlock" @aplly="aplly" />
+    <table-footer v-if="dashboard.posts.length > 0" class="action" :actionsBlock="actionsBlock" @aplly="aplly" />
     <pagination
       class="pagination"
-      v-if="dashboard.paginations"
+      v-if="dashboard.paginations && dashboard.posts.length > 0"
       :pagination="dashboard.paginations"
       @openPage="openPage"
     />
+		<not-found class="notFound" v-if="dashboard.posts.length === 0"/>
   </div>
 </template>
 
@@ -36,6 +37,7 @@ import TableFooter from "~/components/profile/dashboard/table-footer";
 import TableBlock from "~/components/profile/dashboard/table-block";
 import { mapState } from "vuex";
 import Pagination from "~/components/profile/pagination";
+import NotFound from "~/components/profile/dashboard/not-found-dashboard";
 
 export default {
   layout: "profileSmall",
@@ -45,7 +47,8 @@ export default {
     TableHeader,
     TableBlock,
     TableFooter,
-    Pagination
+		Pagination,
+		NotFound
   },
   data() {
     return {
@@ -97,15 +100,14 @@ export default {
         })
         .catch(error => console.error(error));
     },
-    view(slug) {
-			console.log(slug)
+    view(slug, id) {
       this.$router.push({
-        path: `/${slug}/comments/`
+        path: `/${slug}/comments/${id}`
       });
     },
     edit(slug) {
       this.$router.push({
-        path: `/profile/dashboard/comment/${slug}/edit`
+        path: `/profile/dashboard/comments/${slug}/edit`
       });
     },
     deletePosts(id) {
@@ -127,6 +129,7 @@ export default {
     },
     getPosts() {
 			this.updateRouter();
+			this.$store.commit("CLEAR_DASHBOARD_POSTS");
       this.$axios
         .$get(
           `/api/admin/comments${this.sortUpdate()}&type=${this.type}&limit=20&page=${
@@ -135,7 +138,6 @@ export default {
 				)
 
         .then(res => {
-					console.log(res)
 					this.$store.commit("CLEAR_DASHBOARD_IDS");
           this.$store.commit("SET_DASHBOARD_POSTS", res.data);
           this.$store.commit("SET_DASHBOARD_PAGINATIONS", res.pagination);
@@ -226,6 +228,9 @@ export default {
 }
 .pagination {
   order: 6;
+}
+.notFound {
+	order: 4;
 }
 .table-block {
   order: 4;

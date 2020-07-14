@@ -14,11 +14,11 @@
           @click="updateSort('vote')"
         >top voted</button>
       </div>
-      <div class="container" v-if="comments.length > 0">
+      <div v-if="comments.length > 0" class="container">
         <div class="row">
           <template>
             <div class="col-12" v-for="comment in comments" :key="comment.id">
-              <comment-block :comment="comment" :type="'all'" />
+              <comment-block :comment="comment" :type="'replies'" />
             </div>
           </template>
           <div class="col-12 button-block">
@@ -43,12 +43,12 @@ import CommentBlock from "~/components/profile/comment-block";
 import NotFound from "~/components/profile/not-found";
 
 export default {
-  layout: "profile",
+  layout: "author",
   middleware: "auth",
   components: {
     DefaultNewsCard,
-		CommentBlock,
-		NotFound
+    CommentBlock,
+    NotFound
   },
   data() {
     return {
@@ -74,7 +74,7 @@ export default {
       }
       this.$axios
         .$get(
-          `/api/profile/comments?orderBy=${this.type}&order=${this.sort}&type=all&page=${this.page}&limit=12`
+          `/api/author/${this.$route.params.slug}/comments?orderBy=${this.type}&order=${this.sort}&type=replies&page=${this.page}&limit=12`
         )
         .then(res => {
           if (!more) {
@@ -95,8 +95,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "../../../assets/utils/variables";
-@import "../../../assets/utils/colors";
+@import "../../../../assets/utils/variables";
+@import "../../../../assets/utils/colors";
+
 
 .img {
   display: inline-block;
@@ -170,9 +171,7 @@ a {
   width: 100%;
   display: block;
   margin: 0 auto;
-  // height: 100%;
   max-width: 130px;
-  // max-height: 100px;
 }
 .aboutAuthor {
   display: inline-block;
@@ -190,11 +189,8 @@ a {
 .user-popup {
   top: -295px;
   padding: 1.5em 1.2em 0.8em 1.2em;
-  // border-radius: 2px;
   background-color: $white;
   position: absolute;
-  // top: -45px;
-  // width: 100px;
   z-index: 3;
   max-width: 20em;
   min-height: 300px;
@@ -202,7 +198,6 @@ a {
   width: 100%;
   border: 1px solid $dedede;
   border-radius: 4px;
-  // visibility: hidden;
   opacity: 1;
   -webkit-box-shadow: 2px 4px 16px 0 $shark026;
   box-shadow: 2px 4px 16px 0 $shark026;
@@ -257,4 +252,5 @@ a {
   }
 }
 </style>
+
 

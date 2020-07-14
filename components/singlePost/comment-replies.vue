@@ -44,7 +44,7 @@
         :key="comment.id"
         :data="comment"
         :postId="postId"
-				:parenPostId="parenPostId"
+        :parenPostId="parenPostId"
         :index="index + 1"
         @updateCommentReplies="updateCommentReplies()"
       />
@@ -101,8 +101,8 @@ export default {
   },
   props: {
     data: Object,
-		postId: String,
-		parenPostId: String,
+    postId: String,
+    parenPostId: String,
     index: Number
   },
   computed: {
@@ -137,7 +137,9 @@ export default {
       this.$axios
         .$post(`/api/comments/${this.data.id}/reports`, data)
         .then(res => {
-          console.log(res);
+          this.$toasted.show(res.message);
+          this.closeReport();
+          this.closeReportInput();
         })
         .catch(error => {
           console.log(error);
@@ -154,7 +156,6 @@ export default {
     }
   },
   created() {
-		console.log(this.parenPostId)
     this.reportValue = this.reportArr[0];
   }
 };

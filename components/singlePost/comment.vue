@@ -54,7 +54,7 @@
         @createComments="createComments"
       />
     </div>
-    <div v-if="data.hasReplies" class="button-open-replies">
+    <div v-if="data.hasReplies && !data.children" class="button-open-replies">
       <hr v-if="replies" />
       <button v-if="replies" @click="getCommentReplies">
         See all replies
@@ -63,9 +63,20 @@
         </svg>
       </button>
     </div>
-    <div class="comments comment-2-replise">
+    <div v-if="!data.children" class="comments comment-2-replise">
       <comment-replies
         v-for="comment in dataReplies"
+        :key="comment.id"
+        :data="comment"
+        :postId="postId"
+				:parenPostId="data.id"
+        :index="1"
+				@updateCommentReplies="updateCommentReplies()"
+      />
+    </div>
+    <div v-else class="comments comment-2-replise">
+      <comment-replies
+        v-for="comment in data.children"
         :key="comment.id"
         :data="comment"
         :postId="postId"
@@ -129,17 +140,25 @@ export default {
   },
   props: {
     data: Object,
-    postId: String
+		postId: String,
+		type: Boolean
   },
   computed: {
     ...mapState(["commentsReply"])
   },
   created() {
-    this.reportValue = this.reportArr[0];
+		this.reportValue = this.reportArr[0];
+		if(this.type && this.data.hasReplies) {
+			this.getCommentReplies()
+		}
   },
   methods: {
 		updateCommentReplies() {
-			this.getCommentReplies()
+			if(!this.data.children) {
+				this.getCommentReplies()
+			}else {
+				this.$emit('getComments')
+			}
 		},
     reportClick() {
       if (this.reportValue === "something else") {
@@ -156,7 +175,9 @@ export default {
       this.$axios
         .$post(`/api/comments/${this.data.id}/reports`, data)
         .then(res => {
-          console.log(res);
+					this.$toasted.show(res.message)
+					this.closeReport()
+					this.closeReportInput()
         })
         .catch(error => {
           console.log(error);

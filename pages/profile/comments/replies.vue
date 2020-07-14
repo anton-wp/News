@@ -14,7 +14,7 @@
           @click="updateSort('vote')"
         >top voted</button>
       </div>
-      <div class="container">
+      <div class="container" v-if="comments.length > 0">
         <div class="row">
           <template>
             <div class="col-12" v-for="comment in comments" :key="comment.id">
@@ -30,6 +30,9 @@
           </div>
         </div>
       </div>
+			<div class="not-found" v-else>
+        <not-found />
+      </div>
     </div>
   </div>
 </template>
@@ -37,13 +40,15 @@
 <script>
 import DefaultNewsCard from "~/components/news/DefaultNewsCard";
 import CommentBlock from "~/components/profile/comment-block";
+import NotFound from "~/components/profile/not-found";
 
 export default {
   layout: "profile",
   middleware: "auth",
   components: {
 		DefaultNewsCard,
-		CommentBlock
+		CommentBlock,
+		NotFound
   },
   data() {
     return {

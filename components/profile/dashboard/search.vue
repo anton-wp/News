@@ -133,7 +133,7 @@ export default {
     },
     getStatusComments() {
       this.$axios
-        .$get("/api/admin/comments/statuses")
+        .$get("/api/admin/comments/helper/statuses")
         .then((data) => {
           this.statuses = data.data;
           data.data.unshift({ title: "Choose Status", key: "" });

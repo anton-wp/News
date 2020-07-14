@@ -3,15 +3,15 @@
     <div class="title">
       <nuxt-link :to="`/${comment.post.slug}`" class="comment__title">{{ comment.post.title }}</nuxt-link>
     </div>
-    <nuxt-link v-if="type === 'all' || type === 'replies'" class="view" :to="`/${comment.post.slug}/comment/${comment.id}`">view</nuxt-link>
-		<span v-if="type === 'subscription'" class="view">unsubscribe</span>
+    <nuxt-link v-if="type === 'all' || type === 'replies'" class="view" :to="`/${comment.post.slug}/comments/${comment.id}`">view</nuxt-link>
+		<span v-if="type === 'subscription'" @click="unsubscribe" class="view">unsubscribe</span>
     <time class="date">
       {{ new Date(comment.createdAt).toDateString() }}
       <span v-if="comment.parent">
         | reply to
         <nuxt-link
           class="date__link"
-          :to="`/${comment.post.slug}/comment/${comment.parent.id}`"
+          :to="`/${comment.post.slug}/comments/${comment.id}`"
         >{{comment.user.firstName}} {{comment.user.lastName}}</nuxt-link>
       </span>
     </time>
@@ -32,7 +32,12 @@ export default {
   props: {
 		comment: Object,
 		type: String
-  }
+	},
+	methods: {
+		unsubscribe() {
+			this.$emit('unsubscribe', this.comment.id)
+		}
+	}
 };
 </script>
 

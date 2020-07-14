@@ -115,7 +115,6 @@ export default {
   },
   mounted() {
     this.baseUrl = process.env.baseUrl;
-    console.log(this.post);
   }
 };
 </script>

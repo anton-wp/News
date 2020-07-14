@@ -100,4 +100,7 @@ export default {
 	CLEAR_DASHBOARD_IDS: (state) => {
 		state.dashboard.ids = [];
 	},
+	CLEAR_DASHBOARD_POSTS: (state) => {
+		state.dashboard.posts = [];
+	},
 }

@@ -260,11 +260,11 @@
 <script>
 import PrevNext from "~/components/singlePost/prevNext.vue";
 import AuthorBlock from "~/components/singlePost/authorBlock.vue";
+import ButtonBlockHead from "~/components/singlePost/buttonBlockHead.vue";
+import Follow from "~/components/universal-components/followBlock.vue";
 import Comment from "~/components/singlePost/comment.vue";
 import Marks from "~/components/singlePost/marks.vue";
 import SocialBlock from "~/components/singlePost/socialBlock.vue";
-import ButtonBlockHead from "~/components/singlePost/buttonBlockHead.vue";
-import Follow from "~/components/universal-components/followBlock.vue";
 import RelatedBlock from "~/components/universal-components/relatedBlock.vue";
 import AsideReview from "~/components/universal-components/AsideReview.vue";
 

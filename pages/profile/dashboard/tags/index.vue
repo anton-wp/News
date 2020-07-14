@@ -18,13 +18,14 @@
       :header="header"
       :links="links"
     />
-    <table-footer class="action" :actionsBlock="actionsBlock" @aplly="aplly" merge />
+    <table-footer v-if="dashboard.posts.length > 0" class="action" :actionsBlock="actionsBlock" @aplly="aplly" merge />
     <pagination
       class="pagination"
-      v-if="dashboard.paginations"
+      v-if="dashboard.paginations && dashboard.posts.length > 0"
       :pagination="dashboard.paginations"
       @openPage="openPage"
     />
+		<not-found class="notFound" v-if="dashboard.posts.length === 0"/>
   </div>
 </template>
 
@@ -35,6 +36,7 @@ import TableFooter from "~/components/profile/dashboard/table-footer";
 import TableBlock from "~/components/profile/dashboard/table-block";
 import { mapState } from "vuex";
 import Pagination from "~/components/profile/pagination";
+import NotFound from "~/components/profile/dashboard/not-found-dashboard";
 
 export default {
   layout: "profileSmall",
@@ -43,7 +45,8 @@ export default {
     Search,
     TableHeader,
     TableBlock,
-    TableFooter,
+		TableFooter,
+		NotFound,
     Pagination
   },
   data() {
@@ -134,7 +137,8 @@ export default {
     },
 
     getPosts() {
-			this.updateRouter()
+			this.updateRouter();
+			this.$store.commit("CLEAR_DASHBOARD_POSTS");
       this.$axios
         .$get(
           `/api/admin/tags?limit=20&page=${
@@ -230,6 +234,9 @@ export default {
 }
 .pagination {
   order: 6;
+}
+.notFound {
+	order: 4;
 }
 .table-block {
   order: 4;
