@@ -9,6 +9,7 @@
         :prev="prev"
         :next="next"
         :headerMenu="headerMenu"
+				:type="type"
     />
 </template>
 

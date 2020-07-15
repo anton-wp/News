@@ -119,9 +119,20 @@ export default {
     }
   },
   created() {
+			console.log(this.$route.query.i)
+		if(this.$route.query.i){
+			this.confirmEmail()
+		}
     this.$store.commit("SET_BREADCRUMBS");
   },
   methods: {
+		confirmEmail() {
+			this.$axios.$post(`/api/auth/confirm-email`, {token: this.$route.query.i})
+				.then(res => console.log(res))
+				.catch(error => {
+          console.log(error);
+        });
+		},
     logIn() {
       this.$v.$touch();
 

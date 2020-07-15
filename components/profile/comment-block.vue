@@ -20,7 +20,7 @@
         <p class>{{ comment.body }}</p>
       </div>
       <div class="content__points" v-if="!comment.parent">
-        <span class="content__points__count">0</span>
+        <span class="content__points__count">{{ comment.votes ? comment.votes : '0' }}</span>
         <span class="content__points__vote">vote(s)</span>
       </div>
     </div>

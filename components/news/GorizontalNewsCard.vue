@@ -14,7 +14,7 @@
             <div class="pad0-image col-12 col-sm-12 col-md-6 col-lg-6 px-0">
                 <div class="information padding0">
                     <div class="container-fluid">
-                        <news-card-header v-if="!tag" :category="post.category" colorScheme="dark" />
+                        <news-card-header v-if="!tag" :category="post.category" :post="post" colorScheme="dark" />
                         <div class="row block wrapp">
                             <!-- <h2  > -->
                             <!-- add go to post page {id} -->
@@ -46,6 +46,7 @@
                             colorScheme="light"
                             :pending="false"
                             :showMarks="false"
+														:post="post"
                         />
             </div>
                     </div>

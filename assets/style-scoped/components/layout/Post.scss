@@ -15,6 +15,13 @@
 		background-color: $secondary-bgcolor;
 	}
 
+	.verdict-active{
+		background-color: #F5F5F5;
+		.value {
+			color: #F23D3B;
+		}
+	}
+
 	.reply-comment {
 		margin-top: 36px;
 	}
@@ -22,7 +29,6 @@
 	.button-open-replies {
 		display: flex;
 		justify-content: center;
-		margin-top: 36px;
 
 		hr {
 			height: 1px;
@@ -32,7 +38,7 @@
 			z-index: 1;
 			position: absolute;
 			width: 100%;
-			bottom: 23px;
+			bottom: 5px;
 		}
 
 		button {
@@ -220,7 +226,7 @@
 
 	.comment {
 		position: relative;
-		padding: 1.5em 0em 1.3em;
+		padding: 1.5em 1em 1.3em;
 
 		.buttons {
 			margin-top: 1em;

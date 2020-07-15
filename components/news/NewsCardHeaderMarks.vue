@@ -6,7 +6,7 @@
       </svg>
       <span class="text">
         <!-- TODO go to single post page -->
-        <a class="reviews-link" :class="colorScheme" href="#">0</a>
+        <a class="reviews-link" :class="colorScheme" href="#">{{ post.commentsCount }}</a>
       </span>
     </span>
     <span class="mark-news">
@@ -15,7 +15,7 @@
       </svg>
       <!-- TODO go to single post page -->
       <span class="text">
-        <a class="reviews-link" :class="colorScheme" href="#">0</a>
+        <a class="reviews-link" :class="colorScheme" href="#">{{ post.verdictValue }}</a>
       </span>
     </span>
     <span class="mark-news">
@@ -24,7 +24,7 @@
       </svg>
       <!-- TODO go to single post page -->
       <span class="text">
-        <a class="reviews-link" :class="colorScheme" href="#">0</a>
+        <a class="reviews-link" :class="colorScheme" href="#">{{ post.viewsCount }}</a>
       </span>
     </span>
     <span class="bookmark-news">
@@ -43,7 +43,11 @@ export default {
   },
   props: {
     colorScheme: String,
-    pending: Boolean
-  }
+		pending: Boolean,
+		post: Object
+	},
+	created() {
+		console.log(this.post)
+	}
 };
 </script>

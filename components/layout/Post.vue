@@ -293,7 +293,8 @@ export default {
       default: null
     },
     review: Boolean,
-    headerMenu: Array
+		headerMenu: Array,
+		type: String,
   },
 
   head() {
@@ -367,7 +368,7 @@ export default {
   },
   methods: {
 		updateComment (data) {
-			this.comments.map(comment => comment.id === data.id ? comment = data : null)
+			this.comments = this.comments.map(comment => comment.id === data.id ? comment = data : comment)
 		},
     sortUpdate(type) {
 			if(type === 'agree'){
@@ -428,7 +429,6 @@ export default {
 					}else {
 						this.comments = res.data;
 					}
-					console.log(res)
 					this.paginations = res.pagination;
           this.disabled = false;
         })
@@ -455,6 +455,11 @@ export default {
     } else {
       this.$store.commit("SET_BREADCRUMBS", [{ title: this.data.title }]);
     }
-  }
+	},
+	mounted() {
+		if(this.type === 'post'){
+			this.$axios.post(`/api/posts/${this.data.id}/add-view`)
+		}
+	}
 };
 </script>

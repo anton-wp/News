@@ -1,50 +1,52 @@
 <template>
-  <div class="comment">
-    <author-block
-      :author="data.user"
-      :publishedAt="data.createdAt"
-      :type="'comment'"
-      :postReaction="data.postReaction"
-    />
-    <div class="verdict" @click="voteAdd">
-      <svg v-if="!data.isVerdict" width="40" height="40">
-        <use xlink:href="#verdict-icon-custom" />
-      </svg>
-      <svg v-if="data.isVerdict" width="40" height="40">
-        <use xlink:href="#verdict-icon-selected" />
-      </svg>
-      <div style="margin-left: 10px">
-        <span class="value">{{ data.votes ? data.votes : '0' }}</span>
-        <span class="label">VOTE(S)</span>
-      </div>
-    </div>
-    <div class="title">
-      <p>{{data.body}}</p>
-      <p></p>
-      <br />
-    </div>
-    <div class="buttons">
-      <button @click="reply">
-        <svg width="14" height="17">
-          <use xlink:href="#reply" />
+  <div style="position: relative;">
+    <div class="comment" :class="data.isVerdict ? 'verdict-active' : ''">
+      <author-block
+        :author="data.user"
+        :publishedAt="data.createdAt"
+        :type="'comment'"
+        :postReaction="data.postReaction"
+      />
+      <div class="verdict" @click="voteAdd">
+        <svg v-if="!data.isVerdict" width="40" height="40">
+          <use xlink:href="#verdict-icon-custom" />
         </svg>
-        Reply
-      </button>
-      <button @click="openReport">
-        <svg width="14" height="17">
-          <use xlink:href="#flag" />
+        <svg v-if="data.isVerdict" width="40" height="40">
+          <use xlink:href="#verdict-icon-selected" />
         </svg>
-        Report
-      </button>
-      <button @click="openShareBlock = !openShareBlock">
-        <svg width="14" height="17">
-          <use xlink:href="#share-alt" />
-        </svg>
-        Share
-        <div class="block__share" v-if="openShareBlock">
-          <comment-share :post="data" />
+        <div style="margin-left: 10px">
+          <span class="value">{{ data.votes ? data.votes : '0' }}</span>
+          <span class="label">VOTE(S)</span>
         </div>
-      </button>
+      </div>
+      <div class="title">
+        <p>{{data.body}}</p>
+        <p></p>
+        <br />
+      </div>
+      <div class="buttons">
+        <button @click="reply">
+          <svg width="14" height="17">
+            <use xlink:href="#reply" />
+          </svg>
+          Reply
+        </button>
+        <button @click="openReport">
+          <svg width="14" height="17">
+            <use xlink:href="#flag" />
+          </svg>
+          Report
+        </button>
+        <button @click="openShareBlock = !openShareBlock">
+          <svg width="14" height="17">
+            <use xlink:href="#share-alt" />
+          </svg>
+          Share
+          <div class="block__share" v-if="openShareBlock">
+            <comment-share :post="data" />
+          </div>
+        </button>
+      </div>
     </div>
     <div class="replies">
       <reply-comment
@@ -129,6 +131,7 @@ export default {
       openShareBlock: false,
       reportValue: "",
       somethingElse: "",
+      voteDisabled: false,
       reportArr: [
         "spam",
         "sexually explicit or suggestive",
@@ -154,16 +157,19 @@ export default {
   },
   methods: {
     voteAdd() {
-      this.$axios
-        .post(`/api/comments/${this.data.id}/vote`)
-        .then(res => {
-					// this.data = res.data.data;
-					this.$emit('updateComment', res.data.data)
-          this.$toasted.show(res.data.message);
-        })
-        .catch(error => {
-					this.$toasted.error(error.response.data.message);
-        });
+      if (!this.voteDisabled) {
+        this.voteDisabled = true;
+        this.$axios
+          .post(`/api/comments/${this.data.id}/vote`)
+          .then(res => {
+            this.voteDisabled = false;
+            this.$emit("updateComment", res.data.data);
+            this.$toasted.show(res.data.message);
+          })
+          .catch(error => {
+            this.$toasted.error(error.response.data.message);
+          });
+      }
     },
     updateCommentReplies() {
       if (!this.data.children) {
