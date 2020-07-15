@@ -274,6 +274,10 @@
 		padding-top: 55px;
 		padding-right: 1em;
 
+		svg {
+			cursor: pointer;
+		}
+
 		div {
 			display: flex;
 			flex-direction: column;
