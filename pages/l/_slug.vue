@@ -4,6 +4,7 @@
         :data="data"
         :term="term"
         :pagination="pagination"
+        :headerMenu="headerMenu"
         v-if="type !== null"
     />
 </template>
@@ -18,27 +19,49 @@ export default {
         Category
     },
 
-	asyncData({ $axios, route }) {
-        return $axios
-            .$get(`/api/tags/${route.params.slug}`)
-            .then(response => {
-                let type = response.type;
-                let data = response.data;
-                let term = response.term;
-                let pagination = response.pagination;
-
-                return { type, data, term, pagination };
-            })
-            .catch(error => console.error(error));
-    },
     data() {
         return {
             type: null,
             data: null,
             pagination: null,
-            term: null
+            term: null,
+            headerMenu: null
         };
     },
+
+    // asyncData({ $axios, route }) {
+    //     return $axios
+    //         .$get(`/api/tags/${route.params.slug}`)
+    //         .then(response => {
+    //             let type = response.type;
+    //             let data = response.data;
+    //             let term = response.term;
+    //             let pagination = response.pagination;
+
+    //             return { type, data, term, pagination };
+    //         })
+    //         .catch(error => console.error(error));
+    // },
+
+    async asyncData({ $axios, params }) {
+        const dataCat = await $axios.$get(`/api/tags/${params.slug}`);
+
+        let type = dataCat.type;
+        let data = dataCat.data;
+        let term = dataCat.term;
+        let pagination = dataCat.pagination;
+
+		const headerMenu = await $axios.$get(`/api/menu/header`);
+
+        return {
+            type: type,
+            data: data,
+            term: term,
+            pagination: pagination,
+            headerMenu: headerMenu.data
+        };
+    },
+
     created() {
         // this.$http
         //     .get(`/api/tags/${this.$route.params.slug}`)
@@ -50,7 +73,8 @@ export default {
         //     })
         //     .catch(error => {
         //         this.$router.push("/");
-        //     });
+		//     });
+
     }
 };
 </script>

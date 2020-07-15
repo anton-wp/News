@@ -1,9 +1,48 @@
 .__amp {
 	header {
 		padding: 20px 0;
+		.header__item {
+			width: 0;
+			flex-grow: 1;
+			display: inline-flex;
+			align-items: center;
+			justify-content: center;
+		}
 	}
 
 	.header-logo {
 		display: inline-flex;
+	}
+
+	.hamburger {
+		border: none;
+		background-color: transparent;
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		flex-direction: column;
+		span {
+			width: 20px;
+			height: 2px;
+			background-color: #333333;
+			&:nth-of-type(2) {
+				margin: 5px 0;
+			}
+		}
+	}
+
+	.nav-menu {
+		width: 300px;
+		max-width: 80vw;
+		background-color: #fff;
+		padding: 20px;
+		display: flex;
+		flex-direction: column;
+		a {
+			font-weight: bold;
+			font-size: 16px;
+			display: inline-flex;
+			padding: 10px 0;
+		}
 	}
 }

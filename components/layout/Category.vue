@@ -1,5 +1,13 @@
 <template>
     <div v-if="$isAMP">
+        <amp-sidebar id="sidebar1" layout="nodisplay" side="left" class="nav-menu">
+            <nuxt-link
+                :to="'/amp/' + menuLink.path"
+                v-for="(menuLink, index) of headerMenu"
+                :key="index"
+            >{{ menuLink.title }}</nuxt-link>
+        </amp-sidebar>
+
         <div class="container">
             <h1>{{term.name}}</h1>
 
@@ -154,13 +162,15 @@ export default {
         slug: String,
         pagination: Object,
         tag: Boolean,
-        term: Object
+        term: Object,
+        headerMenu: Array
     },
     created() {
         this.loadMoreText = `more ${
             this.term.name === "news" ? "" : this.term.name
         } news`;
-        this.$store.commit("SET_BREADCRUMBS", [{ title: this.term.name }]);
+		this.$store.commit("SET_BREADCRUMBS", [{ title: this.term.name }]);
+
     },
     mounted() {
         this.posts.push(this.data);
@@ -176,7 +186,7 @@ export default {
                 .$get(
                     `/api/${this.api}${this.slug}?limit=${this.limit}&page=${this.page}`
                 )
-                .then((data) => {
+                .then(data => {
                     this.posts.push(data.data);
                     this.paginations = data.pagination;
                     this.loadMoreText = `more ${

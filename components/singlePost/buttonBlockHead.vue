@@ -3,7 +3,7 @@
     <nuxt-link v-if="category" class="link" :to="`/${category.slug}`">
       <h5 class="category-name">{{category.name}}</h5>
     </nuxt-link>
-    <div class="blockAction">
+    <div v-if="type !== 'comment'" class="blockAction">
       <nuxt-link class="action" v-if="actions.review" :to="`/${slug}/review`">
         <svg width="12" height="15">
           <use xlink:href="#delete" />
@@ -37,7 +37,8 @@ export default {
   props: {
     category: Object,
     id: String,
-    slug: String
+		slug: String,
+		type: String
   },
   data() {
     return {
@@ -45,7 +46,9 @@ export default {
     };
   },
   created() {
-    this.getButton();
+		if(this.type !== 'comment'){
+			this.getButton();
+		}
   },
   methods: {
     getButton() {

@@ -17,13 +17,14 @@
       :header="header"
       :links="links"
     />
-    <table-footer class="action" :actionsBlock="actionsBlock" @aplly="aplly" />
+    <table-footer v-if="dashboard.posts.length > 0" class="action" :actionsBlock="actionsBlock" @aplly="aplly" />
     <pagination
       class="pagination"
-      v-if="dashboard.paginations"
+      v-if="dashboard.paginations && dashboard.posts.length > 0"
       :pagination="dashboard.paginations"
       @openPage="openPage"
     />
+		<not-found class="notFound" v-if="dashboard.posts.length === 0"/>
   </div>
 </template>
 
@@ -34,16 +35,18 @@ import TableFooter from "~/components/profile/dashboard/table-footer";
 import TableBlock from "~/components/profile/dashboard/table-block";
 import { mapState } from "vuex";
 import Pagination from "~/components/profile/pagination";
+import NotFound from "~/components/profile/dashboard/not-found-dashboard";
 
 export default {
   layout: "profileSmall",
-  // middleware: "auth",
+  middleware: "auth",
   components: {
     Search,
     TableHeader,
     TableBlock,
     TableFooter,
-    Pagination
+		Pagination,
+		NotFound
   },
   data() {
     return {
@@ -117,6 +120,8 @@ export default {
       this.search.author = this.$route.query.author;
     },
     getPosts() {
+			this.updateRouter();
+			this.$store.commit("CLEAR_DASHBOARD_POSTS");
       this.$axios
         .$get(
           `/api/admin/drafts?limit=20&page=${
@@ -127,7 +132,6 @@ export default {
 					this.$store.commit("CLEAR_DASHBOARD_IDS");
           this.$store.commit("SET_DASHBOARD_POSTS", res.data);
           this.$store.commit("SET_DASHBOARD_PAGINATIONS", res.pagination);
-          this.updateRouter();
           if (this.dashboard.posts.length === 0) {
             if (this.page > 1) {
               this.page = this.page - 1;
@@ -209,6 +213,9 @@ export default {
 }
 .pagination {
   order: 6;
+}
+.notFound {
+	order: 4;
 }
 .table-block {
   order: 4;

@@ -19,13 +19,14 @@
       :header="header"
       :links="links"
     />
-    <table-footer class="action" :actionsBlock="actionsBlock" @aplly="aplly" />
+    <table-footer v-if="dashboard.posts.length > 0" class="action" :actionsBlock="actionsBlock" @aplly="aplly" />
     <pagination
       class="pagination"
-      v-if="dashboard.paginations"
+      v-if="dashboard.paginations && dashboard.posts.length > 0"
       :pagination="dashboard.paginations"
       @openPage="openPage"
     />
+		<not-found class="notFound" v-if="dashboard.posts.length === 0"/>
   </div>
 </template>
 
@@ -34,6 +35,7 @@ import Search from "~/components/profile/dashboard/search";
 import TableHeader from "~/components/profile/dashboard/table-header";
 import TableFooter from "~/components/profile/dashboard/table-footer";
 import TableBlock from "~/components/profile/dashboard/table-block";
+import NotFound from "~/components/profile/dashboard/not-found-dashboard";
 import { mapState } from "vuex";
 import Pagination from "~/components/profile/pagination";
 
@@ -45,7 +47,8 @@ export default {
     TableHeader,
     TableBlock,
     Pagination,
-    TableFooter
+		TableFooter,
+		NotFound
   },
   data() {
     return {
@@ -93,9 +96,9 @@ export default {
       this.$axios
         .$post(`/api/admin/posts/delete-multi`, { ids: this.dashboard.ids })
         .then(res => {
-					this.$toasted.show(res.message);
+          this.$toasted.show(res.message);
           this.$store.commit("DEL_POSTS_DASHBOARD", this.dashboard.ids);
-					this.$store.commit("CLEAR_DASHBOARD_IDS");
+          this.$store.commit("CLEAR_DASHBOARD_IDS");
           if (this.dashboard.posts.length === 0) {
             if (this.page > 1) {
               this.page = this.page - 1;
@@ -142,6 +145,8 @@ export default {
       this.search.author = this.$route.query.author;
     },
     getPosts() {
+			this.updateRouter();
+			this.$store.commit("CLEAR_DASHBOARD_POSTS");
       this.$axios
         .$get(
           `/api/admin/posts?limit=20&page=${
@@ -150,15 +155,18 @@ export default {
         )
         .then(res => {
           this.$store.commit("CLEAR_DASHBOARD_IDS");
-          this.$router.push({
-            path: "/profile/dashboard/posts",
-            query: this.query()
-          });
+
           this.$store.commit("SET_DASHBOARD_POSTS", res.data);
           this.$store.commit("SET_DASHBOARD_PAGINATIONS", res.pagination);
         })
         .catch(error => console.error(error));
-    },
+		},
+		updateRouter () {
+			  this.$router.push({
+        path: "/profile/dashboard/posts",
+        query: this.query()
+      });
+		},
     sortUpdate() {
       if (this.sort.name && this.sort.type) {
         return `&${this.sort.name}Sort=${this.sort.type}`;
@@ -235,6 +243,9 @@ export default {
 }
 .pagination {
   order: 6;
+}
+.notFound {
+	order: 4;
 }
 .table-block {
   order: 4;

@@ -86,6 +86,9 @@ export default {
       case "tags":
 				this.getStatusTags()
 				break;
+      case "comments":
+				this.getStatusComments()
+				break;
       default:
         '';
     }
@@ -128,6 +131,18 @@ export default {
           // this.errorMessage = error.response.data.message;
         });
     },
+    getStatusComments() {
+      this.$axios
+        .$get("/api/admin/comments/helper/statuses")
+        .then((data) => {
+          this.statuses = data.data;
+          data.data.unshift({ title: "Choose Status", key: "" });
+          this.selectedStatus = this.statuses[0].key;
+        })
+        .catch(error => {
+          // this.errorMessage = error.response.data.message;
+        });
+    },
     searchAuthors(query) {
       this.isLoadingAuthor = true;
 
@@ -146,7 +161,6 @@ export default {
       this.selectedAuthor = "";
     },
     searchClick() {
-			console.log(this.selectedStatus)
       let search = {
         search: this.search,
         status: this.selectedStatus,

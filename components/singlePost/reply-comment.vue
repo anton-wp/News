@@ -21,7 +21,7 @@
 export default {
 	data () {
 		return {
-			subscribe: false,
+			subscribe: true,
 			comment: '',
 		}
 	},
@@ -38,7 +38,8 @@ export default {
 			this.$axios
 				.$post(`/api/posts/${this.postId}/comments/${this.id}`, data)
 				.then(res => {
-					console.log(res)
+					this.$toasted.show(res.message);
+					this.$emit('updateCommentReplies')
 					this.comment = ''
 					this.$emit('createComments', res.data)
 				})

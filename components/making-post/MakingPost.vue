@@ -3,7 +3,10 @@
         <div class="container">
             <div class="row blockForm">
                 <div class="col-lg-12">
-                    <h1 class="create-post-title">Add Post</h1>
+                    <h1 class="create-post-title">
+                        <span v-if="add">Add</span>
+                        <span v-if="edit">Edit</span> Post
+                    </h1>
                     <p class="create-post-subtitle">
                         must follow
                         <a href="#">TOS</a> and general post
@@ -346,8 +349,8 @@
                                 :show-no-results="false"
                                 :hide-selected="false"
                                 @search-change="searchAuthors"
-                                @select="saveDraft"
-                                :class="(errorNotif && selectedAuthor.length < 1) ? 'error' : ''"
+                                @close="saveDraft"
+                                :class="(errorNotif && !selectedAuthor) ? 'error' : ''"
                             >
                                 <template slot="option" slot-scope="props">
                                     <div class="option__desc">
@@ -604,7 +607,7 @@ export default {
             newLinkOption: [],
             isLoading: false,
 
-            selectedAuthor: [],
+            selectedAuthor: null,
             authorsOption: [],
             isLoadingAuthor: false,
 
@@ -684,9 +687,11 @@ export default {
                 });
         },
 
-        getReservedTimes() {
+        getReservedTimes(id) {
             this.$axios
-                .$get("/api/posts/create-helpers/get-reserved-time")
+                .$get(
+                    `/api/posts/create-helpers/get-reserved-time?postId=${id}`
+                )
                 .then(resp => {
                     resp.data.forEach(element => {
                         this.reservedTimes.push(Date.parse(element));
@@ -779,7 +784,7 @@ export default {
         },
 
         initDate(settedDate = null) {
-            const now = settedDate !== null ? settedDate : this.now;
+            const now = settedDate != null ? settedDate : this.now;
 
             console.log(now);
 
@@ -840,6 +845,8 @@ export default {
         },
 
         saveDraft() {
+            console.log();
+
             if (this.$refs.cropper) {
                 const cropData = this.$refs.cropper.getCropBoxData();
 
@@ -851,10 +858,10 @@ export default {
 
             const newData = {};
 
-            if (this.$v.title.$model) {
+            if (this.title) {
                 newData.title = this.$v.title.$model;
             }
-            if (this.$v.subtitle.$model) {
+            if (this.subtitle) {
                 newData.subtitle = this.$v.subtitle.$model;
             }
             if (this.content) {
@@ -906,6 +913,12 @@ export default {
             }
             if (this.cropperH) {
                 newData.cropperHeight = this.cropperH;
+            }
+
+            if (this.selectedAuthor) {
+                newData.author = this.selectedAuthor.id;
+            } else {
+                newData.author = this.$store.$auth.$state.user.id;
             }
 
             this.$axios
@@ -962,6 +975,11 @@ export default {
             newData.cropperX = this.cropperX;
             newData.cropperWidth = this.cropperW;
             newData.cropperHeight = this.cropperH;
+            if (this.selectedAuthor) {
+                newData.author = this.selectedAuthor.id;
+            } else {
+                newData.author = this.$store.$auth.$state.user.id;
+            }
 
             this.$axios
                 .$patch(`/api/posts/${this.postId}/publish`, newData)
@@ -975,8 +993,6 @@ export default {
         }
     },
     computed: {
-        // ...mapGetters(["loggedInUser"]),
-
         daysInMonth() {
             return new Date(this.date.year, this.date.month + 1, 0).getDate();
         },
@@ -1019,7 +1035,9 @@ export default {
 
         countContent() {
             let cContent = 0;
-            if (this.content) {
+            if (this.content && this.content.blocks.length) {
+                console.log("121212");
+
                 cContent = this.content.blocks.reduce(function(prev, el) {
                     let counter = 0;
 
@@ -1053,7 +1071,6 @@ export default {
         this.getFields();
         this.getCategories();
         this.getOptions();
-        this.getReservedTimes();
 
         for (
             let i = this.now.getFullYear();
@@ -1076,12 +1093,15 @@ export default {
         }
 
         if (this.add) {
-            this.initDate();
             this.$axios
                 .$post("/api/posts/")
                 .then(resp => {
                     this.postId = resp.id;
                     this.dropOptions.params.postId = resp.id;
+
+                    this.getReservedTimes(resp.id);
+
+                    this.initDate();
                 })
                 .catch(error => {
                     console.log(error);
@@ -1118,6 +1138,9 @@ export default {
                     }
                     this.imgDescript = resp.data.featured.source;
                     this.subtitle = resp.data.subtitle;
+                    // this.selectedAuthor = resp.data.author;
+
+                    this.getReservedTimes(resp.data.id);
 
                     this.initDate(new Date(resp.data.publishedAt));
                 })

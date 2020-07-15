@@ -1,5 +1,13 @@
 <template>
   <div v-if="$isAMP">
+    <amp-sidebar id="sidebar1" layout="nodisplay" side="left" class="nav-menu">
+      <nuxt-link
+        :to="'/amp/' + menuLink.path"
+        v-for="(menuLink, index) of headerMenu"
+        :key="index"
+      >{{ menuLink.title }}</nuxt-link>
+    </amp-sidebar>
+
     <div class="container">
       <nuxt-link
         v-if="data.category"
@@ -225,13 +233,16 @@
                     </button>
                   </div>
                   <div
-                    class="comments comment-1-replise"
+                    class="commentscomment-1-replise"
                     v-for="comment of comments"
                     :key="comment.id"
                     :id="comment.id"
                   >
                     <comment :postId="data.id" :data="comment" />
                   </div>
+                </div>
+                <div v-if="paginations.next" class="col-12 button-block">
+                  <button class="loadMore" @click="moreComments">Load More</button>
                 </div>
               </div>
             </div>
@@ -249,11 +260,11 @@
 <script>
 import PrevNext from "~/components/singlePost/prevNext.vue";
 import AuthorBlock from "~/components/singlePost/authorBlock.vue";
+import ButtonBlockHead from "~/components/singlePost/buttonBlockHead.vue";
+import Follow from "~/components/universal-components/followBlock.vue";
 import Comment from "~/components/singlePost/comment.vue";
 import Marks from "~/components/singlePost/marks.vue";
 import SocialBlock from "~/components/singlePost/socialBlock.vue";
-import ButtonBlockHead from "~/components/singlePost/buttonBlockHead.vue";
-import Follow from "~/components/universal-components/followBlock.vue";
 import RelatedBlock from "~/components/universal-components/relatedBlock.vue";
 import AsideReview from "~/components/universal-components/AsideReview.vue";
 
@@ -281,7 +292,8 @@ export default {
       type: Object,
       default: null
     },
-    review: Boolean
+    review: Boolean,
+    headerMenu: Array
   },
 
   head() {
@@ -326,7 +338,7 @@ export default {
       bodySize: 110,
       comment: "",
       message: false,
-      subscribe: false,
+      subscribe: true,
       disabled: false,
       comments: [],
       page: 1,
@@ -348,14 +360,20 @@ export default {
         },
         {
           title: "Disagree",
-          action: "agree"
+          action: "disagree"
         }
       ]
     };
   },
   methods: {
     sortUpdate(type) {
-      if (type === this.orderBy) {
+			if(type === 'agree'){
+				this.orderBy = type;
+        this.order = "DESC";
+			}else if (type === 'disagree') {
+				this.orderBy = type;
+        this.order = "ASC";
+			}else if (type === this.orderBy) {
         if (this.order === "ASC") {
           this.order = "DESC";
         } else {
@@ -387,7 +405,12 @@ export default {
           this.comment = "";
         });
     },
-    getComments() {
+
+    moreComments() {
+      this.page = this.page + 1;
+      this.getComments();
+    },
+    getComments(loadMore) {
       this.$axios
         .$get(
           `/api/posts/${this.data.id}/comments?order=${this.order}&orderBy=${
@@ -397,8 +420,12 @@ export default {
           }&page=${this.page}`
         )
         .then(res => {
-          this.comments = [...this.comments, ...res.data];
-          this.paginations = res.pagination;
+          if(loadMore) {
+						this.comments = [...this.comments, ...res.data];
+					}else {
+						this.comments = res.data;
+					}
+					this.paginations = res.pagination;
           this.disabled = false;
         })
         .catch(error => {

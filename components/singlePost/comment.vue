@@ -36,11 +36,14 @@
         </svg>
         Report
       </button>
-      <button>
+      <button @click="openShareBlock = !openShareBlock">
         <svg width="14" height="17">
           <use xlink:href="#share-alt" />
         </svg>
         Share
+        <div class="block__share" v-if="openShareBlock">
+          <comment-share :post="data" />
+        </div>
       </button>
     </div>
     <div class="replies">
@@ -51,7 +54,7 @@
         @createComments="createComments"
       />
     </div>
-    <div v-if="data.hasReplies" class="button-open-replies">
+    <div v-if="data.hasReplies && !data.children" class="button-open-replies">
       <hr v-if="replies" />
       <button v-if="replies" @click="getCommentReplies">
         See all replies
@@ -60,13 +63,26 @@
         </svg>
       </button>
     </div>
-    <div class="comments comment-2-replise">
+    <div v-if="!data.children" class="comments comment-2-replise">
       <comment-replies
         v-for="comment in dataReplies"
         :key="comment.id"
         :data="comment"
         :postId="postId"
+				:parenPostId="data.id"
         :index="1"
+				@updateCommentReplies="updateCommentReplies()"
+      />
+    </div>
+    <div v-else class="comments comment-2-replise">
+      <comment-replies
+        v-for="comment in data.children"
+        :key="comment.id"
+        :data="comment"
+        :postId="postId"
+				:parenPostId="data.id"
+        :index="1"
+				@updateCommentReplies="updateCommentReplies()"
       />
     </div>
     <modal-window v-if="report" @closeModal="closeReport">
@@ -81,7 +97,7 @@
     <modal-window v-if="reportInput" @closeModal="closeReportInput">
       <div class="report">
         <textarea class="something-else" v-model="somethingElse"></textarea>
-        <button class="report-button" @click="reportsComents(somethingElse)">Report</button>
+        <button class="report-button" @click="reportsComments(somethingElse)">Report</button>
       </div>
     </modal-window>
   </div>
@@ -90,6 +106,7 @@
 <script>
 import { mapState } from "vuex";
 import CommentReplies from "~/components/singlePost/comment-replies.vue";
+import CommentShare from "~/components/singlePost/comment-share.vue";
 import AuthorBlock from "~/components/singlePost/authorBlock.vue";
 import ReplyComment from "~/components/singlePost/reply-comment.vue";
 import modalWindow from "~/components/universal-components/modalWindow.vue";
@@ -100,16 +117,18 @@ export default {
     AuthorBlock,
     ReplyComment,
     CommentReplies,
-    modalWindow
+    modalWindow,
+    CommentShare
   },
   data() {
     return {
       dataReplies: [],
       replies: true,
-			report: false,
-			reportInput: false,
-			reportValue: "",
-			somethingElse: '',
+      report: false,
+      reportInput: false,
+      openShareBlock: false,
+      reportValue: "",
+      somethingElse: "",
       reportArr: [
         "spam",
         "sexually explicit or suggestive",
@@ -121,31 +140,44 @@ export default {
   },
   props: {
     data: Object,
-    postId: String
+		postId: String,
+		type: Boolean
   },
   computed: {
     ...mapState(["commentsReply"])
   },
   created() {
-    this.reportValue = this.reportArr[0];
+		this.reportValue = this.reportArr[0];
+		if(this.type && this.data.hasReplies) {
+			this.getCommentReplies()
+		}
   },
   methods: {
+		updateCommentReplies() {
+			if(!this.data.children) {
+				this.getCommentReplies()
+			}else {
+				this.$emit('getComments')
+			}
+		},
     reportClick() {
       if (this.reportValue === "something else") {
-				this.report = false
-				this.reportInput = true;
+        this.report = false;
+        this.reportInput = true;
       } else {
-				this.reportsComents()
+        this.reportsComments();
       }
     },
-    reportsComents(reportMessage) {
+    reportsComments(reportMessage) {
       let data = reportMessage
         ? { reportType: this.reportValue, reportMessage: reportMessage }
         : { reportType: this.reportValue };
       this.$axios
         .$post(`/api/comments/${this.data.id}/reports`, data)
         .then(res => {
-          console.log(res);
+					this.$toasted.show(res.message)
+					this.closeReport()
+					this.closeReportInput()
         })
         .catch(error => {
           console.log(error);

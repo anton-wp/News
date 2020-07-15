@@ -23,29 +23,7 @@ ul{
 		.profile-bottom {
 			padding-bottom: 2.2em;
 		}
-		.sideBar {
-			ul {
-				position: sticky;
-				top: 25px;
-				z-index: 1;
-				padding-left: 0 !important;
-				// margin-top: -15px;
-				@media (max-width: 768px) {
-					margin-top: -40px;
-				}
-			}
-			li {
-				display: block;
-				margin-top: 20px;
 
-				@media (max-width: 768px) {
-					text-align: center;
-				}
-				@media (max-width: 639px) {
-					margin-top: 5px;
-				}
-			}
-		}
 		.sideBar {
 			padding: 0 0 0 2.5em;
 			@media (max-width: 991px) {

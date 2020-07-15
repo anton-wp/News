@@ -1,6 +1,6 @@
 <template>
   <div class="posts">
-    <search class="search" @getSearch="getSearch" :type="'drafts'" :searchProps="searchProps" />
+    <search class="search" @getSearch="getSearch" :type="'comments'" :searchProps="searchProps" />
     <table-header class="header" :header="header" @getSort="getSort" />
     <table-block
       class="table-block"
@@ -9,23 +9,24 @@
       @edit="edit"
       @deletePosts="deletePosts"
       :key="index"
-      :title="post.title"
-      :category="post.category"
-      :date="post.publishedAt"
-      :status="post.publishedAt"
+      :titleComment="post.body"
+      :commentResponse="post"
+      :date="post.createdAt"
+      :status="post.status"
       :id="post.id"
-      :slug="post.slug"
-      :author="post.author"
+      :author="post.user"
       :header="header"
       :links="links"
+			:post="post.post"
     />
-    <table-footer class="action" :actionsBlock="actionsBlock" @aplly="aplly" />
+    <table-footer v-if="dashboard.posts.length > 0" class="action" :actionsBlock="actionsBlock" @aplly="aplly" />
     <pagination
       class="pagination"
-      v-if="dashboard.paginations"
+      v-if="dashboard.paginations && dashboard.posts.length > 0"
       :pagination="dashboard.paginations"
       @openPage="openPage"
     />
+		<not-found class="notFound" v-if="dashboard.posts.length === 0"/>
   </div>
 </template>
 
@@ -36,16 +37,18 @@ import TableFooter from "~/components/profile/dashboard/table-footer";
 import TableBlock from "~/components/profile/dashboard/table-block";
 import { mapState } from "vuex";
 import Pagination from "~/components/profile/pagination";
+import NotFound from "~/components/profile/dashboard/not-found-dashboard";
 
 export default {
   layout: "profileSmall",
-  // middleware: "auth",
+  middleware: "auth",
   components: {
     Search,
     TableHeader,
     TableBlock,
     TableFooter,
-    Pagination
+		Pagination,
+		NotFound
   },
   data() {
     return {
@@ -89,7 +92,7 @@ export default {
   methods: {
     aplly() {
       this.$axios
-        .$post(`/api/admin/posts/delete-multi`, { ids: this.dashboard.ids })
+        .$post(`/api/admin/comments/delete-multi`, { ids: this.dashboard.ids })
         .then(res => {
 					this.$toasted.show(res.message);
 					this.$store.commit("DEL_POSTS_DASHBOARD", this.dashboard.ids);
@@ -97,19 +100,19 @@ export default {
         })
         .catch(error => console.error(error));
     },
-    view(slug) {
+    view(slug, id) {
       this.$router.push({
-        path: `/draft/${slug}/preview/`
+        path: `/${slug}/comments/${id}`
       });
     },
     edit(slug) {
       this.$router.push({
-        path: `/draft/${slug}/`
+        path: `/profile/dashboard/comments/${slug}/edit`
       });
     },
     deletePosts(id) {
       this.$axios
-        .$delete(`/api/posts/${id}`)
+        .$delete(`/api/comments/${id}/delete`)
         .then(res => {
           this.$toasted.show(res.message);
           this.$store.commit("DEL_POST_DASHBOARD", id);
@@ -121,9 +124,12 @@ export default {
       this.sort.name = this.$route.query.sort ? this.$route.query.sort : this.sort.name;
       this.sort.type = this.$route.query.direction ? this.$route.query.direction : this.sort.type;
       this.search.search = this.$route.query.q;
+      this.search.status = this.$route.query.status;
       this.search.author = this.$route.query.author;
     },
     getPosts() {
+			this.updateRouter();
+			this.$store.commit("CLEAR_DASHBOARD_POSTS");
       this.$axios
         .$get(
           `/api/admin/comments${this.sortUpdate()}&type=${this.type}&limit=20&page=${
@@ -135,8 +141,7 @@ export default {
 					this.$store.commit("CLEAR_DASHBOARD_IDS");
           this.$store.commit("SET_DASHBOARD_POSTS", res.data);
           this.$store.commit("SET_DASHBOARD_PAGINATIONS", res.pagination);
-          this.updateRouter();
-          if (this.dashboard.posts.length === 0) {
+          if (this.dashboard.posts.length === 0 && this.pagination && this.pagination.pagesCount > 0) {
             if (this.page > 1) {
               this.page = this.page - 1;
               this.getPosts();
@@ -154,8 +159,6 @@ export default {
       });
     },
     sortUpdate() {
-			console.log(this.sort.name)
-			console.log(this.sort.type)
       if (this.sort.name && this.sort.type) {
         return `?orderBy=${this.sort.name}&order=${this.sort.type}`;
       }
@@ -165,6 +168,9 @@ export default {
       let search = "";
       if (this.search.search) {
         search = search + `&search=${this.search.search}`;
+      }
+      if (this.search.status) {
+        search = search + `&status=${this.search.status}`;
       }
       if (this.search.author) {
         search = search + `&user=${this.search.author}`;
@@ -195,6 +201,9 @@ export default {
       if (this.search.search) {
         res["q"] = this.search.search;
       }
+      if (this.search.status) {
+        res["status"] = this.search.status;
+      }
       if (this.search.author) {
         res["author"] = this.search.author;
       }
@@ -219,6 +228,9 @@ export default {
 }
 .pagination {
   order: 6;
+}
+.notFound {
+	order: 4;
 }
 .table-block {
   order: 4;

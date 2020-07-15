@@ -10,8 +10,17 @@
 		border-color: #DEDEDE;
 	}
 
+	.authorBig {
+		font-size: 15px !important;
+	}
+
 	.title {
 		font-weight: 600;
+	}
+
+	.title__small {
+		font-weight:400;
+		font-size: 90%;
 	}
 
 	.links-block {
@@ -27,8 +36,17 @@
 			text-decoration: none;
 		}
 
+
+
 		.delete {
 			color: #cc2424;
+		}
+	}
+
+	.commentResponse {
+		a {
+			font-weight: 600;
+			color: #444;
 		}
 	}
 
@@ -53,6 +71,7 @@
 	.author {
 		display: block;
 		color: #0a0a0a;
+		position: relative;
 		// margin-bottom: 30px;
 		cursor: pointer;
 

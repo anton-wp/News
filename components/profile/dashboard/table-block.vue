@@ -19,6 +19,18 @@
         <nuxt-link class="link" :to="`/m/${author.slug}`">{{author.firstName}} {{author.lastName}}</nuxt-link>
       </small>
     </div>
+    <div class="col-lg " v-if="titleComment" @mouseleave="showPopup = false">
+      <h6 class="header">{{header.title}}</h6>
+      <small v-if="author" class="author" @mouseenter="showPopup = true">
+        <div v-if="showPopup" id="1" class="user-popup active">
+          <div>
+            <popup-user-info :authorId="author.id" />
+          </div>
+        </div>
+        <nuxt-link class="link authorBig" :to="`/m/${author.slug}`">{{author.firstName}} {{author.lastName}}</nuxt-link>
+      </small>
+      <h6 class="title__small">{{titleComment}}</h6>
+    </div>
     <div class="col-lg-4 category" v-if="description">
       <h6 class="header">{{header.description}}</h6>
       <h6>{{description}}</h6>
@@ -26,6 +38,13 @@
     <div class="col-lg-3 category" v-if="category">
       <h6 class="header">{{header.response}}</h6>
       <h6>{{category.name}}</h6>
+    </div>
+    <div class="col-lg-3 category commentResponse" v-if="commentResponse">
+      <h6 class="header">{{header.response}}</h6>
+      <h6>
+        <nuxt-link v-if="!commentResponse.parent" :to="`/${commentResponse.post.slug}/comments/${commentResponse.id}`">{{commentResponse.post.slug}}</nuxt-link>
+        <nuxt-link v-else :to="`/${commentResponse.post.slug}/comments/${commentResponse.id}`">{{commentResponse.user.firstName}} {{commentResponse.user.lastName}}</nuxt-link>
+      </h6>
     </div>
     <div class="col-lg-2 category" v-if="date">
       <h6 class="header">{{header.date}}</h6>
@@ -90,7 +109,10 @@ export default {
     status: String | Boolean,
     header: Object,
     featured: Object | Boolean,
-    links: Object
+    links: Object,
+    post: Object,
+    commentResponse: null,
+    titleComment: String,
   },
   methods: {
     toggle() {
@@ -109,10 +131,18 @@ export default {
         .catch(error => console.error(error));
     },
     view() {
-      this.$emit("view", this.slug, this.status);
+      if (this.post.slug) {
+        this.$emit("view", this.post.slug, this.id);
+      } else {
+        this.$emit("view", this.slug, this.status);
+      }
     },
     edit() {
-      this.$emit("edit", this.slug, this.id);
+      if (this.slug) {
+        this.$emit("edit", this.slug, this.id);
+      } else {
+        this.$emit("edit", this.id);
+      }
     },
     deletePosts() {
       this.$emit("deletePosts", this.id);

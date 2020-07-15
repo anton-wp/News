@@ -18,13 +18,14 @@
       :header="header"
       :links="links"
     />
-    <table-footer class="action" :actionsBlock="actionsBlock" @aplly="aplly" merge />
+    <table-footer v-if="dashboard.posts.length > 0" class="action" :actionsBlock="actionsBlock" @aplly="aplly" merge />
     <pagination
       class="pagination"
-      v-if="dashboard.paginations"
+      v-if="dashboard.paginations && dashboard.posts.length > 0"
       :pagination="dashboard.paginations"
       @openPage="openPage"
     />
+		<not-found class="notFound" v-if="dashboard.posts.length === 0"/>
   </div>
 </template>
 
@@ -35,6 +36,7 @@ import TableFooter from "~/components/profile/dashboard/table-footer";
 import TableBlock from "~/components/profile/dashboard/table-block";
 import { mapState } from "vuex";
 import Pagination from "~/components/profile/pagination";
+import NotFound from "~/components/profile/dashboard/not-found-dashboard";
 
 export default {
   layout: "profileSmall",
@@ -43,7 +45,8 @@ export default {
     Search,
     TableHeader,
     TableBlock,
-    TableFooter,
+		TableFooter,
+		NotFound,
     Pagination
   },
   data() {
@@ -93,8 +96,8 @@ export default {
           .$post(`/api/admin/tags/delete-multi`, { ids: this.dashboard.ids })
           .then(res => {
             this.$toasted.show(res.message);
-						this.$store.commit("DEL_POSTS_DASHBOARD", this.dashboard.ids);
-						this.$store.commit("CLEAR_DASHBOARD_IDS");
+            this.$store.commit("DEL_POSTS_DASHBOARD", this.dashboard.ids);
+            this.$store.commit("CLEAR_DASHBOARD_IDS");
             if (this.dashboard.posts.length === 0) {
               if (this.page > 1) {
                 this.page = this.page - 1;
@@ -110,8 +113,8 @@ export default {
         this.$axios
           .put(`/api/admin/tags/approve`, { ids: this.dashboard.ids })
           .then(res => {
-						this.$toasted.show(res.message);
-						this.$store.commit("CLEAR_DASHBOARD_IDS");
+            this.$toasted.show(res.message);
+            this.$store.commit("CLEAR_DASHBOARD_IDS");
           })
           .catch(error => console.error(error));
       }
@@ -134,6 +137,8 @@ export default {
     },
 
     getPosts() {
+			this.updateRouter();
+			this.$store.commit("CLEAR_DASHBOARD_POSTS");
       this.$axios
         .$get(
           `/api/admin/tags?limit=20&page=${
@@ -144,12 +149,14 @@ export default {
           this.$store.commit("CLEAR_DASHBOARD_IDS");
           this.$store.commit("SET_DASHBOARD_POSTS", res.data);
           this.$store.commit("SET_DASHBOARD_PAGINATIONS", res.pagination);
-          this.$router.push({
-            path: "/profile/dashboard/tags",
-            query: this.query()
-          });
         })
         .catch(error => console.error(error));
+    },
+    updateRouter() {
+      this.$router.push({
+        path: "/profile/dashboard/tags",
+        query: this.query()
+      });
     },
     sortUpdate() {
       if (this.sort.name && this.sort.type) {
@@ -227,6 +234,9 @@ export default {
 }
 .pagination {
   order: 6;
+}
+.notFound {
+	order: 4;
 }
 .table-block {
   order: 4;

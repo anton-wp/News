@@ -73,25 +73,47 @@ export default {
                         services: {
                             youtube: true,
                             coub: true,
-                            twitter: {
-                                regex: /^https?:\/\/twitter\.com\/(?:#!\/)?(\w+)\/status(?:es)?\/(\d+)(?:\/.*)?$/,
+                            codepen: {
+                                regex: /https?:\/\/codepen.io\/([^\/\?\&]*)\/pen\/([^\/\?\&]*)/,
                                 embedUrl:
-                                    "https://twitframe.com/show?url=https://twitter.com/<%= remote_id %>",
+                                    "https://codepen.io/<%= remote_id %>?height=300&theme-id=0&default-tab=css,result&embed-version=2",
                                 html:
-                                    '<iframe width="600" height="600" style="margin: 0 auto;" frameborder="0" scrolling="no" allowtransparency="true"></iframe>',
+                                    "<iframe height='300' scrolling='no' frameborder='no' allowtransparency='true' allowfullscreen='true' style='width: 100%;'></iframe>",
                                 height: 300,
                                 width: 600,
-                                id: ids => ids.join("/status/")
+                                id: groups => groups.join("/embed/")
                             },
+
                             instagram: {
-                                regex: /https?:\/\/www\.instagram\.com\/p\/([^\/\?\&]+)\/?/,
+                                regex: /(?:https?:\/\/(?:www\.)?)?instagram\.com(\/p\/\w+\/?)\/\?utm_source=ig_web_copy_link/,
                                 embedUrl:
-                                    "https://www.instagram.com/p/<%= remote_id %>/embed",
+                                    "https://www.instagram.com<%= remote_id %>/embed",
                                 html:
                                     '<iframe width="400" height="505" style="margin: 0 auto;" frameborder="0" scrolling="no" allowtransparency="true"></iframe>',
                                 height: 505,
                                 width: 400
-                            }
+							},
+
+							// twitter: {
+                            //     regex: /^https?:\/\/twitter\.com\/(?:#!\/)?(\w+)\/status(?:es)?\/(\d+)(?:\/.*)?$/,
+                            //     embedUrl:
+                            //         "https://twitframe.com/show?url=https://twitter.com/<%= remote_id %>",
+                            //     html:
+                            //         '<iframe width="600" height="600" style="margin: 0 auto;" frameborder="0" scrolling="no" allowtransparency="true"></iframe>',
+                            //     height: 300,
+                            //     width: 600,
+                            //     id: ids => ids.join("/status/")
+                            // },
+
+                            // facebook: {
+                            //     regex: /(?:https?:\/\/(?:www\.)?)?facebook\.com\/(\w+\/)/,
+                            //     embedUrl:
+                            //         "https://www.facebook.com/<%= remote_id %>",
+                            //     html:
+                            //         '<iframe width="400" height="505" style="margin: 0 auto;" frameborder="0" scrolling="no" allowtransparency="true"></iframe>',
+                            //     height: 600,
+                            //     width: 400
+                            // }
                         }
                     }
                 }
@@ -99,6 +121,8 @@ export default {
 
             onChange: () => {
                 this.save();
+
+                // console.log('https://www.instagram.com/p/CCYVrjVFYjS/?utm_source=ig_web_button_share_sheet'.match(/(https?:\/\/(www\.)?)?instagram\.com(\/p\/\w+\/?)/)[3].substr(3))
             }
         });
         console.log(this.postId);
