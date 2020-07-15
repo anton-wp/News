@@ -6,7 +6,7 @@
       :type="'comment'"
       :postReaction="data.postReaction"
     />
-    <div class="verdict">
+    <div class="verdict" @click="voteAdd">
       <svg v-if="!data.isVerdict" width="40" height="40">
         <use xlink:href="#verdict-icon-custom" />
       </svg>
@@ -14,7 +14,7 @@
         <use xlink:href="#verdict-icon-selected" />
       </svg>
       <div style="margin-left: 10px">
-        <span class="value">1</span>
+        <span class="value">{{ data.votes ? data.votes : '0' }}</span>
         <span class="label">VOTE(S)</span>
       </div>
     </div>
@@ -69,9 +69,9 @@
         :key="comment.id"
         :data="comment"
         :postId="postId"
-				:parenPostId="data.id"
+        :parenPostId="data.id"
         :index="1"
-				@updateCommentReplies="updateCommentReplies()"
+        @updateCommentReplies="updateCommentReplies()"
       />
     </div>
     <div v-else class="comments comment-2-replise">
@@ -80,9 +80,9 @@
         :key="comment.id"
         :data="comment"
         :postId="postId"
-				:parenPostId="data.id"
+        :parenPostId="data.id"
         :index="1"
-				@updateCommentReplies="updateCommentReplies()"
+        @updateCommentReplies="updateCommentReplies()"
       />
     </div>
     <modal-window v-if="report" @closeModal="closeReport">
@@ -140,26 +140,38 @@ export default {
   },
   props: {
     data: Object,
-		postId: String,
-		type: Boolean
+    postId: String,
+    type: Boolean
   },
   computed: {
     ...mapState(["commentsReply"])
   },
   created() {
-		this.reportValue = this.reportArr[0];
-		if(this.type && this.data.hasReplies) {
-			this.getCommentReplies()
-		}
+    this.reportValue = this.reportArr[0];
+    if (this.type && this.data.hasReplies) {
+      this.getCommentReplies();
+    }
   },
   methods: {
-		updateCommentReplies() {
-			if(!this.data.children) {
-				this.getCommentReplies()
-			}else {
-				this.$emit('getComments')
-			}
-		},
+    voteAdd() {
+      this.$axios
+        .post(`/api/comments/${this.data.id}/vote`)
+        .then(res => {
+					// this.data = res.data.data;
+					this.$emit('updateComment', res.data.data)
+          this.$toasted.show(res.data.message);
+        })
+        .catch(error => {
+					this.$toasted.error(error.response.data.message);
+        });
+    },
+    updateCommentReplies() {
+      if (!this.data.children) {
+        this.getCommentReplies();
+      } else {
+        this.$emit("getComments");
+      }
+    },
     reportClick() {
       if (this.reportValue === "something else") {
         this.report = false;
@@ -175,9 +187,9 @@ export default {
       this.$axios
         .$post(`/api/comments/${this.data.id}/reports`, data)
         .then(res => {
-					this.$toasted.show(res.message)
-					this.closeReport()
-					this.closeReportInput()
+          this.$toasted.show(res.message);
+          this.closeReport();
+          this.closeReportInput();
         })
         .catch(error => {
           console.log(error);

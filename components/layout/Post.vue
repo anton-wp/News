@@ -238,7 +238,7 @@
                     :key="comment.id"
                     :id="comment.id"
                   >
-                    <comment :postId="data.id" :data="comment" />
+                    <comment :postId="data.id" :data="comment" @updateComment="updateComment"/>
                   </div>
                 </div>
                 <div v-if="paginations.next" class="col-12 button-block">
@@ -366,6 +366,9 @@ export default {
     };
   },
   methods: {
+		updateComment (data) {
+			this.comments.map(comment => comment.id === data.id ? comment = data : null)
+		},
     sortUpdate(type) {
 			if(type === 'agree'){
 				this.orderBy = type;
@@ -408,7 +411,7 @@ export default {
 
     moreComments() {
       this.page = this.page + 1;
-      this.getComments();
+      this.getComments('loadMore');
     },
     getComments(loadMore) {
       this.$axios
@@ -425,6 +428,7 @@ export default {
 					}else {
 						this.comments = res.data;
 					}
+					console.log(res)
 					this.paginations = res.pagination;
           this.disabled = false;
         })
