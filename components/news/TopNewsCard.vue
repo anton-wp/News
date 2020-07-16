@@ -5,7 +5,7 @@
         <img v-bind:src="post.featured.wide" alt="top news">
       </nuxt-link>
       <div class="container info">
-        <news-card-header v-if="!tag" colorScheme="light" :category="post.category" />
+        <news-card-header v-if="!tag" colorScheme="light" :post="post" :category="post.category" />
         <nuxt-link class="wrapp" :to="`/${post.slug}`">
           <h2 class="title top-title">
             {{ post.title }}
@@ -14,7 +14,7 @@
         <div class="shortContent">
           <p>{{post.shortContent}}[...]</p>
         </div>
-      	<news-card-footer :author="post.author" :tag="tag" :publishedAt="post.publishedAt" colorScheme="light" :pending="false" :showMarks="false" />
+      	<news-card-footer :author="post.author" :tag="tag" :post="post" :publishedAt="post.publishedAt" colorScheme="light" :pending="false" :showMarks="false" />
       </div>
     </div>
   </div>

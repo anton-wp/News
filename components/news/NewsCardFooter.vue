@@ -24,7 +24,7 @@
           Edit
         </button>
         <div v-if="tag" class="marks">
-          <news-card-header-marks :colorScheme="colorScheme" :pending="false" />
+          <news-card-header-marks :colorScheme="colorScheme" :post="post" :pending="false" />
         </div>
       </span>
     </div>
@@ -42,7 +42,8 @@ export default {
     showMarks: Boolean,
     author: Object,
     publishedAt: String,
-    tag: Boolean
+		tag: Boolean,
+		post: Object
   },
   components: {
     PopupUserInfo,

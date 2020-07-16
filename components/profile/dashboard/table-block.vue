@@ -123,7 +123,6 @@ export default {
       this.$axios
         .$put(`/api/admin/tags/${id}/featured`)
         .then(res => {
-          console.log(res);
           this.disabledFeatured = false;
           this.$toasted.show(res.message);
           this.$store.commit("UPDATE_FEATURED", id);
@@ -131,7 +130,7 @@ export default {
         .catch(error => console.error(error));
     },
     view() {
-      if (this.post.slug) {
+      if (this.post) {
         this.$emit("view", this.post.slug, this.id);
       } else {
         this.$emit("view", this.slug, this.status);

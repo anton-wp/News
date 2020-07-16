@@ -82,7 +82,8 @@ module.exports = {
 			}
 		},
 		plugins: [
-			{ src: '~/plugins' }
+			{ src: '~/plugins' },
+			{ src: '~/plugins/http' }
 		]
 	},
 

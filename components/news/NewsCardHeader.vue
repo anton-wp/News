@@ -10,7 +10,7 @@
           >{{ category.name }}</nuxt-link>
         </span>
       </div>
-      <news-card-header-marks :pending="false" />
+      <news-card-header-marks :post="post" :pending="false" />
     </div>
   </div>
 </template>
@@ -23,7 +23,8 @@ export default {
   },
   props: {
     colorScheme: String,
-    category: Object
+		category: Object,
+		post: Object
   }
 };
 </script>

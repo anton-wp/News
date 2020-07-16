@@ -2,13 +2,17 @@
   <div class="edit__comment">
     <h2 v-if="data.parent">Reply to {{data.parent.title}}</h2>
     <h2 v-if="!data.parent && data.post">
-			Comment for
+      Comment for
       <nuxt-link to="`/${data.post.slug}`">{{data.post.title}}</nuxt-link>
     </h2>
     <author-block v-if="data.user" :author="data.user" :publishedAt="data.createdAt" :type="true" />
     <textarea v-model="body" />
     <div class="block-button text-right">
-      <button class="update" @click="blockComment" :disabled="disabled">{{block ? 'unblock' : 'block'}}</button>
+      <button
+        class="update"
+        @click="blockComment"
+        :disabled="disabled"
+      >{{block ? 'unblock' : 'block'}}</button>
       <button class="update" @click="updateComment" :disabled="disabled">update</button>
       <button class="delete" @click="deleteComment" :disabled="disabled">delete</button>
     </div>
@@ -27,8 +31,8 @@ export default {
     return {
       data: Object,
       body: "",
-			disabled: false,
-			block: Boolean,
+      disabled: false,
+      block: Boolean
     };
   },
   created() {
@@ -44,8 +48,12 @@ export default {
         .$post(`/api/admin/comments/${this.$route.params.id}/block`)
         .then(res => {
           this.$toasted.show(res.message);
-					this.disabled = false;
-					this.block = !this.block
+          this.disabled = false;
+          this.block = !this.block;
+        })
+        .catch(error => {
+          this.disabled = false;
+          this.$toasted.error(error.response.data.message);
         });
     },
     updateComment() {
@@ -58,6 +66,10 @@ export default {
         .then(res => {
           this.$toasted.show(res.message);
           this.disabled = false;
+        })
+        .catch(error => {
+          this.disabled = false;
+          this.$toasted.error(error.response.data.message);
         });
     },
     deleteComment() {
@@ -68,6 +80,10 @@ export default {
           this.$router.push({ path: "/profile/dashboard/comments" });
           this.$toasted.show(res.message);
           this.disabled = false;
+        })
+        .catch(error => {
+          this.disabled = false;
+          this.$toasted.error(error.response.data.message);
         });
     },
     getComment() {
@@ -75,8 +91,8 @@ export default {
         .$get(`/api/admin/comments/${this.$route.params.id}`)
         .then(res => {
           this.data = res.data;
-					this.body = res.data.body;
-					this.block = res.data.blocked;
+          this.body = res.data.body;
+          this.block = res.data.blocked;
         });
     }
   }
@@ -86,12 +102,12 @@ export default {
 <style lang="scss">
 .edit__comment {
   display: flex;
-	flex-direction: column;
+  flex-direction: column;
 
-	a{
-		color: inherit;
-		text-decoration: none;
-	}
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
   textarea {
     width: 100%;
     height: 200px;

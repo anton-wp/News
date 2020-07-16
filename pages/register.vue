@@ -240,8 +240,9 @@ export default {
       this.$axios
         .$post(`/api/auth/registration/`, formData)
         .then(res => {
-          this.loading = false;
-          this.login({ email: this.email, password: this.password });
+					this.loading = false;
+					this.redirect('/');
+          // this.login({ email: this.email, password: this.password });
           // this.closeLoginPopup();
         })
         .catch(error => (this.errorMessage = error.response.properties));
