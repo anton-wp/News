@@ -71,13 +71,13 @@
                 <div class="container">
                     <div class="row top-verdict">
                         <div
-                            class="col-lg-4 col-md-6"
+                            class="col-12 col-lg-4 col-md-6"
                             v-for="post in posts.slice(0, 2)"
                             :key="post.id"
                         >
                             <top-news-card :post="post" />
                         </div>
-                        <div class="col-lg-4 col-md-6 col-12">
+                        <div class="col-12 col-lg-4 col-md-6 col-12">
                             <div class="wrapper-title-hot">
                                 <h5 class="title-hot">
                                     <span>top verdicts</span>
@@ -91,7 +91,7 @@
                 <div class="container">
                     <div class="row row-flex top-verdict">
                         <div
-                            class="col-12 col-sm-6 col-md-4 col-lg-4"
+                            class="col-12 col-md-4 col-lg-4"
                             v-for="post in posts.slice(2, 5)"
                             :key="post.id"
                         >
@@ -197,8 +197,8 @@ export default {
 
     created() {
         this.$store.commit("SET_BREADCRUMBS");
-        this.$store.commit("SET_HEADER_MENU", this.menu);
-        this.$store.commit("SET_HEADER_HOT_NEWS", this.tags);
+        // this.$store.commit("SET_HEADER_MENU", this.menu);
+        // this.$store.commit("SET_HEADER_HOT_NEWS", this.tags);
 
         // this.getPosts()
     },

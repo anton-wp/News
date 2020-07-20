@@ -26,6 +26,7 @@
 <script>
 import {mapState} from 'vuex'
 import SearchPopup from '~/components/universal-components/popup-search.vue'
+import { log } from 'util'
 
 export default {
   components: {
@@ -38,11 +39,6 @@ export default {
       tags: []
     }
   },
-  created () {
-		// if(this.header.news.length === 0) {
-		// 	this.getHotNews()
-		// }
-	},
 	computed: {
 		...mapState(['header'])
 	},

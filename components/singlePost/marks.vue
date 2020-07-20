@@ -20,12 +20,12 @@
     </a>
   </div>
   <div v-else class="marks">
-    <span class="mark-news">
+    <span class="mark-news" @click='scrollToComment'>
       <svg width="20" height="20">
         <use xlink:href="#comment" />
       </svg>
       <span class="text">
-        <a class="reviews-link dark" href="#">{{author.commentsCount}}</a>
+        <a class="reviews-link dark" href="#">{{data.commentsCount ? data.commentsCount : 0}}</a>
       </span>
     </span>
     <span class="mark-news">
@@ -33,7 +33,7 @@
         <use xlink:href="#votes" />
       </svg>
       <span class="text">
-        <a class="reviews-link dark" href="#">{{author.verdictsCount}}</a>
+        <a class="reviews-link dark" href="#">{{data.votesCount ? data.votesCount : 0}}</a>
       </span>
     </span>
     <span class="mark-news">
@@ -41,7 +41,7 @@
         <use xlink:href="#eye" />
       </svg>
       <span class="text">
-        <a class="reviews-link dark" href="#">{{author.followersCount}}</a>
+        <a class="reviews-link dark" href="#">{{data.viewsCount ? data.viewsCount : 0}}</a>
       </span>
     </span>
     <span class="bookmark-news">
@@ -58,7 +58,12 @@ export default {
     Bookmark
   },
   props: {
-    author: Object,
-  }
+		data: Object
+	},
+	methods: {
+		scrollToComment() {
+			this.$emit('scrollToComment')
+		}
+	}
 };
 </script>

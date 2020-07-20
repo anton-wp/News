@@ -17,6 +17,9 @@ export default {
 	SET_SUBSCRIPTIONS: (state, subscriptions) => {
 		state.subscriptions = subscriptions;
 	},
+	SET_VOTES: (state, votes) => {
+		state.votes = votes;
+	},
 	SET_DASHBOARD_POSTS: (state, posts) => {
 		state.dashboard.posts = posts;
 	},
@@ -49,6 +52,11 @@ export default {
 	},
 	ADD_BOOKMARK: (state, id) => {
 		state.bookmarks = state.bookmarks.concat(id);
+	},
+	ADD_VOTE: (state, id) => {
+		if(!state.votes.includes(id)) {
+			state.votes = state.votes.concat(id);
+		}
 	},
 	SET_BREADCRUMBS: (state, breadcrumbCustom) => {
 		let breadcrumbs = [
@@ -87,6 +95,9 @@ export default {
 	UPDATE_LOGIN_POPUP: (state, data) => {
 		state.loginModal.open = data.open;
 		state.loginModal.type = data.type;
+	},
+	TOGGLE__ANIMATION__LOGIN__MODAL: (state, data) => {
+		state.loginModal.open = data;
 	},
  	CLEAR_PROFILE: (state) => {
 		state.profile = Object;

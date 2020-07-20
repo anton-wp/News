@@ -10,6 +10,7 @@
         :next="next"
         :headerMenu="headerMenu"
 				:type="type"
+				:tag ="tag"
     />
 </template>
 
@@ -67,7 +68,8 @@ export default {
 
         const dataCat = await $axios.$get(`/api/${route}?limit=12`);
 
-        const tag = dataCat.type === "feed";
+				console.log(dataCat.type)
+        const tag = dataCat.type === "category";
         const type = dataCat.type === "feed" ? "category" : dataCat.type;
         const data = dataCat.data;
         let term = dataCat.term || { name: "news" };
@@ -80,7 +82,7 @@ export default {
         const prev = dataCat.previous;
         const next = dataCat.next;
 
-        const headerMenu = await $axios.$get(`/api/menu/header`);
+				const headerMenu = await $axios.$get(`/api/menu/header`);
 
         return {
             tag: tag,

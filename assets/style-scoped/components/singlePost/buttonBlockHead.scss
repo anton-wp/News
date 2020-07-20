@@ -29,8 +29,9 @@
 	}
 
 	.blockAction {
-		display: inline-block;
+		display: flex;
 		margin-left: auto;
+		align-items: center;
 
 		.action{
 			cursor: pointer;
@@ -49,6 +50,7 @@
 			font-weight: 700;
 			font-size: 10px;
 			text-transform: uppercase;
+			max-height: 26px;
 
 			&:hover{
 				color: $white;

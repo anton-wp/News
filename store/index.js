@@ -19,6 +19,7 @@ const store = () => new Vuex.Store({
 		bookmarks: [],
 		commentsReply: '',
 		subscriptions: [],
+		votes: [],
 		header: {
 			menu: [],
 			news: [],

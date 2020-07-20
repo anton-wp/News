@@ -91,7 +91,7 @@
           <div class="col-12 col-lg-8">
             <div class="container pad0">
               <div class="row">
-                <button-block-head :id="data.id" :slug="data.slug" :category="data.category" />
+                <button-block-head :id="data.id" :slug="data.slug" :category="data.category" :data="data"/>
                 <div class="col-lg-12">
                   <h1 class="post-page-title">{{data.title}}</h1>
                   <h2>{{data.subTitle}}</h2>
@@ -107,7 +107,7 @@
                         style="align-items: center; display: flex;"
                         v-if="!review"
                       >
-                        <marks :author="data.author" />
+                        <marks :data="data"  @scrollToComment="scrollToComment" />
                       </div>
                     </div>
                   </div>
@@ -154,7 +154,7 @@
                   </div>
                   <related-block />
                 </div>
-                <div v-if="!draft && !review" class="col-lg-12">
+                <div v-if="!draft && !review" class="col-lg-12" ref="element">
                   <div class="comment-wrapper">
                     <span class="title">your verdict</span>
                     <span class="about" @mouseenter="message = true" @mouseleave="message = false">
@@ -238,7 +238,7 @@
                     :key="comment.id"
                     :id="comment.id"
                   >
-                    <comment :postId="data.id" :data="comment" @updateComment="updateComment"/>
+                    <comment :postId="data.id" :data="comment" @updateComment="updateComment" />
                   </div>
                 </div>
                 <div v-if="paginations.next" class="col-12 button-block">
@@ -293,8 +293,8 @@ export default {
       default: null
     },
     review: Boolean,
-		headerMenu: Array,
-		type: String,
+    headerMenu: Array,
+    type: String
   },
 
   head() {
@@ -367,17 +367,25 @@ export default {
     };
   },
   methods: {
-		updateComment (data) {
-			this.comments = this.comments.map(comment => comment.id === data.id ? comment = data : comment)
-		},
+    scrollToComment() {
+      this.$refs.element.scrollIntoView({
+        behavior: "smooth",
+        inline: "nearest"
+      });
+    },
+    updateComment(data) {
+      this.comments = this.comments.map(comment =>
+        comment.id === data.id ? (comment = data) : comment
+      );
+    },
     sortUpdate(type) {
-			if(type === 'agree'){
-				this.orderBy = type;
+      if (type === "agree") {
+        this.orderBy = type;
         this.order = "DESC";
-			}else if (type === 'disagree') {
-				this.orderBy = type;
+      } else if (type === "disagree") {
+        this.orderBy = type;
         this.order = "ASC";
-			}else if (type === this.orderBy) {
+      } else if (type === this.orderBy) {
         if (this.order === "ASC") {
           this.order = "DESC";
         } else {
@@ -412,7 +420,7 @@ export default {
 
     moreComments() {
       this.page = this.page + 1;
-      this.getComments('loadMore');
+      this.getComments("loadMore");
     },
     getComments(loadMore) {
       this.$axios
@@ -424,12 +432,12 @@ export default {
           }&page=${this.page}`
         )
         .then(res => {
-          if(loadMore) {
-						this.comments = [...this.comments, ...res.data];
-					}else {
-						this.comments = res.data;
-					}
-					this.paginations = res.pagination;
+          if (loadMore) {
+            this.comments = [...this.comments, ...res.data];
+          } else {
+            this.comments = res.data;
+          }
+          this.paginations = res.pagination;
           this.disabled = false;
         })
         .catch(error => {
@@ -455,11 +463,11 @@ export default {
     } else {
       this.$store.commit("SET_BREADCRUMBS", [{ title: this.data.title }]);
     }
-	},
-	mounted() {
-		if(this.type === 'post'){
-			this.$axios.post(`/api/posts/${this.data.id}/add-view`)
-		}
-	}
+  },
+  mounted() {
+    if (this.type === "post") {
+      this.$axios.post(`/api/posts/${this.data.id}/add-view`);
+    }
+  }
 };
 </script>

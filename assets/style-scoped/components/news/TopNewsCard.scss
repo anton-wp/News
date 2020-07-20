@@ -2,23 +2,32 @@
 	margin-bottom: 16px;
 	height: 95%;
 	position: relative;
+
 	&:hover {
 		.img::before {
 			background-color: $black05;
 		}
 	}
-
+	.position__verdict__top {
+		position: absolute;
+		left: 1.2em;
+		top: -21px;
+		span{
+			color: black;
+		}
+	}
 	.active {
 		visibility: visible !important;
 	}
-	img{
+
+	img {
 		width: 100%;
 		height: 100%;
 		object-fit: cover;
 		object-position: center;
 	}
 
-	.img{
+	.img {
 		top: 0px;
 		left: 0px;
 		position: absolute;
@@ -50,6 +59,15 @@
 
 		&.category {
 			padding: 15em 1.3em 1.25em;
+
+
+		}
+
+		@media (max-width: 992px) {
+			padding: 4em 1.2em 1.2em;
+		}
+		@media (max-width: 768px) {
+			padding: 25vw 1.2em 1.2em;
 		}
 
 		.info {

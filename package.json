@@ -32,6 +32,7 @@
     "nuxt-dropzone": "^1.0.4",
     "nuxt-jsonld": "^1.4.10",
     "sass-loader": "^8.0.2",
+    "vue-backtotop": "^1.6.1",
     "vue-click-outside": "^1.1.0",
     "vue-cropperjs": "^4.1.0",
     "vue-multiselect": "^2.1.6",

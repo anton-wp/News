@@ -24,20 +24,20 @@
 import AuthorBlock from "~/components/singlePost/authorBlock.vue";
 import ButtonBlockHead from "~/components/singlePost/buttonBlockHead.vue";
 import Marks from "~/components/singlePost/marks.vue";
+
 export default {
-	components : {
+  components: {
     AuthorBlock,
     ButtonBlockHead,
-    Marks
+		Marks,
+  },
+  props: {
+    data: Object
 	},
-	props: {
-		data: Object,
-	},
-	provide() {
+  provide() {
     return {
       id: this.data.id
     };
-  },
-
-}
+  }
+};
 </script>

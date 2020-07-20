@@ -1,9 +1,9 @@
 <template>
   <button class="bookmark" :disabled="disabled" @click="click">
-    <svg width="20" height="20" v-if="!bookmarks.includes(this.id)">
+    <svg width="20" height="20" v-if="!bookmarks.includes(id)">
       <use xlink:href="#bookmark-empty" />
     </svg>
-    <svg width="20" height="20" v-if="bookmarks.includes(this.id)">
+    <svg width="20" height="20" v-if="bookmarks.includes(id)">
       <use xlink:href="#bookmark" />
     </svg>
   </button>

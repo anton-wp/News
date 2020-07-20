@@ -15,7 +15,7 @@
       </svg>
       <!-- TODO go to single post page -->
       <span class="text">
-        <a class="reviews-link" :class="colorScheme" href="#">{{ post.verdictValue }}</a>
+        <a class="reviews-link" :class="colorScheme" href="#">{{ post.votesCount }}</a>
       </span>
     </span>
     <span class="mark-news">
@@ -46,8 +46,5 @@ export default {
 		pending: Boolean,
 		post: Object
 	},
-	created() {
-		console.log(this.post)
-	}
 };
 </script>

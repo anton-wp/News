@@ -6,6 +6,7 @@
 		text-align: right;
 		margin-bottom: 10px;
 		.forgot-link {
+			cursor: pointer;
 			font-weight: 500;
 			color: #ff4242;
 			text-decoration: none;
@@ -75,16 +76,16 @@
 		-webkit-box-shadow: 0 0 50px 10px rgba(0, 0, 0, 0.4);
 		box-shadow: 0 0 50px 10px rgba(0, 0, 0, 0.4);
 		z-index: 4;
-		-webkit-transition: opacity 0.15s 0.3s ease, visibility 0.15s 0.3s ease,
-			-webkit-transform 0.2s 0.3s ease-in-out;
-		transition: opacity 0.15s 0.3s ease, visibility 0.15s 0.3s ease,
-			-webkit-transform 0.2s 0.3s ease-in-out;
-		-o-transition: opacity 0.15s 0.3s ease, visibility 0.15s 0.3s ease,
-			transform 0.2s 0.3s ease-in-out;
-		transition: opacity 0.15s 0.3s ease, visibility 0.15s 0.3s ease,
-			transform 0.2s 0.3s ease-in-out;
-		transition: opacity 0.15s 0.3s ease, visibility 0.15s 0.3s ease,
-			transform 0.2s 0.3s ease-in-out, -webkit-transform 0.2s 0.3s ease-in-out;
+		// -webkit-transition: opacity 0.15s 0.3s ease, visibility 0.15s 0.3s ease,
+		// 	-webkit-transform 0.2s 0.3s ease-in-out;
+		// transition: opacity 0.15s 0.3s ease, visibility 0.15s 0.3s ease,
+		// 	-webkit-transform 0.2s 0.3s ease-in-out;
+		// -o-transition: opacity 0.15s 0.3s ease, visibility 0.15s 0.3s ease,
+		// 	transform 0.2s 0.3s ease-in-out;
+		// transition: opacity 0.15s 0.3s ease, visibility 0.15s 0.3s ease,
+		// 	transform 0.2s 0.3s ease-in-out;
+		// transition: opacity 0.15s 0.3s ease, visibility 0.15s 0.3s ease,
+		// 	transform 0.2s 0.3s ease-in-out, -webkit-transform 0.2s 0.3s ease-in-out;
 		// overflow: scroll;
 		max-height: 95%;
 
@@ -211,6 +212,12 @@
 			&:hover {
 				color: #bc2d2d;
 			}
+		}
+	}
+	.check__email {
+		margin-bottom: 40px;
+		p{
+			text-align: center;
 		}
 	}
 

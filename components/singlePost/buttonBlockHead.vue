@@ -28,17 +28,26 @@
         </svg>
         edit
       </nuxt-link>
+      <div class="position__verdict__single" v-if="data.verdictValue">
+        <block-verdict :verdict="data.verdictValue" />
+      </div>
     </div>
   </div>
 </template>
 
 <script>
+import BlockVerdict from "~/components/universal-components/block-verdict";
+
 export default {
+  components: {
+    BlockVerdict
+  },
   props: {
     category: Object,
     id: String,
-		slug: String,
-		type: String
+    slug: String,
+		type: String,
+		data: Object
   },
   data() {
     return {
@@ -46,15 +55,15 @@ export default {
     };
   },
   created() {
-		if(this.type !== 'comment'){
-			this.getButton();
-		}
+    if (this.type !== "comment") {
+      this.getButton();
+    }
   },
   methods: {
     getButton() {
       this.$axios
         .$get(`/api/posts/${this.id}/actions`)
-        .then((data) => {
+        .then(data => {
           // console.log(data.data)
           this.actions = data.data;
         })
@@ -65,7 +74,7 @@ export default {
     removePost() {
       this.$axios
         .$delete(`/api/posts/${this.id}/mark-deleted`)
-        .then((data) => {
+        .then(data => {
           console.log(data);
         })
         .catch(error => {
@@ -75,7 +84,7 @@ export default {
     deletePost() {
       this.$axios
         .$delete(`/api/posts/${this.id}`)
-        .then((data) => {
+        .then(data => {
           console.log(data);
         })
         .catch(error => {
