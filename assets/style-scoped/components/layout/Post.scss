@@ -254,6 +254,10 @@
 				transition: color 0.3s;
 				margin-right: 1.8em;
 
+				@media (max-width: 576px) {
+					margin-right: .8em;
+				}
+
 				&:hover {
 					color: #ff4242;
 				}

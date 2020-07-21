@@ -170,7 +170,9 @@
                   >Verdict is top voted comment by all members. One vote per member. Verdict can change over time.</span>
                 </div>
                 <div v-if="!draft && !review" class="col-12">
-                  <textarea class="form-input with-border" v-model="comment"></textarea>
+                  <div class="mx-2">
+										<textarea class="form-input with-border" v-model="comment"></textarea>
+									</div>
                   <div class="blockCheckbox">
                     <label for="checkbox" @click="subscribe = !subscribe">
                       <div class="categoryCheckbox">
@@ -185,7 +187,7 @@
                     <button @click="createdComment(true)">agree</button>
                     <button @click="createdComment(false)">disagree</button>
                   </div>
-                  <div class="sort-comments">
+                  <div class="sort-comments mx-2">
                     <button
                       v-for="(sortAc, index) in sortActions"
                       :key="index"
@@ -247,7 +249,7 @@
               </div>
             </div>
           </div>
-          <div class="col-lg-4">
+          <div class="col-lg-4 px-0 pl-md-5">
             <follow v-if="!review" />
             <asideReview v-if="data && review" :postData="data" />
           </div>
