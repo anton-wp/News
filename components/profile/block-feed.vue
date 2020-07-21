@@ -1,5 +1,5 @@
 <template>
-  <div class="feed">
+  <div class="feed__profile">
     <p>
       “
       <a :href="data.postLink" target="_blank">{{ data.title }}</a>”
@@ -17,7 +17,7 @@ export default {
 </script>
 
 <style lang="scss">
-.feed {
+.feed__profile {
   font-size: 100%;
   font-weight: 400;
   line-height: 1.5;

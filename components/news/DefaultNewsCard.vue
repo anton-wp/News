@@ -1,5 +1,5 @@
 <template>
-  <article class="default-news-card">
+  <article class="default-news-card mb-0">
     <div class="picture">
 			<div class="position__verdict__default" v-if="post.verdictValue">
 				<block-verdict :verdict="post.verdictValue" />

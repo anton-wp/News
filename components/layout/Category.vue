@@ -58,15 +58,15 @@
       <div class="container">
         <div class="row">
           <div class="col-12 col-lg-8">
-            <h1 class="category-page-title">{{term.name}}</h1>
+            <h1 class="category-page-title mt-0 ml-2 ml-md-0">{{term.name}}</h1>
             <div class="row" v-for="(data, index) in posts" :key="index">
-              <div class="col-12" v-for="post in data.slice(0, 1)" :key="post.id">
+              <div class="col-12 mb-3" v-for="post in data.slice(0, 1)" :key="post.id">
                 <top-news-card :tag="tag" padding :post="post" />
               </div>
-              <div class="col-12 col-md-6" v-for="post in data.slice(1, 3)" :key="post.id">
+              <div class="col-12 col-md-6 mb-3" v-for="post in data.slice(1, 3)" :key="post.id">
                 <default-news-card type="first-block" :tag="tag" :post="post" :padding="true" />
               </div>
-              <div class="col-12" v-for="post in data.slice(3, 6)" :key="post.id">
+              <div class="col-12 mb-3" v-for="post in data.slice(3, 6)" :key="post.id">
                 <gorizontal-news-card
                   type="full-block"
                   :tag="tag"
@@ -74,13 +74,13 @@
                   :background="false"
                 />
               </div>
-              <div class="col-12" v-for="post in data.slice(6, 7)" :key="post.id">
+              <div class="col-12 mb-3" v-for="post in data.slice(6, 7)" :key="post.id">
                 <top-news-card :post="post" :tag="tag" />
               </div>
-              <div class="col-12 col-md-6" v-for="post in data.slice(7, 9)" :key="post.id">
+              <div class="col-12 col-md-6 mb-3" v-for="post in data.slice(7, 9)" :key="post.id">
                 <default-news-card type="first-block" :tag="tag" :post="post" :padding="true" />
               </div>
-              <div class="col-12" v-for="post in data.slice(9, 12)" :key="post.id">
+              <div class="col-12 mb-3" v-for="post in data.slice(9, 12)" :key="post.id">
                 <gorizontal-news-card
                   type="full-block"
                   :tag="tag"
@@ -99,7 +99,7 @@
               </div>
             </div>
           </div>
-          <div class="col-lg-4">
+          <div class="col-lg-4 px-0 pl-md-5">
             <follow-block :posts="false" />
           </div>
         </div>
@@ -119,7 +119,8 @@ export default {
     TopNewsCard,
     DefaultNewsCard,
     GorizontalNewsCard,
-    FollowBlock
+		FollowBlock,
+
   },
   data() {
     return {

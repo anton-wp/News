@@ -10,7 +10,7 @@
 <script>
 export default {
   props: {
-    verdict: Number
+    verdict: Number|String
   }
 };
 </script>
