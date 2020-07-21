@@ -5,7 +5,7 @@
 				<block-verdict :verdict="post.verdictValue" />
 			</div>
       <nuxt-link :to="`/${post.slug}`">
-        <img v-bind:src="post.featured.wide">
+        <img v-bind:src="image ? post.featured.landscape : post.featured.wide">
       </nuxt-link>
       <div class="information" :class="!padding ? 'with-padding' : 'without-padding'">
         <div class="container-fluid">
@@ -31,7 +31,8 @@ export default {
   props: {
     padding: Boolean,
 		post: Object,
-		tag: Boolean
+		tag: Boolean,
+		image: Boolean
   },
   components: {
     NewsCardHeader,

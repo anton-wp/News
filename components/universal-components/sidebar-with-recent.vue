@@ -9,7 +9,7 @@
         v-for="post in posts"
         :key="post.id"
       >
-        <default-news-card :post="post" :padding="true" />
+        <default-news-card :post="post" :padding="true" :image="true" />
       </div>
     </div>
   </div>

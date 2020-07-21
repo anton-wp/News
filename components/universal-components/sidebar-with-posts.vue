@@ -10,7 +10,7 @@
     </div>
     <div class="row wrapper-side-post">
       <div class="col-12 col-md-4 col-lg-12 px-0" v-for="post in posts" :key="post.id">
-        <default-news-card :post="post" :padding="true" />
+        <default-news-card :post="post" :padding="true" :image="true" />
         <!-- <default-news-card :padding="true" />
         <default-news-card :padding="true" />-->
         <!-- <vrd-vdc type="second-block" [defaultPost]="post" [padding]="true"></vrd-vdc> -->

@@ -1,5 +1,5 @@
 <template>
-  <div class="col-12 blockHead">
+  <div class="col-12 blockHead px-2">
     <nuxt-link v-if="category" class="link" :to="`/${category.slug}`">
       <h5 class="category-name">{{category.name}}</h5>
     </nuxt-link>
@@ -29,7 +29,7 @@
         edit
       </nuxt-link>
       <div class="position__verdict__single" v-if="data.verdictValue">
-        <block-verdict :verdict="data.verdictValue" />
+        <block-verdict :small="true" :verdict="data.verdictValue" />
       </div>
     </div>
   </div>

@@ -1,9 +1,18 @@
 .breadcrumbs-layout {
+
+
 	.routing {
+		display: flex;
 		max-width: $global-width;
 		margin: 0 auto;
 		position: relative;
 		padding: 0 15px;
+
+		.breadcrumbs:last-child {
+			text-overflow: ellipsis;
+			max-width: 100%;
+			overflow: hidden;
+		}
 
 		.breadcrumbs {
 			font-size: 11px;
@@ -12,6 +21,7 @@
 			transition: 0.3s;
 			color: $black;
 			text-transform: capitalize;
+			white-space: nowrap;
 		}
 		.active-breadcrumbs {
 			cursor: pointer;

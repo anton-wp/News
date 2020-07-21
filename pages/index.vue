@@ -75,7 +75,7 @@
               <top-news-card :post="post" />
             </div>
             <div class="col-12 col-lg-4 col-md-6 col-12 pt-3">
-              <div class="wrapper-title-hot">
+              <div v-if="index === 0" class="wrapper-title-hot">
                 <h5 class="title-hot">
                   <span>top verdicts</span>
                 </h5>
@@ -108,8 +108,17 @@
             <div class="col-12 col-md-12 col-lg-4 px-0 pl-md-5 pr-md-2 pr-xl-0">
               <div class="row">
                 <div class="col-12">
-                  <follow-block :posts="true" />
-                  <SidebarWithRecent />
+                  <follow-block v-if="index === 0" :posts="true" />
+                  <SidebarWithRecent v-if="index === 0" />
+                  <default-news-card
+                    v-else
+                    v-for="post in posts.slice(19, 23)"
+                    :key="post.id"
+                    type="first-block"
+                    :post="post"
+                    :padding="true"
+										:image="true"
+                  />
                 </div>
               </div>
             </div>
@@ -188,8 +197,8 @@ export default {
   },
 
   created() {
-		this.$store.commit("SET_BREADCRUMBS");
-		this.getVerdictTop();
+    this.$store.commit("SET_BREADCRUMBS");
+    this.getVerdictTop();
     // this.$store.commit("SET_HEADER_MENU", this.menu);
     // this.$store.commit("SET_HEADER_HOT_NEWS", this.tags);
 
@@ -215,16 +224,17 @@ export default {
     };
   },
   methods: {
-		getVerdictTop() {
-			this.$axios
-				.$get('/api/comments/verdicts/top')
-				.then(res => {
-					console.log(res)
-				})
-				 .catch(error => console.error(error));
-		},
+    getVerdictTop() {
+      this.$axios
+        .$get("/api/comments/verdicts/top")
+        .then(res => {
+          console.log(res);
+        })
+        .catch(error => console.error(error));
+    },
     loadMore() {
       this.page = this.page + 1;
+      this.limit = 23;
       this.getPosts();
     },
     getPosts() {

@@ -1,7 +1,7 @@
 <template>
   <div class="login-popup">
     <div class="form-wrapper">
-      <div>
+      <!-- <div> -->
         <div class="form">
           <div class="close-form" @click="closeLoginPopup">×</div>
           <!-- <login /> -->
@@ -26,7 +26,7 @@
             </span>
           </div>
         </div>
-      </div>
+      <!-- </div> -->
     </div>
   </div>
 </template>
