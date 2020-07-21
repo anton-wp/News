@@ -1,6 +1,9 @@
 <template>
   <div style="position: relative;">
     <div class="comment" :class="data.isVerdict ? 'verdict-active' : ''">
+      <div class="position__verdict__comment" v-if="data.verdictThreshold">
+        <block-verdict :verdict="data.verdictThreshold" />
+      </div>
       <author-block
         :author="data.user"
         :publishedAt="data.createdAt"
@@ -8,10 +11,10 @@
         :postReaction="data.postReaction"
       />
       <div class="verdict" @click="voteAdd">
-        <svg v-if="!data.isVerdict" width="40" height="40">
+        <svg v-if="!votes.includes(data.id)" width="40" height="40">
           <use xlink:href="#verdict-icon-custom" />
         </svg>
-        <svg v-if="data.isVerdict" width="40" height="40">
+        <svg v-else width="40" height="40">
           <use xlink:href="#verdict-icon-selected" />
         </svg>
         <div style="margin-left: 10px">
@@ -112,6 +115,7 @@ import CommentShare from "~/components/singlePost/comment-share.vue";
 import AuthorBlock from "~/components/singlePost/authorBlock.vue";
 import ReplyComment from "~/components/singlePost/reply-comment.vue";
 import modalWindow from "~/components/universal-components/modalWindow.vue";
+import BlockVerdict from "~/components/universal-components/block-verdict";
 
 export default {
   name: "comment",
@@ -120,7 +124,8 @@ export default {
     ReplyComment,
     CommentReplies,
     modalWindow,
-    CommentShare
+		CommentShare,
+		BlockVerdict
   },
   data() {
     return {
@@ -147,7 +152,7 @@ export default {
     type: Boolean
   },
   computed: {
-    ...mapState(["commentsReply"])
+    ...mapState(["commentsReply", "votes"])
   },
   created() {
     this.reportValue = this.reportArr[0];
@@ -165,6 +170,7 @@ export default {
             this.voteDisabled = false;
             this.$emit("updateComment", res.data.data);
             this.$toasted.show(res.data.message);
+            this.$store.commit("ADD_VOTE", this.data.id);
           })
           .catch(error => {
             this.$toasted.error(error.response.data.message);

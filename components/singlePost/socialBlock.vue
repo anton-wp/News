@@ -97,7 +97,7 @@
             </svg>
         </a>
     </div>
-    <aside v-else class="shared-news-links">
+    <aside v-else class="shared-news-links" style="flex-wrap: wrap;">
         <div class="big-shared-buttons">
             <ShareNetwork
                 class="big-share-link facebook"

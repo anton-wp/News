@@ -15,12 +15,15 @@
 		background-color: $secondary-bgcolor;
 	}
 
-	.verdict-active{
+	.verdict-active {
 		background-color: #F5F5F5;
+
 		.value {
 			color: #F23D3B;
 		}
 	}
+
+	.position__verdict__single {}
 
 	.reply-comment {
 		margin-top: 36px;
@@ -224,9 +227,17 @@
 		padding-left: 1.7em;
 	}
 
+
 	.comment {
 		position: relative;
 		padding: 1.5em 1em 1.3em;
+
+
+		.position__verdict__comment {
+			position: absolute;
+			right: 20px;
+			top: 0;
+		}
 
 		.buttons {
 			margin-top: 1em;
@@ -667,6 +678,7 @@
 				z-index: 5;
 				transform: rotate(45deg);
 			}
+
 			@media (max-width: 449px) {
 				bottom: -100px;
 			}
@@ -691,6 +703,7 @@
 					display: flex;
 					justify-content: center;
 					align-items: center;
+
 					@media (max-width: 992px) {
 						margin-left: 2.5px;
 						margin-right: 2.5px;

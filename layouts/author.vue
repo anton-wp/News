@@ -1,27 +1,27 @@
 <template>
-    <div class="author-layout">
-        <custom-svg />
-        <app-header />
-        <hot-news />
-        <breadcrumbs />
-        <big-header />
-        <get-profile />
-        <div class="container">
-            <div class="row">
-                <div class="col-12 profile-bottom">
-                    <div class="line" />
-                </div>
-                <div class="col-auto sideBar">
-                    <tabs />
-                </div>
-                <div class="col content">
-                    <nuxt />
-                    <!-- <not-found /> -->
-                </div>
-            </div>
+  <div class="author-layout">
+    <custom-svg />
+    <app-header />
+    <hot-news />
+    <breadcrumbs />
+    <big-header />
+    <get-profile />
+    <div class="container">
+      <div class="row">
+        <div class="col-12 profile-bottom">
+          <div class="line" />
         </div>
-        <app-footer />
+        <div class="col-auto sideBar">
+          <tabs />
+        </div>
+        <div class="col content">
+          <nuxt />
+          <!-- <not-found /> -->
+        </div>
+      </div>
     </div>
+    <app-footer />
+  </div>
 </template>
 
 <script>
@@ -36,19 +36,18 @@ import Tabs from "~/components/profile/tabs";
 import getProfile from "~/components/profile/getProfile";
 
 export default {
-    name: "author",
-    components: {
-        CustomSvg,
-        AppHeader,
-        AppFooter,
-        HotNews,
-        BigHeader,
-        Breadcrumbs,
-        NotFound,
-        getProfile,
-        Tabs
-        // LoginPopup
-    },
-
+  name: "author",
+  components: {
+    CustomSvg,
+    AppHeader,
+    AppFooter,
+    HotNews,
+    BigHeader,
+    Breadcrumbs,
+    NotFound,
+    getProfile,
+    Tabs
+    // LoginPopup
+  },
 };
 </script>

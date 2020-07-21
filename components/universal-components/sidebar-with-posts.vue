@@ -9,7 +9,7 @@
       >latest</span>
     </div>
     <div class="row wrapper-side-post">
-      <div class="col-sm-12 col-md-4 col-lg-12" v-for="post in posts" :key="post.id">
+      <div class="col-12 col-md-4 col-lg-12 px-0" v-for="post in posts" :key="post.id">
         <default-news-card :post="post" :padding="true" />
         <!-- <default-news-card :padding="true" />
         <default-news-card :padding="true" />-->

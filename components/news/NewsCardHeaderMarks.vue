@@ -1,6 +1,6 @@
 <template>
   <div class="marks-component-news ">
-    <span class="mark-news">
+    <span class="mark-news px-0">
       <svg width="15" height="15">
         <use xlink:href="#comment" />
       </svg>
@@ -9,16 +9,16 @@
         <a class="reviews-link" :class="colorScheme" href="#">{{ post.commentsCount }}</a>
       </span>
     </span>
-    <span class="mark-news">
+    <span class="mark-news px-0">
       <svg width="15" height="15">
         <use xlink:href="#votes" />
       </svg>
       <!-- TODO go to single post page -->
       <span class="text">
-        <a class="reviews-link" :class="colorScheme" href="#">{{ post.verdictValue }}</a>
+        <a class="reviews-link" :class="colorScheme" href="#">{{ post.votesCount }}</a>
       </span>
     </span>
-    <span class="mark-news">
+    <span class="mark-news px-0">
       <svg width="15" height="15">
         <use xlink:href="#eye" />
       </svg>
@@ -27,7 +27,7 @@
         <a class="reviews-link" :class="colorScheme" href="#">{{ post.viewsCount }}</a>
       </span>
     </span>
-    <span class="bookmark-news">
+    <span class="bookmark-news px-0">
       <!-- add function add this post to save -->
       <bookmark />
     </span>
@@ -46,8 +46,5 @@ export default {
 		pending: Boolean,
 		post: Object
 	},
-	created() {
-		console.log(this.post)
-	}
 };
 </script>

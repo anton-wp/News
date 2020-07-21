@@ -1,9 +1,15 @@
 .gorizontal-news-card {
+	margin-bottom: 2em;
 	.nuxt-link {
 		color: inherit;
 	}
 	.active {
 		visibility: visible !important;
+	}
+	.position__verdict__default {
+		position: absolute;
+    top: 0;
+    left: 1.2em;
 	}
 
 	.image-full-block {
@@ -30,7 +36,7 @@
 
 	.wrapper-horizontal-verdict-card {
 		font-family: open sans, Helvetica Neue, Helvetica, Roboto, Arial, sans-serif;
-		margin: 10px 0 1em 0;
+		margin: 0 0 1em 0;
 
 		.pad0-image {
 			padding-left: 0px !important;
@@ -157,13 +163,13 @@
 		.pad0-image {
 			padding: 0;
 
-			.post-image {
-				min-height: 350px;
-			}
+			// .post-image {
+			// 	min-height: 350px;
+			// }
 		}
 	}
 
-	@media (max-width: 576px) {
+	@media (max-width: 768px) {
 		.wrapper-horizontal-verdict-card {
 			.information {
 				&.padding0 {
