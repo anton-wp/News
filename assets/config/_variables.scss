@@ -1,4 +1,4 @@
-@import "./colors";
+@import "../utils/colors";
 
 $global-width: 1310px;
 
@@ -8,6 +8,11 @@ $tablet-breackpoint: 769px;
 $large-breackpoint: 1024;
 $xlarge-breackpoint: 1280;
 $xxlarge-breackpoint: 1440px;
+
+$font-family-base: 'Open Sans', sans-serif;
+$spacers: (
+	2: '0.625rem',
+);
 
 $breakpoints: (
   small: 0,
@@ -28,9 +33,7 @@ $grid-column-gutter: (
   medium: 30px,
 );
 
-
 $max-site-width: 1280px;
-
 
 $transition-color: color .25s;
 $transition-animation: all linear .25s;
