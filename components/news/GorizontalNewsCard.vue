@@ -1,7 +1,7 @@
 <template>
-  <div class="gorizontal-news-card">
+  <div class="gorizontal-news-card mb-0 mb-md-4">
     <div
-      class="container wrapper-horizontal-verdict-card px-0"
+      class="container wrapper-horizontal-verdict-card px-0 mb-0"
       :class="{back_block: type === 'minimal-block'}"
     >
       <div class="row w-100 mx-0">

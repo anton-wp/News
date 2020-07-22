@@ -1,6 +1,6 @@
 <template>
-  <div class="breadcrumbs-layout">
-    <div class="routing" v-if="breadcrumbs.length">
+  <div class="breadcrumbs-layout mt-2">
+    <div class="routing px-2 px-md-2" v-if="breadcrumbs.length">
       <component
         :is="item.path ? 'nuxt-link' : 'span'"
         class="breadcrumbs"

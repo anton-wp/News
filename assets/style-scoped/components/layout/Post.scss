@@ -227,9 +227,11 @@
 		padding-left: 1.7em;
 	}
 
+
 	.comment {
 		position: relative;
 		padding: 1.5em 1em 1.3em;
+
 
 		.position__verdict__comment {
 			position: absolute;
@@ -251,6 +253,10 @@
 				color: #929292;
 				transition: color 0.3s;
 				margin-right: 1.8em;
+
+				@media (max-width: 576px) {
+					margin-right: .8em;
+				}
 
 				&:hover {
 					color: #ff4242;
@@ -509,6 +515,11 @@
 
 			.text {
 				margin-bottom: 3rem;
+				word-wrap: normal;
+				word-break: normal;
+				line-break: auto;
+				text-align: justify;
+				text-indent: 1em;
 			}
 
 			.image-wrapper {
@@ -543,6 +554,10 @@
 				-webkit-box-direction: normal;
 				-webkit-font-smoothing: antialiased;
 				margin: 15px 15px 15px 0;
+
+				@media (max-width: 576px) {
+					font-size: 1.9em;
+				}
 			}
 
 			.comment-wrapper {
@@ -580,23 +595,29 @@
 				}
 
 				.about {
+					display: -webkit-box;
+					display: -ms-flexbox;
+					display: flex;
+					-webkit-box-align: center;
+					-ms-flex-align: center;
+					align-items: center;
 					z-index: 2;
 					position: relative;
 					background-color: $white;
 					font-family: "Open Sans";
 					// margin-top: 10px;
-					display: -webkit-box;
-					display: -ms-flexbox;
-					display: flex;
 					padding-left: 10px;
 					font-size: 14px;
 					font-weight: 700;
 					color: $heading-color;
-					-webkit-box-align: center;
-					-ms-flex-align: center;
-					align-items: center;
 					position: relative;
 					cursor: help;
+
+					span {
+						@media (max-width: 576px) {
+							display: none;
+						}
+					}
 
 					.icon {
 						margin-left: 15px;

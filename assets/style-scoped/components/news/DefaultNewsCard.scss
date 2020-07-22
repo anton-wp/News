@@ -1,5 +1,11 @@
+
+.sidebar__with__recent {
+	.default-news-card {
+		margin-bottom: 0px !important;
+	}
+}
 .default-news-card {
-	margin-bottom: 2em;
+	margin-bottom: 1em;
 	position: relative;
 	// background-color: $black;
 
@@ -13,7 +19,7 @@
 	.position__verdict__default {
 		position: absolute;
     top: 0;
-    left: 1.2em; 
+    left: 1.2em;
 	}
 	.picture {
 		.title {

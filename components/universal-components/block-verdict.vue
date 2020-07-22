@@ -1,21 +1,25 @@
 <template>
-  <div class="verdict__block">
-    <svg width="40" height="40">
+  <div class="verdict__block" :class="small ? '' : 'shadow'">
+    <svg :width="small ? 33 : 40 " height="40">
       <use xlink:href="#verdict-icon-selected" />
     </svg>
-    <span>{{verdict}} %</span>
+    <span class="px-2 px-md-3">{{verdict}}%</span>
   </div>
 </template>
 
 <script>
 export default {
   props: {
-    verdict: Number
+    verdict: Number | String,
+    small: Boolean
   }
 };
 </script>
 
 <style lang="scss">
+.shadow {
+  box-shadow: 2px 4px 16px 0 rgba(35, 36, 40, 0.4);
+}
 .verdict__block {
   font-size: 100%;
   font-weight: 700;
@@ -26,11 +30,7 @@ export default {
   align-items: center;
   background: #fff;
   max-width: 7.5em;
-  box-shadow: 2px 4px 16px 0 rgba(35, 36, 40, 0.4);
   z-index: 2;
   color: inherit;
-  span {
-    padding: 0 12px;
-  }
 }
 </style>

@@ -40,6 +40,7 @@
 <script>
 import DefaultNewsCard from "~/components/news/DefaultNewsCard";
 import CommentBlock from "~/components/profile/comment-block";
+
 import NotFound from "~/components/profile/not-found";
 
 export default {

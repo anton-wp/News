@@ -11,7 +11,7 @@
     <div id="follow">
       <div class="row">
         <div class="col-12 text-center">
-          iframe
+          ..iframe
           <!-- <div class="fb-page medium-order-3 tablet-order-2 fb_iframe_widget"
             data-href="https://www.facebook.com/VerdictNews/" data-width="100%" data-height="180" data-small-header="true"
             data-adapt-container-width="true" data-hide-cover="false" data-show-facepile="true" fb-xfbml-state="rendered"
@@ -29,7 +29,7 @@
     </div>
     <div class="col-12" v-if="!posts">
       <sidebar-with-posts />
-      <!-- <vrd-swp></vrd-swp> -->
+			<sidebar-with-recent />
     </div>
   </div>
 </template>
@@ -37,11 +37,13 @@
 <script>
 import SidebarWithPosts from "~/components/universal-components/sidebar-with-posts.vue";
 import SocialBlock from "~/components/universal-components/socialBlock.vue";
+import SidebarWithRecent from "~/components/universal-components/sidebar-with-recent";
 
 export default {
   components: {
     SidebarWithPosts,
-    SocialBlock
+		SocialBlock,
+				SidebarWithRecent
   },
   props: {
     posts: Boolean

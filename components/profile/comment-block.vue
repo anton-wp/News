@@ -1,10 +1,17 @@
 <template>
-  <div class="comment-block">
-    <div class="title">
+  <div class="comment-block" :class="comment.isVerdict ? 'verdict__comment__block'  : ''">
+    <div v-if="comment.isVerdict" class="position__verdict__comment">
+      <block-verdict :verdict="comment.verdictThreshold" />
+    </div>
+    <div class="title__comment" :class="comment.isVerdict ? 'verdict__title'  : ''">
       <nuxt-link :to="`/${comment.post.slug}`" class="comment__title">{{ comment.post.title }}</nuxt-link>
     </div>
-    <nuxt-link v-if="type === 'all' || type === 'replies'" class="view" :to="`/${comment.post.slug}/comments/${comment.id}`">view</nuxt-link>
-		<span v-if="type === 'subscription'" @click="unsubscribe" class="view">unsubscribe</span>
+    <nuxt-link
+      v-if="type === 'all' || type === 'replies'"
+      class="view"
+      :to="`/${comment.post.slug}/comments/${comment.id}`"
+    >view</nuxt-link>
+    <span v-if="type === 'subscription'" @click="unsubscribe" class="view">unsubscribe</span>
     <time class="date">
       {{ new Date(comment.createdAt).toDateString() }}
       <span v-if="comment.parent">
@@ -28,20 +35,32 @@
 </template>
 
 <script>
+import BlockVerdict from "~/components/universal-components/block-verdict";
+
 export default {
+  components: {
+    BlockVerdict
+  },
   props: {
-		comment: Object,
-		type: String
-	},
-	methods: {
-		unsubscribe() {
-			this.$emit('unsubscribe', this.comment.id)
-		}
-	}
+    comment: Object,
+    type: String
+  },
+  methods: {
+    unsubscribe() {
+      this.$emit("unsubscribe", this.comment.id);
+    }
+  }
 };
 </script>
 
 <style lang="scss">
+.verdict__comment__block {
+  padding-top: 2em !important;
+  background-color: #f4f4f4;
+}
+.verdict__title {
+  padding-right: 8em;
+}
 .comment-block {
   display: flex;
   flex-direction: column;
@@ -49,10 +68,10 @@ export default {
   margin-bottom: 1em;
   border-bottom: 1px solid black;
 
-  .title {
+  .title__comment {
     text-overflow: ellipsis;
     max-height: 1.8em;
-		overflow: hidden;
+    overflow: hidden;
 
     .comment__title {
       letter-spacing: 0.35px;
@@ -67,11 +86,15 @@ export default {
         color: #ff4242;
       }
     }
-	}
-
+  }
+  .position__verdict__comment {
+    position: absolute;
+    top: 0;
+    right: 2.9em;
+  }
   .content {
-		display: flex;
-		margin-top: 0px !important;
+    display: flex;
+    margin-top: 0px !important;
 
     .content__comment {
       margin: 0.5em 0;
@@ -83,19 +106,19 @@ export default {
       line-break: auto;
       text-align: justify;
       text-indent: 1em;
-		}
+    }
 
     .content__points {
       display: flex;
       flex-direction: column;
       align-items: center;
-			margin-left: auto;
+      margin-left: auto;
 
       .content__points__count {
         font-size: 1.8em;
         line-height: 1;
         font-weight: 400;
-			}
+      }
 
       .content__points__vote {
         color: #ff4242;
@@ -104,19 +127,19 @@ export default {
         font-weight: 400;
       }
     }
-	}
+  }
 
   .date {
     line-height: 1;
     color: #8d8d8d;
     font-weight: 400;
-		font-size: 16px;
+    font-size: 16px;
 
     .date__link {
       color: inherit;
       text-decoration: none;
     }
-	}
+  }
 
   .view {
     color: #ff4242;
@@ -126,8 +149,8 @@ export default {
     vertical-align: bottom;
     line-height: 1.2;
     text-decoration: none;
-		margin-top: 10px;
-		cursor: pointer;
+    margin-top: 10px;
+    cursor: pointer;
 
     &:hover {
       text-decoration: none;

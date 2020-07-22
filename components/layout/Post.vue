@@ -85,25 +85,25 @@
     </div>
   </div>
   <div v-else class="post-layout">
-    <div class="policy-wrapper">
+    <div class="policy-wrapper px-0">
       <div class="container">
         <div class="row">
           <div class="col-12 col-lg-8">
-            <div class="container pad0">
+            <div class="container pad0 px-0">
               <div class="row">
                 <button-block-head :id="data.id" :slug="data.slug" :category="data.category" :data="data"/>
-                <div class="col-lg-12">
+                <div class="col-lg-12 px-2">
                   <h1 class="post-page-title">{{data.title}}</h1>
                   <h2>{{data.subTitle}}</h2>
                 </div>
                 <div class="col-lg-12">
-                  <div class="container">
+                  <div class="container px-0">
                     <div class="row" style="margin-bottom: 3.1em;">
-                      <div class="col-lg-6">
+                      <div class="col-lg-6 px-0">
                         <author-block :author="data.author" :publishedAt="data.publishedAt" />
                       </div>
                       <div
-                        class="col-lg-6"
+                        class="col-lg-6 mt-3 my-md-0"
                         style="align-items: center; display: flex;"
                         v-if="!review"
                       >
@@ -112,10 +112,10 @@
                     </div>
                   </div>
                 </div>
-                <div class="col-12" v-if="!review">
+                <div class="col-12 px-2" v-if="!review">
                   <social-block v-if="data" :post="data" @changeFontSize="changeFontSize" />
                 </div>
-                <div class="col-lg-12">
+                <div class="col-lg-12 px-0">
                   <div class="image-wrapper">
                     <img v-if="data.featured.wide" class="post-image" :src="data.featured.wide" />
                     <img
@@ -123,15 +123,15 @@
                       class="post-image"
                       src="/image/default_image_landscape.png"
                     />
-                    <div class="source">
+                    <div class="source mr-3">
                       <span>source: {{data.featured.source ? data.featured.source : data.author.firstName + ' ' + data.author.lastName}}</span>
                     </div>
                   </div>
-                  <p class="text" v-html="data.body" :style="{fontSize: bodySize + '%'}">
+                  <p class="text px-2" v-html="data.body" :style="{fontSize: bodySize + '%'}">
                     <!-- {{data.body}} -->
                   </p>
                 </div>
-                <div class="col-12" v-if="!review">
+                <div class="col-12 px-2" v-if="!review">
                   <social-block v-if="data" :post="data" @changeFontSize="changeFontSize" />
                 </div>
                 <!-- <social-block [(fontSize)]="bodySize" class="col-lg-12"></social-block> -->
@@ -145,10 +145,10 @@
                     </div>
                   </div>
                 </div>
-                <div class="col-lg-12" v-if="!review">
+                <div class="col-lg-12 px-0" v-if="!review">
                   <prev-next :slug="data.slug" />
                 </div>
-                <div v-if="!draft && !review" class="col-lg-12">
+                <div v-if="!draft && !review" class="col-lg-12 px-0">
                   <div class="related-title">
                     <span>related</span>
                   </div>
@@ -158,7 +158,7 @@
                   <div class="comment-wrapper">
                     <span class="title">your verdict</span>
                     <span class="about" @mouseenter="message = true" @mouseleave="message = false">
-                      About Verdict
+                      <span>About Verdict</span>
                       <svg class="icon" width="17" height="17">
                         <use xlink:href="#eclipse-question" />
                       </svg>
@@ -170,7 +170,9 @@
                   >Verdict is top voted comment by all members. One vote per member. Verdict can change over time.</span>
                 </div>
                 <div v-if="!draft && !review" class="col-12">
-                  <textarea class="form-input with-border" v-model="comment"></textarea>
+                  <div class="mx-2">
+										<textarea class="form-input with-border" v-model="comment"></textarea>
+									</div>
                   <div class="blockCheckbox">
                     <label for="checkbox" @click="subscribe = !subscribe">
                       <div class="categoryCheckbox">
@@ -185,7 +187,7 @@
                     <button @click="createdComment(true)">agree</button>
                     <button @click="createdComment(false)">disagree</button>
                   </div>
-                  <div class="sort-comments">
+                  <div class="sort-comments mx-2">
                     <button
                       v-for="(sortAc, index) in sortActions"
                       :key="index"
@@ -247,7 +249,7 @@
               </div>
             </div>
           </div>
-          <div class="col-lg-4">
+          <div class="col-lg-4 px-0 pl-md-5">
             <follow v-if="!review" />
             <asideReview v-if="data && review" :postData="data" />
           </div>
