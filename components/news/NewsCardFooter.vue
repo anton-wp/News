@@ -2,7 +2,7 @@
   <div class="news-card-footer">
     <div class="row wrapp" @mouseleave="hide">
       <span class="bywho">
-        <div v-if="showPopup" id="1" class="user-popup active">
+				 <div v-if="showPopup" id="1" class="user-popup active" :class="bottom ? 'user-popup__bottom' : ''">
           <div>
             <popup-user-info :authorId="author.id" />
           </div>
@@ -43,7 +43,8 @@ export default {
     author: Object,
     publishedAt: String,
 		tag: Boolean,
-		post: Object
+		post: Object,
+		bottom: Boolean
   },
   components: {
     PopupUserInfo,

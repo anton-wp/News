@@ -74,11 +74,12 @@
             <div class="col-12 col-lg-4 col-md-6" v-for="post in posts.slice(0, 2)" :key="post.id">
               <top-news-card :post="post" />
             </div>
-            <div class="col-12 col-lg-4 col-md-6 col-12 pt-3">
+            <div class="col-12 col-lg-4 col-md-6 col-12 pt-3 pt-md-0">
               <div v-if="index === 0" class="wrapper-title-hot">
                 <h5 class="title-hot">
                   <span>top verdicts</span>
                 </h5>
+									<block-verdict-home v-for="verdict in verdictTop" :key="verdict.id" :data="verdict" />
               </div>
             </div>
           </div>
@@ -172,6 +173,7 @@ import DefaultNewsCard from "~/components/news/DefaultNewsCard";
 import GorizontalNewsCard from "~/components/news/GorizontalNewsCard";
 import followBlock from "~/components/universal-components/followBlock";
 import SidebarWithRecent from "~/components/universal-components/sidebar-with-recent";
+import BlockVerdictHome from "~/components/universal-components/block-verdict-home";
 
 export default {
   components: {
@@ -179,7 +181,8 @@ export default {
     DefaultNewsCard,
     GorizontalNewsCard,
     followBlock,
-    SidebarWithRecent
+    SidebarWithRecent,
+		BlockVerdictHome
   },
 
   amp: "hybrid",
@@ -192,7 +195,8 @@ export default {
       limit: 19,
       loadMoreText: "load more",
       arrayPosts: [],
-      headerMenu: null
+			headerMenu: null,
+			verdictTop: []
     };
   },
 
@@ -228,7 +232,8 @@ export default {
       this.$axios
         .$get("/api/comments/verdicts/top")
         .then(res => {
-          console.log(res);
+					this.verdictTop = res.data
+          // console.log(res);
         })
         .catch(error => console.error(error));
     },
