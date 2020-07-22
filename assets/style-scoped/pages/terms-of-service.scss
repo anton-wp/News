@@ -11,6 +11,10 @@
 
 			.wrapper-terms {
 				padding-left: 15px;
+
+				.text {
+					margin-bottom: 14px;
+				}
 			}
 
 			.terms-page-title {
@@ -48,7 +52,12 @@
 				margin: 50px 0;
 
 				h5 {
-					padding-bottom: 20px;
+					padding-bottom: 10px;
+					font-size: 18px;
+				}
+
+				strong {
+					font-weight: 700;
 				}
 
 				.in-text-ul {
@@ -74,7 +83,7 @@
 			}
 
 			.tab {
-				padding-left: 30px;
+				padding-left: 20px;
 			}
 		}
 	}

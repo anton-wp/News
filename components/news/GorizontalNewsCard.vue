@@ -14,7 +14,7 @@
             <img v-bind:src="post.featured.landscape" class="post-image" alt />
           </nuxt-link>
         </div>
-        <div class="pad0-image col-12 col-sm-12 col-md-6 col-lg-6 px-0">
+        <div class="pad0-image col-12 col-sm-12 col-md-6 col-lg-6 pl-0 pr-3">
           <div class="information padding0">
             <div class="container-fluid">
               <news-card-header

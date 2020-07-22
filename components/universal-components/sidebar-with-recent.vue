@@ -1,9 +1,9 @@
 <template>
-  <div class="sidebar-with-posts pr-2">
+  <div class="sidebar-with-posts pr-0">
     <div class="trigger-type-posts">
-      <span class="trigger">recent verdicts</span>
+      <span class="trigger px-7">recent verdicts</span>
     </div>
-    <div class="row wrapper-side-post">
+    <div class="row wrapper-side-post mx-0">
       <div
         class="col-12 col-md-4 col-lg-12 px-0 sidebar__with__recent"
         v-for="post in posts"

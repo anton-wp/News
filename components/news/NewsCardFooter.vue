@@ -16,7 +16,7 @@
           >&thinsp;{{ author.firstName }} {{ author.lastName }}&thinsp;</span>
         </nuxt-link>
         <time class="author">{{ new Date(this.publishedAt).toDateString() }}</time>
-        <br />
+        <!-- <br /> -->
         <button class="button-edit" v-if="pending">
           <svg width="15" height="15">
             <use xlink:href="#pencil" />

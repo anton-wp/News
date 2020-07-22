@@ -7,7 +7,7 @@
       <nuxt-link :to="`/${post.slug}`">
         <img v-bind:src="image ? post.featured.landscape : post.featured.wide">
       </nuxt-link>
-      <div class="information" :class="!padding ? 'with-padding' : 'without-padding'">
+      <div class="information" :class="image ? 'pt-0' : !padding ? 'with-padding' : 'without-padding'">
         <div class="container-fluid">
           <news-card-header v-if="!tag" :category="post.category" :post="post" colorScheme="dark" />
           <div class="row block wrapp">

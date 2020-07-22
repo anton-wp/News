@@ -11,7 +11,9 @@ $xxlarge-breackpoint: 1440px;
 
 $font-family-base: 'Open Sans', sans-serif;
 $spacers: (
-	2: '0.625rem',
+	2: 0.625rem,
+	7: 7px,
+	8: 2em,
 );
 
 $breakpoints: (

@@ -787,10 +787,10 @@
             </p>
             <p class="text tab">
                 B. By using the Website or the Service in any manner, you agree to the above arbitration agreement. In
-                doing so, YOU GIVE UP YOUR RIGHT TO GO TO COURT to assert or defend any claims between you and the
+                doing so, <strong>YOU GIVE UP YOUR RIGHT TO GO TO COURT</strong> to assert or defend any claims between you and the
                 Company (except for matters that may be taken to
-                small-claims court). YOU ALSO GIVE UP YOUR RIGHT TO PARTICIPATE IN A CLASS ACTION OR OTHER CLASS
-                PROCEEDING. Your rights will be determined by a NEUTRAL ARBITRATOR, NOT A JUDGE OR JURY, and the
+                small-claims court). <strong>YOU ALSO GIVE UP YOUR RIGHT TO PARTICIPATE IN A CLASS ACTION OR OTHER CLASS
+                PROCEEDING.</strong> Your rights will be determined by a <strong>NEUTRAL ARBITRATOR, NOT A JUDGE OR JURY</strong>, and the
                 arbitrator shall determine all
                 issues regarding the arbitrability of the dispute. You are entitled to a fair hearing before the
                 arbitrator. The arbitrator can grant any relief that a court can, but you should note that arbitration
@@ -1668,10 +1668,10 @@
                                 </p>
                                 <p class="text tab">
                                     B. By using the Website or the Service in any manner, you agree to the above arbitration agreement. In
-                                    doing so, YOU GIVE UP YOUR RIGHT TO GO TO COURT to assert or defend any claims between you and the
+                                    doing so, <strong>YOU GIVE UP YOUR RIGHT TO GO TO COURT</strong> to assert or defend any claims between you and the
                                     Company (except for matters that may be taken to
-                                    small-claims court). YOU ALSO GIVE UP YOUR RIGHT TO PARTICIPATE IN A CLASS ACTION OR OTHER CLASS
-                                    PROCEEDING. Your rights will be determined by a NEUTRAL ARBITRATOR, NOT A JUDGE OR JURY, and the
+                                    small-claims court). <strong>YOU ALSO GIVE UP YOUR RIGHT TO PARTICIPATE IN A CLASS ACTION OR OTHER CLASS
+                                    PROCEEDING.</strong> Your rights will be determined by a <strong>NEUTRAL ARBITRATOR, NOT A JUDGE OR JURY,</strong> and the
                                     arbitrator shall determine all
                                     issues regarding the arbitrability of the dispute. You are entitled to a fair hearing before the
                                     arbitrator. The arbitrator can grant any relief that a court can, but you should note that arbitration
@@ -1755,6 +1755,7 @@
                                 <p
                                     class="text"
                                 >Please contact us at support@verdict.org with any questions regarding these Terms.</p>
+																<br>
                                 <p class="text">
                                     <i>Date of Last Revision: February 7, 2019</i>
                                 </p>

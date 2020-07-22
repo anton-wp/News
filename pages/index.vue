@@ -70,16 +70,24 @@
     <div v-for="(posts, index) of arrayPosts" :key="index">
       <div class="wrapper-block-news">
         <div class="container">
-          <div class="row top-verdict pt-3 pt-md-5 pb-md-4">
-            <div class="col-12 col-lg-4 col-md-6" v-for="post in posts.slice(0, 2)" :key="post.id">
+          <div class="row top-verdict pt-3 pt-md-5 pb-md-5">
+            <div
+              class="col-12 col-md-6 custom-lg-midle"
+              v-for="post in posts.slice(0, 2)"
+              :key="post.id"
+            >
               <top-news-card :post="post" />
             </div>
-            <div class="col-12 col-lg-4 col-md-6 col-12 pt-3 pt-md-0">
+            <div class="col-12 custom-lg-small col-md-6 col-12 pt-3 pt-lg-0">
               <div v-if="index === 0" class="wrapper-title-hot">
                 <h5 class="title-hot">
                   <span>top verdicts</span>
                 </h5>
-									<block-verdict-home v-for="verdict in verdictTop" :key="verdict.id" :data="verdict" />
+                <block-verdict-home
+                  v-for="verdict in verdictTop"
+                  :key="verdict.id"
+                  :data="verdict"
+                />
               </div>
             </div>
           </div>
@@ -112,13 +120,14 @@
                   <follow-block v-if="index === 0" :posts="true" />
                   <SidebarWithRecent v-if="index === 0" />
                   <default-news-card
+										class="mb-8"
                     v-else
                     v-for="post in posts.slice(19, 23)"
                     :key="post.id"
                     type="first-block"
                     :post="post"
                     :padding="true"
-										:image="true"
+                    :image="true"
                   />
                 </div>
               </div>
@@ -153,7 +162,7 @@
         </div>
       </div>
     </div>
-    <div class="wrapper-block-news" v-if="pagination && pagination.next">
+    <div class="wrapper-block-news mt-8" v-if="pagination && pagination.next">
       <div class="container">
         <div class="row">
           <div class="col-12">
@@ -182,7 +191,7 @@ export default {
     GorizontalNewsCard,
     followBlock,
     SidebarWithRecent,
-		BlockVerdictHome
+    BlockVerdictHome
   },
 
   amp: "hybrid",
@@ -195,8 +204,8 @@ export default {
       limit: 19,
       loadMoreText: "load more",
       arrayPosts: [],
-			headerMenu: null,
-			verdictTop: []
+      headerMenu: null,
+      verdictTop: []
     };
   },
 
@@ -232,7 +241,7 @@ export default {
       this.$axios
         .$get("/api/comments/verdicts/top")
         .then(res => {
-					this.verdictTop = res.data
+          this.verdictTop = res.data;
           // console.log(res);
         })
         .catch(error => console.error(error));

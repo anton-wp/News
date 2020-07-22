@@ -51,6 +51,7 @@
                                     class="text"
                                 >Today we are all members of the large community shaping the world of tomorrow!</p>
                                 <p class="text">Join VERDICT, what is yours today?</p>
+																<br>
                             </div>
                             <div class="paragraph">
                                 <h5>

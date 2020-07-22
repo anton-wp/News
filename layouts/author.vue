@@ -1,12 +1,11 @@
 <template>
-  <div class="author-layout">
+  <div class="author-layout page__default">
     <custom-svg />
     <app-header />
-    <hot-news />
     <breadcrumbs />
     <big-header />
     <get-profile />
-    <div class="container">
+    <div class="container page__content">
       <div class="row">
         <div class="col-12 profile-bottom">
           <div class="line" />
@@ -26,7 +25,6 @@
 
 <script>
 import CustomSvg from "~/components/module/CustomSvg";
-import HotNews from "~/components/layout/HotNews";
 import AppHeader from "~/components/layout/AppHeader";
 import BigHeader from "~/components/profile/bigHeader";
 import Breadcrumbs from "~/components/layout/Breadcrumbs";
@@ -41,7 +39,6 @@ export default {
     CustomSvg,
     AppHeader,
     AppFooter,
-    HotNews,
     BigHeader,
     Breadcrumbs,
     NotFound,

@@ -39,14 +39,19 @@
 	}
 
 	.policy-wrapper {
-		margin-top: 20px;
+		// margin-top: 20px;
 		width: 100%;
+
+		h4 {
+			font-weight: 400;
+			padding: 16px 15px;
+		}
 
 		.container {
 			max-width: $global-width;
 
 			.padding-0 {
-				padding: 0;
+				padding-right: 2.1em;
 			}
 
 			.search-name {
@@ -57,13 +62,13 @@
 				color: #6d6d6d;
 				font-weight: bold;
 				font-family: "Open Sans";
-				padding-left: 10px;
+				padding-left: 15px;
 				margin-bottom: 1em;
 				&::before {
 					content: "";
 					position: absolute;
 					display: block;
-					top: 35px;
+					top: 41px;
 					height: 3px;
 					background-color: $primary_color;
 					content: "";
@@ -73,7 +78,7 @@
 
 			.primary-form {
 				width: 100%;
-				padding-left: 10px;
+				padding-left: 15px;
 				padding-right: 10px;
 				margin-bottom: 2.9em;
 				font-size: 1.3em;

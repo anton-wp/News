@@ -1,10 +1,9 @@
 <template>
-  <div>
+  <div class="page__default">
     <custom-svg />
     <app-header />
-    <hot-news />
     <breadcrumbs />
-    <nuxt />
+    <nuxt  class="page__content" />
     <app-footer />
     <!-- <back-to-top bottom="50px" right="50px">
       <button type="button" class="btn btn-info btn-to-top">
@@ -16,7 +15,6 @@
 
 <script>
 import CustomSvg from "~/components/module/CustomSvg";
-import HotNews from "~/components/layout/HotNews";
 import AppHeader from "~/components/layout/AppHeader";
 import Breadcrumbs from "~/components/layout/Breadcrumbs";
 import AppFooter from "~/components/layout/AppFooter";
@@ -28,7 +26,6 @@ export default {
     CustomSvg,
     AppHeader,
     AppFooter,
-    HotNews,
     Breadcrumbs,
     // BackToTop
   }

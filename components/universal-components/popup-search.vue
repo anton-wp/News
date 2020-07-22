@@ -13,6 +13,7 @@
           placeholder="Search..."
           autocomplete="off"
           @keyup.enter="activeSearch"
+          v-click-outside="closeSearch"
         />
       </label>
       <p class="about-input-listeners">
@@ -25,10 +26,15 @@
 </template>
 
 <script>
+import ClickOutside from "vue-click-outside";
 export default {
+  directives: {
+    ClickOutside
+  },
   data() {
     return {
-      search: ""
+      search: "",
+      toggle: false
     };
   },
   methods: {
@@ -39,7 +45,10 @@ export default {
       }
     },
     closeSearch() {
-      this.$emit("closeSearch");
+			if(this.toggle) {
+				this.$emit("closeSearch");
+			}
+			this.toggle = true;
     }
   }
 };

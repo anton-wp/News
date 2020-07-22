@@ -7,9 +7,9 @@
             <a href="/" class="footer-logo">
               <img class="footer-logo-icon" src="/image/logo-white.svg" />
             </a>
-            <p
+            <h1
               class="text-block-after-logo"
-            >your opinion on latest news, events, and society developments</p>
+            >your opinion on latest news, events, and society developments</h1>
           </div>
           <div class="second-block col-lg-8 col-xl-6 order-3 order-sm-3 order-md-3 order-lg-2">
             <div class="footer-general-icons-list">

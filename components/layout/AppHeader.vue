@@ -16,105 +16,98 @@
       </div>
     </div>
   </header>
-  <header v-else class="app-header">
-    <template class="wrapper-header">
-      <div class="main-header container">
-        <div class="burger-icon d-lg-none" @click="activeSideBarMenu">
-          <svg width="30" height="35">
-            <use xlink:href="#burger-menu-icon" />
-          </svg>
-        </div>
-        <div class="main-logo">
-          <nuxt-link to="/">
-            <img class="main-logo-img" src="/image/logo.svg" alt="Verdict - Main Logo" />
-          </nuxt-link>
-        </div>
-        <ul id="menu" class="nav-item-list d-none d-sm-none d-md-none d-lg-flex">
-          <li
-            class="nav-item"
-            v-for="category of header.menu.slice(0, cropMenu)"
-            :key="category.order"
-          >
-            <nuxt-link :to="`/${category.path}`" class="general-nav-item-link">{{ category.title }}</nuxt-link>
-          </li>
-          <li id="link" class="nav-item more" @mouseover="popupMoreOn" @mouseleave="popupMoreClose">
-            <span id="more" class="general-nav-item-link">More</span>
-            <span class="shevron">
-              <svg width="12" height="15">
-                <use xlink:href="#chevron-down" />
-              </svg>
-            </span>
-            <div v-if="popupMore" class="popup-more">
-              <ul>
-                <li
-                  class="nav-item"
-                  v-for="category of header.menu.slice(cropMenu, header.menu.length)"
-                  :key="category.order"
-                >
-                  <nuxt-link :to="`/${category.path}`" class="nav-item-link">{{ category.title }}</nuxt-link>
-                </li>
-              </ul>
-            </div>
-          </li>
-        </ul>
-        <div class="nav-signup">
-          <user-profile v-if="true" :authorization="$store.state.auth.loggedIn" />
-          <button
-            v-if="!$store.state.auth.loggedIn"
-            class="signup-btn d-none d-md-block"
-            @click="openLoginPopup('signUp')"
-          >Sign Up</button>
-          <button v-if="$store.state.auth.loggedIn" class="signup-btn d-none d-md-block">
-            <nuxt-link class="link-button" to="/add">Add Post</nuxt-link>
-          </button>
-        </div>
-      </div>
-      <template v-if="SideBarMenu">
-        <div class="background05"></div>
-        <div id="side-menu" class="side-menu" @click="disabledSideBarMenu">
-          <div class="close-sidemenu-icon">
-            <svg width="30" height="30">
-              <use xlink:href="#close" />
+  <div v-else class="app-header">
+    <header>
+      <template class="wrapper-header">
+        <div class="main-header container">
+          <div class="burger-icon d-lg-none" @click="activeSideBarMenu">
+            <svg width="30" height="35">
+              <use xlink:href="#burger-menu-icon" />
             </svg>
           </div>
-          <ul class="menu">
-            <li v-for="item of header.menu" :key="item.order">
-              <nuxt-link class="general-nav-item-link" :to="`/${item.path}`">{{ item.title }}</nuxt-link>
+          <div class="main-logo">
+            <nuxt-link to="/">
+              <img class="main-logo-img" src="/image/logo.svg" alt="Verdict - Main Logo" />
+            </nuxt-link>
+          </div>
+          <ul id="menu" class="nav-item-list d-none d-sm-none d-md-none d-lg-flex">
+            <li
+              class="nav-item"
+              v-for="category of header.menu.slice(0, cropMenu)"
+              :key="category.order"
+            >
+              <nuxt-link
+                :to="`/${category.path}`"
+                class="general-nav-item-link"
+              >{{ category.title }}</nuxt-link>
             </li>
-            <li>
-              <div class="container follow">
-                <span>Follow verdict</span>
-                <div class="social">
-                  <social-block />
-                </div>
+            <li
+              id="link"
+              class="nav-item more"
+              @mouseover="popupMoreOn"
+              @mouseleave="popupMoreClose"
+            >
+              <span id="more" class="general-nav-item-link">More</span>
+              <span class="shevron">
+                <svg width="12" height="15">
+                  <use xlink:href="#chevron-down" />
+                </svg>
+              </span>
+              <div v-if="popupMore" class="popup-more">
+                <ul>
+                  <li
+                    class="nav-item"
+                    v-for="category of header.menu.slice(cropMenu, header.menu.length)"
+                    :key="category.order"
+                  >
+                    <nuxt-link :to="`/${category.path}`" class="nav-item-link">{{ category.title }}</nuxt-link>
+                  </li>
+                </ul>
               </div>
             </li>
           </ul>
-        </div>
-      </template>
-      <!-- <div class="c_modal">
-        <div id="c-modal-verify-phone-modal" class="c_modal-wrapper opened">
-          <div class="c_modal-reveal verify-form-wrap ">
-            <button class="close-modal" (click)="modalClose()">×</button>
-            <div class="c_modal-content">
-              <div class="verify-form-wrap" id="verify-phone-modal">
-                <p>To add your own posts
-                  <a [routerLink]="['/profile/']" (click)="modalClose()" title="Verify">
-                    <u>verify your account by adding a
-                      phone number
-                    </u>
-                  </a>.
-                </p>
-              </div>
-            </div>
+          <div class="nav-signup">
+            <user-profile v-if="true" :authorization="$store.state.auth.loggedIn" />
+            <button
+              v-if="!$store.state.auth.loggedIn"
+              class="signup-btn d-none d-md-block"
+              @click="openLoginPopup('signUp')"
+            >Sign Up</button>
+            <button v-if="$store.state.auth.loggedIn" class="signup-btn d-none d-md-block">
+              <nuxt-link class="link-button" to="/add">Add Post</nuxt-link>
+            </button>
           </div>
         </div>
-      </div>-->
-      <transition name="modal">
-        <login-popup v-if="loginModal.open" />
-      </transition>
-    </template>
-  </header>
+        <template v-if="SideBarMenu">
+          <div class="background05"></div>
+          <div id="side-menu" class="side-menu" @click="disabledSideBarMenu">
+            <div class="close-sidemenu-icon">
+              <svg width="30" height="30">
+                <use xlink:href="#close" />
+              </svg>
+            </div>
+            <ul class="menu">
+              <li v-for="item of header.menu" :key="item.order">
+                <nuxt-link class="general-nav-item-link" :to="`/${item.path}`">{{ item.title }}</nuxt-link>
+              </li>
+              <li>
+                <div class="container follow">
+                  <span>Follow verdict</span>
+                  <div class="social">
+                    <social-block />
+                  </div>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </template>
+        <transition name="modal">
+          <login-popup v-if="loginModal.open" />
+        </transition>
+      </template>
+    </header>
+    <hot-news />
+  </div>
 </template>
 
 <script>
@@ -123,6 +116,7 @@ import UserProfile from "~/components/user/UserProfile";
 import LoginPopup from "~/components/layout/LoginPopup";
 import SocialBlock from "~/components/universal-components/socialBlock.vue";
 import { mapGetters } from "vuex";
+import HotNews from "~/components/layout/HotNews";
 
 export default {
   amp: "hybrid",
@@ -131,7 +125,8 @@ export default {
   components: {
     UserProfile,
     LoginPopup,
-    SocialBlock
+    SocialBlock,
+    HotNews
   },
   data() {
     return {

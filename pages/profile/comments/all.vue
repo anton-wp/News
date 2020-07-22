@@ -96,7 +96,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "../../../assets/utils/variables";
+@import "../../../assets/config/variables";
 @import "../../../assets/utils/colors";
 
 .img {
