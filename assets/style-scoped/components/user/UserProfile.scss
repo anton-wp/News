@@ -81,13 +81,16 @@
 
 	.icon {
 		display: inline-block;
-		margin: 9px 0 0 9px;
+		margin: 9px 0 0 3px;
 		user-select: none;
 		cursor: pointer;
 
 		svg {
 			width: 24px;
 			height: 24px;
+		}
+		@media (max-width: 576px) {
+			margin: 9px 0 0 9px;
 		}
 		@media (max-width: 480px) {
 			margin: 9px 0 0 0;
@@ -146,21 +149,6 @@
 		box-shadow: 2px 4px 16px 0 rgba(35, 36, 40, 0.26);
 		user-select: none;
 		transition: 0.3;
-		animation: animation linear 0.2s;
-
-		@keyframes animation {
-			0% {
-				opacity: 0;
-				transform: translateY(20px);
-				// transform: rotateX(100deg);
-			}
-
-			100% {
-				opacity: 1;
-				transform: translateY(0px);
-				// transform: rotateY(0deg);
-			}
-		}
 
 		// font-weight: 700;
 		&::before {

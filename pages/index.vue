@@ -200,7 +200,7 @@ export default {
   data() {
     return {
       pagination: null,
-      page: 1,
+      page: 0,
       limit: 19,
       loadMoreText: "load more",
       arrayPosts: [],
@@ -242,19 +242,22 @@ export default {
         .$get("/api/comments/verdicts/top")
         .then(res => {
           this.verdictTop = res.data;
-          // console.log(res);
         })
         .catch(error => console.error(error));
     },
     loadMore() {
-      this.page = this.page + 1;
+      if(this.page === 0){
+				this.page = this.page + 19;
+			}else {
+				this.page =this.page + 23
+			}
       this.limit = 23;
       this.getPosts();
     },
     getPosts() {
       this.loadMoreText = "loading";
       this.$axios
-        .$get(`/api/posts/?limit=${this.limit}&page=${this.page}`)
+        .$get(`/api/posts/?limit=${this.limit}&offset=${this.page}`)
         .then(res => {
           this.arrayPosts.push(res.data);
           this.pagination = res.pagination;

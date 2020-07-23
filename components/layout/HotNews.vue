@@ -1,15 +1,16 @@
 <template>
   <div class="hot-news-wrapper">
     <div class="hot-news">
-      <div class="hot-news-title">
-        Latest:
-      </div>
+      <div class="hot-news-title">Latest:</div>
       <div class="hot-news-item-list-wrapper">
-        <div class="hot-news-item-list" :class="hoverClass || ''" @mouseenter="hoverClass='stop-animation'" @mouseleave="hoverClass=''">
+        <div
+          class="hot-news-item-list"
+          :class="hoverClass || ''"
+          @mouseenter="hoverClass='stop-animation'"
+          @mouseleave="hoverClass=''"
+        >
           <div class="hot-news-item" v-for="(item, index) in header.news" :key="index">
-            <nuxt-link class="hot-news-link" v-bind:to="`/l/${item.slug}`">
-              {{ item.name }}
-            </nuxt-link>
+            <nuxt-link class="hot-news-link" v-bind:to="`/l/${item.slug}`">{{ item.name }}</nuxt-link>
           </div>
         </div>
       </div>
@@ -19,37 +20,39 @@
         </svg>
       </div>
     </div>
-    <search-popup v-if="showPopusSearch" @closeSearch="closeSearch" />
+    <transition name="modal-search">
+      <search-popup v-if="showPopusSearch" @closeSearch="closeSearch" />
+    </transition>
   </div>
 </template>
 
 <script>
-import {mapState} from 'vuex'
-import SearchPopup from '~/components/universal-components/popup-search.vue'
-import { log } from 'util'
+import { mapState } from "vuex";
+import SearchPopup from "~/components/universal-components/popup-search.vue";
+import { log } from "util";
 
 export default {
   components: {
-    SearchPopup
+    SearchPopup,
   },
-  data () {
+  data() {
     return {
       showPopusSearch: false,
-			hoverClass: String,
-      tags: []
-    }
+      hoverClass: String,
+      tags: [],
+    };
   },
-	computed: {
-		...mapState(['header'])
-	},
+  computed: {
+    ...mapState(["header"]),
+  },
   methods: {
-    openSearch () {
-      this.showPopusSearch = true
+    openSearch() {
+      this.showPopusSearch = true;
     },
-    closeSearch () {
-      this.showPopusSearch = false
-    }
-  }
-}
+    closeSearch() {
+      this.showPopusSearch = false;
+    },
+  },
+};
 </script>
 

@@ -33,31 +33,6 @@
                   <use v-bind:xlink:href="`#${icon.linkName}`" />
                 </svg>
               </a>
-              <!-- <a class="touchable-social-zone">
-                <svg width="30" height="30">
-                  <use xlink:href="#twitter" />
-                </svg>
-              </a>
-              <a class="touchable-social-zone">
-                <svg width="30" height="30">
-                  <use xlink:href="#pinterest" />
-                </svg>
-              </a>
-              <a class="touchable-social-zone">
-                <svg width="30" height="30">
-                  <use xlink:href="#feed" />
-                </svg>
-              </a>
-              <a class="touchable-social-zone">
-                <svg width="30" height="30">
-                  <use xlink:href="#feedburner" />
-                </svg>
-              </a>
-              <a class="touchable-social-zone">
-                <svg width="30" height="30">
-                  <use xlink:href="#instagram" />
-                </svg>
-              </a>-->
             </div>
             <div class="copyright-text d-none d-sm-block">
               <span class="text-string">Copyright © 2018-2020 VERDICT, LLC - All Rights Reserved.</span>
@@ -86,6 +61,13 @@
         </div>
       </div>
     </div>
+    <transition name="scroll">
+      <div v-if="scroll" class="button__scroll__top" @click="ScrollToTop">
+        <svg width="20" height="20">
+          <use xlink:href="#big-angle-up" />
+        </svg>
+      </div>
+    </transition>
   </div>
 </template>
 
@@ -93,24 +75,47 @@
 export default {
   data() {
     return {
+      scroll: false,
       social: [
         { linkName: "facebook", link: "https://www.facebook.com/VerdictNews/" },
         { linkName: "twitter", link: "https://twitter.com/VerdictWebsite" },
         {
-          linkName: "instagram",
-          link: "https://www.instagram.com/verdictnews/",
-        },
-        {
           linkName: "pinterest",
           link: "https://www.pinterest.com/VerdictNews/",
         },
+        { linkName: "feed", link: "/feed/" },
         {
           linkName: "feedburner",
           link: "https://feeds.feedburner.com/VerdictNews",
         },
-        { linkName: "feed", link: "/feed/" },
+        {
+          linkName: "instagram",
+          link: "https://www.instagram.com/verdictnews/",
+        },
       ],
     };
+  },
+  mounted() {
+    if (process.env !== "server") {
+      window.addEventListener("scroll", this.updateScroll);
+    }
+    this.updateScroll();
+  },
+  methods: {
+    updateScroll() {
+      if (window.scrollY > 600) {
+        this.scroll = true;
+      } else {
+        this.scroll = false;
+      }
+    },
+    ScrollToTop() {
+      window.scroll({
+        top: 0,
+        left: 0,
+        behavior: "smooth",
+      });
+    },
   },
 };
 </script>

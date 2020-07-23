@@ -42,18 +42,20 @@
           <use xlink:href="#chevron-down" />
         </svg>
       </div>
-      <div id="sign-popup" class="sign-popup" v-if="showPopup">
-        <ul class="sign-popup-ul" v-if="!authorization">
-          <li class="sign-popup-ul-item" @click="openLoginPopup('logIn')">Log In</li>
-          <li class="sign-popup-ul-item" @click="openLoginPopup('signUp')">Sign Up</li>
-        </ul>
-        <ul class="sign-popup-ul" v-if="authorization">
-          <nuxt-link class="sign-popup-ul-item" to="/profile/dashboard/">Profile</nuxt-link>
-          <nuxt-link class="sign-popup-ul-item" to="/profile/notifications/">Notification</nuxt-link>
-          <nuxt-link class="sign-popup-ul-item" to="/profile/settings/">Settings</nuxt-link>
-          <nuxt-link class="sign-popup-ul-item" @click.native="logout" to="/">Logout</nuxt-link>
-        </ul>
-      </div>
+      <transition name="sing-popup">
+        <div id="sign-popup" class="sign-popup" v-if="showPopup">
+          <ul class="sign-popup-ul" v-if="!authorization">
+            <li class="sign-popup-ul-item" @click="openLoginPopup('logIn')">Log In</li>
+            <li class="sign-popup-ul-item" @click="openLoginPopup('signUp')">Sign Up</li>
+          </ul>
+          <ul class="sign-popup-ul" v-if="authorization">
+            <nuxt-link class="sign-popup-ul-item" to="/profile/dashboard/">Profile</nuxt-link>
+            <nuxt-link class="sign-popup-ul-item" to="/profile/notifications/">Notification</nuxt-link>
+            <nuxt-link class="sign-popup-ul-item" to="/profile/settings/">Settings</nuxt-link>
+            <nuxt-link class="sign-popup-ul-item" @click.native="logout" to="/">Logout</nuxt-link>
+          </ul>
+        </div>
+      </transition>
     </div>
   </div>
 </template>
@@ -66,28 +68,28 @@ import ClickOutside from "vue-click-outside";
 
 export default {
   directives: {
-    ClickOutside
+    ClickOutside,
   },
   components: {
-    BlockNotification
+    BlockNotification,
   },
   props: {
-    authorization: Boolean
+    authorization: Boolean,
   },
   data() {
     return {
       showPopup: false,
-      modalNotification: false
+      modalNotification: false,
     };
   },
   computed: {
-    ...mapState(["loginModal"])
+    ...mapState(["loginModal"]),
   },
   methods: {
     openLoginPopup(type) {
       let data = {
         open: true,
-        type: type
+        type: type,
       };
       this.$store.commit("UPDATE_LOGIN_POPUP", data);
     },
@@ -103,14 +105,14 @@ export default {
     },
     logout() {
       // console.log(this.$cookies)
-			this.$auth.logout("local").then(() => {});
+      this.$auth.logout("local").then(() => {});
 
-			this.$store.commit('CLEAR_BOOKMARKS')
-			this.$store.commit('CLEAR_SUBSCRIPTION')
+      this.$store.commit("CLEAR_BOOKMARKS");
+      this.$store.commit("CLEAR_SUBSCRIPTION");
 
       // location.reload();
-    }
-  }
+    },
+  },
 };
 </script>
 

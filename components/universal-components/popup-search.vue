@@ -29,12 +29,12 @@
 import ClickOutside from "vue-click-outside";
 export default {
   directives: {
-    ClickOutside
+    ClickOutside,
   },
   data() {
     return {
       search: "",
-      toggle: false
+      toggle: false,
     };
   },
   methods: {
@@ -45,11 +45,11 @@ export default {
       }
     },
     closeSearch() {
-			if(this.toggle) {
-				this.$emit("closeSearch");
-			}
-			this.toggle = true;
-    }
-  }
+      if (this.toggle) {
+        this.$emit("closeSearch");
+      }
+      this.toggle = true;
+    },
+  },
 };
 </script>

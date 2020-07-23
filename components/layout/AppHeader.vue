@@ -73,7 +73,7 @@
               class="signup-btn d-none d-md-block"
               @click="openLoginPopup('signUp')"
             >Sign Up</button>
-            <button v-if="$store.state.auth.loggedIn" class="signup-btn d-none d-md-block">
+            <button v-if="$store.state.auth.loggedIn" class="signup-btn d-none d-sm-block">
               <nuxt-link class="link-button" to="/add">Add Post</nuxt-link>
             </button>
           </div>
@@ -126,7 +126,7 @@ export default {
     UserProfile,
     LoginPopup,
     SocialBlock,
-    HotNews
+    HotNews,
   },
   data() {
     return {
@@ -134,7 +134,7 @@ export default {
       isToken: false,
       windowWidth: 0,
       cropMenu: 0,
-      SideBarMenu: false
+      SideBarMenu: false,
     };
   },
   mounted() {
@@ -143,7 +143,7 @@ export default {
       this.$store.dispatch("getSubscriptions");
       this.$store.dispatch("getVotes");
     }
-    this.$nextTick(function() {
+    this.$nextTick(function () {
       window.addEventListener("resize", this.getWindowWidth);
       //Init
       this.getWindowWidth();
@@ -151,7 +151,7 @@ export default {
   },
 
   computed: {
-    ...mapState(["header", "bookmarks", "subscriptions", "loginModal"])
+    ...mapState(["header", "bookmarks", "subscriptions", "loginModal"]),
   },
   methods: {
     // getBookmarks() {
@@ -173,8 +173,8 @@ export default {
     getMenu() {
       this.$axios
         .$get(`/api/menu/header`)
-        .then(res => this.$store.commit("SET_HEADER_MENU", res.data))
-        .catch(error => console.error(error));
+        .then((res) => this.$store.commit("SET_HEADER_MENU", res.data))
+        .catch((error) => console.error(error));
     },
     disabledSideBarMenu() {
       this.SideBarMenu = false;
@@ -189,8 +189,13 @@ export default {
         document.documentElement.offsetWidth === 993
       ) {
         this.cropMenu = 3;
+      } else if (
+        document.documentElement.offsetWidth === 975 ||
+        document.documentElement.offsetWidth === 976
+      ) {
+				this.cropMenu = 4;
       } else if (document.documentElement.offsetWidth < 1200) {
-        this.cropMenu = Math.floor(menu.offsetWidth / 100 - 1);
+        this.cropMenu = 4;
       } else {
         this.cropMenu = Math.floor(menu.offsetWidth / 100 - 0.1);
       }
@@ -198,21 +203,21 @@ export default {
     openLoginPopup(type) {
       let data = {
         open: true,
-        type: type
+        type: type,
       };
       this.$store.commit("UPDATE_LOGIN_POPUP", data);
     },
     closeLoginPopup() {
       let data = {
         open: false,
-        type: ""
+        type: "",
       };
       this.$store.commit("UPDATE_LOGIN_POPUP", data);
     },
     changeLoginPopup(type) {
       let data = {
         open: true,
-        type: type
+        type: type,
       };
       this.$store.commit("UPDATE_LOGIN_POPUP", data);
     },
@@ -228,11 +233,11 @@ export default {
     },
     token() {
       return true;
-    }
+    },
   },
   beforeDestroy() {
     window.removeEventListener("resize", this.getWindowWidth);
-  }
+  },
 };
 </script>
 
