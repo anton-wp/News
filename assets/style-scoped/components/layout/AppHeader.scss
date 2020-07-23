@@ -19,11 +19,11 @@
 
 	.main-header {
 		display: grid;
-		grid-gap: 24px;
+		grid-gap: 17px;
 		max-width: $global-width;
 		margin: 0 auto;
 		margin-left: 0;
-		padding: 7px 10px 11px 15px;
+		padding: 7px 10px 11px 10px;
 		grid-template-columns: auto 1fr auto;
 		align-items: center;
 		left: 50%;
@@ -225,7 +225,7 @@
 
 	@media (max-width: 480px) {
 		.nav-signup {
-			margin-right: 15px;
+			// margin-right: 15px;
 		}
 		.main-header {
 			grid-template-columns: auto 1fr auto;

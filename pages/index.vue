@@ -72,14 +72,14 @@
         <div class="container">
           <div class="row top-verdict pt-3 pt-md-5 pb-md-5">
             <div
-              class="col-12 col-md-6 custom-lg-midle"
+              class="col-12 col-md-6 custom-lg-midle h-100"
               v-for="post in posts.slice(0, 2)"
               :key="post.id"
             >
               <top-news-card :post="post" />
             </div>
             <div class="col-12 custom-lg-small col-md-6 col-12 pt-3 pt-lg-0">
-              <div v-if="index === 0" class="wrapper-title-hot">
+              <div v-if="index === 0" class="wrapper-title-hot px-3 px-sm-0">
                 <h5 class="title-hot">
                   <span>top verdicts</span>
                 </h5>

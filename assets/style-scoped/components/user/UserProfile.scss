@@ -89,6 +89,10 @@
 			width: 24px;
 			height: 24px;
 		}
+		@media (max-width: 480px) {
+			margin: 9px 0 0 0;
+			margin-left: 5px;
+		}
 	}
 
 	.icon-notification {

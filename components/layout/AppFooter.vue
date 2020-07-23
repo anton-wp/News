@@ -22,12 +22,18 @@
               <a class="footer-general-link">SITEMAP</a>
             </div>
             <div class="footer-social-icons-list">
-              <a class="touchable-social-zone">
+              <a
+                class="touchable-social-zone"
+                v-for="icon in social"
+                :key="icon.linkName"
+                v-bind:class="icon.linkName"
+                :href="icon.link"
+              >
                 <svg width="30" height="30">
-                  <use xlink:href="#facebook" />
+                  <use v-bind:xlink:href="`#${icon.linkName}`" />
                 </svg>
               </a>
-              <a class="touchable-social-zone">
+              <!-- <a class="touchable-social-zone">
                 <svg width="30" height="30">
                   <use xlink:href="#twitter" />
                 </svg>
@@ -51,7 +57,7 @@
                 <svg width="30" height="30">
                   <use xlink:href="#instagram" />
                 </svg>
-              </a>
+              </a>-->
             </div>
             <div class="copyright-text d-none d-sm-block">
               <span class="text-string">Copyright © 2018-2020 VERDICT, LLC - All Rights Reserved.</span>
@@ -71,7 +77,7 @@
                 <img class="market-place-icon google-play" src="/image/google-play-badge.svg" alt="Verdict">
 
               </button>
-            </div> -->
+            </div>-->
 
             <div class="copyright-text d-block d-sm-none">
               <span class="text-string">Copyright © 2018-2020 VERDICT, LLC - All Rights Reserved.</span>
@@ -82,3 +88,29 @@
     </div>
   </div>
 </template>
+
+<script>
+export default {
+  data() {
+    return {
+      social: [
+        { linkName: "facebook", link: "https://www.facebook.com/VerdictNews/" },
+        { linkName: "twitter", link: "https://twitter.com/VerdictWebsite" },
+        {
+          linkName: "instagram",
+          link: "https://www.instagram.com/verdictnews/",
+        },
+        {
+          linkName: "pinterest",
+          link: "https://www.pinterest.com/VerdictNews/",
+        },
+        {
+          linkName: "feedburner",
+          link: "https://feeds.feedburner.com/VerdictNews",
+        },
+        { linkName: "feed", link: "/feed/" },
+      ],
+    };
+  },
+};
+</script>

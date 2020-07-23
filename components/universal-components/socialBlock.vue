@@ -1,9 +1,9 @@
 <template>
   <div class="row socialBlock">
     <a
+      class="social-icon-round"
       v-for="icon in social"
       :key="icon.linkName"
-      class="social-icon-round"
       v-bind:class="icon.linkName"
 			:href="icon.link"
     >
