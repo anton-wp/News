@@ -57,10 +57,26 @@
     <div class="policy-wrapper animation">
       <div class="container">
         <div class="row">
-          <div class="col-12 col-lg-8">
-            <h1 class="category-page-title mt-0 ml-2 ml-md-0">{{term.name}}</h1>
+          <div class="col-12 col-lg-8 px-md-3 pr-lg-5">
+            <div class="d-flex align-items-center mt-0 pl-2 pl-md-0 pr-5 pr-md-0 mb-3">
+              <h1 class="category-page-title mt-0 mb-0">{{term.name}}</h1>
+              <div v-if="tag" class="ml-auto">
+                <button class="button-followed follow">Follow</button>
+              </div>
+            </div>
+            <!-- :class="full ? 'follow-full' : 'follow'"
+              v-if="!subscriptions.includes(id) && !loading"
+              @click="Subscribe"
+            :disabled="disabled()"-->
+            <!-- <button
+              class="button-followed unfollow"
+              :class="full ? 'unfollow-full' : 'unfollow'"
+              v-if="subscriptions.includes(id) && !loading"
+              @click="Unsubscribe"
+            >Unfollow</button>
+            <button class="button-followed unfollow" v-if="loading">Loading</button>-->
             <div class="row" v-for="(data, index) in posts" :key="index">
-              <div class="col-12 mb-3" v-for="post in data.slice(0, 1)" :key="post.id">
+              <div class="col-12 mb-8" v-for="post in data.slice(0, 1)" :key="post.id">
                 <top-news-card :tag="tag" padding :post="post" />
               </div>
               <div class="col-12 col-md-6 mb-3" v-for="post in data.slice(1, 3)" :key="post.id">
@@ -74,7 +90,7 @@
                   :background="false"
                 />
               </div>
-              <div class="col-12 mb-3" v-for="post in data.slice(6, 7)" :key="post.id">
+              <div class="col-12 mb-8" v-for="post in data.slice(6, 7)" :key="post.id">
                 <top-news-card :post="post" :tag="tag" />
               </div>
               <div class="col-12 col-md-6 mb-3" v-for="post in data.slice(7, 9)" :key="post.id">
@@ -99,7 +115,7 @@
               </div>
             </div>
           </div>
-          <div class="col-lg-4 px-0 pl-md-5">
+          <div class="col-lg-4 px-0 px-md-3">
             <follow-block :posts="false" />
           </div>
         </div>
@@ -119,8 +135,12 @@ export default {
     TopNewsCard,
     DefaultNewsCard,
     GorizontalNewsCard,
-		FollowBlock,
-
+    FollowBlock,
+  },
+  head() {
+    return {
+      title: this.tag ? this.term.name + " | Verdict" : 'Top stories and discussions on Verdict for ' + this.term.name ,
+    };
   },
   data() {
     return {
@@ -129,7 +149,7 @@ export default {
       page: 1,
       paginations: Object,
       api: "",
-      loadMoreText: ""
+      loadMoreText: "",
     };
   },
   props: {
@@ -138,16 +158,16 @@ export default {
     pagination: Object,
     tag: Boolean,
     term: Object,
-    headerMenu: Array
+    headerMenu: Array,
   },
   created() {
+    console.log(this.tag);
     this.loadMoreText = `more ${
       this.term.name === "news" ? "" : this.term.name
     } news`;
     this.$store.commit("SET_BREADCRUMBS", [{ title: this.term.name }]);
   },
   mounted() {
-		console.log(this.tag)
     this.posts.push(this.data);
     this.paginations = this.pagination;
     if (this.tag) {
@@ -161,22 +181,22 @@ export default {
         .$get(
           `/api/${this.api}${this.slug}?limit=${this.limit}&page=${this.page}`
         )
-        .then(data => {
+        .then((data) => {
           this.posts.push(data.data);
           this.paginations = data.pagination;
           this.loadMoreText = `more ${
             this.term.name === "news" ? "" : this.term.name
           } news`;
         })
-        .catch(error => {
+        .catch((error) => {
           console.log(error);
         });
     },
     loadMore() {
       this.page = this.page + 1;
       this.getPosts();
-    }
-  }
+    },
+  },
 };
 </script>
 

@@ -885,7 +885,7 @@
                 <div class="row">
                     <div class="col-lg-8">
                         <div class="wrapper-terms">
-                            <h1 class="terms-page-title">TERMS OF SERVICE</h1>
+                            <h1 class="terms-page-title mx-n1 mx-sm-3 mx-md-0">TERMS OF SERVICE</h1>
                             <p class="text">
                                 Welcome to Verdict, a social networking platform operated by Verdict, LLC a Delaware Limited Liability
                                 Company (the
@@ -1762,7 +1762,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-lg-4">
+                    <div class="col-lg-4 px-0 px-md-3">
                         <follow />
                     </div>
                 </div>

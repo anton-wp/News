@@ -49,7 +49,7 @@
               </div>
             </div>
           </div>
-          <div class="col-lg-4">
+          <div class="col-lg-4 px-0 px-md-3">
             <follow />
           </div>
         </div>

@@ -88,11 +88,11 @@
     <div class="policy-wrapper px-0">
       <div class="container">
         <div class="row">
-          <div class="col-12 col-lg-8">
+          <div class="col-12 col-lg-8 px-md-3 pr-lg-5">
             <div class="container pad0 px-0">
-              <div class="row">
+              <div class="row mx-0">
                 <button-block-head :id="data.id" :slug="data.slug" :category="data.category" :data="data"/>
-                <div class="col-lg-12 px-2">
+                <div class="col-lg-12 px-0">
                   <h1 class="post-page-title">{{data.title}}</h1>
                   <h2>{{data.subTitle}}</h2>
                 </div>
@@ -112,7 +112,7 @@
                     </div>
                   </div>
                 </div>
-                <div class="col-12 px-2" v-if="!review">
+                <div class="col-12 px-0" v-if="!review">
                   <social-block v-if="data" :post="data" @changeFontSize="changeFontSize" />
                 </div>
                 <div class="col-lg-12 px-0">
@@ -131,7 +131,7 @@
                     <!-- {{data.body}} -->
                   </p>
                 </div>
-                <div class="col-12 px-2" v-if="!review">
+                <div class="col-12 px-0" v-if="!review">
                   <social-block v-if="data" :post="data" @changeFontSize="changeFontSize" />
                 </div>
                 <!-- <social-block [(fontSize)]="bodySize" class="col-lg-12"></social-block> -->
@@ -187,7 +187,7 @@
                     <button @click="createdComment(true)">agree</button>
                     <button @click="createdComment(false)">disagree</button>
                   </div>
-                  <div class="sort-comments mx-2">
+                  <div class="sort-comments mx-2" v-if="comments.length > 0">
                     <button
                       v-for="(sortAc, index) in sortActions"
                       :key="index"
@@ -249,8 +249,8 @@
               </div>
             </div>
           </div>
-          <div class="col-lg-4 px-0 pl-md-5">
-            <follow v-if="!review" />
+          <div class="col-lg-4 px-0 px-md-3">
+            <follow v-if="!review" :recent="true"/>
             <asideReview v-if="data && review" :postData="data" />
           </div>
         </div>

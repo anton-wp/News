@@ -22,7 +22,7 @@
           <span class="label">VOTE(S)</span>
         </div>
       </div>
-      <div class="title">
+      <div class="title-comment">
         <p>{{data.body}}</p>
         <p></p>
         <br />

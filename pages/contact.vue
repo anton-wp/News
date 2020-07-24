@@ -66,7 +66,7 @@
                 <div class="row">
                     <div class="col-lg-8">
                         <div class="wrapper-terms">
-                            <h1 class="terms-page-title">CONTACT</h1>
+                            <h1 class="terms-page-title mx-n1 mx-sm-3 mx-md-0">CONTACT</h1>
                             <p class="text">Verdict Membership Questions</p>
                             <p
                                 class="text"
@@ -184,7 +184,7 @@
                             </form>
                         </div>
                     </div>
-                    <div class="col-lg-4">
+                    <div class="col-lg-4 px-0 px-md-3">
                         <follow />
                     </div>
                 </div>

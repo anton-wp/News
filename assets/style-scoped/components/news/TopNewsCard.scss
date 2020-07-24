@@ -8,14 +8,17 @@
 			background-color: $black05;
 		}
 	}
+
 	.position__verdict__top {
 		position: absolute;
 		left: 1.2em;
 		top: -21px;
-		span{
+
+		span {
 			color: black;
 		}
 	}
+
 	.active {
 		visibility: visible !important;
 	}
@@ -48,6 +51,26 @@
 		}
 	}
 
+
+	&.category {
+		@media (min-width: 769px) {
+			// padding: 4em 1.2em 1.2em;
+			padding: 10em 1.3em 1.25em;
+		}
+	}
+
+	&.category {
+		.top-title {
+			margin-top: 0 !important;
+		}
+
+		@media (min-width: 1200px) {
+			.top-title {
+				font-size: 2.2em !important;
+			}
+		}
+	}
+
 	.wrapper-hot-card {
 		width: 100%;
 		height: 100%;
@@ -57,18 +80,10 @@
 		// position: relative;
 		cursor: pointer;
 
-		&.category {
-			@media (min-width: 992px) {
-				// padding: 4em 1.2em 1.2em;
-				padding: 15em 1.3em 1.25em;
-			}
-
-
-		}
-
 		@media (max-width: 992px) {
 			padding: 4em 1.2em 1.2em;
 		}
+
 		@media (max-width: 768px) {
 			padding: 25vw 1.2em 1.2em;
 		}

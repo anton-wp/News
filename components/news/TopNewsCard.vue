@@ -1,7 +1,7 @@
 <template>
-  <div class="top-news-card">
-    <div class="wrapper-hot-card" :class="padding ? 'category' : ''">
-      <nuxt-link class="img" :to="`/${post.slug}`">
+  <div class="top-news-card" :class="padding ? 'category' : ''">
+    <div class="wrapper-hot-card">
+      <nuxt-link class="img" :title="post.title" :to="`/${post.slug}`">
         <img v-bind:src="post.featured.wide" alt="top news" />
       </nuxt-link>
       <div class="container info">
@@ -9,7 +9,7 @@
           <block-verdict :verdict="post.verdictValue" />
         </div>
         <news-card-header v-if="!tag" colorScheme="light" :post="post" :category="post.category" />
-        <nuxt-link class="wrapp" :to="`/${post.slug}`">
+        <nuxt-link class="wrapp" :title="post.title" :to="`/${post.slug}`">
           <h2 class="title top-title">{{ post.title }}</h2>
         </nuxt-link>
         <div class="shortContent">
@@ -37,18 +37,18 @@ export default {
   components: {
     NewsCardHeader,
     NewsCardFooter,
-    BlockVerdict
+    BlockVerdict,
   },
   props: {
     post: Object,
     category: Boolean,
     tag: Boolean,
-    padding: Boolean
+    padding: Boolean,
   },
   provide() {
     return {
-      id: this.post.id
+      id: this.post.id,
     };
-  }
+  },
 };
 </script>

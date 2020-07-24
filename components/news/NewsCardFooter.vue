@@ -2,7 +2,12 @@
   <div class="news-card-footer">
     <div class="row wrapp" @mouseleave="hide">
       <span class="bywho">
-				 <div v-if="showPopup" id="1" class="user-popup active" :class="bottom ? 'user-popup__bottom' : ''">
+        <div
+          v-if="showPopup"
+          id="1"
+          class="user-popup active"
+          :class="bottom ? 'user-popup__bottom' : ''"
+        >
           <div>
             <popup-user-info :authorId="author.id" />
           </div>
@@ -27,6 +32,12 @@
           <news-card-header-marks :colorScheme="colorScheme" :post="post" :pending="false" />
         </div>
       </span>
+      <!-- <span class="action">
+        <svg width="12" height="15">
+          <use xlink:href="#delete" />
+        </svg>
+        delete
+      </span> -->
     </div>
   </div>
 </template>
@@ -42,17 +53,17 @@ export default {
     showMarks: Boolean,
     author: Object,
     publishedAt: String,
-		tag: Boolean,
-		post: Object,
-		bottom: Boolean
+    tag: Boolean,
+    post: Object,
+    bottom: Boolean,
   },
   components: {
     PopupUserInfo,
-    NewsCardHeaderMarks
+    NewsCardHeaderMarks,
   },
   data() {
     return {
-      showPopup: false
+      showPopup: false,
     };
   },
   methods: {
@@ -61,8 +72,8 @@ export default {
     },
     hide() {
       this.showPopup = false;
-    }
-  }
+    },
+  },
 };
 </script>
 

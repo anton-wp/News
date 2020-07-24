@@ -9,7 +9,7 @@
         v-for="post in posts"
         :key="post.id"
       >
-        <default-news-card :post="post" :padding="true" :image="true" />
+        <default-news-card :post="post" :padding="true" :image="true"  :paddingTop="paddingTop"/>
       </div>
     </div>
   </div>
@@ -26,7 +26,10 @@ export default {
     return {
       posts: []
     };
-  },
+	},
+	props: {
+		paddingTop: Boolean,
+	},
   beforeMount() {
     this.getPost();
   },

@@ -27,9 +27,9 @@
         </div>
       </div>
     </div>
-    <div class="col-12" v-if="!posts">
+    <div class="col-12 px-0" v-if="!posts">
       <sidebar-with-posts />
-			<sidebar-with-recent />
+      <sidebar-with-recent v-if="recent" />
     </div>
   </div>
 </template>
@@ -42,11 +42,12 @@ import SidebarWithRecent from "~/components/universal-components/sidebar-with-re
 export default {
   components: {
     SidebarWithPosts,
-		SocialBlock,
-				SidebarWithRecent
+    SocialBlock,
+    SidebarWithRecent,
   },
   props: {
-    posts: Boolean
-  }
+		posts: Boolean,
+		recent: Boolean
+  },
 };
 </script>

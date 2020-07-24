@@ -470,7 +470,7 @@
                 <div class="row">
                     <div class="col-12 col-lg-8">
                         <div class="wrapper-terms">
-                            <h1 class="policy-page-title">PRIVACY POLICY</h1>
+                            <h1 class="policy-page-title mx-n1 mx-sm-3 mx-md-0">PRIVACY POLICY</h1>
                             <p class="text">
                                 The Verdict website and mobile applications (the “Site”) are
                                 operated by Verdict, LLC. Verdict is committed to respecting and
@@ -935,7 +935,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-lg-4">
+                    <div class="col-lg-4 px-0 px-md-3">
                         <follow />
                         <!-- <vrd-fbc [post]="true"></vrd-fbc> -->
                     </div>

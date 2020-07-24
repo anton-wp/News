@@ -10,7 +10,7 @@
           <div class="position__verdict__default" v-if="post.verdictValue">
             <block-verdict :verdict="post.verdictValue" />
           </div>
-          <nuxt-link :class="'image-'+type" :to="`/${post.slug}`">
+          <nuxt-link :title="post.title" :class="'image-'+type" :to="`/${post.slug}`">
             <img v-bind:src="post.featured.landscape" class="post-image" alt />
           </nuxt-link>
         </div>
@@ -29,11 +29,13 @@
                 <nuxt-link
                   class="title"
                   :to="`/${post.slug}`"
+									:title="post.title"
                   v-if="type === 'full-block'"
                 >{{ post.title }}</nuxt-link>
                 <nuxt-link
                   class="title"
                   :to="`/${post.slug}`"
+									:title="post.title"
                   v-if="type === 'minimal-block'"
                 >{{ post.title }}</nuxt-link>
                 <!-- <nuxt-link v-if="type === 'minimal-block'">{{ post.title }}</nuxt-link> -->

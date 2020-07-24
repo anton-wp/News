@@ -1,7 +1,7 @@
 <template>
   <div class="comment">
     <author-block :author="data.user" :publishedAt="data.createdAt" :type="'comment-replies'" />
-    <div class="title">
+    <div class="title-comment">
       <p>{{data.body}}</p>
       <p></p>
       <br />

@@ -118,7 +118,7 @@
               <div class="row">
                 <div class="col-12">
                   <follow-block v-if="index === 0" :posts="true" />
-                  <SidebarWithRecent v-if="index === 0" />
+                  <SidebarWithRecent v-if="index === 0"  :paddingTop="true" />
                   <default-news-card
 										class="mb-8"
                     v-else
@@ -128,6 +128,7 @@
                     :post="post"
                     :padding="true"
                     :image="true"
+                    :paddingTop="true"
                   />
                 </div>
               </div>
