@@ -18,10 +18,11 @@
           <div class="information padding0">
             <div class="container-fluid">
               <news-card-header
-                v-if="!tag"
-                :category="post.category"
-                :post="post"
-                colorScheme="dark"
+              v-if="!tag"
+              :category="post.category"
+              :post="post"
+              colorScheme="dark"
+              :paddingTop="paddingTop"
               />
               <div class="row block wrapp">
                 <!-- <h2  > -->
@@ -29,13 +30,13 @@
                 <nuxt-link
                   class="title"
                   :to="`/${post.slug}`"
-									:title="post.title"
+                  :title="post.title"
                   v-if="type === 'full-block'"
                 >{{ post.title }}</nuxt-link>
                 <nuxt-link
                   class="title"
                   :to="`/${post.slug}`"
-									:title="post.title"
+                  :title="post.title"
                   v-if="type === 'minimal-block'"
                 >{{ post.title }}</nuxt-link>
                 <!-- <nuxt-link v-if="type === 'minimal-block'">{{ post.title }}</nuxt-link> -->
@@ -69,24 +70,28 @@
 <script>
 import NewsCardHeader from "~/components/news/NewsCardHeader";
 import NewsCardFooter from "~/components/news/NewsCardFooter";
-import BlockVerdict from '~/components/universal-components/block-verdict'
+import BlockVerdict from "~/components/universal-components/block-verdict";
 export default {
   components: {
     NewsCardHeader,
-		NewsCardFooter,
-		BlockVerdict
+    NewsCardFooter,
+    BlockVerdict,
   },
   props: {
     type: String,
     background: Boolean,
     shortContent: Boolean,
     post: Object,
-    tag: Boolean
+    tag: Boolean,
+    paddingTop: Boolean,
   },
   provide() {
     return {
-      id: this.post.id
+      id: this.post.id,
     };
-  }
+  },
+  created() {
+    console.log(this.paddingTop);
+  },
 };
 </script>

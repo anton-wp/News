@@ -9,6 +9,9 @@
 		height: 45px;
 		cursor: pointer;
 		text-decoration: none;
+		@media (max-width: 460px) {
+			height: 37px;
+		}
 
 		&:hover {
 			background-color: #f1f1f1;
@@ -35,9 +38,20 @@
 			justify-content: center;
 			align-items: center;
 			font-size: 25px;
+			@media (max-width: 460px) {
+				width: 37px;
+				height: 37px;
+			}
 
 			svg {
 				fill: $white;
+				width: 29px;
+				height: 29px;
+
+				@media (max-width: 460px) {
+					width: 21px;
+					height: 21px;
+				}
 			}
 		}
 

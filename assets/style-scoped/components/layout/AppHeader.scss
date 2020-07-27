@@ -1,6 +1,6 @@
 .app-header {
 	position: relative;
-	z-index: 6;
+	z-index: 99999999999999999;
 	padding-top: 71px;
 
 	header {
@@ -386,7 +386,7 @@
 		padding-top: 15px;
 		padding-left: 0;
 		position: fixed;
-		overflow: hidden;
+		// overflow: hidden;
 
 		li {
 			list-style: none;
@@ -454,7 +454,7 @@
 
 		.social {
 			margin: 0 auto;
-			width: 175px;
+			// width: 175px;
 		}
 	}
 }

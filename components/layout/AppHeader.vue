@@ -86,19 +86,21 @@
                 <use xlink:href="#close" />
               </svg>
             </div>
-            <ul class="menu">
-              <li v-for="item of header.menu" :key="item.order">
-                <nuxt-link class="general-nav-item-link" :to="`/${item.path}`">{{ item.title }}</nuxt-link>
-              </li>
-              <li>
-                <div class="container follow">
-                  <span>Follow verdict</span>
-                  <div class="social">
-                    <social-block />
+            <div>
+              <ul class="menu">
+                <li v-for="item of header.menu" :key="item.order">
+                  <nuxt-link class="general-nav-item-link" :to="`/${item.path}`">{{ item.title }}</nuxt-link>
+                </li>
+                <li>
+                  <div class="container follow">
+                    <span class="pl-3">Follow verdict</span>
+                    <div class="social">
+                      <social-block :margin="true" />
+                    </div>
                   </div>
-                </div>
-              </li>
-            </ul>
+                </li>
+              </ul>
+            </div>
           </div>
         </template>
         <transition name="modal">
@@ -193,7 +195,7 @@ export default {
         document.documentElement.offsetWidth === 975 ||
         document.documentElement.offsetWidth === 976
       ) {
-				this.cropMenu = 4;
+        this.cropMenu = 4;
       } else if (document.documentElement.offsetWidth < 1200) {
         this.cropMenu = 4;
       } else {

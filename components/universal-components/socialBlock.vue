@@ -2,9 +2,9 @@
   <div class="row socialBlock">
     <a
       class="social-icon-round"
+			:class="[icon.linkName, margin ? 'margin-social-icon' : '']"
       v-for="icon in social"
       :key="icon.linkName"
-      v-bind:class="icon.linkName"
 			:href="icon.link"
     >
       <svg width="30" height="30">
@@ -27,6 +27,9 @@ export default {
         { linkName: "feed", link: "/feed/" }
       ]
     };
-  }
+	},
+	props: {
+		margin: Boolean
+	}
 };
 </script>

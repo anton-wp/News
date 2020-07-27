@@ -1,5 +1,5 @@
 <template>
-  <div class="col-12 blockHead px-2">
+  <div class="col-12 blockHead px-0">
     <nuxt-link v-if="category" class="link" :to="`/${category.slug}`">
       <h5 class="category-name">{{category.name}}</h5>
     </nuxt-link>

@@ -20,7 +20,7 @@
               </svg>
             </div>
             <div v-for="post in posts" :key="post.id" style="padding: 0 30px 0 15px; margin-bottom: 32px;">
-              <gorizontal-news-card type="full-block" :background="true" :post="post" />
+              <gorizontal-news-card type="full-block" :background="true" :post="post" :paddingTop="true"/>
             </div>
 						<h4 v-if="posts.length === 0">Sorry, nothing was found</h4>
           </div>

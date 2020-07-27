@@ -33,6 +33,18 @@ a {
 	overflow: hidden;
 }
 
+@media (max-width: 768px) {
+
+	.col-12 {
+		flex: 0 0 100% !important;
+		max-width: 100% !important;
+	}
+	.px-0 {
+		padding-right: 0 !important;
+		padding-left: 0 !important;
+	}
+}
+
 @media (min-width: 992px) {
 	.custom-lg-small {
 		flex: 0 0 30%;
@@ -69,10 +81,10 @@ a {
 		margin-left: 0px;
 		margin-right: 0px;
 
-		.col-12 {
-			padding-left: 0px;
-			padding-right: 0px;
-		}
+		// .col-12 {
+		// 	padding-left: 0px;
+		// 	padding-right: 0px;
+		// }
 
 		// }
 	}
@@ -80,7 +92,7 @@ a {
 
 .modal-enter-active,
 .modal-leave-active {
-	.form {
+	.form-content {
 		opacity: 1;
 		transform: scale(1);
 	}
@@ -88,7 +100,7 @@ a {
 
 .modal-enter,
 .modal-leave-to {
-	.form {
+	.form-content {
 		opacity: 0;
 		transform: scale(.9);
 	}

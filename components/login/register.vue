@@ -1,5 +1,5 @@
 <template>
-  <div style="padding: 2.4rem 3rem 0em;">
+  <div class="p-3 px-sm-5 pt-sm-9">
     <div class="container in-form-container">
       <div class="row">
         <div class="col-12">

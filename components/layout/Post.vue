@@ -85,18 +85,23 @@
     </div>
   </div>
   <div v-else class="post-layout">
-    <div class="policy-wrapper px-0">
+    <div class="policy-wrapper px-2 px-sm-15 px-md-0 ">
       <div class="container">
         <div class="row">
-          <div class="col-12 col-lg-8 px-md-3 pr-lg-5">
+          <div class="col-12 col-lg-8 px-0 px-md-3 pr-lg-5">
             <div class="container pad0 px-0">
               <div class="row mx-0">
-                <button-block-head :id="data.id" :slug="data.slug" :category="data.category" :data="data"/>
+                <button-block-head
+                  :id="data.id"
+                  :slug="data.slug"
+                  :category="data.category"
+                  :data="data"
+                />
                 <div class="col-lg-12 px-0">
                   <h1 class="post-page-title">{{data.title}}</h1>
                   <h2>{{data.subTitle}}</h2>
                 </div>
-                <div class="col-lg-12">
+                <div class="col-lg-12 px-0 px-md-3">
                   <div class="container px-0">
                     <div class="row" style="margin-bottom: 3.1em;">
                       <div class="col-lg-6 px-0">
@@ -107,7 +112,7 @@
                         style="align-items: center; display: flex;"
                         v-if="!review"
                       >
-                        <marks :data="data"  @scrollToComment="scrollToComment" />
+                        <marks :data="data" @scrollToComment="scrollToComment" />
                       </div>
                     </div>
                   </div>
@@ -171,8 +176,8 @@
                 </div>
                 <div v-if="!draft && !review" class="col-12">
                   <div class="mx-2">
-										<textarea class="form-input with-border" v-model="comment"></textarea>
-									</div>
+                    <textarea class="form-input with-border" v-model="comment"></textarea>
+                  </div>
                   <div class="blockCheckbox">
                     <label for="checkbox" @click="subscribe = !subscribe">
                       <div class="categoryCheckbox">
@@ -250,7 +255,7 @@
             </div>
           </div>
           <div class="col-lg-4 px-0 px-md-3">
-            <follow v-if="!review" :recent="true"/>
+            <follow v-if="!review" />
             <asideReview v-if="data && review" :postData="data" />
           </div>
         </div>
@@ -280,23 +285,23 @@ export default {
     SocialBlock,
     RelatedBlock,
     AsideReview,
-    Comment
+    Comment,
   },
   props: {
     data: Object,
     slug: String,
     prev: {
       type: Object,
-      default: null
+      default: null,
     },
     draft: Boolean,
     next: {
       type: Object,
-      default: null
+      default: null,
     },
     review: Boolean,
     headerMenu: Array,
-    type: String
+    type: String,
   },
 
   head() {
@@ -306,34 +311,34 @@ export default {
         {
           hid: "description",
           name: "description",
-          content: this.data.seoDescription
+          content: this.data.seoDescription,
         },
         {
           hid: "og:title",
           name: "og:title",
-          content: this.data.title
+          content: this.data.title,
         },
         {
           hid: "og:description",
           name: "og:description",
-          content: this.data.seoDescription
+          content: this.data.seoDescription,
         },
         {
           hid: "og:url",
           name: "og:url",
-          content: this.$route.fullPath
+          content: this.$route.fullPath,
         },
         {
           hid: "og:image",
           name: "og:image",
-          content: this.data.featured.thumbnail
+          content: this.data.featured.thumbnail,
         },
         {
           hid: "og:type",
           name: "og:type",
-          content: "article"
-        }
-      ]
+          content: "article",
+        },
+      ],
     };
   },
   data() {
@@ -351,32 +356,32 @@ export default {
       sortActions: [
         {
           title: "Latest",
-          action: "date"
+          action: "date",
         },
         {
           title: "Top Voted",
-          action: "voted"
+          action: "voted",
         },
         {
           title: "Agree",
-          action: "agree"
+          action: "agree",
         },
         {
           title: "Disagree",
-          action: "disagree"
-        }
-      ]
+          action: "disagree",
+        },
+      ],
     };
   },
   methods: {
     scrollToComment() {
       this.$refs.element.scrollIntoView({
         behavior: "smooth",
-        inline: "nearest"
+        inline: "nearest",
       });
     },
     updateComment(data) {
-      this.comments = this.comments.map(comment =>
+      this.comments = this.comments.map((comment) =>
         comment.id === data.id ? (comment = data) : comment
       );
     },
@@ -410,11 +415,11 @@ export default {
       let data = {
         body: this.comment,
         postReaction: postReaction,
-        subscribe: this.subscribe
+        subscribe: this.subscribe,
       };
       this.$axios
         .$post(`/api/posts/${this.data.id}/comments`, data)
-        .then(res => {
+        .then((res) => {
           this.comments.push(res.data);
           this.comment = "";
         });
@@ -433,7 +438,7 @@ export default {
               : "reaction"
           }&page=${this.page}`
         )
-        .then(res => {
+        .then((res) => {
           if (loadMore) {
             this.comments = [...this.comments, ...res.data];
           } else {
@@ -442,14 +447,14 @@ export default {
           this.paginations = res.pagination;
           this.disabled = false;
         })
-        .catch(error => {
+        .catch((error) => {
           console.log(error);
         });
-    }
+    },
   },
   provide() {
     return {
-      id: this.data.id
+      id: this.data.id,
     };
   },
   created() {
@@ -458,9 +463,9 @@ export default {
       this.$store.commit("SET_BREADCRUMBS", [
         {
           title: this.data.category.name,
-          path: "/" + this.data.category.slug
+          path: "/" + this.data.category.slug,
         },
-        { title: this.data.title }
+        { title: this.data.title },
       ]);
     } else {
       this.$store.commit("SET_BREADCRUMBS", [{ title: this.data.title }]);
@@ -470,6 +475,6 @@ export default {
     if (this.type === "post") {
       this.$axios.post(`/api/posts/${this.data.id}/add-view`);
     }
-  }
+  },
 };
 </script>
