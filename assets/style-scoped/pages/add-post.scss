@@ -302,8 +302,11 @@
 	.arrow-date {
 		position: absolute;
 		right: 1px;
-		top: 3px;
+		top: 8px;
 		pointer-events: none;
+		@media (min-width: map_get($grid-breakpoints, xl)) {
+			top: 3px;
+		}
 	}
 
 	.select-wrap {
@@ -340,11 +343,14 @@
 			font-weight: 700;
 			text-transform: uppercase;
 			letter-spacing: 0.7px;
-			font-size: 0.8em;
+			font-size: 100%;
 			padding-right: 1.1em;
 			appearance: none;
 			// margin-left: 5px;
 			margin-right: 10px;
+			@media (min-width: map_get($grid-breakpoints, xl)) {
+				font-size: 0.8em;
+			}
 		}
 	}
 
@@ -409,7 +415,7 @@
 		max-width: $global-width;
 
 		.create-post-title {
-			font-size: 1.9em;
+			font-size: 2em;
 			margin: 0;
 			position: relative;
 			color: $black;
@@ -418,7 +424,7 @@
 			text-size-adjust: 100%;
 			-webkit-box-direction: normal;
 			-webkit-font-smoothing: antialiased;
-			margin: 15px 15px 5px 0;
+			margin: 0 15px 5px 0;
 		}
 
 		.create-post-subtitle {
@@ -583,7 +589,10 @@
 				text-indent: 0;
 				padding: 0.55em 0.65em;
 				border: 1px solid #c6c6c6;
-				font-size: 0.9em;
+				font-size: 100%;
+				@media (min-width: map_get($grid-breakpoints, xl)) {
+					font-size: 0.8em;
+				}
 			}
 
 			textarea,
@@ -934,5 +943,59 @@
 		&:hover {
 			color: #575757;
 		}
+	}
+
+	.input-wrapper {
+		height: auto;
+		max-height: initial;
+	}
+
+	.add-cloumn {
+		@media (min-width: map_get($grid-breakpoints, xl)) {
+			padding-right: 2.65em;
+		}
+	}
+
+	.date {
+		padding: 0 !important;
+	}
+
+	.date-col {
+		@media (max-width: map_get($grid-breakpoints, md)) {
+			padding: 0;
+			margin-bottom: 20px;
+		}
+	}
+
+	.publish-wrap {
+		@media (max-width: map_get($grid-breakpoints, md)) {
+			position: fixed;
+			bottom: 0;
+			z-index: 999;
+			background-color: #fff;
+			border-top: 1px solid #ebebeb;
+			left: 0;
+			right: 0;
+			padding: 8px 15px;
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+		}
+	}
+
+	.crop-wrap {
+		@media (min-width: map_get($grid-breakpoints, xl)) {
+			margin-top: 30px;
+		}
+	}
+
+	.preview {
+		@media (min-width: map_get($grid-breakpoints, xl)) {
+			margin-top: 105px;
+		}
+	}
+
+	.drop-title {
+		font-weight: 400;
 	}
 }

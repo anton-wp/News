@@ -17,7 +17,7 @@
 
             <form class="primary-form dropzone" id="addPostForm">
                 <div class="row blockForm">
-                    <div class="col-12 col-lg-7 col-xl-8">
+                    <div class="col-12 col-lg-7 col-xl-8 add-cloumn">
                         <div class="add-field" v-if="fields.title">
                             <div class="input-wrapper title">
                                 <label>
@@ -110,10 +110,7 @@
                     <div class="col-12 col-lg-5 col-xl-4">
                         <div class="container date">
                             <div class="row">
-                                <div
-                                    class="col-sm-auto col-lg-8"
-                                    style="padding-left: 0px; padding-right: 0px;"
-                                >
+                                <div class="col-sm-auto col-lg-8 date-col">
                                     <div
                                         class="schedule-date-col schedule-date"
                                         v-if="fields.publishedAt"
@@ -365,33 +362,34 @@
                             >This field is required</div>
                         </div>
 
-                        <div class="buttons-wrapp">
-                            <div>
-                                <div class="buttons-forse" v-if="fields.forcePublish">
-                                    <label class="d-flex align-items-center w-100">
-                                        <div class="categoryCheckbox">
-                                            <svg width="10" height="10" v-if="forcePublish">
-                                                <use xlink:href="#checkbox" />
-                                            </svg>
-                                            <input
-                                                type="checkbox"
-                                                v-model="forcePublish"
-                                                @change="saveDraft"
-                                            />
-                                        </div>
+                        <div class="buttons-wrapp publish-wrap">
+                            <button
+                                class="button-add post-button"
+                                @click.prevent="publishedPost"
+                            >Publish</button>
 
-                                        <div class="categoryTitle ml-2">force publish</div>
-                                    </label>
-                                </div>
-                                <button
-                                    class="button-add post-button"
-                                    @click.prevent="publishedPost"
-                                >Publish</button>
+                            <div class="buttons-forse m-0 mt-xl-2" v-if="fields.forcePublish">
+                                <label class="d-flex align-items-center w-100">
+                                    <div class="categoryCheckbox">
+                                        <svg width="10" height="10" v-if="forcePublish">
+                                            <use xlink:href="#checkbox" />
+                                        </svg>
+                                        <input
+                                            type="checkbox"
+                                            v-model="forcePublish"
+                                            @change="saveDraft"
+                                        />
+                                    </div>
+
+                                    <div class="categoryTitle ml-2">force publish</div>
+                                </label>
                             </div>
                         </div>
                     </div>
+                </div>
 
-                    <div class="col-12 col-lg-7 col-xl-8" v-if="fields.cropper">
+                <div class="row">
+                    <div class="col-12 col-lg-7 col-xl-8 add-cloumn" v-if="fields.cropper">
                         <div class="buttons-wrapp input-wrapper">
                             <label>
                                 Featured Image
@@ -419,6 +417,7 @@
                                 :destroyDropzone="true"
                                 @vdropzone-success="afterComplete"
                                 @vdropzone-processing="loadingDrop=true; imgCrop=''"
+                                @vdropzone-error="errorImg"
                                 :include-styling="false"
                                 class="drop-wrap"
                                 v-if="dropVisible"
@@ -436,6 +435,11 @@
                                     v-if="errorNotif && !imgCrop"
                                     class="form-field-tip error-tip"
                                 >Featured image is required</div>
+
+                                <div
+                                    v-if="imgToSmall"
+                                    class="form-field-tip error-tip"
+                                >The selected image is too small. Minimum image size 993px 559px</div>
 
                                 <div class="cssload-container" v-if="loadingDrop">
                                     <div class="lds-ellipsis">
@@ -461,13 +465,34 @@
                                 :class="{'visible-crop' : !visibleCrop}"
                             />
                         </div>
+
+                        <div class="input-wrapper" v-if="fields.featuredImage">
+                            <label>
+                                Featured Image source
+                                <span class="required">*</span>
+                            </label>
+                            <input
+                                class="form-input"
+                                placeholder="e.g Instagram, Youtube, etc"
+                                v-model.trim="$v.imgDescript.$model"
+                                @blur="saveDraft"
+                                :class="($v.imgDescript.$anyError && errorNotif) ? 'error' : ''"
+                            />
+                            <label class="require">
+                                <span class="required">*</span> required fields
+                            </label>
+                            <div
+                                class="error-notification"
+                                v-if="!$v.imgDescript.required && errorNotif"
+                            >This field is required</div>
+                        </div>
                     </div>
 
                     <div class="col-12 col-lg-5 col-xl-4">
                         <div class="animation prev-img-block">
-                            <div class="preview"></div>
+                            <div class="preview" v-if="imgCrop"></div>
 
-                            <div class="header-metadata" v-if="categories">
+                            <div class="header-metadata" v-if="categories && imgCrop">
                                 <span class="category js--post-category-preview">
                                     <span>{{ categories.find(x => x.id === selectedCategory ).slug }}</span>
                                 </span>
@@ -505,28 +530,6 @@
                             <h2 class="title-posts" v-if="title">{{ title }}</h2>
                         </div>
                     </div>
-                    <div class="col-12 col-lg-7 col-xl-8">
-                        <div class="input-wrapper" v-if="fields.featuredImage">
-                            <label>
-                                Featured Image source
-                                <span class="required">*</span>
-                            </label>
-                            <input
-                                class="form-input"
-                                placeholder="e.g Instagram, Youtube, etc"
-                                v-model.trim="$v.imgDescript.$model"
-                                @blur="saveDraft"
-                                :class="($v.imgDescript.$anyError && errorNotif) ? 'error' : ''"
-                            />
-                            <label class="require">
-                                <span class="required">*</span> required fields
-                            </label>
-                            <div
-                                class="error-notification"
-                                v-if="!$v.imgDescript.required && errorNotif"
-                            >This field is required</div>
-                        </div>
-                    </div>
                 </div>
             </form>
         </div>
@@ -548,12 +551,12 @@ export default {
     components: {
         Multiselect,
         Dropzone,
-        VueCropper
+        VueCropper,
     },
 
     props: {
         add: String,
-        edit: String
+        edit: String,
     },
 
     data() {
@@ -564,7 +567,7 @@ export default {
                 day: null,
                 year: null,
                 hours: null,
-                minutes: null
+                minutes: null,
             },
             months,
             hours: [],
@@ -593,7 +596,7 @@ export default {
                 source: false,
                 featuredImage: false,
                 cropper: false,
-                publishInterval: null
+                publishInterval: null,
             },
             errorNotif: false,
             selectedCategory: null,
@@ -626,11 +629,12 @@ export default {
                 headers: { Authorization: "barier" },
                 paramName: "image",
                 params: {
-                    postId: null
-                }
+                    postId: null,
+                },
             },
             loadingDrop: false,
-            dropVisible: true
+            dropVisible: true,
+            imgToSmall: false,
         };
     },
 
@@ -638,14 +642,14 @@ export default {
         title: {
             required,
             minLength: minLength(50),
-            maxLength: maxLength(120)
+            maxLength: maxLength(120),
         },
         imgDescript: {
-            required
+            required,
         },
         subtitle: {
-            minLength: minLength(50)
-        }
+            minLength: minLength(50),
+        },
     },
     methods: {
         // Getters
@@ -653,12 +657,12 @@ export default {
         getFields() {
             this.$axios
                 .$get("/api/profile/post-fields?action=create")
-                .then(resp => {
+                .then((resp) => {
                     console.log(resp);
 
                     this.fields = resp.fields;
                 })
-                .catch(error => {
+                .catch((error) => {
                     console.log(error);
                 });
         },
@@ -666,11 +670,11 @@ export default {
         getCategories() {
             this.$axios
                 .$get("/api/categories/")
-                .then(resp => {
+                .then((resp) => {
                     this.categories = resp.data;
                     this.selectedCategory = resp.data[0].id;
                 })
-                .catch(error => {
+                .catch((error) => {
                     console.log(error);
                 });
         },
@@ -678,11 +682,11 @@ export default {
         getOptions() {
             this.$axios
                 .$get("/api/posts/create-helpers/verdict-options/")
-                .then(resp => {
+                .then((resp) => {
                     this.options = resp.data;
                     this.selectedOption = resp.data[0].title;
                 })
-                .catch(error => {
+                .catch((error) => {
                     console.log(error);
                 });
         },
@@ -692,12 +696,12 @@ export default {
                 .$get(
                     `/api/posts/create-helpers/get-reserved-time?postId=${id}`
                 )
-                .then(resp => {
-                    resp.data.forEach(element => {
+                .then((resp) => {
+                    resp.data.forEach((element) => {
                         this.reservedTimes.push(Date.parse(element));
                     });
                 })
-                .catch(error => {
+                .catch((error) => {
                     console.log(error);
                 });
         },
@@ -712,7 +716,7 @@ export default {
                         this.linkOption = data;
                         this.linkOption = [
                             ...this.linkOption,
-                            ...this.newLinkOption
+                            ...this.newLinkOption,
                         ];
                         this.isLoading = false;
                     });
@@ -737,7 +741,7 @@ export default {
             const tag = {
                 id: Math.floor(Math.random() * 10000000),
                 type: "created",
-                name: newTag
+                name: newTag,
             };
 
             this.newLinkOption.push(tag);
@@ -745,7 +749,9 @@ export default {
         },
 
         formatTags() {
-            const tagsForFormdata = this.selectedLinkOption.map(function(item) {
+            const tagsForFormdata = this.selectedLinkOption.map(function (
+                item
+            ) {
                 if (item.type === "created") {
                     return item.name;
                 } else {
@@ -810,7 +816,7 @@ export default {
                     left: this.cropperX,
                     top: this.cropperY,
                     width: this.cropperW,
-                    height: this.cropperH
+                    height: this.cropperH,
                 });
             }
 
@@ -823,12 +829,19 @@ export default {
             this.imgCrop = res.file;
             this.imgId = res.mediaId;
         },
+        errorImg(file, message, xhr) {
+            this.loadingDrop = false;
+            this.imgToSmall = true;
+            this.imgCrop = null;
+            this.imgId = null;
+        },
 
         uploadImg() {
             this.dropVisible = true;
             this.loadingDrop = true;
             this.visibleCrop = false;
             this.imgCrop = undefined;
+            this.imgToSmall = false;
 
             const formData = new FormData();
 
@@ -837,99 +850,92 @@ export default {
 
             this.$axios
                 .$post("/api/media/image-preload/", formData)
-                .then(res => {
+                .then((res) => {
                     this.imgId = res.mediaId;
                     this.imgCrop = res.file;
                 })
-                .catch(error => console.error(error));
+                .catch((error) => {
+                    this.loadingDrop = false;
+                    this.imgToSmall = true;
+                    this.imgCrop = null;
+                    this.imgId = null;
+                });
         },
 
         saveDraft() {
-            console.log();
-
-            if (this.$refs.cropper) {
-                const cropData = this.$refs.cropper.getCropBoxData();
-
-                this.cropperX = Math.floor(cropData.left);
-                this.cropperY = Math.floor(cropData.top);
-                this.cropperW = Math.floor(cropData.width);
-                this.cropperH = Math.floor(cropData.height);
-            }
-
-            const newData = {};
-
-            if (this.title) {
-                newData.title = this.$v.title.$model;
-            }
-            if (this.subtitle) {
-                newData.subtitle = this.$v.subtitle.$model;
-            }
-            if (this.content) {
-                newData.bodyJson = this.content;
-            }
-            if (this.selectedLinkOption.length) {
-                const tagsForFormdata = this.selectedLinkOption.map(function(
-                    item
-                ) {
-                    if (item.type === "created") {
-                        return item.name;
-                    } else {
-                        return item.id;
-                    }
-                });
-
-                newData.tags = tagsForFormdata.toString();
-            }
-            if (this.selectedCategory) {
-                newData.category = this.selectedCategory;
-            }
-            if (this.selectedOption) {
-                newData.verdictOption = this.selectedOption;
-            }
-            if (this.fields.publishedAt) {
-                newData.publishedAt = this.selectedDate.toString();
-            }
-
-            if (this.forcePublish) {
-                newData.forcePublish = this.forcePublish;
-            }
-
-            if (this.imgCrop) {
-                newData.media = this.imgId;
-            }
-
-            if (this.$v.imgDescript.$model) {
-                newData.source = this.$v.imgDescript.$model;
-            }
-
-            if (this.cropperX || this.cropperX == 0) {
-                newData.cropperX = this.cropperX;
-            }
-            if (this.cropperY || this.cropperY == 0) {
-                newData.cropperY = this.cropperY;
-            }
-            if (this.cropperW) {
-                newData.cropperWidth = this.cropperW;
-            }
-            if (this.cropperH) {
-                newData.cropperHeight = this.cropperH;
-            }
-
-            if (this.selectedAuthor) {
-                newData.author = this.selectedAuthor.id;
-            } else {
-                newData.author = this.$store.$auth.$state.user.id;
-            }
-
-            this.$axios
-                .$patch(`/api/posts/${this.postId}`, newData)
-                .then(resp => {
-                    this.$toasted.show(resp.message);
-                })
-                .catch(error => {
-                    console.log(error);
-                    this.$toasted.show(error.message);
-                });
+            // if (this.$refs.cropper) {
+            //     const cropData = this.$refs.cropper.getCropBoxData();
+            //     this.cropperX = Math.floor(cropData.left);
+            //     this.cropperY = Math.floor(cropData.top);
+            //     this.cropperW = Math.floor(cropData.width);
+            //     this.cropperH = Math.floor(cropData.height);
+            // }
+            // const newData = {};
+            // if (this.title) {
+            //     newData.title = this.$v.title.$model;
+            // }
+            // if (this.subtitle) {
+            //     newData.subtitle = this.$v.subtitle.$model;
+            // }
+            // if (this.content) {
+            //     newData.bodyJson = this.content;
+            // }
+            // if (this.selectedLinkOption.length) {
+            //     const tagsForFormdata = this.selectedLinkOption.map(function (
+            //         item
+            //     ) {
+            //         if (item.type === "created") {
+            //             return item.name;
+            //         } else {
+            //             return item.id;
+            //         }
+            //     });
+            //     newData.tags = tagsForFormdata.toString();
+            // }
+            // if (this.selectedCategory) {
+            //     newData.category = this.selectedCategory;
+            // }
+            // if (this.selectedOption) {
+            //     newData.verdictOption = this.selectedOption;
+            // }
+            // if (this.fields.publishedAt) {
+            //     newData.publishedAt = this.selectedDate.toString();
+            // }
+            // if (this.forcePublish) {
+            //     newData.forcePublish = this.forcePublish;
+            // }
+            // if (this.imgCrop) {
+            //     newData.media = this.imgId;
+            // }
+            // if (this.$v.imgDescript.$model) {
+            //     newData.source = this.$v.imgDescript.$model;
+            // }
+            // if (this.cropperX || this.cropperX == 0) {
+            //     newData.cropperX = this.cropperX;
+            // }
+            // if (this.cropperY || this.cropperY == 0) {
+            //     newData.cropperY = this.cropperY;
+            // }
+            // if (this.cropperW) {
+            //     newData.cropperWidth = this.cropperW;
+            // }
+            // if (this.cropperH) {
+            //     newData.cropperHeight = this.cropperH;
+            // }
+            // if (this.selectedAuthor) {
+            //     newData.author = this.selectedAuthor.id;
+            // } else {
+            //     newData.author = this.$store.$auth.$state.user.id;
+            // }
+            // this.$axios
+            //     .$patch(`/api/posts/${this.postId}`, newData)
+            //     .then((resp) => {
+            //         this.$toasted.show(resp.message);
+            //     })
+            //     .catch((error) => {
+            //         console.log(error);
+            //         this.$toasted.show(error.message);
+            //     });
         },
 
         publishedPost() {
@@ -953,7 +959,7 @@ export default {
             newData.bodyJson = this.content;
 
             if (this.selectedLinkOption.length) {
-                const tagsForFormdata = this.selectedLinkOption.map(function(
+                const tagsForFormdata = this.selectedLinkOption.map(function (
                     item
                 ) {
                     if (item.type === "created") {
@@ -983,14 +989,14 @@ export default {
 
             this.$axios
                 .$patch(`/api/posts/${this.postId}/publish`, newData)
-                .then(resp => {
+                .then((resp) => {
                     this.$toasted.show(resp.message);
                 })
-                .catch(error => {
+                .catch((error) => {
                     console.log(error);
                     this.$toasted.show(error.message);
                 });
-        }
+        },
     },
     computed: {
         daysInMonth() {
@@ -1008,7 +1014,7 @@ export default {
         disabledDates() {
             const diffs = {
                 months: this.monthDiff(this.now, this.selectedDate),
-                minutes: this.minutesDiff(this.now, this.selectedDate)
+                minutes: this.minutesDiff(this.now, this.selectedDate),
             };
 
             if (this.reservedTimes.includes(Date.parse(this.selectedDate))) {
@@ -1024,7 +1030,7 @@ export default {
         titlesLength() {
             const lengthTitle = {
                 title: 0,
-                subtitle: 0
+                subtitle: 0,
             };
 
             if (this.title) lengthTitle.title = this.title.length;
@@ -1038,7 +1044,7 @@ export default {
             if (this.content && this.content.blocks.length) {
                 console.log("121212");
 
-                cContent = this.content.blocks.reduce(function(prev, el) {
+                cContent = this.content.blocks.reduce(function (prev, el) {
                     let counter = 0;
 
                     if (
@@ -1052,9 +1058,13 @@ export default {
                     }
 
                     if (el.type === "list" && el.data.items.length > 0) {
-                        counter = el.data.items.reduce(function(previus, elem) {
+                        counter = el.data.items.reduce(function (
+                            previus,
+                            elem
+                        ) {
                             return elem.length + previus;
-                        }, 0);
+                        },
+                        0);
                     } else {
                         counter = 0;
                     }
@@ -1064,7 +1074,7 @@ export default {
             }
 
             return cContent;
-        }
+        },
     },
 
     created() {
@@ -1095,7 +1105,7 @@ export default {
         if (this.add) {
             this.$axios
                 .$post("/api/posts/")
-                .then(resp => {
+                .then((resp) => {
                     this.postId = resp.id;
                     this.dropOptions.params.postId = resp.id;
 
@@ -1103,7 +1113,7 @@ export default {
 
                     this.initDate();
                 })
-                .catch(error => {
+                .catch((error) => {
                     console.log(error);
                 });
         }
@@ -1115,7 +1125,7 @@ export default {
 
             this.$axios
                 .$get(`/api/posts/${this.$route.params.slug}/edit`)
-                .then(resp => {
+                .then((resp) => {
                     this.postId = resp.data.id;
                     this.selectedOption = resp.data.verdictOption;
                     this.title = resp.data.title;
@@ -1144,7 +1154,7 @@ export default {
 
                     this.initDate(new Date(resp.data.publishedAt));
                 })
-                .catch(error => {
+                .catch((error) => {
                     console.log(error);
                 });
         }
@@ -1152,13 +1162,13 @@ export default {
     mounted() {
         let breadCrumbsItem = "";
 
-        if (this.add) breadCrumbsItem = "Add";
-        if (this.edit) breadCrumbsItem = "Edit";
+        if (this.add) breadCrumbsItem = "Add Post";
+        if (this.edit) breadCrumbsItem = "Edit Post";
 
         this.$store.commit("SET_BREADCRUMBS", [{ title: breadCrumbsItem }]);
         this.dropOptions.headers.Authorization = this.$auth.getToken("local");
         // this.dropOptions.params.postId = this.postId
-    }
+    },
 };
 </script>
 

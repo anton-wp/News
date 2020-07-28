@@ -22,7 +22,7 @@ module.exports = {
 		],
 		script: [
 			{ src: 'https://cdn.ampproject.org/v0/amp-sidebar-0.1.js', defer: true }
-		  ],
+		],
 	},
 	/*
 	** Customize the progress-bar color
@@ -89,7 +89,7 @@ module.exports = {
 
 	proxy: {
 		'/api/': {
-			target: 'http://dev.api.verdict.org',
+			target: 'https://dev.verdict.org/api',
 			pathRewrite: { '^/api/': '' }
 		}
 	},
