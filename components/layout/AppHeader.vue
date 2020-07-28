@@ -70,7 +70,7 @@
             <user-profile v-if="true" :authorization="$store.state.auth.loggedIn" />
             <button
               v-if="!$store.state.auth.loggedIn"
-              class="signup-btn d-none d-md-block"
+              class="signup-btn d-none d-sm-block"
               @click="openLoginPopup('signUp')"
             >Sign Up</button>
             <button v-if="$store.state.auth.loggedIn" class="signup-btn d-none d-sm-block">

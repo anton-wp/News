@@ -85,7 +85,7 @@
     </div>
   </div>
   <div v-else class="post-layout">
-    <div class="policy-wrapper px-2 px-sm-15 px-md-0 ">
+    <div class="policy-wrapper px-2 px-sm-15 px-md-0">
       <div class="container">
         <div class="row">
           <div class="col-12 col-lg-8 px-0 px-md-3 pr-lg-5">
@@ -98,7 +98,7 @@
                   :data="data"
                 />
                 <div class="col-lg-12 px-0">
-                  <h1 class="post-page-title">{{data.title}}</h1>
+                  <h1 class="post-page-title mt-2">{{data.title}}</h1>
                   <h2>{{data.subTitle}}</h2>
                 </div>
                 <div class="col-lg-12 px-0 px-md-3">
@@ -121,7 +121,7 @@
                   <social-block v-if="data" :post="data" @changeFontSize="changeFontSize" />
                 </div>
                 <div class="col-lg-12 px-0">
-                  <div class="image-wrapper">
+                  <div class="image-wrapper mx-n2 mx-sm-n3 mx-md-0">
                     <img v-if="data.featured.wide" class="post-image" :src="data.featured.wide" />
                     <img
                       v-if="!data.featured.wide"
@@ -140,7 +140,7 @@
                   <social-block v-if="data" :post="data" @changeFontSize="changeFontSize" />
                 </div>
                 <!-- <social-block [(fontSize)]="bodySize" class="col-lg-12"></social-block> -->
-                <div class="col-lg-12" style="margin-top: 25px;" v-if="!review">
+                <div class="col-lg-12 px-0" style="margin-top: 25px;" v-if="!review">
                   <div class="linked-title">
                     <span>linked</span>
                   </div>
@@ -159,12 +159,12 @@
                   </div>
                   <related-block />
                 </div>
-                <div v-if="!draft && !review" class="col-lg-12" ref="element">
+                <div v-if="!draft && !review" class="col-lg-12 px-0" ref="element">
                   <div class="comment-wrapper">
                     <span class="title">your verdict</span>
                     <span class="about" @mouseenter="message = true" @mouseleave="message = false">
                       <span>About Verdict</span>
-                      <svg class="icon" width="17" height="17">
+                      <svg class="icon" width="20" height="20">
                         <use xlink:href="#eclipse-question" />
                       </svg>
                     </span>
@@ -174,9 +174,9 @@
                     class="aboutPopup"
                   >Verdict is top voted comment by all members. One vote per member. Verdict can change over time.</span>
                 </div>
-                <div v-if="!draft && !review" class="col-12">
-                  <div class="mx-2">
-                    <textarea class="form-input with-border" v-model="comment"></textarea>
+                <div v-if="!draft && !review" class="col-12 px-0">
+                  <div>
+                    <textarea class="form-input with-border mb-0" v-model="comment"></textarea>
                   </div>
                   <div class="blockCheckbox">
                     <label for="checkbox" @click="subscribe = !subscribe">
@@ -274,6 +274,7 @@ import Marks from "~/components/singlePost/marks.vue";
 import SocialBlock from "~/components/singlePost/socialBlock.vue";
 import RelatedBlock from "~/components/universal-components/relatedBlock.vue";
 import AsideReview from "~/components/universal-components/AsideReview.vue";
+import { mapState } from "vuex";
 
 export default {
   components: {
@@ -373,6 +374,10 @@ export default {
       ],
     };
   },
+  computed: {
+    ...mapState(["auth"]),
+  },
+
   methods: {
     scrollToComment() {
       this.$refs.element.scrollIntoView({
@@ -472,7 +477,7 @@ export default {
     }
   },
   mounted() {
-    if (this.type === "post") {
+    if (this.type === "post" && this.auth.loggedIn) {
       this.$axios.post(`/api/posts/${this.data.id}/add-view`);
     }
   },

@@ -8,9 +8,10 @@
   .reviews-link {
     cursor: pointer;
     text-decoration: none;
-    font-weight: 400;
+    font-weight: 400 !important;
     transition: color 0.3s;
-    color: black;
+		color: black;
+		font-size: 1.1em !important;
 
     &:hover {
       color: $primary_color;

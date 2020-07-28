@@ -1,6 +1,6 @@
 <template>
   <div class="news-card-header">
-    <div class="row wrapp" :class="paddingTop ? 'small__height' : '123'">
+    <div class="row wrapp" :class="paddingTop ? 'small__height' : ''">
       <div class="theme-wrapper">
         <span class="theme">
           <nuxt-link

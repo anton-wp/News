@@ -37,6 +37,7 @@
 
 <script>
 import BlockVerdict from "~/components/universal-components/block-verdict";
+import { mapState } from "vuex";
 
 export default {
   components: {
@@ -55,9 +56,12 @@ export default {
     };
   },
   created() {
-    if (this.type !== "comment") {
-      this.getButton();
+    if (this.type !== "comment" && this.auth.loggedIn) {
+			this.getButton();
     }
+	},
+	computed: {
+    ...mapState(["auth"]),
   },
   methods: {
     getButton() {

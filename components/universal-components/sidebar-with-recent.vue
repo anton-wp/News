@@ -3,7 +3,7 @@
     <div class="trigger-type-posts">
       <span class="trigger px-7">recent verdicts</span>
     </div>
-    <div class="row wrapper-side-post mx-0">
+    <div class="row wrapper-side-post mx-n2 mx-sm-n3 mx-md-0">
       <div
         class="col-12 col-md-4 col-lg-12 px-0 sidebar__with__recent"
         v-for="post in posts"

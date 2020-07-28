@@ -345,6 +345,9 @@
 			user-select: none;
 			padding: 0.85em 1.4em 0.8em;
 			margin: 0 0 0 0.5em;
+			@media (max-width: 768px) {
+				padding: 0.85em 0.8em 0.8em;
+			}
 
 			&:hover {
 				background-color: $button-hover-background;

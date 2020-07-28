@@ -49,6 +49,7 @@
             <li class="sign-popup-ul-item" @click="openLoginPopup('signUp')">Sign Up</li>
           </ul>
           <ul class="sign-popup-ul" v-if="authorization">
+            <nuxt-link class="sign-popup-ul-item d-list-item d-sm-none" to="/add">Add Post</nuxt-link>
             <nuxt-link class="sign-popup-ul-item" to="/profile/dashboard/">Profile</nuxt-link>
             <nuxt-link class="sign-popup-ul-item" to="/profile/notifications/">Notification</nuxt-link>
             <nuxt-link class="sign-popup-ul-item" to="/profile/settings/">Settings</nuxt-link>
