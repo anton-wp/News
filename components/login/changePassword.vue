@@ -1,5 +1,5 @@
 <template>
-  <div style="padding: 2.4rem 3rem 0em;">
+  <div class="p-3 px-sm-5 pt-sm-9">
     <div class="col-12">
       <h3 class="form-title">Log In</h3>
     </div>

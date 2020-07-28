@@ -1,32 +1,34 @@
 <template>
   <div class="login-popup">
     <div class="form-wrapper">
-      <!-- <div> -->
-        <div class="form">
-          <div class="close-form" @click="closeLoginPopup">×</div>
-          <!-- <login /> -->
+      <div class="form">
+        <div class="form-content">
+          <!-- <div> -->
+            <div class="close-form" @click="closeLoginPopup">×</div>
+            <!-- <login /> -->
 
-          <register v-if="loginModal.type === 'signUp'" />
+            <register v-if="loginModal.type === 'signUp'" />
 
-          <login v-if="loginModal.type === 'logIn'" :type="'modal'" />
-          <change-password v-if="loginModal.type === 'forgotPassword'" :type="'modal'" />
-          <check-email v-if="loginModal.type === 'CheckEmail'" />
+            <login v-if="loginModal.type === 'logIn'" :type="'modal'" />
+            <change-password v-if="loginModal.type === 'forgotPassword'" :type="'modal'" />
+            <check-email v-if="loginModal.type === 'CheckEmail'" />
 
-          <div
-            v-if="loginModal.type !== 'forgotPassword' && loginModal.type !== 'CheckEmail'"
-            class="trigger-form"
-          >
-            <span v-if="loginModal.type === 'logIn'">
-              Don't have an account?
-              <a @click="changeLoginPopup('signUp')">Sign Up</a>.
-            </span>
-            <span v-if="loginModal.type === 'signUp'">
-              Already have an account?
-              <a @click="changeLoginPopup('logIn')">Log In</a>.
-            </span>
-          </div>
+            <div
+              v-if="loginModal.type !== 'forgotPassword' && loginModal.type !== 'CheckEmail'"
+              class="trigger-form"
+            >
+              <span v-if="loginModal.type === 'logIn'">
+                Don't have an account?
+                <a @click="changeLoginPopup('signUp')">Sign Up</a>.
+              </span>
+              <span v-if="loginModal.type === 'signUp'">
+                Already have an account?
+                <a @click="changeLoginPopup('logIn')">Log In</a>.
+              </span>
+            </div>
+          <!-- </div> -->
         </div>
-      <!-- </div> -->
+      </div>
     </div>
   </div>
 </template>
@@ -43,16 +45,16 @@ export default {
     Login,
     Register,
     ChangePassword,
-    CheckEmail
+    CheckEmail,
   },
   computed: {
-    ...mapState(["loginModal"])
+    ...mapState(["loginModal"]),
   },
   methods: {
     changeLoginPopup(type) {
       let data = {
         open: false,
-        type: type
+        type: type,
       };
       this.$store.commit("UPDATE_LOGIN_POPUP", data);
       setTimeout(() => {
@@ -62,10 +64,10 @@ export default {
     closeLoginPopup() {
       let data = {
         open: false,
-        type: ""
+        type: "",
       };
       this.$store.commit("UPDATE_LOGIN_POPUP", data);
-    }
-  }
+    },
+  },
 };
 </script>

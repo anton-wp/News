@@ -72,7 +72,7 @@
         <div class="container">
           <div class="row top-verdict pt-3 pt-md-5 pb-md-5">
             <div
-              class="col-12 col-md-6 custom-lg-midle h-100"
+              class="col-12 col-md-6 custom-lg-midle h-100 px-0 px-md-3"
               v-for="post in posts.slice(0, 2)"
               :key="post.id"
             >

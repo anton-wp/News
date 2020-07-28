@@ -116,7 +116,7 @@
             </div>
           </div>
           <div class="col-lg-4 px-0 px-md-3">
-            <follow-block :posts="false" />
+            <follow-block :posts="false"  :recent="true" />
           </div>
         </div>
       </div>

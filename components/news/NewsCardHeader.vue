@@ -1,6 +1,6 @@
 <template>
   <div class="news-card-header">
-    <div class="row wrapp">
+    <div class="row wrapp" :class="paddingTop ? 'small__height' : '123'">
       <div class="theme-wrapper">
         <span class="theme">
           <nuxt-link
@@ -19,12 +19,13 @@
 import NewsCardHeaderMarks from "~/components/news/NewsCardHeaderMarks";
 export default {
   components: {
-    NewsCardHeaderMarks
+    NewsCardHeaderMarks,
   },
   props: {
     colorScheme: String,
-		category: Object,
-		post: Object
-  }
+    category: Object,
+    paddingTop: Boolean,
+    post: Object,
+  },
 };
 </script>

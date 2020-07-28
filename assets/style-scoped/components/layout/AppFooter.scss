@@ -2,6 +2,7 @@
 	margin-top: 20px;
 
 	.button__scroll__top {
+		z-index: 999999999;
 		position: fixed;
 		bottom: 1.3em;
 		right: 5em;

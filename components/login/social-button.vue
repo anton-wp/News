@@ -1,11 +1,11 @@
 <template>
   <div class="login-social-button">
-    <div class="row">
-      <div v-for="icon in social" :key="icon" class="col-12 col-sm-6">
+    <div class="row mx-0">
+      <div v-for="icon in social" :key="icon" class="col-12 col-sm-6 px-0 pr-sm-4">
         <div class="social-button">
           <a href="#">
             <div class="icon" :class="icon">
-              <svg width="29" height="29">
+              <svg>
                 <use v-bind:xlink:href="`#${icon}`" />
               </svg>
             </div>

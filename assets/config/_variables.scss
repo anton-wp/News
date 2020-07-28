@@ -4,7 +4,7 @@ $global-width: 1310px;
 
 $small-breackpoint: 320px;
 $middle-breackpoint: 640px;
-$tablet-breackpoint: 769px;
+$tablet-breaсkpoint: 769px;
 $large-breackpoint: 1024;
 $xlarge-breackpoint: 1280;
 $xxlarge-breackpoint: 1440px;
@@ -14,6 +14,8 @@ $spacers: (
 	2: 0.625rem,
 	7: 7px,
 	8: 2em,
+	9: 2.4rem,
+	15: 15px,
 );
 
 $breakpoints: (
