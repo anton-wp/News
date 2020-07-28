@@ -8,7 +8,7 @@
         @click="getPost('latest')"
       >latest</span>
     </div>
-    <div class="row mx-0 wrapper-side-post">
+    <div class="row mx-n2 mx-sm-n3 mx-md-0 wrapper-side-post">
       <div class="col-12 col-md-4 col-lg-12 px-0 px-md-3 px-lg-0 mb-md-4" v-for="post in posts" :key="post.id">
         <default-news-card :post="post" :padding="true" :image="true" />
         <!-- <default-news-card :padding="true" />

@@ -1,5 +1,5 @@
 <template>
-  <div class="row">
+  <div class="row mx-n2 mx-sm-n3">
     <div class="col-12 col-md-4 px-0 px-md-3" v-for="post of posts.slice(1, 4)" :key="post.title">
       <default-news-card type="first-block" :post="post" :padding="true" />
     </div>

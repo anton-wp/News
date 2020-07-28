@@ -94,7 +94,6 @@ export default {
         confirmPassword: ""
       },
       loading: false,
-      // error: false,
       errorMessage: Object,
       email: "",
       password: "",

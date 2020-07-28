@@ -8,12 +8,19 @@
   @media (max-width: 576px) {
     justify-content: space-around;
   }
+  @media (max-width: 420px) {
+		max-width: 270px;
+    margin: 0 auto;
+    a {
+			margin: 1em 1.2em .2em;
+		}
+  }
   .social-icon-round {
     width: 45px;
     height: 45px;
     border-radius: 25px;
     position: relative;
-    margin: 0 auto 15px;
+    // margin: 0 auto 15px;
     cursor: pointer;
     display: flex;
     justify-content: center;

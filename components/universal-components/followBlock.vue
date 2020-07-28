@@ -1,11 +1,11 @@
 <template>
   <div class="container-fluid followVerdict">
-    <div class="wrapper-title-follow">
+    <div class="wrapper-title-follow px-0">
       <h5>
         <span>follow verdict</span>
       </h5>
     </div>
-    <div class="col-12 social-links">
+    <div class="col-12 social-links px-0 px-md-3 px-lg-0">
       <social-block />
     </div>
     <div id="follow">

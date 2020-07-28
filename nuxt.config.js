@@ -89,7 +89,7 @@ module.exports = {
 
 	proxy: {
 		'/api/': {
-			target: 'http://dev.verdict.org/api/',
+			target: 'http://dev.api.verdict.org/',
 			pathRewrite: { '^/api/': '' }
 		}
 	},
