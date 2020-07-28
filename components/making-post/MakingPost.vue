@@ -364,9 +364,21 @@
 
                         <div class="buttons-wrapp publish-wrap">
                             <button
+                                class="button-add button-add--decline"
+                                @click.prevent="saveDraft"
+                                v-if="userRole !== 'super-admin'"
+                            >Save draft</button>
+
+                            <button
                                 class="button-add post-button"
                                 @click.prevent="publishedPost"
                             >Publish</button>
+
+							<button
+                                class="button-add button-add--decline"
+                                @click.prevent="saveDraft()"
+                                v-if="this.edit"
+                            >Save</button>
 
                             <div class="buttons-forse m-0 mt-xl-2" v-if="fields.forcePublish">
                                 <label class="d-flex align-items-center w-100">
@@ -388,7 +400,7 @@
                     </div>
                 </div>
 
-                <div class="row">
+                <div class="row mt-4">
                     <div class="col-12 col-lg-7 col-xl-8 add-cloumn" v-if="fields.cropper">
                         <div class="buttons-wrapp input-wrapper">
                             <label>
@@ -562,6 +574,8 @@ export default {
     data() {
         return {
             postId: undefined,
+
+            userRole: null,
             date: {
                 month: null,
                 day: null,
@@ -863,79 +877,79 @@ export default {
         },
 
         saveDraft() {
-            // if (this.$refs.cropper) {
-            //     const cropData = this.$refs.cropper.getCropBoxData();
-            //     this.cropperX = Math.floor(cropData.left);
-            //     this.cropperY = Math.floor(cropData.top);
-            //     this.cropperW = Math.floor(cropData.width);
-            //     this.cropperH = Math.floor(cropData.height);
-            // }
-            // const newData = {};
-            // if (this.title) {
-            //     newData.title = this.$v.title.$model;
-            // }
-            // if (this.subtitle) {
-            //     newData.subtitle = this.$v.subtitle.$model;
-            // }
-            // if (this.content) {
-            //     newData.bodyJson = this.content;
-            // }
-            // if (this.selectedLinkOption.length) {
-            //     const tagsForFormdata = this.selectedLinkOption.map(function (
-            //         item
-            //     ) {
-            //         if (item.type === "created") {
-            //             return item.name;
-            //         } else {
-            //             return item.id;
-            //         }
-            //     });
-            //     newData.tags = tagsForFormdata.toString();
-            // }
-            // if (this.selectedCategory) {
-            //     newData.category = this.selectedCategory;
-            // }
-            // if (this.selectedOption) {
-            //     newData.verdictOption = this.selectedOption;
-            // }
-            // if (this.fields.publishedAt) {
-            //     newData.publishedAt = this.selectedDate.toString();
-            // }
-            // if (this.forcePublish) {
-            //     newData.forcePublish = this.forcePublish;
-            // }
-            // if (this.imgCrop) {
-            //     newData.media = this.imgId;
-            // }
-            // if (this.$v.imgDescript.$model) {
-            //     newData.source = this.$v.imgDescript.$model;
-            // }
-            // if (this.cropperX || this.cropperX == 0) {
-            //     newData.cropperX = this.cropperX;
-            // }
-            // if (this.cropperY || this.cropperY == 0) {
-            //     newData.cropperY = this.cropperY;
-            // }
-            // if (this.cropperW) {
-            //     newData.cropperWidth = this.cropperW;
-            // }
-            // if (this.cropperH) {
-            //     newData.cropperHeight = this.cropperH;
-            // }
-            // if (this.selectedAuthor) {
-            //     newData.author = this.selectedAuthor.id;
-            // } else {
-            //     newData.author = this.$store.$auth.$state.user.id;
-            // }
-            // this.$axios
-            //     .$patch(`/api/posts/${this.postId}`, newData)
-            //     .then((resp) => {
-            //         this.$toasted.show(resp.message);
-            //     })
-            //     .catch((error) => {
-            //         console.log(error);
-            //         this.$toasted.show(error.message);
-            //     });
+            if (this.$refs.cropper) {
+                const cropData = this.$refs.cropper.getCropBoxData();
+                this.cropperX = Math.floor(cropData.left);
+                this.cropperY = Math.floor(cropData.top);
+                this.cropperW = Math.floor(cropData.width);
+                this.cropperH = Math.floor(cropData.height);
+            }
+            const newData = {};
+            if (this.title) {
+                newData.title = this.$v.title.$model;
+            }
+            if (this.subtitle) {
+                newData.subtitle = this.$v.subtitle.$model;
+            }
+            if (this.content) {
+                newData.bodyJson = this.content;
+            }
+            if (this.selectedLinkOption.length) {
+                const tagsForFormdata = this.selectedLinkOption.map(function (
+                    item
+                ) {
+                    if (item.type === "created") {
+                        return item.name;
+                    } else {
+                        return item.id;
+                    }
+                });
+                newData.tags = tagsForFormdata.toString();
+            }
+            if (this.selectedCategory) {
+                newData.category = this.selectedCategory;
+            }
+            if (this.selectedOption) {
+                newData.verdictOption = this.selectedOption;
+            }
+            if (this.fields.publishedAt) {
+                newData.publishedAt = this.selectedDate.toString();
+            }
+            if (this.forcePublish) {
+                newData.forcePublish = this.forcePublish;
+            }
+            if (this.imgCrop) {
+                newData.media = this.imgId;
+            }
+            if (this.$v.imgDescript.$model) {
+                newData.source = this.$v.imgDescript.$model;
+            }
+            if (this.cropperX || this.cropperX == 0) {
+                newData.cropperX = this.cropperX;
+            }
+            if (this.cropperY || this.cropperY == 0) {
+                newData.cropperY = this.cropperY;
+            }
+            if (this.cropperW) {
+                newData.cropperWidth = this.cropperW;
+            }
+            if (this.cropperH) {
+                newData.cropperHeight = this.cropperH;
+            }
+            if (this.selectedAuthor) {
+                newData.author = this.selectedAuthor.id;
+            } else {
+                newData.author = this.$store.$auth.$state.user.id;
+            }
+            this.$axios
+                .$patch(`/api/posts/${this.postId}`, newData)
+                .then((resp) => {
+                    // this.$toasted.show(resp.message);
+                })
+                .catch((error) => {
+                    console.log(error);
+                    this.$toasted.show(error.message);
+                });
         },
 
         publishedPost() {
@@ -1081,6 +1095,9 @@ export default {
         this.getFields();
         this.getCategories();
         this.getOptions();
+
+        this.userRole = this.$store.state.auth.user.group.name;
+        console.log(this.userRole);
 
         for (
             let i = this.now.getFullYear();
