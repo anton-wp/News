@@ -103,7 +103,7 @@ export default {
   },
   methods: {
     updateScroll() {
-      if (window.scrollY > 600) {
+      if (window.scrollY > 500) {
         this.scroll = true;
       } else {
         this.scroll = false;

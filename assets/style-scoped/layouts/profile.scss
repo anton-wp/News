@@ -73,7 +73,7 @@ ul {
 			}
 
 			@media (max-width: 768px) {
-				padding: 0 0 0 1.1em;
+				padding: 0 0 0 .5em;
 				.menu-block {
 					.title {
 						margin-top: 5px;
@@ -106,7 +106,7 @@ ul {
 
 				@media (max-width: 639px) {
 					left: 25px;
-					top: 35px;
+					top: 25px;
 					width: calc(100vw - 100% - 1rem);
 				}
 
@@ -124,7 +124,7 @@ ul {
 					@media (max-width: 768px) {
 						margin-left: 0px;
 						margin-top: 0px;
-						padding: 0.4em 1em 0.8em;
+						padding: 0.8em 1em 0.8em;
 						display: list-item;
 						white-space: nowrap;
 					}

@@ -40,7 +40,7 @@
       text-align: center;
     }
     @media (max-width: 639px) {
-      margin-top: 5px;
+      margin-top: 10px;
     }
   }
 
@@ -83,7 +83,7 @@
       @media (max-width: 639px) {
         width: 25px;
         height: 25px;
-        margin-top: 10px;
+        margin-top: 20px;
         margin-bottom: 10px;
       }
     }
@@ -102,7 +102,7 @@
     }
     @media (max-width: 639px) {
       left: 50px;
-      top: 35px;
+      top: 25px;
       width: calc(100vw - 100% - 1rem);
     }
     .subMenu {
@@ -117,7 +117,7 @@
       @media (max-width: 768px) {
         margin-left: 0px;
         margin-top: 0px;
-        padding: 0.4em 1em 0.8em;
+        padding: 0.8em 1em 0.8em;
         display: list-item;
         white-space: nowrap;
       }

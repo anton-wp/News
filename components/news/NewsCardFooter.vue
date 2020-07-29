@@ -20,7 +20,7 @@
             @mouseover="toggle"
           >&thinsp;{{ author.firstName }} {{ author.lastName }}&thinsp;</span>
         </nuxt-link>
-        <time class="author">{{ new Date(this.publishedAt).toDateString() }}</time>
+        <time class="author">{{ parse(post.publishedAt, '[on] MMM DD,YYYY HH:mm a ZZ') }}</time>
         <!-- <br /> -->
         <button class="button-edit" v-if="pending">
           <svg width="15" height="15">
@@ -45,6 +45,7 @@
 <script>
 import PopupUserInfo from "~/components/universal-components/popup-user-info";
 import NewsCardHeaderMarks from "~/components/news/NewsCardHeaderMarks";
+import { format } from 'fecha';
 
 export default {
   props: {
@@ -67,6 +68,9 @@ export default {
     };
   },
   methods: {
+		parse(date, f) {
+			return format(new Date(date), f);
+		},
     toggle() {
       this.showPopup = true;
     },

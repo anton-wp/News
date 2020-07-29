@@ -48,7 +48,7 @@
           <nuxt-link
             v-bind:to="`/amp/m/${post.author.slug}/posts`"
           >{{ post.author.firstName }} {{ post.author.lastName }}</nuxt-link>
-          <time class="published-date">{{ new Date(post.publishedAt).toDateString() }}</time>
+          <time class="published-date">{{ parse(post.publishedAt, 'YY-MM-DD HH:mm:ss' ) }}</time>
         </div>
       </div>
     </div>
@@ -142,6 +142,7 @@ import DefaultNewsCard from "~/components/news/DefaultNewsCard";
 import GorizontalNewsCard from "~/components/news/GorizontalNewsCard";
 import FollowBlock from "~/components/universal-components/followBlock";
 import { mapState } from "vuex";
+import { parse } from 'fecha';
 
 export default {
   components: {
@@ -152,7 +153,7 @@ export default {
   },
   head() {
     return {
-      title: this.tag
+      title: this.tag ||  this.term.name === 'news'
         ? this.term.name + " | Verdict"
         : "Top stories and discussions on Verdict for " + this.term.name,
     };

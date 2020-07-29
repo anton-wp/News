@@ -90,6 +90,20 @@ a {
 	}
 }
 
+.mob__menu-enter-active,
+.mob__menu-leave-active {
+	transition: all 200ms linear;
+	.side-menu {
+		transform: translateX(0);
+	}
+}
+
+.mob__menu-enter,
+.mob__menu-leave-to {
+	.side-menu {
+		transform: translateX(-100%);
+	}
+}
 .modal-enter-active,
 .modal-leave-active {
 	.form-content {

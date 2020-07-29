@@ -78,15 +78,15 @@
             </button>
           </div>
         </div>
-        <template v-if="SideBarMenu">
-          <div class="background05"></div>
-          <div id="side-menu" class="side-menu" @click="disabledSideBarMenu">
-            <div class="close-sidemenu-icon">
-              <svg width="30" height="30">
-                <use xlink:href="#close" />
-              </svg>
-            </div>
-            <div>
+        <transition name="mob__menu">
+          <div v-if="SideBarMenu">
+            <div class="background05"></div>
+            <div id="side-menu" class="side-menu" @click="disabledSideBarMenu">
+              <div class="close-sidemenu-icon">
+                <svg width="30" height="30">
+                  <use xlink:href="#close" />
+                </svg>
+              </div>
               <ul class="menu">
                 <li v-for="item of header.menu" :key="item.order">
                   <nuxt-link class="general-nav-item-link" :to="`/${item.path}`">{{ item.title }}</nuxt-link>
@@ -102,7 +102,7 @@
               </ul>
             </div>
           </div>
-        </template>
+        </transition>
         <transition name="modal">
           <login-popup v-if="loginModal.open" />
         </transition>

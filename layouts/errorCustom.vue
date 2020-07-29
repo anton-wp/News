@@ -4,7 +4,7 @@
     <app-header />
     <div class="container-fluid error-layout page__content">
       <div class="row">
-        <div class="col-12">
+        <div class="col-12 px-2 px-sm-3">
           <div class="content-404">
             <svg class="img404">
               <use xlink:href="#error404" />
@@ -45,13 +45,13 @@
       <h1 class="category-page-title">latest news</h1>
         </div>-->
 
-        <div class="col-12 content">
+        <div class="col-12 content px-0 px-md-3">
           <div class="row">
             <div class="col-12">
-              <h1 class="category-page-title">latest news</h1>
+              <h1 class="category-page-title  mx-7 mx-md-0">latest news</h1>
             </div>
             <div
-              class="col-sm-12 col-md-6 col-lg-3"
+              class="col-12 col-md-6 col-lg-3 px-2 px-sm-3"
               v-for="post of posts.slice(0, 4)"
               :key="post.title"
             >
@@ -78,7 +78,12 @@ export default {
     AppHeader,
     AppFooter,
     DefaultNewsCard
-  },
+	},
+	head() {
+		return {
+			title: '404 Not Found | Verdict'
+		}
+	},
   data() {
     return {
       search: "",

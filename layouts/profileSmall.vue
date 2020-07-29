@@ -9,7 +9,7 @@
         <div class="col-12 profile-bottom">
           <div class="line" />
         </div>
-        <div class="col-auto sideBar">
+        <div class="col-auto sideBar mx-0">
           <tabs />
         </div>
         <div class="col content">

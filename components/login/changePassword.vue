@@ -1,7 +1,9 @@
 <template>
   <div class="p-3 px-sm-5 pt-sm-9">
-    <div class="col-12">
-      <h3 class="form-title">Log In</h3>
+    <div class="col-12 px-0">
+      <h3 v-if="!modal" class="form-title">Log In</h3>
+      <h3 v-if="modal" class="form-title">Forgot your password?</h3>
+      <p v-if="modal" class="form-text">Enter your email address, and we’ll send a link to choose a new password.</p>
     </div>
     <div class="input-block">
       <label class="label-input">
@@ -36,7 +38,8 @@ export default {
     };
 	},
 	props: {
-		type: String
+		type: String,
+		modal: Boolean,
 	},
   methods: {
     click() {

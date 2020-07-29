@@ -1,7 +1,7 @@
 <template>
   <div style="position: relative;">
     <div class="comment" :class="data.isVerdict ? 'verdict-active' : ''">
-      <div class="position__verdict__comment" v-if="data.verdictThreshold">
+      <div class="position__verdict__comment" v-if="data.isVerdict">
         <block-verdict :verdict="data.verdictThreshold" />
       </div>
       <author-block

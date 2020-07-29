@@ -10,7 +10,7 @@
             <register v-if="loginModal.type === 'signUp'" />
 
             <login v-if="loginModal.type === 'logIn'" :type="'modal'" />
-            <change-password v-if="loginModal.type === 'forgotPassword'" :type="'modal'" />
+            <change-password v-if="loginModal.type === 'forgotPassword'" :modal="true" :type="'modal'" />
             <check-email v-if="loginModal.type === 'CheckEmail'" />
 
             <div

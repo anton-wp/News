@@ -2,7 +2,7 @@
   <div class="p-3 px-sm-5 pt-sm-9">
     <div class="container in-form-container mx-md-0">
       <div class="row">
-        <div class="col-12">
+        <div class="col-12 px-0 px-md-3">
           <h3 class="form-title">Log In to Verdict</h3>
         </div>
       </div>
@@ -10,12 +10,12 @@
         <social />
       </div>
       <div class="row">
-        <div class="col-12">
+        <div class="col-12 px-0 px-md-3">
           <h6 class="form-sub-title mb-0">Or by email</h6>
           <span v-if="errorMessage.email" class="primary-error">{{errorMessage.email}}</span>
           <span v-if="errorMessage.password" class="primary-error">{{errorMessage.password}}</span>
         </div>
-        <div class="col-12">
+        <div class="col-12 px-0 px-md-3">
           <form @submit.prevent="logIn" id="authorizationForm" class="primary-form">
             <div class="input-block">
               <label class="label-input">
@@ -176,6 +176,7 @@ export default {
 					this.closeLoginPopup();
         })
         .catch(error => {
+					console.log(error.response);
           this.loading = false;
           this.errorMessage = error.response.data.properties;
         });

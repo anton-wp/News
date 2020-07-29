@@ -14,7 +14,21 @@ export default {
 	middleware: "auth",
   components: {
     NotificationBlock
-  }
+	},
+	created () {
+		this.getNotifications()
+	},
+	methods: {
+		getNotifications() {
+			this.$axios.$get('/api/profile/notifications')
+				.then(res => {
+					console.log(res)
+				})
+				.catch(error => {
+					console.log(error)
+				})
+		}
+	}
 
 }
 </script>
