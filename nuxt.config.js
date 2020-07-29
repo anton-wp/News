@@ -77,6 +77,7 @@ module.exports = {
 					login: { url: '/api/auth/login', method: 'post', propertyName: 'token' },
 					user: { url: '/api/profile', method: 'get', propertyName: '' },
 					logout: true,
+					
 
 				},
 			}
