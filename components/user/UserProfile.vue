@@ -20,8 +20,8 @@
 					<vrd-ppnb class="col-12 block" [small]='true'></vrd-ppnb>
 					<vrd-ppnb class="col-12 block" [small]='true'></vrd-ppnb>
           <vrd-ppnb class="col-12 block" [small]='true'></vrd-ppnb>-->
-          <div class="viewAll">
-            <a>view all</a>
+          <div class="viewAll" @click="modalNotification = false">
+            <nuxt-link to="/profile/notifications">view all</nuxt-link>
           </div>
         </div>
       </div>

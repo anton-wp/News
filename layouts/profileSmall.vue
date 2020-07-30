@@ -12,7 +12,7 @@
         <div class="col-auto sideBar mx-0">
           <tabs />
         </div>
-        <div class="col content">
+        <div class="col px-0">
           <nuxt />
         </div>
       </div>

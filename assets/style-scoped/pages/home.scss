@@ -39,6 +39,7 @@ a {
 		flex: 0 0 100% !important;
 		max-width: 100% !important;
 	}
+
 	.px-0 {
 		padding-right: 0 !important;
 		padding-left: 0 !important;
@@ -93,6 +94,7 @@ a {
 .mob__menu-enter-active,
 .mob__menu-leave-active {
 	transition: all 200ms linear;
+
 	.side-menu {
 		transform: translateX(0);
 	}
@@ -104,6 +106,7 @@ a {
 		transform: translateX(-100%);
 	}
 }
+
 .modal-enter-active,
 .modal-leave-active {
 	.form-content {

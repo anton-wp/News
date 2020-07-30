@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="primary-form">
-      <div class="container account">
+      <div class="container account px-0">
         <div class="row">
           <div class="col-12 blockTitle">
             <h4 class="title">Account</h4>
@@ -10,19 +10,19 @@
             <div class="row container-fluid string">
               <h5 class="col-12 col-xl-3 text-xl-right">Email</h5>
               <input
-                class="col-12 col-sm-5 col-xl-3 email"
+                class="col-sm-5 col-xl-3 email"
                 type="text"
                 v-model="email"
                 placeholder="Email"
               />
-              <label class="col-4 col-sm-3 col-lg-2 labelRadio">
+              <label class="col-6 col-sm-3 col-lg-2 labelRadio">
                 <span class="custom-radio">
                   <div class="active-radio" v-if="emailType === '0'" />
                 </span>
                 <input type="radio" class="radioEmail" id="emailType" value="0" v-model="emailType" />
                 public
               </label>
-              <label class="col-4 col-sm-3 col-lg-2 labelRadio">
+              <label class="col-6 col-sm-3 col-lg-2 labelRadio">
                 <span class="custom-radio">
                   <div class="active-radio" v-if="emailType === '1'" />
                 </span>
@@ -33,17 +33,23 @@
             <div class="row container-fluid string">
               <h5 class="col-12 col-xl-3 text-xl-right">Phone</h5>
               <div class="col-12 col-sm-auto col-xl phone">
-                <div class="disabled" v-if="verified" />
                 <div class="container" style="padding: 0;">
-                  <div class="col-12" style="display: flex; padding: 0;">
-                    <MazPhoneNumberInput
-                      v-model="yourNumber"
-                      @update="results = $event"
-                      :default-country-code="countryCode"
-											style="width: 294px;"
-                    />
+                  <div class="col-12" style="display: flex; padding: 0; flex-wrap: wrap;">
+                    <div class="position-relative">
+                      <div class="disabled" v-if="verified" />
+                      <MazPhoneNumberInput
+                        v-model="yourNumber"
+                        @update="results = $event"
+                        :default-country-code="countryCode"
+                        style="max-width: 294px;"
+                      />
+                    </div>
                     <button
-                      class="verified"
+                      class="col-12 text-left button-change order-sm-3"
+                      @click="changeVerified"
+                    >change</button>
+                    <button
+                      class="verified order-sm-2"
                       :class="verified ? 'active' : 'inactive'"
                       :disabled="verified"
                       @click="openModal"
@@ -55,7 +61,6 @@
                       <span v-if="!verified">Verify</span>
                     </button>
                   </div>
-                  <button class="col-12 text-left button-change" @click="changeVerified">change</button>
                 </div>
                 <!-- (click)="changeVerified()" -->
               </div>
@@ -89,14 +94,14 @@
             </div>
             <div class="row container-fluid string">
               <h5 class="col-12 col-xl-3 text-xl-right">Profile visibility</h5>
-              <label class="col-4 col-sm-3 col-lg-2 labelRadio">
+              <label class="col-6 col-sm-3 col-lg-2 labelRadio">
                 <span class="custom-radio">
                   <div class="active-radio" v-if="profileVisibility === '0'" />
                 </span>
                 <input type="radio" class="profileVisibility" value="0" v-model="profileVisibility" />
                 public
               </label>
-              <label class="col-4 col-sm-3 col-lg-2 labelRadio">
+              <label class="col-6 col-sm-3 col-lg-2 labelRadio">
                 <span class="custom-radio">
                   <div class="active-radio" v-if="profileVisibility === '1'" />
                 </span>
@@ -119,19 +124,19 @@
                     class="col-12 col-sm-4 col-xl-4"
                     type="password"
                     placeholder="old password"
-										v-model="password"
+                    v-model="password"
                   />
                   <input
                     class="col-12 col-sm-4 col-xl-4"
                     type="password"
                     placeholder="new password"
-										v-model="newPassword"
+                    v-model="newPassword"
                   />
                   <input
                     class="col-12 col-sm-4 col-xl-4"
                     type="password"
                     placeholder="repeat new password"
-										v-model="repeatNewPassword"
+                    v-model="repeatNewPassword"
                   />
                   <div class="block-button text-right">
                     <button class="cancel" @click="visibleChangePasswordBlock">cancel</button>
@@ -144,13 +149,13 @@
         </div>
       </div>
       <hr />
-      <div class="container">
+      <div class="container px-0">
         <div class="row">
           <div class="col-12 blockTitle">
             <h4 class="title">Social profiles</h4>
           </div>
           <div class="row container-fluid string">
-            <h4 class="col-12 col-xl-3 text-xl-right">Linked accounts</h4>
+            <h5 class="col-12 col-xl-3 text-xl-right pl-3">Linked accounts</h5>
             <div class="col-12 col-sm-12 col-xl-9">
               <a
                 class="social"
@@ -178,21 +183,21 @@
           <h5 class="col-12 col-xl-3 text-xl-right">{{profile}} Profile</h5>
           <!-- formControlName="facebookProfile" -->
           <input
-            class="col-12 col-sm-5 col-xl-3"
+            class="input-social col-xl-3"
             type="text"
             v-bind:placeholder="`https://${profile}.com/profile`"
           />
         </div>
       </div>
       <hr />
-      <div class="container">
-        <div class="row container-fluid string followingCategories">
-          <h4 class="col-12 col-xl-3 title">Following Categories</h4>
-          <div class="col-12 col-xl-9">
+      <div class="container px-0">
+        <div class="row container-fluid string followingCategories px-0">
+          <h4 class="col-12 col-xl-3 title-setting">Following Categories</h4>
+          <div class="col-12 col-xl-9 px-0">
             <!-- *ngFor="let category of profileStore.categoryList"
             (click)="changeActive(category.id)"-->
             <label
-              class="col-12 col-sm-6 col-md-4"
+              class="col-sm-4 col-md-4"
               v-for="category in followingCategories"
               :key="category.id"
             >
@@ -217,19 +222,19 @@
         </div>
       </div>
       <hr />
-      <div class="container">
+      <div class="container px-0">
         <div class="row">
           <div class="col-12 blockTitle">
             <h4 class="title">Notification settings</h4>
           </div>
           <div class="row container-fluid string">
-            <h4 class="col-12 col-xl-3 text-xl-right">Send me notifications when</h4>
+            <h5 class="col-12 col-xl-3 text-xl-right pl-3">Send me notifications when</h5>
             <div class="col-12 col-sm-12 col-xl-9">
               <div class="row" v-for="string in notificationSettings" :key="string.id">
                 <!-- <div class="col-12" > -->
-                <h6 class="col-12 col-lg-5 col-xl-4">{{string.title}}</h6>
+                <h6 class="col-12 col-lg-5 col-xl-4 px-0">{{string.title}}</h6>
                 <div
-                  class="col-12 col-lg-7 col-xl-8 d-flex flex-column flex-sm-row justify-content-around align-items-sm-center"
+                  class="col-12 col-lg-7 col-xl-8 d-flex flex-column flex-sm-row justify-content-between align-items-sm-center px-0"
                 >
                   <label class="labelRadio" v-for="(setting, key, index) in settings" :key="index">
                     <span class="custom-radio">
@@ -246,12 +251,12 @@
                 </div>
               </div>
             </div>
-            <h4 class="col-12 col-xl-3 text-xl-right">Send Admin notifications when</h4>
+            <h5 class="col-12 col-xl-3 text-xl-right pl-3">Send Admin notifications when</h5>
             <div class="col-12 col-sm-12 col-xl-9">
               <div class="row">
-                <h6 class="col-12 col-lg-5 col-xl-4">someone adds new post</h6>
+                <h6 class="col-12 col-lg-5 col-xl-4 px-0">someone adds new post</h6>
                 <div
-                  class="col-12 col-lg-7 col-xl-8 d-flex flex-column flex-sm-row justify-content-end align-items-sm-center"
+                  class="col-12 col-lg-7 col-xl-8 d-flex flex-column flex-sm-row justify-content-end align-items-sm-center px-0"
                 >
                   <label class="labelRadio radioBottom">
                     <span class="custom-radio">
@@ -295,10 +300,10 @@
       <div class="form-header">
         <h4>Enter Confirmation Code</h4>
         <!-- (keyup)="onKey($event)" -->
-				<input placeholder="Enter Code" @keyup.enter="phoneVerifyCode" v-model="code"/>
+        <input placeholder="Enter Code" @keyup.enter="phoneVerifyCode" v-model="code" />
       </div>
       <div class="form-wrap-confirm">
-				<!-- (click)="confirm()" -->
+        <!-- (click)="confirm()" -->
         <span class="confirm" @click="phoneVerifyCode">CONFIRM</span>
       </div>
     </modal-window>
@@ -315,7 +320,7 @@ export default {
   middleware: "auth",
   components: {
     MazPhoneNumberInput,
-    ModalWindow
+    ModalWindow,
   },
   data() {
     return {
@@ -324,14 +329,14 @@ export default {
       countryCode: "US",
 
       typeModal: "number check",
-			activeModal: false,
+      activeModal: false,
 
-			code: '',
-			codeError: '',
+      code: "",
+      codeError: "",
 
-			repeatNewPassword: '',
-			newPassword: '',
-			password: '',
+      repeatNewPassword: "",
+      newPassword: "",
+      password: "",
 
       email: "",
       emailType: "",
@@ -352,25 +357,25 @@ export default {
       notificationSettings: {
         email_post_published: {
           title: "my post is published",
-          settings: ""
+          settings: "",
         },
         email_post_replies: {
           title: "someone replies to my verdict/comment/reply",
-          settings: ""
+          settings: "",
         },
         email_user_follow: {
           title: "someone follows me",
-          settings: ""
+          settings: "",
         },
         email_recive_point: {
           title: "my post is published",
-          settings: ""
+          settings: "",
         },
         email_verdict_replies: {
           title: "gained V-rep",
-          settings: ""
-        }
-      }
+          settings: "",
+        },
+      },
     };
   },
   created() {
@@ -379,15 +384,15 @@ export default {
   },
   methods: {
     openModal() {
-			if(this.results.isValid) {
-				this.activeModal = true;
-			}
+      if (this.results.isValid) {
+        this.activeModal = true;
+      }
     },
     closeModal() {
       this.activeModal = false;
     },
     openModalCode() {
-			this.phoneVerify()
+      this.phoneVerify();
     },
     changeVerified() {
       this.verified = false;
@@ -412,15 +417,15 @@ export default {
           email_verdict_replies: this.notificationSettings.email_verdict_replies
             .settings,
           email_visibility: this.emailType,
-          profile_visibility: this.profileVisibility
-        }
+          profile_visibility: this.profileVisibility,
+        },
       };
       this.$axios
         .$patch(`/api/profile`, settings)
-        .then(res => {
+        .then((res) => {
           this.$toasted.show(res.message);
         })
-        .catch(error => console.error(error));
+        .catch((error) => console.error(error));
     },
     visibleChangePasswordBlock() {
       this.changePassword = !this.changePassword;
@@ -428,65 +433,65 @@ export default {
     getFollowingCategories() {
       this.$axios
         .$get(`/api/categories/list`)
-        .then(res => {
+        .then((res) => {
           this.followingCategories = res.data;
         })
-        .catch(error => console.error(error));
-		},
+        .catch((error) => console.error(error));
+    },
     phoneVerify() {
-			let phone = {
-				country: this.results.countryCallingCode,
-				phone: this.results.nationalNumber
-			}
+      let phone = {
+        country: this.results.countryCallingCode,
+        phone: this.results.nationalNumber,
+      };
       this.$axios
         .$post(`/api/phone/verify`, phone)
-					.then(res => {
-						this.$toasted.show(res.message);
-						this.typeModal = "code modal";
-					})
-					.catch(error => console.error(error));
+        .then((res) => {
+          this.$toasted.show(res.message);
+          this.typeModal = "code modal";
+        })
+        .catch((error) => console.error(error));
     },
     phoneVerifyCode() {
-			let phone = {
-				code: this.code,
-				country: this.results.countryCallingCode,
-				countryCodeLetters: this.results.countryCode,
-				phone: this.results.nationalNumber
-			}
+      let phone = {
+        code: this.code,
+        country: this.results.countryCallingCode,
+        countryCodeLetters: this.results.countryCode,
+        phone: this.results.nationalNumber,
+      };
       this.$axios
         .$post(`/api/phone/verify-code`, phone)
-					.then(res => {
-						if(res.success) {
-							this.$toasted.show(res.message);
-							this.typeModal = "number check";
-							this.activeModal = false
-							this.verified = true;
-						}else {
-							this.$toasted.error(res.message);
-						}
-					})
-					.catch(error => console.error(error));
+        .then((res) => {
+          if (res.success) {
+            this.$toasted.show(res.message);
+            this.typeModal = "number check";
+            this.activeModal = false;
+            this.verified = true;
+          } else {
+            this.$toasted.error(res.message);
+          }
+        })
+        .catch((error) => console.error(error));
     },
     getProfileFull() {
       this.$axios
         .$get(`/api/profile/full`)
-        .then(res => {
+        .then((res) => {
           this.OutputSettings(res.data);
         })
-        .catch(error => console.error(error));
+        .catch((error) => console.error(error));
     },
     updatePassword() {
-			let params = {
-				newConfirmPassword: this.repeatNewPassword,
-				newPassword: this.newPassword,
-				oldPassword: this.password,
-			}
+      let params = {
+        newConfirmPassword: this.repeatNewPassword,
+        newPassword: this.newPassword,
+        oldPassword: this.password,
+      };
       this.$axios
         .post(`/api/auth/change-password`, params)
-        .then(res => {
-					this.$toasted.show(res.message)
+        .then((res) => {
+          this.$toasted.show(res.message);
         })
-        .catch(error => this.$toasted.error(error.response.message));
+        .catch((error) => this.$toasted.error(error.response.message));
     },
     OutputSettings(data) {
       this.email = data.email;
@@ -512,14 +517,20 @@ export default {
 
       this.yourNumber = data.phone;
       this.countryCode = data.countryCodeLetters;
-    }
-  }
+    },
+  },
 };
 </script>
 
 <style lang="scss" scoped>
 .primary-form {
   font-family: "Open Sans", Helvetica Neue, Helvetica, Roboto, Arial, sans-serif;
+
+  .text-xl-right {
+    @media (min-width: 1200px) {
+      text-align: right;
+    }
+  }
   .mb-2 {
     p {
       font-family: Lato;
@@ -563,11 +574,15 @@ export default {
       display: block;
     }
   }
+
+  .input-social {
+    width: 205px;
+  }
   .categoryTitle {
     display: inline-block;
     vertical-align: middle;
   }
-  .title {
+  .title-settings {
     margin-top: 15px;
     box-sizing: border-box;
     display: table;
@@ -600,12 +615,8 @@ export default {
     }
   }
   .string {
-    margin-bottom: 10px;
-    .row {
-      @media (max-width: 576px) {
-        padding-left: 15px;
-      }
-    }
+    margin-bottom: 15px;
+
     .social {
       display: flex;
       align-items: center;
@@ -613,7 +624,7 @@ export default {
       height: 40px;
       background-color: #8d8d8d;
       margin-right: 10px;
-      margin-bottom: 10px;
+      margin-bottom: 23px;
       padding: 0.5em 1.4em 0.5em 0.6em;
       cursor: pointer;
       transition: background-color 0.25s;
@@ -662,6 +673,10 @@ export default {
       align-items: center;
       margin-top: 19px;
       margin-left: 20px;
+      @media (max-width: 576px) {
+        margin: 0;
+      }
+
       &.active {
         border-color: #00a167;
         background-color: #4cbd39;
@@ -698,14 +713,15 @@ export default {
   .disabled {
     position: absolute;
     z-index: 2;
-    width: 292px;
+    max-width: 292px;
+    width: 100%;
     height: 40px;
     opacity: 0.1;
     background-color: black;
   }
   h4 {
     display: inline-block;
-    font-size: 16px;
+    font-size: 1.2em;
     font-weight: 600;
   }
   h5 {

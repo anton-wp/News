@@ -30,7 +30,7 @@
 		.sideBar {
 			ul {
 				position: sticky;
-				top: 25px;
+				top: 86px;
 				z-index: 1;
 				padding-left: 0 !important;
 
@@ -45,7 +45,7 @@
 
 			li {
 				display: block;
-				margin-top: 20px;
+				margin-bottom: 5px;
 
 				@media (max-width: 768px) {
 					text-align: center;
@@ -58,7 +58,7 @@
 		}
 
 		.sideBar {
-			padding: 0 0 0 2.5em;
+			padding: 0 2.3em 0 4.3em;
 
 			@media (max-width: 991px) {
 				padding: 0 0 0 1.1em;
@@ -188,8 +188,8 @@
 				}
 
 				@media (max-width: 639px) {
-					left: 25px;
-					top: 25px;
+					left: 30px;
+					top: 35px;
 					width: calc(100vw - 100% - 1rem);
 				}
 

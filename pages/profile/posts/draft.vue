@@ -1,12 +1,8 @@
 <template>
-  <div>
+  <div class="container">
     <div class="row">
-      <div class="container">
-        <div class="row">
-          <div class="col-lg-4" v-for="post in posts" :key="post.id">
-            <draft-post :post="post" />
-          </div>
-        </div>
+      <div class="col-lg-4" v-for="post in posts" :key="post.id">
+        <draft-post :post="post" />
       </div>
     </div>
     <pagination v-if="pagination" :pagination="pagination" @openPage="openPage" />
@@ -20,7 +16,7 @@ import Pagination from "~/components/profile/pagination";
 export default {
   components: {
     DraftPost,
-    Pagination
+    Pagination,
   },
   layout: "profile",
   data() {
@@ -28,10 +24,10 @@ export default {
       page: 1,
       posts: [],
       pagination: null,
-      default: null
+      default: null,
     };
   },
-  mounted () {
+  mounted() {
     if (this.$route.query.page) {
       this.page = this.$route.query.page;
     }
@@ -45,19 +41,19 @@ export default {
     query() {
       this.$router.push({
         path: "/profile/posts/draft/",
-        query: { page: this.page }
+        query: { page: this.page },
       });
     },
     getPosts() {
-			this.$axios
+      this.$axios
         .$get(`/api/profile/posts?status=Draft&page=${this.page}&limit=12`)
-        .then(res => {
-					this.posts = res.data;
+        .then((res) => {
+          this.posts = res.data;
           this.pagination = res.pagination;
-					this.query();
+          this.query();
         });
-    }
-  }
+    },
+  },
 };
 </script>
 

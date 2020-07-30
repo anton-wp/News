@@ -3,7 +3,7 @@
     <div class="wrapper">
       <div class="container">
         <div class="row sub-wrapper">
-          <div class="first-block col-lg-2 col-xl-3 col-12 col-sm-6 order-1">
+          <div class="first-block col-lg-2 col-xl-3 col-12 col-sm-6 order-1 px-0 px-sm-3">
             <a href="/" class="footer-logo">
               <img class="footer-logo-icon" src="/image/logo-white.svg" />
             </a>

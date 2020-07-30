@@ -13,7 +13,7 @@
         <div class="col-auto sideBar">
           <tabs />
         </div>
-        <div class="col content">
+        <div class="col content px-0">
           <nuxt />
           <!-- <not-found /> -->
         </div>
