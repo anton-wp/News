@@ -82,7 +82,8 @@ export default {
     //       }
     //     })
     //     .catch(error => console.error(error));
-    // },
+		// },
+		
     morePosts() {
       this.getPosts("more", this.page + 1);
     },
