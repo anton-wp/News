@@ -105,13 +105,10 @@ export default {
       }, 200);
     },
     logout() {
-      // console.log(this.$cookies)
       this.$auth.logout("local").then(() => {});
 
       this.$store.commit("CLEAR_BOOKMARKS");
       this.$store.commit("CLEAR_SUBSCRIPTION");
-
-      // location.reload();
     },
   },
 };

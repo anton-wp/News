@@ -16,16 +16,21 @@
       :author="post.user"
       :header="header"
       :links="links"
-			:post="post.post"
+      :post="post.post"
     />
-    <table-footer v-if="dashboard.posts.length > 0" class="action" :actionsBlock="actionsBlock" @aplly="aplly" />
+    <table-footer
+      v-if="dashboard.posts.length > 0"
+      class="action"
+      :actionsBlock="actionsBlock"
+      @aplly="aplly"
+    />
     <pagination
       class="pagination"
       v-if="dashboard.paginations && dashboard.posts.length > 0"
       :pagination="dashboard.paginations"
       @openPage="openPage"
     />
-		<not-found class="notFound" v-if="dashboard.posts.length === 0"/>
+    <not-found class="notFound" v-if="dashboard.posts.length === 0" />
   </div>
 </template>
 
@@ -46,13 +51,13 @@ export default {
     TableHeader,
     TableBlock,
     TableFooter,
-		Pagination,
-		NotFound
+    Pagination,
+    NotFound,
   },
   data() {
     return {
-			page: 1,
-			type: 'blocked',
+      page: 1,
+      type: "blocked",
       header: {
         title: "Comment",
         response: "Response To",
@@ -61,22 +66,22 @@ export default {
       },
       sort: {
         name: "date",
-        type: "ASC"
+        type: "ASC",
       },
       search: {
         search: "",
-        author: ""
+        author: "",
       },
       searchProps: {
         search: true,
-        author: true
+        author: true,
       },
       links: {
         view: "review",
         edit: "edit",
-        delete: "delete"
+        delete: "delete",
       },
-      actionsBlock: ["Delete"]
+      actionsBlock: ["Delete"],
     };
   },
   created() {
@@ -84,62 +89,69 @@ export default {
     this.getPosts();
   },
   computed: {
-    ...mapState(["dashboard"])
+    ...mapState(["dashboard"]),
   },
   methods: {
     aplly() {
       this.$axios
         .$post(`/api/admin/comments/delete-multi`, { ids: this.dashboard.ids })
-        .then(res => {
-					this.$toasted.show(res.message);
-					this.$store.commit("DEL_POSTS_DASHBOARD", this.dashboard.ids);
+        .then((res) => {
+          this.$toasted.show(res.message);
+          this.$store.commit("DEL_POSTS_DASHBOARD", this.dashboard.ids);
           this.$store.commit("CLEAR_DASHBOARD_IDS");
         })
-        .catch(error => console.error(error));
+        .catch((error) => console.error(error));
     },
     view(slug, id) {
       this.$router.push({
-        path: `/${slug}/comments/${id}`
+        path: `/${slug}/comments/${id}`,
       });
     },
     edit(slug) {
       this.$router.push({
-        path: `/profile/dashboard/comments/${slug}/edit`
+        path: `/profile/dashboard/comments/${slug}/edit`,
       });
     },
     deletePosts(id) {
       this.$axios
         .$delete(`/api/comments/${id}/delete`)
-        .then(res => {
+        .then((res) => {
           this.$toasted.show(res.message);
           this.$store.commit("DEL_POST_DASHBOARD", id);
         })
-        .catch(error => console.error(error));
+        .catch((error) => console.error(error));
     },
     getParams() {
       this.page = this.$route.query.page ? this.$route.query.page : 1;
-      this.sort.name = this.$route.query.sort ? this.$route.query.sort : this.sort.name;
-      this.sort.type = this.$route.query.direction ? this.$route.query.direction : this.sort.type;
+      this.sort.name = this.$route.query.sort
+        ? this.$route.query.sort
+        : this.sort.name;
+      this.sort.type = this.$route.query.direction
+        ? this.$route.query.direction
+        : this.sort.type;
       this.search.search = this.$route.query.q;
       this.search.status = this.$route.query.status;
       this.search.author = this.$route.query.author;
     },
     getPosts() {
-			this.updateRouter();
-			this.$store.commit("CLEAR_DASHBOARD_POSTS");
+      this.updateRouter();
+      this.$store.commit("CLEAR_DASHBOARD_POSTS");
       this.$axios
         .$get(
-          `/api/admin/comments${this.sortUpdate()}&type=${this.type}&limit=20&page=${
-            this.page
-          }${this.updateSearch()}`
-				)
+          `/api/admin/comments${this.sortUpdate()}&type=${
+            this.type
+          }&limit=20&page=${this.page}${this.updateSearch()}`
+        )
 
-        .then(res => {
-					console.log(res)
-					this.$store.commit("CLEAR_DASHBOARD_IDS");
+        .then((res) => {
+          this.$store.commit("CLEAR_DASHBOARD_IDS");
           this.$store.commit("SET_DASHBOARD_POSTS", res.data);
           this.$store.commit("SET_DASHBOARD_PAGINATIONS", res.pagination);
-          if (this.dashboard.posts.length === 0 && this.pagination && this.pagination.pagesCount > 0) {
+          if (
+            this.dashboard.posts.length === 0 &&
+            this.pagination &&
+            this.pagination.pagesCount > 0
+          ) {
             if (this.page > 1) {
               this.page = this.page - 1;
               this.getPosts();
@@ -148,12 +160,12 @@ export default {
             }
           }
         })
-        .catch(error => console.error(error));
+        .catch((error) => console.error(error));
     },
     updateRouter() {
       this.$router.push({
         path: "/profile/dashboard/blocked",
-        query: this.query()
+        query: this.query(),
       });
     },
     sortUpdate() {
@@ -206,8 +218,8 @@ export default {
         res["author"] = this.search.author;
       }
       return res;
-    }
-  }
+    },
+  },
 };
 </script>
 
@@ -228,7 +240,7 @@ export default {
   order: 6;
 }
 .notFound {
-	order: 4;
+  order: 4;
 }
 .table-block {
   order: 4;

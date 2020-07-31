@@ -79,6 +79,10 @@
 					font-weight: 700;
 					opacity: 1;
 				}
+
+				@media (max-width: 992px) {
+					font-size: 42px;
+				}
 			}
 		}
 
@@ -93,15 +97,5 @@
 		}
 	}
 
-	@media (max-width: $middle-breackpoint) {
-		.wrapper-search-popup {
-			.wrapper-input {
-				.label-form {
-					.search-filed {
-						font-size: 42px;
-					}
-				}
-			}
-		}
-	}
+
 }

@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div class="container px-0 px-md-3">
     <div v-if="posts.length > 0" class="row">
       <div class="col-12 sort">
         <span class="verdicts-posts">Sort by:</span>
@@ -35,10 +35,9 @@ import DefaultNewsCard from "~/components/news/DefaultNewsCard";
 import NotFound from "~/components/profile/not-found";
 
 export default {
-
   components: {
     DefaultNewsCard,
-    NotFound
+    NotFound,
   },
   props: {
     type: String,
@@ -50,11 +49,10 @@ export default {
       pagination: Object,
       sort: "DESC",
       page: 1,
-      path: ""
+      path: "",
     };
   },
   created() {
-		console.log(this.type)
     if (this.type === "author") {
       this.path = `author/${this.$route.params.slug}`;
     } else {
@@ -72,7 +70,7 @@ export default {
         .$get(
           `/api/${this.path}/posts?status=${this.typePost}&sort=${this.sort}&page=${this.page}&limit=12`
         )
-        .then(res => {
+        .then((res) => {
           if (!more) {
             this.posts = res.data;
             this.pagination = res.pagination;
@@ -81,7 +79,7 @@ export default {
             this.pagination = res.pagination;
           }
         })
-        .catch(error => console.error(error));
+        .catch((error) => console.error(error));
     },
     morePosts() {
       this.getPosts("more", this.page + 1);
@@ -90,8 +88,8 @@ export default {
       this.sort = sort;
       this.page = 1;
       this.getPosts();
-    }
-  }
+    },
+  },
 };
 </script>
 

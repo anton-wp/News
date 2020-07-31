@@ -2,7 +2,7 @@
   <div style="position: relative;">
     <div class="comment" :class="data.isVerdict ? 'verdict-active' : ''">
       <div class="position__verdict__comment" v-if="data.isVerdict">
-        <block-verdict :verdict="data.verdictThreshold" />
+        <block-verdict :verdict="data.verdictThreshold" :comment="true" />
       </div>
       <author-block
         :author="data.user"
@@ -124,8 +124,8 @@ export default {
     ReplyComment,
     CommentReplies,
     modalWindow,
-		CommentShare,
-		BlockVerdict
+    CommentShare,
+    BlockVerdict,
   },
   data() {
     return {
@@ -142,17 +142,17 @@ export default {
         "sexually explicit or suggestive",
         "violent or dangerous",
         "hate speech, harassment, or bullying",
-        "something else"
-      ]
+        "something else",
+      ],
     };
   },
   props: {
     data: Object,
     postId: String,
-    type: Boolean
+    type: Boolean,
   },
   computed: {
-    ...mapState(["commentsReply", "votes"])
+    ...mapState(["commentsReply", "votes"]),
   },
   created() {
     this.reportValue = this.reportArr[0];
@@ -166,13 +166,13 @@ export default {
         this.voteDisabled = true;
         this.$axios
           .post(`/api/comments/${this.data.id}/vote`)
-          .then(res => {
+          .then((res) => {
             this.voteDisabled = false;
             this.$emit("updateComment", res.data.data);
             this.$toasted.show(res.data.message);
             this.$store.commit("ADD_VOTE", this.data.id);
           })
-          .catch(error => {
+          .catch((error) => {
             this.$toasted.error(error.response.data.message);
           });
       }
@@ -198,12 +198,12 @@ export default {
         : { reportType: this.reportValue };
       this.$axios
         .$post(`/api/comments/${this.data.id}/reports`, data)
-        .then(res => {
+        .then((res) => {
           this.$toasted.show(res.message);
           this.closeReport();
           this.closeReportInput();
         })
-        .catch(error => {
+        .catch((error) => {
           console.log(error);
         });
     },
@@ -222,11 +222,11 @@ export default {
     getCommentReplies() {
       this.$axios
         .$get(`/api/posts/${this.postId}/comments/${this.data.id}`)
-        .then(res => {
+        .then((res) => {
           this.dataReplies = res.data;
           this.replies = false;
         })
-        .catch(error => {
+        .catch((error) => {
           console.log(error);
         });
     },
@@ -236,10 +236,7 @@ export default {
       } else {
         this.$store.commit("ADD_COMMENT_REPLY", "");
       }
-    }
+    },
   },
-  mounted() {
-    // console.log(this.data)
-  }
 };
 </script>

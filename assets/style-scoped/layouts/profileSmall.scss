@@ -15,6 +15,13 @@
 		.menu {
 			display: inline-block;
 			margin-right: 10px;
+			@media (max-width: 768px) {
+				padding: 10px 0;
+			}
+			@media (max-width: 639px) {
+				padding-bottom: 7px;
+				padding-top: 0px;
+			}
 		}
 
 		.line {
@@ -29,15 +36,15 @@
 
 		.sideBar {
 			ul {
+				top: 71px;
 				position: sticky;
-				top: 86px;
 				z-index: 1;
 				padding-left: 0 !important;
 
 				// margin-top: -15px;
-				@media (max-width: 768px) {
-					margin-top: -40px;
-				}
+				// @media (max-width: 768px) {
+				// 	margin-top: -40px;
+				// }
 				@media (max-width: 639px) {
 					margin-left: 10px;
 				}
@@ -52,16 +59,16 @@
 				}
 
 				@media (max-width: 639px) {
-					margin-top: 5px;
+					margin-top: 0px;
 				}
 			}
 		}
 
 		.sideBar {
-			padding: 0 2.3em 0 4.3em;
+			padding: 30px 2.3em 0 4.3em;
 
 			@media (max-width: 991px) {
-				padding: 0 0 0 1.1em;
+				padding: 30px 0 0 1.1em;
 			}
 
 			@media (max-width: 768px) {
@@ -103,14 +110,14 @@
 
 			li {
 				display: block;
-				margin-top: 20px;
+				// margin-top: 20px;
 
 				@media (max-width: 768px) {
 					text-align: center;
 				}
 
 				@media (max-width: 639px) {
-					margin-top: 5px;
+					margin-top: 0px;
 				}
 
 				.title {
@@ -181,15 +188,16 @@
 					position: absolute;
 					width: calc(100vw - 100% - 0.9375rem);
 					overflow-x: scroll;
-					left: 92px;
-					top: 25px;
+					left: 96px;
+					top: 0px;
 					background-color: #f4f4f4;
 					cursor: pointer;
+					z-index: 1;
 				}
 
 				@media (max-width: 639px) {
 					left: 30px;
-					top: 35px;
+					top: 0px;
 					width: calc(100vw - 100% - 1rem);
 				}
 
@@ -207,6 +215,7 @@
 					@media (max-width: 768px) {
 						margin-left: 0px;
 						margin-top: 0px;
+						font-size: 14px;
 						padding: 0.8em 1em 0.8em;
 						display: list-item;
 						white-space: nowrap;

@@ -18,11 +18,11 @@
           <div class="information padding0">
             <div class="container-fluid">
               <news-card-header
-              v-if="!tag"
-              :category="post.category"
-              :post="post"
-              colorScheme="dark"
-              :paddingTop="paddingTop"
+                v-if="!tag"
+                :category="post.category"
+                :post="post"
+                colorScheme="dark"
+                :paddingTop="paddingTop"
               />
               <div class="row block wrapp">
                 <!-- <h2  > -->
@@ -89,9 +89,6 @@ export default {
     return {
       id: this.post.id,
     };
-  },
-  created() {
-    console.log(this.paddingTop);
   },
 };
 </script>

@@ -53,7 +53,7 @@
           <div class="img">
             <input type="file" id="file" ref="file" v-on:change="handleFileUpload()" />
             <div class="addPhoto" v-if="!slug" v-on:click="submitFile()">
-              <svg width="24" height="27">
+              <svg width="22" height="19">
                 <use xlink:href="#camera" />
               </svg>
             </div>

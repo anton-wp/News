@@ -28,14 +28,11 @@ import NewsCardFooter from "~/components/news/NewsCardFooter";
 
 export default {
   components: {
-    NewsCardFooter
+    NewsCardFooter,
   },
   props: {
-    data: Object
+    data: Object,
   },
-  created() {
-    console.log(this.data);
-  }
 };
 </script>
 

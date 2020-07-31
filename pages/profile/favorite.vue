@@ -1,6 +1,6 @@
 <template>
-  <div class="container">
-    <div class="row">
+  <div class="container px-0 px-md-3">
+    <div v-if="posts && posts.length > 0" class="row">
       <div class="col-12 sort">
         <span class="verdicts-posts">Sort by:</span>
         <button
@@ -14,7 +14,7 @@
           @click="updateSort('ASC')"
         >top voted</button>
       </div>
-      <div class="container">
+      <div class="container px-0 px-md-3">
         <div class="row">
           <!-- post -->
           <template>
@@ -33,24 +33,27 @@
         </div>
       </div>
     </div>
+		<not-found v-else />
   </div>
 </template>
 
 <script>
 import DefaultNewsCard from "~/components/news/DefaultNewsCard";
+import NotFound from "~/components/profile/not-found";
 
 export default {
   layout: "profile",
   middleware: "auth",
   components: {
-    DefaultNewsCard
+		DefaultNewsCard,
+		NotFound,
   },
   data() {
     return {
       sort: "DESC",
-      posts: [],
+      posts: null,
       pagination: null,
-      page: 1
+      page: 1,
     };
   },
   methods: {
@@ -70,8 +73,7 @@ export default {
         .$get(
           `/api/profile/bookmarks?sort=${this.sort}&page=${this.page}&limit=12`
         )
-        .then(res => {
-          // console.log(res)
+        .then((res) => {
           if (!more) {
             this.posts = res.data;
             this.pagination = res.pagination;
@@ -80,12 +82,12 @@ export default {
             this.pagination = res.pagination;
           }
         })
-        .catch(error => console.error(error));
-    }
+        .catch((error) => console.error(error));
+    },
   },
   beforeMount() {
     this.getPosts();
-  }
+  },
 };
 </script>
 

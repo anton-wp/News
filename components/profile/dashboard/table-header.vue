@@ -43,16 +43,16 @@ export default {
       name: "",
       type: "",
       sort: "",
-      sortArr: []
+      sortArr: [],
     };
   },
   computed: {
-    ...mapState(["dashboard"])
+    ...mapState(["dashboard"]),
   },
   props: {
-    header: Object
+    header: Object,
   },
-  created () {
+  created() {
     for (let head in this.header) {
       if (head === "response") {
         continue;
@@ -64,23 +64,22 @@ export default {
         {
           name: this.getName(this.header[`${head}`]),
           type: "ASC",
-          title: this.header[`${head}`] + " ASC"
+          title: this.header[`${head}`] + " ASC",
         },
         {
           name: this.getName(this.header[`${head}`]),
           type: "DESC",
-          title: this.header[`${head}`] + " DESC"
+          title: this.header[`${head}`] + " DESC",
         }
-	  );
-	  this.sort =  this.sortArr[0];
+      );
+      this.sort = this.sortArr[0];
     }
   },
   methods: {
-		sortUpdate() {
+    sortUpdate() {
       this.$emit("getSort", { name: this.sort.name, type: this.sort.type });
     },
     getName(name) {
-      // console.log(name[0].toLowerCase())
       name = name.split("");
       name[0] = name[0].toLowerCase();
       name = name.join("");
@@ -89,7 +88,7 @@ export default {
     checkboxChange() {
       this.checkboxActive = !this.checkboxActive;
       let ids = [];
-      this.dashboard.posts.map(post => ids.push(post.id));
+      this.dashboard.posts.map((post) => ids.push(post.id));
       if (this.checkboxActive) {
         this.$store.commit("ADD_IDS", ids);
       } else {
@@ -106,7 +105,7 @@ export default {
         this.type = "ASC";
       }
       this.$emit("getSort", { name: this.name, type: this.type });
-    }
-  }
+    },
+  },
 };
 </script>

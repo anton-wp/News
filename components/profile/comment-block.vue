@@ -1,5 +1,8 @@
 <template>
-  <div class="comment-block" :class="comment.isVerdict ? 'verdict__comment__block'  : ''">
+  <div
+    class="comment-block mx-n15 mx-md-0"
+    :class="comment.isVerdict ? 'verdict__comment__block'  : ''"
+  >
     <div v-if="comment.isVerdict" class="position__verdict__comment">
       <block-verdict :verdict="comment.verdictThreshold" />
     </div>
@@ -22,7 +25,7 @@
         >{{comment.user.firstName}} {{comment.user.lastName}}</nuxt-link>
       </span>
     </time>
-    <div class="content">
+    <div class="content-comment__profile">
       <div class="content__comment">
         <p class>{{ comment.body }}</p>
       </div>
@@ -39,17 +42,17 @@ import BlockVerdict from "~/components/universal-components/block-verdict";
 
 export default {
   components: {
-    BlockVerdict
+    BlockVerdict,
   },
   props: {
     comment: Object,
-    type: String
+    type: String,
   },
   methods: {
     unsubscribe() {
       this.$emit("unsubscribe", this.comment.id);
-    }
-  }
+    },
+  },
 };
 </script>
 
@@ -57,6 +60,16 @@ export default {
 .verdict__comment__block {
   padding-top: 2em !important;
   background-color: #f4f4f4;
+
+  @media (max-width: 460px) {
+    padding-top: 4em !important;
+  }
+
+  .verdict__title {
+    @media (max-width: 460px) {
+      padding-right: 0px;
+    }
+  }
 }
 .verdict__title {
   padding-right: 8em;
@@ -67,6 +80,13 @@ export default {
   padding: 0.2em 1.7em 1.7em 2.1em;
   margin-bottom: 1em;
   border-bottom: 1px solid black;
+
+  @media (max-width: 768px) {
+    padding: 0.2em 0 1.7em 2.1em;
+  }
+  @media (max-width: 460px) {
+    padding: 0.2em 0 1.7em 0.8em;
+  }
 
   .title__comment {
     text-overflow: ellipsis;
@@ -92,32 +112,47 @@ export default {
     top: 0;
     right: 2.9em;
   }
-  .content {
+  .content-comment__profile {
     display: flex;
     margin-top: 0px !important;
 
     .content__comment {
       margin: 0.5em 0;
-      margin-right: 1.8em;
-      font-size: 1.2em;
-      line-height: 1.6;
+
       word-wrap: normal;
       word-break: normal;
       line-break: auto;
       text-align: justify;
       text-indent: 1em;
+      p {
+        font-size: 1.2em;
+        line-height: 1.6;
+        @media (max-width: 768px) {
+          font-size: 1.1em;
+        }
+        @media (max-width: 460px) {
+          font-size: 1em;
+        }
+      }
     }
 
     .content__points {
       display: flex;
       flex-direction: column;
       align-items: center;
-      margin-left: auto;
+			margin-left: auto;
+
+      @media (max-width: 460px) {
+        padding-left: 16px;
+      }
 
       .content__points__count {
         font-size: 1.8em;
         line-height: 1;
         font-weight: 400;
+        @media (max-width: 460px) {
+          font-size: 1.5em;
+        }
       }
 
       .content__points__vote {
@@ -125,6 +160,9 @@ export default {
         font-size: 16px;
         line-height: 1.5;
         font-weight: 400;
+        @media (max-width: 460px) {
+          font-size: 0.8em;
+        }
       }
     }
   }

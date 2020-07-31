@@ -176,7 +176,7 @@ export default {
       this.$axios
         .$get(`/api/menu/header`)
         .then((res) => this.$store.commit("SET_HEADER_MENU", res.data))
-        .catch((error) => console.error(error));
+        .catch((error) => console.log(error));
     },
     disabledSideBarMenu() {
       this.SideBarMenu = false;

@@ -31,7 +31,7 @@
         <div class="form-header">
           <h4>Merge Tag</h4>
           <p class="text-left">Select new Tag name for:</p>
-          <input type="text" class="text-left" placeholder="New Tag name" v-model="mergeValue"/>
+          <input type="text" class="text-left" placeholder="New Tag name" v-model="mergeValue" />
         </div>
         <div class="form-wrap">
           <span @click="mergeTag" class="yes">Merge</span>
@@ -48,22 +48,22 @@ import { mapState } from "vuex";
 
 export default {
   components: {
-    ModalWindow
+    ModalWindow,
   },
   data() {
     return {
       selectedAction: "",
       modal: false,
-			mergeOn: false,
-			mergeValue: ''
+      mergeOn: false,
+      mergeValue: "",
     };
   },
   props: {
     actionsBlock: Array,
-    merge: Boolean
+    merge: Boolean,
   },
   computed: {
-    ...mapState(["dashboard"])
+    ...mapState(["dashboard"]),
   },
   created() {
     this.selectedAction = this.actionsBlock[0];
@@ -76,18 +76,18 @@ export default {
       this.mergeOn = false;
     },
     mergeTag() {
-			console.log(this.mergeValue)
-			console.log(this.dashboard.ids)
-			this.$axios
-          .$put(`/api/admin/tags/merge`, { name: this.mergeValue, tags: this.dashboard.ids })
-          .then(res => {
-						this.$toasted.show(res.message);
-						this.$store.commit("CLEAR_DASHBOARD_IDS");
-						this.mergeClose()
-          })
-          .catch(error => console.error(error));
-
-		},
+      this.$axios
+        .$put(`/api/admin/tags/merge`, {
+          name: this.mergeValue,
+          tags: this.dashboard.ids,
+        })
+        .then((res) => {
+          this.$toasted.show(res.message);
+          this.$store.commit("CLEAR_DASHBOARD_IDS");
+          this.mergeClose();
+        })
+        .catch((error) => console.error(error));
+    },
     aplly() {
       if (this.selectedAction === "Action:") {
         this.modal = false;
@@ -101,7 +101,7 @@ export default {
     },
     no() {
       this.modal = false;
-    }
-  }
+    },
+  },
 };
 </script>

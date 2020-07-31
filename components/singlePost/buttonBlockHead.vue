@@ -41,61 +41,60 @@ import { mapState } from "vuex";
 
 export default {
   components: {
-    BlockVerdict
+    BlockVerdict,
   },
   props: {
     category: Object,
     id: String,
     slug: String,
-		type: String,
-		data: Object
+    type: String,
+    data: Object,
   },
   data() {
     return {
-      actions: Object
+      actions: Object,
     };
   },
   created() {
     if (this.type !== "comment" && this.auth.loggedIn) {
-			this.getButton();
+      this.getButton();
     }
-	},
-	computed: {
+  },
+  computed: {
     ...mapState(["auth"]),
   },
   methods: {
     getButton() {
       this.$axios
         .$get(`/api/posts/${this.id}/actions`)
-        .then(data => {
-          // console.log(data.data)
+        .then((data) => {
           this.actions = data.data;
         })
-        .catch(error => {
+        .catch((error) => {
           console.log(error);
         });
     },
     removePost() {
       this.$axios
         .$delete(`/api/posts/${this.id}/mark-deleted`)
-        .then(data => {
+        .then((data) => {
           console.log(data);
         })
-        .catch(error => {
+        .catch((error) => {
           console.log(error);
         });
     },
     deletePost() {
       this.$axios
         .$delete(`/api/posts/${this.id}`)
-        .then(data => {
+        .then((data) => {
           console.log(data);
         })
-        .catch(error => {
+        .catch((error) => {
           console.log(error);
         });
-    }
-  }
+    },
+  },
 };
 </script>
 

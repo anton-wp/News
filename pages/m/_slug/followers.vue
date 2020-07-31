@@ -105,8 +105,6 @@ export default {
     },
 
     async asyncData({ $axios, params }) {
-        console.log(params);
-
         const userInfo = await $axios.$get(`/api/author/${params.slug}`);
 
         const followers = await $axios.$get(

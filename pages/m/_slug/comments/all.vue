@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div class="container px-0 px-md-3">
     <div class="row">
       <div class="col-12 sort">
         <span class="verdicts-posts">Sort by:</span>
@@ -14,7 +14,7 @@
           @click="updateSort('vote')"
         >top voted</button>
       </div>
-      <div v-if="comments.length > 0" class="container">
+      <div v-if="comments.length > 0" class="container px-0 px-md-3">
         <div class="row">
           <template>
             <div class="col-12" v-for="comment in comments" :key="comment.id">

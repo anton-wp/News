@@ -43,7 +43,7 @@ export default {
             { title: `${res.data.firstName} ${res.data.lastName}` },
           ]);
         })
-        .catch((error) => console.error(error));
+        .catch((error) => console.log(error));
     },
     getProfile() {
       this.slug = this.$route.params.slug;
@@ -56,7 +56,7 @@ export default {
             { title: `${res.data.firstName} ${res.data.lastName}` },
           ]);
         })
-        .catch((error) => console.error(error));
+        .catch((error) => console.log(error));
     },
   },
 };

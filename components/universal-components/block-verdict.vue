@@ -1,6 +1,6 @@
 <template>
   <div class="verdict__block" :class="small ? '' : 'shadow'">
-    <svg :width="small ? 33 : 40 " height="40">
+    <svg :width="small ? 33 : 40 " height="40" :class="comment ? 'comment-adaptive' : ''">
       <use xlink:href="#verdict-icon-selected" />
     </svg>
     <span class="px-2 px-md-3">{{verdict}}%</span>
@@ -11,14 +11,21 @@
 export default {
   props: {
     verdict: Number | String,
-    small: Boolean
-  }
+    small: Boolean,
+    comment: Boolean,
+  },
 };
 </script>
 
 <style lang="scss">
 .shadow {
   box-shadow: 2px 4px 16px 0 rgba(35, 36, 40, 0.4);
+}
+.comment-adaptive {
+  @media (max-width: 576px) {
+    width: 30px;
+    height: 30px;
+  }
 }
 .verdict__block {
   font-size: 100%;

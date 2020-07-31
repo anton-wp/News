@@ -53,7 +53,6 @@ export default {
         .$get(`/api/profile/feed?page=${this.page}`)
         .then(res => {
           this.posts = res.data;
-          console.log(res);
           this.$store.commit("SET_DASHBOARD_POSTS", res.data);
           this.$store.commit("SET_DASHBOARD_PAGINATIONS", res.pagination);
         })

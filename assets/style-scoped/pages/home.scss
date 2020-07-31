@@ -12,6 +12,13 @@ a {
 	height: 100%;
 }
 
+.content-profile {
+	padding-top: 29px;
+
+	@media (max-width: 768px) {
+		padding-top: 60px;
+	}
+}
 .page__default {
 	display: flex;
 	flex-direction: column;

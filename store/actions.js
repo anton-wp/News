@@ -54,7 +54,7 @@ export default {
 			.then(res => {
 				context.commit("SET_BOOKMARK", res.data);
 			})
-			.catch(error => console.error(error));
+			.catch(error => console.log(error));
 	},
 	getSubscriptions(context) {
 		this.$axios
@@ -62,7 +62,7 @@ export default {
 			.then(res => {
 				context.commit("SET_SUBSCRIPTIONS", res.data);
 			})
-			.catch(error => console.error(error));
+			.catch(error => console.log(error));
 	},
 	getVotes(context) {
 		this.$axios
@@ -70,7 +70,7 @@ export default {
 			.then(res => {
 				context.commit("SET_VOTES", res.data);
 			})
-			.catch(error => console.error(error));
+			.catch(error => console.log(error));
 	},
 
 

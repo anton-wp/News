@@ -63,17 +63,17 @@ export default {
       loading: false,
       password: "",
       confirmPassword: "",
-      errorMessage: Object
+      errorMessage: Object,
     };
   },
   validations: {
     password: {
-      required
+      required,
     },
     confirmPassword: {
       required,
-      sameAsPassword: sameAs("password")
-    }
+      sameAsPassword: sameAs("password"),
+    },
   },
   methods: {
     click() {
@@ -82,13 +82,11 @@ export default {
       if (this.$v.$invalid) {
         this.errorNotif = true;
       } else {
-        console.log(this.$route);
         let data = {
           token: this.$route.query.i,
           newPassword: this.password,
-          newConfirmPassword: this.confirmPassword
+          newConfirmPassword: this.confirmPassword,
         };
-        console.log(data);
         this.confirmResetPassword(data);
       }
     },
@@ -96,21 +94,22 @@ export default {
       this.errorMessage = Object;
       axios
         .post(`/api/auth/confirm-reset-password/`, formData)
-        .then(res => {
+        .then((res) => {
           this.loading = false;
           // this.$router.push({ path: "/" });
           // this.$toasted.show(
           //   "You will be sent a message to confirm your email."
           // );
         })
-        .catch(error => {
+        .catch((error) => {
           console.log(error.response.data);
-          if(error.response.data.message) this.$toasted.error(error.response.data.message);
+          if (error.response.data.message)
+            this.$toasted.error(error.response.data.message);
           this.loading = false;
           this.errorMessage = error.response.data.properties;
         });
-    }
-  }
+    },
+  },
 };
 </script>
 

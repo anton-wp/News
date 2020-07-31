@@ -7,13 +7,13 @@
     <get-profile />
     <div class="container page__content">
       <div class="row">
-        <div class="col-12 profile-bottom">
+        <div class="col-12">
           <div class="line" />
         </div>
         <div class="col-auto sideBar">
           <tabs />
         </div>
-        <div class="col content px-0">
+        <div class="col content-profile px-0">
           <nuxt />
           <!-- <not-found /> -->
         </div>

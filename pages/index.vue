@@ -96,7 +96,7 @@
       <div class="wrapper-block-news background">
         <div class="container">
           <div class="row row-flex top-verdict pt-0 pb-0 pt-md-5 pb-md-5">
-            <div class="col-12 col-md-4 col-lg-4" v-for="post in posts.slice(2, 5)" :key="post.id">
+            <div class="col-12 col-md-4 col-lg-4 px-0 px-md-15" v-for="post in posts.slice(2, 5)" :key="post.id">
               <default-news-card type="first-block" :post="post" :padding="false" />
             </div>
           </div>
@@ -118,7 +118,7 @@
               <div class="row">
                 <div class="col-12">
                   <follow-block v-if="index === 0" :posts="true" />
-                  <SidebarWithRecent v-if="index === 0"  :paddingTop="true" />
+                  <SidebarWithRecent class="mx-n10 mx-0" v-if="index === 0"  :paddingTop="true" />
                   <default-news-card
 										class="mb-8"
                     v-else
@@ -140,7 +140,7 @@
         <div class="container">
           <div class="row row-flex py-0 pt-md-5 pb-md-4">
             <div
-              class="col-12 col-sm-12 col-md-12 col-lg-6"
+              class="col-12 col-sm-12 col-md-12 col-lg-6 px-0 px-md-15"
               v-for="post in posts.slice(11, 15)"
               :key="post.id"
             >
@@ -153,7 +153,7 @@
         <div class="container">
           <div class="row pt-0 md-0 pt-md-5 pb-md-4">
             <div
-              class="col-12 col-sm-12 col-md-6 col-lg-3"
+              class="col-12 col-sm-12 col-md-6 col-lg-3 px-0 px-md-15"
               v-for="post in posts.slice(15, 19)"
               :key="post.id"
             >

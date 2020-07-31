@@ -24,6 +24,11 @@
 			flex: 0 0 180px;
 			padding: 0;
 		}
+		@media (max-width: 460px) {
+			max-width: 214px;
+			flex: 0 0 214px;
+			padding: 0;
+		}
 	}
 
 	.bigHeader-row {
@@ -141,8 +146,8 @@
 			color: white;
 			background-color: #ff4242;
 			border-radius: 50%;
-			width: 40px;
-			height: 40px;
+			width: 35px;
+			height: 35px;
 			cursor: pointer;
 			fill: $white;
 		}
