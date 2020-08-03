@@ -3,10 +3,10 @@
         <div class="block">
             <nuxt-link class="link" :to="`/draft/${post.slug}`">
                 <img v-if="!post.featured.original" src="/image/default_image_landscape.png" alt />
-                <img v-if="post.featured.original" :src="post.featured.original" alt />
+                <img v-if="post.featured.original" :src="post.featured.wide" alt />
             </nuxt-link>
             <!-- <img *ngIf="post.featured.original" [src]="post.featured.landscape" alt /> -->
-            <div class="content">
+            <div class="content-draft">
                 <nuxt-link class="link" :to="`/draft/${post.slug}`">
                     <h5>{{post.title}}</h5>
                 </nuxt-link>

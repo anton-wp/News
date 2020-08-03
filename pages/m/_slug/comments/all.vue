@@ -1,7 +1,7 @@
 <template>
   <div class="container px-0 px-md-3">
     <div class="row">
-      <div class="col-12 sort">
+      <div class="col-12 sort" v-if="comments.length > 0">
         <span class="verdicts-posts">Sort by:</span>
         <button
           class="click-for-follow follow"
@@ -113,14 +113,14 @@ export default {
     font-weight: 600;
   }
   .active {
-    background-color: #bc2d2d !important;
+    background-color: #ff4242 !important;
     color: #fff !important;
   }
   .follow {
     color: #ff4242;
     margin-right: 5px;
     &:hover {
-      background-color: #bc2d2d;
+      background-color: #bc2d2d !important;
       color: #fff;
     }
   }

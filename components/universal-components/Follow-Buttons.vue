@@ -23,7 +23,8 @@ import { mapState } from "vuex";
 export default {
   props: {
     id: String,
-    full: Boolean
+		full: Boolean,
+		type: String
   },
   data() {
     return {
@@ -46,10 +47,11 @@ export default {
         .then(responce => {
           this.$store.commit("DEL_SUBSCRIPTION", this.id);
           this.$toasted.show(responce.message);
-          this.loading = false;
+					this.loading = false;
+					console.log(this.type)
           if (
             this.$store.getters.IS_TABS.filter(tab => tab.title === "Following")
-              .length > 0
+              .length > 0 && this.type !== 'author'
           ) {
             this.$store.commit("UPDATE_COUNTER_TABS", {
               title: "Following",

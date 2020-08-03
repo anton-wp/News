@@ -11,7 +11,7 @@
 		}
 
 		.active {
-			background-color: #bc2d2d !important;
+			background-color: #ff4242 !important;
 			color: #fff !important;
 		}
 
@@ -20,7 +20,7 @@
 			margin-right: 5px;
 
 			&:hover {
-				background-color: #bc2d2d;
+				background-color: #bc2d2d !important;
 				color: #fff;
 			}
 		}
@@ -75,7 +75,7 @@
 		text-align: center;
 		transition: 0.3s;
 		cursor: pointer;
-		margin-top: 0.5em;
+		margin-top: 30px;
 	}
 }
 
@@ -87,7 +87,7 @@
 	// background: 0 0;
 	display: inline-block;
 	vertical-align: middle;
-	margin: 0 0 1rem;
+	margin: 0 0 1.5rem;
 	font-family: inherit;
 	border: 1px solid transparent;
 	border-radius: 0;

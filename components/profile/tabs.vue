@@ -61,6 +61,7 @@ export default {
   },
   watch: {
     "$route.path"() {
+			console.log(this.$store.state.tabs)
       this.activTabsStart(this.$store.state.tabs);
     }
   },

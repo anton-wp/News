@@ -21,10 +21,24 @@
             since:
             <time
               class="member-since"
-            >{{ new Date($store.state.profile.createdAt).toDateString()}}</time>
+            >{{ parse($store.state.profile.createdAt, 'MMMM DD,YYYY') }}</time>
           </p>
         </div>
       </div>
     </div>
   </div>
 </template>
+
+<script>
+import { format } from "fecha";
+
+export default {
+  methods: {
+    parse(date, f) {
+      if(date) {
+				return format(new Date(date), f);
+			}
+		},
+	}
+}
+</script>

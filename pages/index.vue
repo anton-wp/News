@@ -76,7 +76,7 @@
               v-for="post in posts.slice(0, 2)"
               :key="post.id"
             >
-              <top-news-card :post="post" />
+              <top-news-card :post="post" :home="true"/>
             </div>
             <div class="col-12 custom-lg-small col-md-6 col-12 pt-3 pt-lg-0">
               <div v-if="index === 0" class="wrapper-title-hot px-3 px-sm-0">

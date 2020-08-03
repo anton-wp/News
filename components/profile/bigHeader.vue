@@ -80,10 +80,12 @@
           </div>
         </div>
         <div class="d-block d-md-none">
-          <h4 class="your-name mb-0 mb-md-2 bigHeader-row">{{$store.state.profile.firstName}} {{$store.state.profile.lastName}}</h4>
+          <h4
+            class="your-name mb-0 mb-md-2 bigHeader-row"
+          >{{$store.state.profile.firstName}} {{$store.state.profile.lastName}}</h4>
           <p
             class="member-since bigHeader-row"
-          >{{$store.state.profile.rank}} since: {{ new Date($store.state.profile.createdAt).toDateString()}}</p>
+          >{{$store.state.profile.rank}} since: {{ parse($store.state.profile.createdAt, 'MMMM DD,YYYY') }}</p>
           <div class="d-flex stat">
             <div class="wrapper-statistic bigHeader-row__vRep">
               <p class="statistic-count">{{ $store.state.profile.postsCount }}</p>
@@ -103,30 +105,39 @@
             <p class="vrep-title">V-rep</p>
           </div>
         </div>
-        <div class="d-none d-md-block" style="flex: 1 1 0px;">
-          <h4 class="your-name">{{$store.state.profile.firstName}} {{$store.state.profile.lastName}}</h4>
-          <p
-            class="member-since"
-          >{{$store.state.profile.rank}} since: {{ new Date($store.state.profile.createdAt).toDateString()}}</p>
-          <div class="mail-content">
-            <div class="mail-wrapper">
-              social
-              <!-- <fa-icon [icon]="faEnvelope"></fa-icon> -->
+        <div class="profile-content__block">
+          <div class="row">
+            <div class="d-none d-md-block" style="flex: 1 1 0px;">
+              <h4
+                class="your-name"
+              >{{$store.state.profile.firstName}} {{$store.state.profile.lastName}}</h4>
+              <p
+                class="member-since"
+              >{{$store.state.profile.rank}} since: {{ parse($store.state.profile.createdAt, 'MMMM DD,YYYY') }}</p>
+              <div class="mail-content">
+                <div class="mail-wrapper">
+                  social
+                  <!-- <fa-icon [icon]="faEnvelope"></fa-icon> -->
+                </div>
+              </div>
+            </div>
+            <div class="col-12 col-sm-auto ml-auto stat d-none d-md-block">
+              <div class="wrapper-statistic">
+                <p class="statistic-count">{{ $store.state.profile.postsCount }}</p>
+                <p class="statistic-title">Posts</p>
+              </div>
+              <div class="wrapper-statistic">
+                <p class="statistic-count">{{ $store.state.profile.verdictsCount }}</p>
+                <p class="statistic-title">Verdicts</p>
+              </div>
+              <div class="wrapper-statistic">
+                <p class="statistic-count">{{ $store.state.profile.commentsCount }}</p>
+                <p class="statistic-title">Comments</p>
+              </div>
             </div>
           </div>
-        </div>
-        <div class="col-12 col-sm-auto ml-auto stat d-none d-md-block">
-          <div class="wrapper-statistic">
-            <p class="statistic-count">{{ $store.state.profile.postsCount }}</p>
-            <p class="statistic-title">Posts</p>
-          </div>
-          <div class="wrapper-statistic">
-            <p class="statistic-count">{{ $store.state.profile.verdictsCount }}</p>
-            <p class="statistic-title">Verdicts</p>
-          </div>
-          <div class="wrapper-statistic">
-            <p class="statistic-count">{{ $store.state.profile.commentsCount }}</p>
-            <p class="statistic-title">Comments</p>
+          <div class="pt-3 profile-content__subtitle">
+            <p>{{$store.state.profile.subTitle}}</p>
           </div>
         </div>
       </div>
@@ -136,6 +147,7 @@
 
 <script>
 import FollowButtons from "~/components/universal-components/Follow-Buttons";
+import { format } from "fecha";
 
 export default {
   components: {
@@ -154,6 +166,11 @@ export default {
   },
 
   methods: {
+    parse(date, f) {
+      if(date) {
+				return format(new Date(date), f);
+			}
+    },
     getProfileFull() {
       this.$axios
         .$get(`/api/profile/full`)

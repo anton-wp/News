@@ -21,6 +21,7 @@
           :key="follow.id"
           :post="follow"
           :type="'following'"
+					:typeProfile="type"
         />
         <div v-if="pagination.next" class="col-12 button-block">
           <button class="loadMore">Load More</button>

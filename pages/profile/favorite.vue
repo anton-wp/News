@@ -109,14 +109,14 @@ export default {
     font-weight: 600;
   }
   .active {
-    background-color: #bc2d2d !important;
+    background-color: #ff4242 !important;
     color: #fff !important;
   }
   .follow {
     color: #ff4242;
     margin-right: 5px;
     &:hover {
-      background-color: #bc2d2d;
+      background-color: #bc2d2d !important;
       color: #fff;
     }
   }

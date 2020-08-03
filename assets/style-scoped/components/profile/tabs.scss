@@ -18,6 +18,7 @@
 		@media (max-width: 639px) {
 			padding-bottom: 7px;
 			padding-top: 0px;
+			margin-right: 0px;
 		}
 
 		.menu-block {
@@ -119,7 +120,7 @@
 		@media (max-width: 768px) {
 			display: flex;
 			position: absolute;
-			width: calc(100vw - 100% - 0.9375rem);
+			width: calc(100vw - 100% - 2.05rem);
 			overflow-x: scroll;
 			left: 96px;
 			top: 0px;
@@ -129,7 +130,7 @@
 		}
 
 		@media (max-width: 639px) {
-			left: 50px;
+			left: 31px;
 			top: 0px;
 			width: calc(100vw - 100% - 1rem);
 		}

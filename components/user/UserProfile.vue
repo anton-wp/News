@@ -107,8 +107,7 @@ export default {
     logout() {
       this.$auth.logout("local").then(() => {});
 
-      this.$store.commit("CLEAR_BOOKMARKS");
-      this.$store.commit("CLEAR_SUBSCRIPTION");
+      this.$store.commit("CLEAR_LOGOUT");
     },
   },
 };

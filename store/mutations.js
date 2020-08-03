@@ -114,4 +114,11 @@ export default {
 	CLEAR_DASHBOARD_POSTS: (state) => {
 		state.dashboard.posts = [];
 	},
+	CLEAR_LOGOUT: (state) => {
+		state.dashboard.ids = [];
+		state.dashboard.posts = [];
+		state.dashboard.paginations = Object;
+		state.tabs = [];
+		state.profile = Object;
+	}
 }

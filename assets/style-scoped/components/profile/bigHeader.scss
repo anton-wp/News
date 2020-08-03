@@ -2,6 +2,34 @@
 	.menu {
 		display: inline-block;
 		margin-right: 10px;
+
+		@media (max-width: 639px) {
+			margin-right: 0px;
+		}
+	}
+
+	.profile-content__block {
+		max-width: calc(100% - 330px);
+		width: 100%;
+		padding-right: 15px;
+		@media (max-width: 768px) {
+			max-width: 100%;
+			padding: 0 15px;
+		}
+	}
+
+	.profile-content__subtitle {
+		font-size: 1.25em;
+    line-height: 1.4;
+    overflow-wrap: normal;
+    word-wrap: normal;
+    word-break: normal;
+    line-break: auto;
+    text-align: justify;
+		text-indent: 1.5em;
+		@media (max-width: 768px) {
+			font-size: 1.1em;
+		}
 	}
 
 	.image-block {

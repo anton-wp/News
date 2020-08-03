@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div class="container px-0 px-md-15">
     <div class="row">
       <div class="col-lg-4" v-for="post in posts" :key="post.id">
         <draft-post :post="post" />

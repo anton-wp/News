@@ -12,8 +12,11 @@
         <nuxt-link class="wrapp" :title="post.title" :to="`/${post.slug}`">
           <h2 class="title top-title">{{ post.title }}</h2>
         </nuxt-link>
-        <div class="shortContent">
+        <div v-if="!home" class="shortContent">
           <p>{{post.shortContent}}[...]</p>
+        </div>
+        <div v-else class="shortContent shortContent-home">
+          <p>{{post.shortContent}}</p>
         </div>
         <news-card-footer
           :author="post.author"
@@ -43,7 +46,8 @@ export default {
     post: Object,
     category: Boolean,
     tag: Boolean,
-    padding: Boolean,
+		padding: Boolean,
+		home: Boolean,
   },
   provide() {
     return {

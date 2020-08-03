@@ -5,8 +5,9 @@
       width: 100%;
       cursor: pointer;
     }
-    .content {
-      padding: 0.9em 0;
+    .content-draft {
+			padding: 0.9em 0;
+			margin-top: 0px !important;
       .bottom {
         margin-top: 5px;
       }
@@ -20,9 +21,15 @@
       }
       .link {
         text-decoration: none;
-        color: inherit;
+				color: inherit;
+				display: -webkit-box;
+				height: calc(1.5em * 3);
+				-webkit-line-clamp: 3;
+				-webkit-box-orient: vertical;
+				overflow: hidden;
       }
       h5 {
+				text-overflow: ellipsis;
         color: #0a0a0a;
         box-sizing: inherit;
         max-height: calc(1.3em * 3);
@@ -72,14 +79,14 @@
         }
       }
       p {
-        margin-left: 5px;
+				margin-left: 5px;
+				margin-bottom: 0px;
         font-weight: 600;
         font-size: 0.9em;
         letter-spacing: -0.3px;
         color: inherit;
         line-height: 1.8;
         box-sizing: inherit;
-        margin-bottom: auto;
         cursor: pointer;
         transition: color 0.25s ease-out, color 0.25s ease-out;
         &:hover {
