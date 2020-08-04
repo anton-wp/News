@@ -2,7 +2,7 @@
 	margin-top: 20px;
 
 	.button__scroll__top {
-		z-index: 999999999;
+		z-index: 999;
 		position: fixed;
 		bottom: 1.3em;
 		right: 5em;
@@ -190,7 +190,7 @@
 		.wrapper {
 			.container {
 				.sub-wrapper {
-					padding: 24px 10px;
+					padding: 24px 10px 10px;
 
 					.first-block {
 						text-align: center;
