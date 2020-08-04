@@ -261,10 +261,10 @@
 	.blockForm {
 		font-family: open sans, Helvetica Neue, Helvetica, Roboto, Arial, sans-serif;
 
-		@media (max-width: 576px) {
-			padding-left: 10px;
-			padding-right: 10px;
-		}
+		// @media (max-width: 576px) {
+		// 	padding-left: 10px;
+		// 	padding-right: 10px;
+		// }
 
 		.time-select-wrap {
 			align-items: center;
@@ -471,7 +471,7 @@
 				-moz-user-select: none;
 				-ms-user-select: none;
 				user-select: none;
-				padding: 0.85em 1.4em 0.8em 1.4em;
+				padding: 0.85em 2.2em 0.8em 2.2em;
 				-webkit-transition: background-color 0.25s ease-out, color 0.25s ease-out;
 				-o-transition: background-color 0.25s ease-out, color 0.25s ease-out;
 				transition: background-color 0.25s ease-out, color 0.25s ease-out;
@@ -553,6 +553,7 @@
 				letter-spacing: 0.5px;
 				margin-bottom: 0.1em;
 				// font-family: "Open Sans";
+				padding-right: 20px;
 
 				span {
 					font-weight: 600;
@@ -971,7 +972,7 @@
 		@media (max-width: map_get($grid-breakpoints, md)) {
 			position: fixed;
 			bottom: 0;
-			z-index: 999;
+			z-index: 9999;
 			background-color: #fff;
 			border-top: 1px solid #ebebeb;
 			left: 0;
