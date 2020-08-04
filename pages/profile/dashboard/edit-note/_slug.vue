@@ -31,9 +31,7 @@
         </form>
       </div>
       <div class="col-12 button-block">
-        <button class="add" @click="createNote">
-          Add note
-        </button>
+        <button class="add" @click="updateNote">Edit note</button>
       </div>
     </div>
   </div>
@@ -41,25 +39,42 @@
 
 <script>
 export default {
-	layout: 'profile',
-	middleware: "auth",
-	data() {
-		return {
-			message: '',
-		}
-	},
-	methods: {
-		createNote() {
-			this.$axios.$post(`/api/profile/notes`, {message: this.message})
-				.then(res => {
-					this.$toasted.show('Note has been added')
+  layout: "profile",
+  middleware: "auth",
+  data() {
+    return {
+      message: "",
+    };
+  },
+  methods: {
+    updateNote() {
+      this.$axios
+        .$put(`/api/profile/notes/${this.$route.params.slug}`, {
+          message: this.message,
+        })
+        .then((res) => {
+					this.$toasted.show('Note has been changed')
 					this.$router.push({ path: "/profile/dashboard" });
-				})
-				.catch(error => {
-					console.log(error)
-				})
-		}
-	}
-}
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
+    getNote() {
+      this.$axios
+        .$get(`/api/profile/notes/${this.$route.params.slug}`)
+        .then((res) => {
+					console.log(res);
+					this.message = res.data.message
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
+  },
+  created() {
+    this.getNote();
+  },
+};
 </script>
 

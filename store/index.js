@@ -20,6 +20,7 @@ const store = () => new Vuex.Store({
 		commentsReply: '',
 		subscriptions: [],
 		votes: [],
+		notes: [],
 		header: {
 			menu: [],
 			news: [],

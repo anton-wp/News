@@ -38,7 +38,7 @@
             </nuxt-link>
           </div> -->
           <div class="options" v-click-outside="backOption">
-            <button @click="openOption">
+            <button @click="openOption" style="height: 45px;">
               <span>.</span>
               <span>.</span>
               <span>.</span>

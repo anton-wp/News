@@ -20,76 +20,85 @@
 <script>
 import Pagination from "~/components/profile/pagination";
 import { mapState } from "vuex";
-import BlockFeed from "~/components/profile/block-feed"
+import BlockFeed from "~/components/profile/block-feed";
 
 export default {
   layout: "profile",
   middleware: "auth",
   components: {
-		Pagination,
-		BlockFeed
+    Pagination,
+    BlockFeed,
   },
   data() {
     return {
       page: 1,
-			posts: [],
-			sort: '',
-			sortArr: []
+      posts: [],
+      sort: "",
+      sortArr: [],
     };
   },
   created() {
     this.getFeed();
+    this.getSort();
   },
   computed: {
-    ...mapState(["dashboard"])
+    ...mapState(["dashboard"]),
   },
   methods: {
-		sortUpdate () {
-
+    sortUpdate() {
+			this.getFeed()
 		},
-    getFeed() {
-			this.$store.commit("CLEAR_DASHBOARD_POSTS");
+    getSort() {
       this.$axios
-        .$get(`/api/profile/feed?page=${this.page}`)
-        .then(res => {
+        .$get(`/api/profile/feed-resources`)
+        .then((res) => {
+          this.sortArr = res.data;
+        })
+        .catch((error) => console.error(error));
+    },
+    getFeed() {
+      this.$store.commit("CLEAR_DASHBOARD_POSTS");
+      this.$axios
+        .$get(`/api/profile/feed?page=${this.page}${this.sort ? '&resource=' + this.sort.url : ''}`)
+        .then((res) => {
           this.posts = res.data;
           this.$store.commit("SET_DASHBOARD_POSTS", res.data);
           this.$store.commit("SET_DASHBOARD_PAGINATIONS", res.pagination);
         })
-        .catch(error => console.error(error));
+        .catch((error) => console.error(error));
     },
     openPage(page) {
       this.page = page;
       this.getFeed();
-    }
-  }
+    },
+  },
 };
 </script>
 
 <style lang="scss">
 .profile__feed {
-	.sort {
-		color: #727272;
+  .sort {
+    color: #727272;
     font-weight: 600;
     margin-right: 5px;
-		font-size: 16px;
-		margin-bottom: 10px;
+    font-size: 16px;
+    margin-bottom: 10px;
 
-		select {
-			display: inline-block;
-			width: auto;
-			font-weight: 700;
-			border: none;
-			background: 0 0;
-			font-size: 16px;
-			line-height: 1.5;
-			padding: 5px 15px 5px 5px;
-			text-transform: none;
-			letter-spacing: inherit;
-			border-radius: 0;
-			cursor: pointer;
-			margin-left: 5px;
-		}
-	}
+    select {
+      display: inline-block;
+      width: auto;
+      font-weight: 700;
+      border: none;
+      background: 0 0;
+      font-size: 16px;
+      line-height: 1.5;
+      padding: 5px 15px 5px 5px;
+      text-transform: none;
+      letter-spacing: inherit;
+      border-radius: 0;
+      cursor: pointer;
+      margin-left: 5px;
+    }
+  }
 }
 </style>

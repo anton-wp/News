@@ -26,6 +26,9 @@ export default {
 	SET_DASHBOARD_PAGINATIONS: (state, paginations) => {
 		state.dashboard.paginations = paginations;
 	},
+	SET_NOTE: (state, data) => {
+		state.notes = data;
+	},
 	ADD_COMMENT_REPLY: (state, id) => {
 		state.commentsReply = id;
 	},
@@ -47,6 +50,9 @@ export default {
 	DEL_POSTS_DASHBOARD: (state, id) => {
 		state.dashboard.posts = state.dashboard.posts.filter(post => !id.includes(post.id))
 	},
+	DEL_NOTE: (state, id) => {
+		state.notes = state.notes.filter(note => note.id !== id);
+	},
 	ADD_SUBSCRIPTION: (state, id) => {
 		state.subscriptions = state.subscriptions.concat(id);
 	},
@@ -57,6 +63,9 @@ export default {
 		if(!state.votes.includes(id)) {
 			state.votes = state.votes.concat(id);
 		}
+	},
+	ADD_NOTE: (state, data) => {
+		state.notes = state.notes.concat(data);
 	},
 	SET_BREADCRUMBS: (state, breadcrumbCustom) => {
 		let breadcrumbs = [

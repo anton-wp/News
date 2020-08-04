@@ -72,8 +72,19 @@
 			.user-popup__bottom {
 				top: 40px !important;
 				bottom: -309px !important;
+				right: 0;
 				&:after {
 					top: -6px !important;
+					right: 60% !important;
+					@media (max-width: 992px) {
+						right: 80% !important;
+					}
+				}
+				@media (max-width: 992px) {
+					right: auto !important;
+				}
+				@media (max-width: 576px) {
+					right: 0 !important;
 				}
 			}
 
