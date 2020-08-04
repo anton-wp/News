@@ -47,7 +47,8 @@ export default {
       return format(new Date(date), f);
     },
     openOption() {
-      this.optionOpen = true;
+			this.optionOpen = true;
+			
     },
     backOption() {
       this.optionOpen = false;
