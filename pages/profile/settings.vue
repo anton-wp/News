@@ -276,10 +276,10 @@
               </div>
             </div>
           </div>
-          <div class="bottom-button">
-            <!-- (click)='update()' -->
-            <button class="update" @click="updateProfile">update profile</button>
-          </div>
+        </div>
+        <div class="bottom-button">
+          <!-- (click)='update()' -->
+          <button class="update mr-15" @click="updateProfile">update profile</button>
         </div>
       </div>
     </div>
@@ -810,7 +810,8 @@ export default {
     justify-content: flex-end;
     button {
       user-select: none;
-      padding: 0.85em 1.4em 0.8em 1.4em;
+      padding: 0.85em 1.4em 0.8em;
+      line-height: 17.4px;
       font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 0.8px;

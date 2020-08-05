@@ -124,6 +124,7 @@ export default {
 		state.dashboard.posts = [];
 	},
 	CLEAR_LOGOUT: (state) => {
+		console.log(123)
 		state.dashboard.ids = [];
 		state.dashboard.posts = [];
 		state.dashboard.paginations = Object;

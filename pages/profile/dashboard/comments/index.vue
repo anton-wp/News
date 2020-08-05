@@ -7,6 +7,7 @@
       v-for="(post, index) in dashboard.posts"
       @view="view"
       @edit="edit"
+      @approve="approve"
       @deletePosts="deletePosts"
       :key="index"
       :titleComment="post.body"
@@ -16,7 +17,7 @@
       :id="post.id"
       :author="post.user"
       :header="header"
-      :links="links"
+      :links="post.status === 'Pending review' ? linksPending : links "
 			:post="post.post"
     />
     <table-footer v-if="dashboard.posts.length > 0" class="action" :actionsBlock="actionsBlock" @aplly="aplly" />
@@ -79,6 +80,12 @@ export default {
         edit: "edit",
         delete: "delete"
       },
+      linksPending: {
+        view: "review",
+        edit: "edit",
+        approve: "approve",
+        delete: "decline"
+      },
       actionsBlock: ["Delete"]
     };
   },
@@ -104,6 +111,20 @@ export default {
       this.$router.push({
         path: `/${slug}/comments/${id}`
       });
+    },
+    approve(id) {
+			console.log(id)
+			this.$axios.$post(`/api/admin/comments/${id}/approve`)
+				.then(res => {
+					this.$toasted.show(res.message)
+					this.$store.commit("DEL_POST_DASHBOARD", id);
+				})
+				.catch(error => {
+					console.log(error)
+				})
+      // this.$router.push({
+      //   path: `/profile/dashboard/comments/${slug}/edit`
+      // });
     },
     edit(slug) {
       this.$router.push({

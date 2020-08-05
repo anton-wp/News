@@ -10,6 +10,20 @@
 	}
 }
 
+.notice {
+	line-height: 1.5;
+	display: inline-block;
+	background: #ffdbdf;
+	padding: .5em 1.2em;
+	border-radius: .3em;
+	font-size: .8em;
+	color: #ff4242;
+	font-weight: 600;
+	letter-spacing: .7px;
+	border: 1px solid #ff4242;
+	text-indent: 0;
+}
+
 .post-layout {
 	.background {
 		background-color: $secondary-bgcolor;
@@ -22,8 +36,6 @@
 			color: #F23D3B;
 		}
 	}
-
-	.position__verdict__single {}
 
 	.reply-comment {
 		margin-top: 36px;
@@ -345,6 +357,7 @@
 			user-select: none;
 			padding: 0.85em 1.4em 0.8em;
 			margin: 0 0 0 0.5em;
+
 			@media (max-width: 768px) {
 				padding: 0.85em 0.8em 0.8em;
 			}

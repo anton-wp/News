@@ -1,65 +1,74 @@
 .followVerdict {
-  margin-bottom: 44px;
-  position: sticky;
+	margin-bottom: 44px;
+	position: sticky;
 	// top: 20px;
 	top: -739px;
-  display: block;
-  margin-top: 16px;
-  padding-left: 0;
-  padding-right: 0;
+	display: block;
+	margin-top: 16px;
+	padding-left: 0;
+	padding-right: 0;
 
-  // .row {
-  //   margin-bottom: 44px;
-  // }
+	// .row {
+	//   margin-bottom: 44px;
+	// }
+	.iframe-block {
+		margin-top: 48px;
+		margin-bottom: 47px;
+	}
 
-  .wrapper-title-follow {
-    padding: 0 10px;
 
-    h5 {
-      color: #696969;
-      font-weight: 700;
-      line-height: 16px;
-      font-size: 1.2em;
-      margin-bottom: 20px;
-      position: relative;
+	.wrapper-title-follow {
+		padding: 0 10px;
 
-      span {
-        background-color: $white;
-        position: relative;
-        z-index: 2;
-        padding-right: 5px;
-      }
-      &::after {
-        content: "";
-        position: absolute;
-        display: block;
-        top: 8px;
-        height: 1px;
-        width: 100%;
-        background-color: $doveGray;
-        z-index: 1;
-      }
-    }
-    .social-links {
-      margin-bottom: 2.2em;
+		h5 {
+			color: #696969;
+			font-weight: 700;
+			line-height: 16px;
+			font-size: 1.2em;
+			margin-bottom: 20px;
+			position: relative;
 
-      .social-icon-in-menu {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        width: 30px;
-        height: 30px;
-        cursor: pointer;
-      }
-    }
-  }
+			span {
+				background-color: $white;
+				position: relative;
+				z-index: 2;
+				padding-right: 5px;
+			}
 
-  @media (max-width: 480px) {
-    .follow {
-      .wrapper-title-follow {
-        padding: 0 1.2em;
-      }
-    }
-  }
+			&::after {
+				content: "";
+				position: absolute;
+				display: block;
+				top: 8px;
+				height: 1px;
+				width: 100%;
+				background-color: $doveGray;
+				z-index: 1;
+			}
+		}
+
+		.social-links {
+			margin-bottom: 2.2em;
+
+			.social-icon-in-menu {
+				position: absolute;
+				top: 50%;
+				left: 50%;
+				transform: translate(-50%, -50%);
+				width: 30px;
+				height: 30px;
+				cursor: pointer;
+			}
+		}
+	}
+
+	@media (max-width: 480px) {
+		.follow {
+			.wrapper-title-follow {
+				padding: 0 1.2em;
+			}
+		}
+	}
 }
+
+

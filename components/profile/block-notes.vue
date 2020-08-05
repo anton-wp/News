@@ -48,7 +48,6 @@ export default {
     },
     openOption() {
 			this.optionOpen = true;
-			
     },
     backOption() {
       this.optionOpen = false;

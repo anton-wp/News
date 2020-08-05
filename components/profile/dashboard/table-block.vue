@@ -19,7 +19,7 @@
         <nuxt-link class="link" :to="`/m/${author.slug}`">{{author.firstName}} {{author.lastName}}</nuxt-link>
       </small>
     </div>
-    <div class="col-lg " v-if="titleComment" @mouseleave="showPopup = false">
+    <div class="col-lg" v-if="titleComment" @mouseleave="showPopup = false">
       <h6 class="header">{{header.title}}</h6>
       <small v-if="author" class="author" @mouseenter="showPopup = true">
         <div v-if="showPopup" id="1" class="user-popup active">
@@ -27,7 +27,10 @@
             <popup-user-info :authorId="author.id" />
           </div>
         </div>
-        <nuxt-link class="link authorBig" :to="`/m/${author.slug}`">{{author.firstName}} {{author.lastName}}</nuxt-link>
+        <nuxt-link
+          class="link authorBig"
+          :to="`/m/${author.slug}`"
+        >{{author.firstName}} {{author.lastName}}</nuxt-link>
       </small>
       <h6 class="title__small">{{titleComment}}</h6>
     </div>
@@ -42,8 +45,14 @@
     <div class="col-lg-3 category commentResponse" v-if="commentResponse">
       <h6 class="header">{{header.response}}</h6>
       <h6>
-        <nuxt-link v-if="!commentResponse.parent" :to="`/${commentResponse.post.slug}/comments/${commentResponse.id}`">{{commentResponse.post.slug}}</nuxt-link>
-        <nuxt-link v-else :to="`/${commentResponse.post.slug}/comments/${commentResponse.id}`">{{commentResponse.user.firstName}} {{commentResponse.user.lastName}}</nuxt-link>
+        <nuxt-link
+          v-if="!commentResponse.parent"
+          :to="`/${commentResponse.post.slug}/comments/${commentResponse.id}`"
+        >{{commentResponse.post.slug}}</nuxt-link>
+        <nuxt-link
+          v-else
+          :to="`/${commentResponse.post.slug}/comments/${commentResponse.id}`"
+        >{{commentResponse.user.firstName}} {{commentResponse.user.lastName}}</nuxt-link>
       </h6>
     </div>
     <div class="col-lg-2 category" v-if="date">
@@ -73,6 +82,8 @@
         <span v-if="links.view" class="line-links">|</span>
         <span v-if="links.edit" @click="edit" class="link">{{ links.edit }}</span>
         <span v-if="links.edit" class="line-links">|</span>
+        <span v-if="links.approve" @click="approve" class="link">{{ links.approve }}</span>
+        <span v-if="links.approve" class="line-links">|</span>
         <span v-if="links.delete" class="delete" @click="deletePosts()">{{ links.delete }}</span>
       </span>
     </div>
@@ -85,18 +96,18 @@ import { mapState } from "vuex";
 
 export default {
   components: {
-    PopupUserInfo
+    PopupUserInfo,
   },
   data() {
     return {
       show: false,
       checkboxActive: false,
       showPopup: false,
-      disabledFeatured: false
+      disabledFeatured: false,
     };
   },
   computed: {
-    ...mapState(["dashboard"])
+    ...mapState(["dashboard"]),
   },
   props: {
     id: String,
@@ -122,12 +133,12 @@ export default {
       this.disabledFeatured = true;
       this.$axios
         .$put(`/api/admin/tags/${id}/featured`)
-        .then(res => {
+        .then((res) => {
           this.disabledFeatured = false;
           this.$toasted.show(res.message);
           this.$store.commit("UPDATE_FEATURED", id);
         })
-        .catch(error => console.error(error));
+        .catch((error) => console.error(error));
     },
     view() {
       if (this.post) {
@@ -135,6 +146,9 @@ export default {
       } else {
         this.$emit("view", this.slug, this.status);
       }
+    },
+    approve() {
+      this.$emit("approve", this.id);
     },
     edit() {
       if (this.slug) {
@@ -152,8 +166,8 @@ export default {
       } else {
         this.$store.commit("ADD_IDS", [this.id]);
       }
-    }
-  }
+    },
+  },
 };
 </script>
 

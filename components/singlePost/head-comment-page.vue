@@ -12,7 +12,7 @@
             <author-block v-if="data.author" :author="data.author" :publishedAt="data.publishedAt" />
           </div>
           <div class="col-lg-6" style="align-items: center; display: flex;">
-            <marks v-if="data.author" :author="data.author" />
+            <marks v-if="data.author" :data="data" />
           </div>
         </div>
       </div>

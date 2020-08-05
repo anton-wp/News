@@ -10,7 +10,7 @@
         :type="'comment'"
         :postReaction="data.postReaction"
       />
-      <div class="verdict" @click="voteAdd">
+      <div class="verdict" v-if="data.status !== 'Pending review'" @click="voteAdd">
         <svg v-if="!votes.includes(data.id)" width="40" height="40">
           <use xlink:href="#verdict-icon-custom" />
         </svg>
@@ -24,10 +24,11 @@
       </div>
       <div class="title-comment">
         <p>{{data.body}}</p>
+				<div class="notice" v-if="data.status === 'Pending review'">Pending</div>
         <p></p>
         <br />
       </div>
-      <div class="buttons">
+      <div class="buttons" v-if="data.status !== 'Pending review'">
         <button @click="reply">
           <svg width="14" height="17">
             <use xlink:href="#reply" />
