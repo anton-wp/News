@@ -59,7 +59,10 @@ module.exports = {
 		'vue-social-sharing/nuxt',
 		// ['@nuxtjs/component-cache', { maxAge: 1000 * 60 * 60 }]
 	],
-	serverMiddleware: ['~/middleware/authToken'],
+
+	// serverMiddleware: ['~/middleware/authToken'],
+
+
 	/*
 	** Axios module configuration
 	** See https://axios.nuxtjs.org/options
