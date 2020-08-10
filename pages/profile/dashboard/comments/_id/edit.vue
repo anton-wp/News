@@ -1,5 +1,5 @@
 <template>
-  <div class="edit__comment">
+  <div class="edit__comment px-15">
     <h2 v-if="data.parent">Reply to {{data.parent.title}}</h2>
     <h2 v-if="!data.parent && data.post">
       Comment for
@@ -13,8 +13,16 @@
         @click="blockComment"
         :disabled="disabled"
       >{{block ? 'unblock' : 'block'}}</button>
-      <button class="update" @click="updateComment" :disabled="disabled">update</button>
-      <button class="delete" @click="deleteComment" :disabled="disabled">delete</button>
+      <button
+        class="update"
+        @click="updateApprove"
+        :disabled="disabled"
+      >{{ data.status === 'Pending review' ? 'approve' : 'update' }}</button>
+      <button
+        class="delete"
+        @click="deleteComment"
+        :disabled="disabled"
+      >{{ data.status === 'Pending review' ? 'decline' : 'delete' }}</button>
     </div>
   </div>
 </template>
@@ -25,49 +33,70 @@ import AuthorBlock from "~/components/singlePost/authorBlock.vue";
 export default {
   layout: "profileSmall",
   components: {
-    AuthorBlock
+    AuthorBlock,
   },
   data() {
     return {
       data: Object,
       body: "",
       disabled: false,
-      block: Boolean
+      block: Boolean,
     };
   },
   created() {
     this.getComment();
   },
   methods: {
+		updateApprove() {
+			if(this.data.status === 'Pending review'){
+				this.approveComment();
+			}else {
+				this.updateComment();
+			}
+		},
     blockComment() {
       this.disabled = true;
       let data = {
-        commentId: this.body
+        commentId: this.body,
       };
       this.$axios
         .$post(`/api/admin/comments/${this.$route.params.id}/block`)
-        .then(res => {
+        .then((res) => {
           this.$toasted.show(res.message);
           this.disabled = false;
           this.block = !this.block;
         })
-        .catch(error => {
+        .catch((error) => {
           this.disabled = false;
           this.$toasted.error(error.response.data.message);
         });
     },
     updateComment() {
       let data = {
-        body: this.body
+        body: this.body,
       };
       this.disabled = true;
       this.$axios
         .$post(`/api/comments/${this.$route.params.id}`, data)
-        .then(res => {
+        .then((res) => {
           this.$toasted.show(res.message);
           this.disabled = false;
         })
-        .catch(error => {
+        .catch((error) => {
+          this.disabled = false;
+          this.$toasted.error(error.response.data.message);
+        });
+    },
+    approveComment() {
+      this.disabled = true;
+      this.$axios
+        .$post(`/api/admin/comments/${this.data.id}/approve`)
+        .then((res) => {
+          this.$router.push({ path: "/profile/dashboard/comments" });
+          this.$toasted.show(res.message);
+          this.disabled = false;
+        })
+        .catch((error) => {
           this.disabled = false;
           this.$toasted.error(error.response.data.message);
         });
@@ -76,12 +105,12 @@ export default {
       this.disabled = true;
       this.$axios
         .$delete(`/api/comments/${this.$route.params.id}/delete`)
-        .then(res => {
+        .then((res) => {
           this.$router.push({ path: "/profile/dashboard/comments" });
           this.$toasted.show(res.message);
           this.disabled = false;
         })
-        .catch(error => {
+        .catch((error) => {
           this.disabled = false;
           this.$toasted.error(error.response.data.message);
         });
@@ -89,13 +118,14 @@ export default {
     getComment() {
       this.$axios
         .$get(`/api/admin/comments/${this.$route.params.id}`)
-        .then(res => {
+        .then((res) => {
+          console.log(res.data);
           this.data = res.data;
           this.body = res.data.body;
           this.block = res.data.blocked;
         });
-    }
-  }
+    },
+  },
 };
 </script>
 

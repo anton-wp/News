@@ -48,7 +48,6 @@ export default {
           this.$store.commit("DEL_SUBSCRIPTION", this.id);
           this.$toasted.show(responce.message);
 					this.loading = false;
-					console.log(this.type)
           if (
             this.$store.getters.IS_TABS.filter(tab => tab.title === "Following")
               .length > 0 && this.type !== 'author'
@@ -81,7 +80,9 @@ export default {
               });
             }
           })
-          .catch(error => {});
+          .catch(error => {
+						console.log(error)
+					});
       } else {
         this.LogIn();
       }

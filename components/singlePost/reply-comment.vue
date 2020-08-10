@@ -43,6 +43,9 @@ export default {
 					this.comment = ''
 					this.$emit('createComments', res.data)
 				})
+				.catch((error) => {
+          console.log(error);
+        });
 		}
 	}
 }

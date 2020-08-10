@@ -50,7 +50,6 @@ export default {
   },
   methods: {
     minPage() {
-			console.log(123)
       if (this.page > 1) {
         this.page = this.page - 1;
         this.getNote();

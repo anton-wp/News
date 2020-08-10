@@ -60,9 +60,9 @@
           <div class="col-12 col-lg-8 px-0 px-md-3 pr-lg-5">
             <div class="d-flex align-items-center px-2 px-sm-3 mt-0 pl-2 pl-md-0 pr-5 pr-md-0 mb-3">
               <h1 class="category-page-title mt-0 mb-0">{{term.name}}</h1>
-              <div v-if="tag && auth.loggedIn" class="ml-auto">
+              <!-- <div v-if="tag && auth.loggedIn" class="ml-auto">
                 <button class="button-followed follow">Follow</button>
-              </div>
+              </div> -->
             </div>
             <!-- :class="full ? 'follow-full' : 'follow'"
               v-if="!subscriptions.includes(id) && !loading"

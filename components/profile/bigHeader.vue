@@ -75,7 +75,7 @@
               <p class="vrep-title">V-rep</p>
             </div>
             <div class="follow-block" v-if="slug">
-              <follow-buttons full :id="$store.state.profile.id" />
+              <follow-buttons :full="true" :id="$store.state.profile.id" />
             </div>
           </div>
         </div>

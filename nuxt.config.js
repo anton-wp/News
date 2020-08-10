@@ -24,6 +24,7 @@ module.exports = {
 			{ src: 'https://cdn.ampproject.org/v0/amp-sidebar-0.1.js', defer: true }
 		],
 	},
+
 	/*
 	** Customize the progress-bar color
 	*/
@@ -60,7 +61,6 @@ module.exports = {
 		// ['@nuxtjs/component-cache', { maxAge: 1000 * 60 * 60 }]
 	],
 
-	// serverMiddleware: ['~/middleware/authToken'],
 
 
 	/*
@@ -75,6 +75,7 @@ module.exports = {
 		redirect: {
 			logout: '/',
 		},
+		resetOnError: true,
 		strategies: {
 			local: {
 				endpoints: {
@@ -88,7 +89,8 @@ module.exports = {
 		},
 		plugins: [
 			{ src: '~/plugins' },
-			{ src: '~/plugins/http' }
+			{ src: '~/plugins/http' },
+			{ src: '~/plugins/aToken' }
 		]
 	},
 

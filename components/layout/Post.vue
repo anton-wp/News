@@ -254,7 +254,7 @@
               </div>
             </div>
           </div>
-          <div class="col-lg-4 px-0 px-md-3">
+          <div class="col-lg-4 px-0 px-md-3 mt-0 mt-md-n4">
             <follow v-if="!review" />
             <asideReview v-if="data && review" :postData="data" />
           </div>
@@ -427,6 +427,9 @@ export default {
         .then((res) => {
           this.comments.push(res.data);
           this.comment = "";
+				})
+				.catch((error) => {
+          console.log(error);
         });
     },
 
@@ -477,7 +480,7 @@ export default {
     }
   },
   mounted() {
-    if (this.type === "post" && this.auth.loggedIn) {
+    if (this.type === "post") {
       this.$axios.post(`/api/posts/${this.data.id}/add-view`);
     }
   },

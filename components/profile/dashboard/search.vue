@@ -58,7 +58,7 @@ import Multiselect from "vue-multiselect";
 
 export default {
   components: {
-    Multiselect
+    Multiselect,
   },
   data() {
     return {
@@ -70,27 +70,27 @@ export default {
 
       selectedAuthor: [],
       authorsOption: [],
-      isLoadingAuthor: false
+      isLoadingAuthor: false,
     };
   },
   props: {
     type: "",
-    searchProps: Object
+    searchProps: Object,
   },
   created() {
     switch (this.type) {
       case "posts":
-				this.getStatus()
-				this.getCategories();
-				break;
+        this.getStatus();
+        this.getCategories();
+        break;
       case "tags":
-				this.getStatusTags()
-				break;
+        this.getStatusTags();
+        break;
       case "comments":
-				this.getStatusComments()
-				break;
+        this.getStatusComments();
+        break;
       default:
-        '';
+        "";
     }
   },
   methods: {
@@ -102,7 +102,7 @@ export default {
           data.data.unshift({ name: "Choose Category", id: "" });
           this.selectedCategory = this.categories[0].id;
         })
-        .catch(error => {
+        .catch((error) => {
           // this.errorMessage = error.response.data.message;
         });
     },
@@ -110,12 +110,13 @@ export default {
       this.$axios
         .$get("/api/admin/posts/statuses")
         .then((data) => {
-          data.data = data.data.filter(status => status.title !== "Draft");
+          data.data = data.data.filter((status) => status.title !== "Draft");
           this.statuses = data.data;
           data.data.unshift({ title: "Choose Status", key: "" });
           this.selectedStatus = this.statuses[0].key;
         })
-        .catch(error => {
+        .catch((error) => {
+          console.log(error);
           // this.errorMessage = error.response.data.message;
         });
     },
@@ -127,7 +128,8 @@ export default {
           data.data.unshift({ title: "Choose Status", key: "" });
           this.selectedStatus = this.statuses[0].key;
         })
-        .catch(error => {
+        .catch((error) => {
+          console.log(error);
           // this.errorMessage = error.response.data.message;
         });
     },
@@ -139,7 +141,8 @@ export default {
           data.data.unshift({ title: "Choose Status", key: "" });
           this.selectedStatus = this.statuses[0].key;
         })
-        .catch(error => {
+        .catch((error) => {
+					console.log(error)
           // this.errorMessage = error.response.data.message;
         });
     },
@@ -152,6 +155,9 @@ export default {
           this.authorsOption = data.data;
 
           this.isLoadingAuthor = false;
+				})
+				.catch((error) => {
+          console.log(error);
         });
     },
     resetClick() {
@@ -165,10 +171,10 @@ export default {
         search: this.search,
         status: this.selectedStatus,
         category: this.selectedCategory,
-        author: this.selectedAuthor.id
+        author: this.selectedAuthor.id,
       };
       this.$emit("getSearch", search);
-    }
-  }
+    },
+  },
 };
 </script>

@@ -113,7 +113,6 @@ export default {
       });
     },
     approve(id) {
-			console.log(id)
 			this.$axios.$post(`/api/admin/comments/${id}/approve`)
 				.then(res => {
 					this.$toasted.show(res.message)
@@ -122,9 +121,6 @@ export default {
 				.catch(error => {
 					console.log(error)
 				})
-      // this.$router.push({
-      //   path: `/profile/dashboard/comments/${slug}/edit`
-      // });
     },
     edit(slug) {
       this.$router.push({

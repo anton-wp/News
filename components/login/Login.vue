@@ -176,9 +176,8 @@ export default {
 					this.closeLoginPopup();
         })
         .catch(error => {
-					console.log(error.response);
           this.loading = false;
-          this.errorMessage = error.response.data.properties;
+          this.errorMessage.password = error.response.data.message;
         });
     }
   }

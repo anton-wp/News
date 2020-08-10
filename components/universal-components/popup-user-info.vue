@@ -95,6 +95,7 @@ export default {
           this.$store.dispatch("GET_MODAL", responce.data);
         })
         .catch(error => {
+					console.log(error)
           // this.loading = false;
           // this.errorMessage = error.response.data.message;
         });

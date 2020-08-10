@@ -4,19 +4,22 @@
       <div class="col-lg-4" v-for="post in posts" :key="post.id">
         <draft-post :post="post" />
       </div>
+			<not-found v-if="posts.length === 0" />
     </div>
-    <pagination v-if="pagination" :pagination="pagination" @openPage="openPage" />
+    <pagination v-if="pagination && pagination.pagesCount > 1" :pagination="pagination" @openPage="openPage" />
   </div>
 </template>
 
 <script>
 import DraftPost from "~/components/profile/posts-draft";
 import Pagination from "~/components/profile/pagination";
+import NotFound from "~/components/profile/not-found";
 
 export default {
   components: {
     DraftPost,
-    Pagination,
+		Pagination,
+		NotFound,
   },
   layout: "profile",
   data() {

@@ -26,7 +26,7 @@
         v-if="type === 'following'"
         class="d-flex justify-content-center justify-content-lg-start mt-2"
       >
-        <follow-buttons :type="typeProfile" :id="post.id" />
+        <follow-buttons :full="true" :type="typeProfile"  :id="post.id" />
       </div>
     </div>
   </div>
