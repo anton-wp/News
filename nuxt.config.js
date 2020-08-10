@@ -61,8 +61,6 @@ module.exports = {
 		// ['@nuxtjs/component-cache', { maxAge: 1000 * 60 * 60 }]
 	],
 
-
-
 	/*
 	** Axios module configuration
 	** See https://axios.nuxtjs.org/options
@@ -81,11 +79,12 @@ module.exports = {
 				endpoints: {
 					login: { url: '/api/auth/login', method: 'post', propertyName: 'token' },
 					user: { url: '/api/profile', method: 'get', propertyName: '' },
-					logout: true,
-
-
+					logout: null
 				},
 			}
+		},
+		cookie: {
+			secure: true
 		},
 		plugins: [
 			{ src: '~/plugins' },

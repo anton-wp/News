@@ -7,7 +7,7 @@
 </template>
 
 <script>
-import CheckEmail from "~/components/Login/checkEmail";
+import CheckEmail from "~/components/login/checkEmail";
 export default {
 	middleware: "notAuth",
 	components: {

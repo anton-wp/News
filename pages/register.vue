@@ -13,7 +13,7 @@
 </template>
 
 <script>
-import Register from "~/components/Login/Register";
+import Register from "~/components/login/register";
 
 export default {
   middleware: "notAuth",

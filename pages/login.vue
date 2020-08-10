@@ -13,7 +13,7 @@
 </template>
 
 <script>
-import Login from '~/components/Login/login'
+import Login from '@/components/login/login'
 
 export default {
   middleware: "notAuth",

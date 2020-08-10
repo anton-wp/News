@@ -222,7 +222,7 @@ import Social from "~/components/login/social-button.vue";
 import Cookies from "js-cookie";
 import jwt_decode from "jwt-decode";
 import modalWindow from "~/components/universal-components/modalWindow.vue";
-import Register from "~/components/Login/Register.vue";
+import Register from "~/components/login/register.vue";
 
 export default {
   components: {

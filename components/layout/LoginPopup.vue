@@ -34,10 +34,10 @@
 </template>
 
 <script>
-import Register from "~/components/Login/register";
-import Login from "~/components/Login/login";
-import ChangePassword from "~/components/Login/changePassword";
-import CheckEmail from "~/components/Login/checkEmail";
+import Register from "~/components/login/register";
+import Login from "@/components/login/login";
+import ChangePassword from "~/components/login/changePassword";
+import CheckEmail from "~/components/login/checkEmail";
 import { mapState } from "vuex";
 
 export default {

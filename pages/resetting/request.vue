@@ -7,7 +7,7 @@
 </template>
 
 <script>
-import ChangePassword from '~/components/Login/changePassword'
+import ChangePassword from '~/components/login/changePassword'
 export default {
 	components: {
 		ChangePassword
