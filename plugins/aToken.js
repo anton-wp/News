@@ -8,6 +8,7 @@ export default function ({ $axios, app }) {
 
 			if (401 === +code) {
 				app.$auth.logout();
+				
 			} else {
 				return Promise.reject(error);
 			}
