@@ -146,82 +146,84 @@ export default {
 
     const headerMenu = await $axios.$get(`/api/menu/header`);
 
-    const comments = await $axios.$get(
-      `/api/author/${params.slug}/comments?orderBy=date&order=DESC&type=verdicts&page=1&limit=12`
-    );
+    // const commentsTest = await $axios.$get(
+    //   `/api/author/${params.slug}/comments?orderBy=date&order=DESC&type=verdicts&page=1&limit=12`
+		// );
 
-    // const comments = [
-    //   {
-    //     id: "2",
-    //     status: "Published",
-    //     title: "admin admin - test comment for verdict. test",
-    //     body:
-    //       "test comment for verdict. test comment for verdict. test comment for 123123123123123123123123",
-    //     postReactionString: "DISAGREE",
-    //     postReaction: false,
-    //     createdAt: "2020-07-06T11:53:08.852Z",
-    //     isVerdict: true,
-    //     blocked: false,
-    //     hasReplies: true,
-    //     user: {
-    //       id: "4979d7fc-9271-480a-929e-489dce496eb8",
-    //       email: "admin@admin.com",
-    //       verified: true,
-    //       slug: "admin-admin-4979d7fc-9271-480a-929e-489dce496eb8",
-    //       firstName: "admin",
-    //       lastName: "admin",
-    //       username: "admin",
-    //       medal: null,
-    //       avatar: {
-    //         original:
-    //           "https://dev.api.verdict.org/images/avatar/8a7adc7a0892f8f8b5a2c8cbef162902_original.jpg",
-    //         big:
-    //           "https://dev.api.verdict.org/images/avatar/8a7adc7a0892f8f8b5a2c8cbef162902_big.jpg",
-    //         medium:
-    //           "https://dev.api.verdict.org/images/avatar/8a7adc7a0892f8f8b5a2c8cbef162902_medium.jpg",
-    //         small:
-    //           "https://dev.api.verdict.org/images/avatar/8a7adc7a0892f8f8b5a2c8cbef162902_small.jpg",
-    //         thumbnail:
-    //           "https://dev.api.verdict.org/images/avatar/8a7adc7a0892f8f8b5a2c8cbef162902_thumbnail.jpg",
-    //         source: "admin admin",
-    //         alt: "admin admin",
-    //       },
-    //       isFollow: false,
-    //     },
-    //     post: {
-    //       slug:
-    //         "twitter-urges-you-to-read-articles-before-posting-is-that-the-end-of-fake-news-625",
-    //       id: "625",
-    //       title:
-    //         "Twitter Urges You to Read Articles Before Posting -- Is That The End of Fake News?",
-    //       subtitle: null,
-    //       seoTitle: null,
-    //       seoDescription: null,
-    //       status: "Published",
-    //       viewsCount: "8",
-    //       featured: {},
-    //       inBookmarks: false,
-    //       currentUserReaction: 11,
-    //       shortContent:
-    //         "In an attempt to tackle disinformation and fake news, Twitter will start a test",
-    //       publishedAt: "2020-06-11T15:42:00.000Z",
-    //       commentsCount: 33,
-    //       verdictValue: 22,
-    //       verdictUpdated: "2020-07-16T06:41:09.000Z",
-    //       votesCount: 0,
-    //       reaction: null,
-    //     },
-    //     parent: null,
-    //     votes: 7,
-    //     verdictThreshold: "22",
-    //   },
-    // ];
+		// console.log(commentsTest);
+
+    const comments = [
+      {
+        id: "2",
+        status: "Published",
+        title: "admin admin - test comment for verdict. test",
+        body:
+          "test comment for verdict. test comment for verdict. test comment for 123123123123123123123123",
+        postReactionString: "DISAGREE",
+        postReaction: false,
+        createdAt: "2020-07-06T11:53:08.852Z",
+        isVerdict: true,
+        blocked: false,
+        hasReplies: true,
+        user: {
+          id: "4979d7fc-9271-480a-929e-489dce496eb8",
+          email: "admin@admin.com",
+          verified: true,
+          slug: "admin-admin-4979d7fc-9271-480a-929e-489dce496eb8",
+          firstName: "admin",
+          lastName: "admin",
+          username: "admin",
+          medal: null,
+          avatar: {
+            original:
+              "https://dev.api.verdict.org/images/avatar/8a7adc7a0892f8f8b5a2c8cbef162902_original.jpg",
+            big:
+              "https://dev.api.verdict.org/images/avatar/8a7adc7a0892f8f8b5a2c8cbef162902_big.jpg",
+            medium:
+              "https://dev.api.verdict.org/images/avatar/8a7adc7a0892f8f8b5a2c8cbef162902_medium.jpg",
+            small:
+              "https://dev.api.verdict.org/images/avatar/8a7adc7a0892f8f8b5a2c8cbef162902_small.jpg",
+            thumbnail:
+              "https://dev.api.verdict.org/images/avatar/8a7adc7a0892f8f8b5a2c8cbef162902_thumbnail.jpg",
+            source: "admin admin",
+            alt: "admin admin",
+          },
+          isFollow: false,
+        },
+        post: {
+          slug:
+            "twitter-urges-you-to-read-articles-before-posting-is-that-the-end-of-fake-news-625",
+          id: "625",
+          title:
+            "Twitter Urges You to Read Articles Before Posting -- Is That The End of Fake News?",
+          subtitle: null,
+          seoTitle: null,
+          seoDescription: null,
+          status: "Published",
+          viewsCount: "8",
+          featured: {},
+          inBookmarks: false,
+          currentUserReaction: 11,
+          shortContent:
+            "In an attempt to tackle disinformation and fake news, Twitter will start a test",
+          publishedAt: "2020-06-11T15:42:00.000Z",
+          commentsCount: 33,
+          verdictValue: 22,
+          verdictUpdated: "2020-07-16T06:41:09.000Z",
+          votesCount: 0,
+          reaction: null,
+        },
+        parent: null,
+        votes: 7,
+        verdictThreshold: "22",
+      },
+    ];
 
     return {
       slug: params.slug,
       userInfo: userInfo.data,
       headerMenu: headerMenu.data,
-      comments: comments.data,
+      comments: comments,
     };
   },
 

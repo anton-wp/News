@@ -22,7 +22,7 @@
       <div class="d-flex w-100 align-center">
         <author-block :author="data.author" :publishedAt="data.publishedAt" />
 
-        <marks :author="data.author" />
+        <marks :data="data" />
       </div>
 
       <div class="d-flex">
@@ -41,7 +41,7 @@
       <div class="sing-post-source">source: {{data.featured.source}}</div>
 
       <p class="text" v-html="data.body" :style="{fontSize: bodySize + '%'}">
-        <!-- {{data.body}} -->
+        {{data.body}}
       </p>
 
       <div class="d-flex">
