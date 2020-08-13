@@ -4,15 +4,21 @@
       “
       <a :href="data.postLink" target="_blank">{{ data.title }}</a>”
     </p>
-    <time class="posted published" datetime="Dec 25,2018 4:28 pm EST">{{ new Date(data.publishedAt).toDateString() }}</time>
+    <time class="posted published" datetime="Dec 25,2018 4:28 pm EST">{{ parse(data.publishedAt, 'MMM DD,YYYY HH:mm a ZZ') }}</time>
   </div>
 </template>
 
 <script>
+import { format } from 'fecha';
 export default {
   props: {
     data: Object
-  }
+	},
+	methods: {
+		parse(date, f) {
+			return format(new Date(date), f);
+		},
+	}
 };
 </script>
 

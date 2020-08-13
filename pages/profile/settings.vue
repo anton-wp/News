@@ -230,7 +230,7 @@
           <div class="row container-fluid string">
             <h5 class="col-12 col-xl-3 text-xl-right pl-3">Send me notifications when</h5>
             <div class="col-12 col-sm-12 col-xl-9">
-              <div class="row" v-for="string in notificationSettings" :key="string.id">
+              <div class="row ml-0" v-for="string in notificationSettings" :key="string.id">
                 <!-- <div class="col-12" > -->
                 <h6 class="col-12 col-lg-5 col-xl-4 px-0">{{string.title}}</h6>
                 <div
@@ -253,25 +253,37 @@
             </div>
             <h5 class="col-12 col-xl-3 text-xl-right pl-3">Send Admin notifications when</h5>
             <div class="col-12 col-sm-12 col-xl-9">
-              <div class="row">
+              <div class="row ml-0">
                 <h6 class="col-12 col-lg-5 col-xl-4 px-0">someone adds new post</h6>
                 <div
                   class="col-12 col-lg-7 col-xl-8 d-flex flex-column flex-sm-row justify-content-end align-items-sm-center px-0"
                 >
-                  <label class="labelRadio radioBottom">
-                    <span class="custom-radio">
-                      <div class="active-radio" v-if="admin_email_new_post === '0'" />
-                    </span>
-                    <input type="radio" class="radioEmail" value="0" v-model="admin_email_new_post" />
-                    display
-                  </label>
-                  <label class="labelRadio radioBottom">
-                    <span class="custom-radio">
-                      <div class="active-radio" v-if="admin_email_new_post === '1'" />
-                    </span>
-                    <input type="radio" class="radioEmail" value="1" v-model="admin_email_new_post" />
-                    hide
-                  </label>
+                  <div>
+                    <label class="labelRadio radioBottom">
+                      <span class="custom-radio">
+                        <div class="active-radio" v-if="admin_email_new_post === '0'" />
+                      </span>
+                      <input
+                        type="radio"
+                        class="radioEmail"
+                        value="0"
+                        v-model="admin_email_new_post"
+                      />
+                      display
+                    </label>
+                    <label class="labelRadio radioBottom">
+                      <span class="custom-radio">
+                        <div class="active-radio" v-if="admin_email_new_post === '1'" />
+                      </span>
+                      <input
+                        type="radio"
+                        class="radioEmail"
+                        value="1"
+                        v-model="admin_email_new_post"
+                      />
+                      hide
+                    </label>
+                  </div>
                 </div>
               </div>
             </div>

@@ -25,6 +25,8 @@ module.exports = {
 		],
 	},
 
+	// serverMiddleware: ['~/plugins/role'],
+
 	/*
 	** Customize the progress-bar color
 	*/
@@ -39,6 +41,7 @@ module.exports = {
 	plugins: [
 		{ src: '~/plugins/jsonld' },
 		{ src: '~/plugins/editor', ssr: false },
+		{ src: '~/plugins/globalComponent' },
 	],
 	/*
 	** Nuxt.js dev-modules
@@ -105,6 +108,7 @@ module.exports = {
 	router: {
 		linkActiveClass: 'active-link',
 		linkExactActiveClass: 'your-custom-exact-active-link',
+		middleware: 'role',
 	},
 	env: {
 		baseUrl: process.env.BASE_URL || 'http://localhost:3000'
@@ -119,6 +123,7 @@ module.exports = {
 		** You can extend webpack config here
 		*/
 		extend(config, ctx) {
+			config.resolve.alias['vue'] = 'vue/dist/vue.common'
 		}
 	}
 }

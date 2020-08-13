@@ -32,12 +32,12 @@
           <news-card-header-marks :colorScheme="colorScheme" :post="post" :pending="false" />
         </div>
       </span>
-      <!-- <span class="action">
+      <span class="action" v-if="$store.state.auth.user && $store.state.auth.user.group.name === 'super-admin'" @click="deletePost">
         <svg width="12" height="15">
           <use xlink:href="#delete" />
         </svg>
         delete
-      </span> -->
+      </span>
     </div>
   </div>
 </template>
@@ -76,7 +76,16 @@ export default {
     },
     hide() {
       this.showPopup = false;
-    },
+		},
+		deletePost() {
+			this.$axios.$delete(`/api/posts/${this.post.id}`)
+				.then(res => {
+					this.$toasted.show(res.message)
+				})
+				.catch(error => {
+					console.log(error)
+				})
+		}
   },
 };
 </script>

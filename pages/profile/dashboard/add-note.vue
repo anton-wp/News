@@ -13,7 +13,7 @@
               <option>gjhgjh</option>
               <option>gjhgjh</option>
             </select>
-          </div> -->
+          </div>-->
           <div class="col-12 blockInput">
             <label>
               Note Message
@@ -31,9 +31,7 @@
         </form>
       </div>
       <div class="col-12 button-block">
-        <button class="add" @click="createNote">
-          Add note
-        </button>
+        <button class="add" @click="createNote">Add note</button>
       </div>
     </div>
   </div>
@@ -41,25 +39,26 @@
 
 <script>
 export default {
-	layout: 'profile',
-	middleware: "auth",
-	data() {
-		return {
-			message: '',
-		}
-	},
-	methods: {
-		createNote() {
-			this.$axios.$post(`/api/profile/notes`, {message: this.message})
-				.then(res => {
-					this.$toasted.show('Note has been added')
-					this.$router.push({ path: "/profile/dashboard" });
-				})
-				.catch(error => {
-					console.log(error)
-				})
-		}
-	}
-}
+  layout: "profile",
+  middleware: "auth",
+  data() {
+    return {
+      message: "",
+    };
+  },
+  methods: {
+    createNote() {
+      this.$axios
+        .$post(`/api/profile/notes`, { message: this.message })
+        .then((res) => {
+          this.$toasted.show("Note has been added");
+          this.$router.push({ path: "/profile/dashboard" });
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
+  },
+};
 </script>
 

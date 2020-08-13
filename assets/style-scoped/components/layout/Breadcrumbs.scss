@@ -1,6 +1,8 @@
 .breadcrumbs-layout {
 
-
+	.container{
+		max-width: 1310px;
+	}
 	.routing {
 		display: flex;
 		// max-width: $global-width;

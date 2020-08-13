@@ -124,6 +124,9 @@ export default {
 			this.confirmEmail();
 		}
 	},
+	destroyed() {
+		this.errorMessage.password = ''
+	},
 	methods: {
 		ForgotPassword() {
 			if (this.type === "modal") {
@@ -163,6 +166,7 @@ export default {
 				open: false,
 				type: ""
 			};
+
 			this.$store.commit("UPDATE_LOGIN_POPUP", data);
 		},
 		login(formData) {
@@ -171,19 +175,20 @@ export default {
 					data: formData
 				})
 				.then(() => {
-					this.loading = false;
 					this.$store.dispatch("getBookmarks");
 					this.$store.dispatch("getSubscriptions");
 					this.closeLoginPopup();
 				})
 				.catch(error => {
-					console.log(error.response)
 					if (error.response) {
 						this.errorMessage.password = error.response.data.message;
 					} else {
 						this.errorMessage.password = error.message;
 					}
-				});
+				})
+				.finally(() => {
+					this.loading = false;
+				})
 		}
 	}
 };

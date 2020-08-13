@@ -12,7 +12,7 @@
         @openPage="openPage"
 
       />
-      <div class="col-12 button-block">
+      <div class="col-12 button-block" v-if="$store.state.auth.user && ['editor', 'super-admin'].includes($store.$auth.user.group.name)">
         <nuxt-link class="link" to="/profile/dashboard/add-note">
           <button class="add">Add note</button>
         </nuxt-link>
@@ -46,8 +46,9 @@ export default {
     if (this.$route.query.page) {
       this.page = this.$route.query.page;
     }
-    this.getNote();
-  },
+		this.getNote();
+		console.log(this.$store.$auth.user.group.name)
+	},
   methods: {
     minPage() {
       if (this.page > 1) {
@@ -56,7 +57,7 @@ export default {
       } else if (this.pagination.pagesCount !== 1) {
         this.getNote();
       }
-    },
+		},
     getNote() {
       this.$axios
         .$get(`/api/profile/notes?page=${this.page}`)

@@ -33,7 +33,7 @@ export default {
     return {
       page: 1,
       posts: [],
-      sort: "",
+      sort: {title: "All Feed's"},
       sortArr: [],
     };
   },
@@ -52,14 +52,16 @@ export default {
       this.$axios
         .$get(`/api/profile/feed-resources`)
         .then((res) => {
-          this.sortArr = res.data;
+					this.sortArr = res.data;
+					this.sortArr = [{title: "All Feed's"}, ...this.sortArr]
+					this.sort = this.sortArr[0]
         })
         .catch((error) => console.error(error));
     },
     getFeed() {
-      this.$store.commit("CLEAR_DASHBOARD_POSTS");
+			this.$store.commit("CLEAR_DASHBOARD_POSTS");
       this.$axios
-        .$get(`/api/profile/feed?page=${this.page}${this.sort ? '&resource=' + this.sort.url : ''}`)
+        .$get(`/api/profile/feed?page=${this.page}${this.sort.title !== "All Feed's" ? '&resource=' + this.sort.url : ''}`)
         .then((res) => {
           this.posts = res.data;
           this.$store.commit("SET_DASHBOARD_POSTS", res.data);

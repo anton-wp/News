@@ -13,7 +13,7 @@
         </button>
         <!-- (click)="openOption()" (clickOutside)="backOption()" -->
         <!-- <fa-icon [icon]="faEllipsisV"></fa-icon> -->
-        <div class="block-options" v-if="optionOpen">
+        <div class="block-options" v-if="optionOpen && $store.state.auth.user && $store.state.auth.user.group.name === 'super-admin'">
           <nuxt-link :to="`/profile/dashboard/edit-note/${data.id}`">Edit</nuxt-link>
           <span @click="delNote">Delete</span>
         </div>

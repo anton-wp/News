@@ -3,24 +3,24 @@
     <div
       class="icon-notification d-none d-sm-inline-block"
       v-if="authorization"
-      v-click-outside="() => {modalNotification = false}"
+      v-click-outside="modalNotificationClose"
     >
-      <div class="bell" @click="modalNotification = true">
+      <div class="bell" @click="modalNotificationOpen">
         <svg width="20" height="20">
           <use xlink:href="#Notifications" />
         </svg>
-        <span class="counter-notification">4</span>
+        <span v-if="notifCount" class="counter-notification">{{ notifCount }}</span>
       </div>
-      <div v-if="modalNotification" class="notification">
+      <div v-if="modalNotification && data.length > 0" class="notification">
         <div class="row blockNotification">
-          <block-notification small />
-          <!-- <vrd-ppnb class="col-12 block" [small]='true'></vrd-ppnb>
-					<vrd-ppnb class="col-12 block" [small]='true'></vrd-ppnb>
-					<vrd-ppnb class="col-12 block" [small]='true'></vrd-ppnb>
-					<vrd-ppnb class="col-12 block" [small]='true'></vrd-ppnb>
-					<vrd-ppnb class="col-12 block" [small]='true'></vrd-ppnb>
-          <vrd-ppnb class="col-12 block" [small]='true'></vrd-ppnb>-->
-          <div class="viewAll" @click="modalNotification = false">
+          <block-notification
+            v-for="(notif, index) in data"
+            :key="index"
+            :data="notif"
+            @deleteNotif="deleteNotif"
+            small
+          />
+          <div class="viewAll" @click="modalNotificationClose">
             <nuxt-link to="/profile/notifications">view all</nuxt-link>
           </div>
         </div>
@@ -50,7 +50,7 @@
           </ul>
           <ul class="sign-popup-ul" v-if="authorization">
             <nuxt-link class="sign-popup-ul-item d-list-item d-sm-none" to="/add">Add Post</nuxt-link>
-            <nuxt-link class="sign-popup-ul-item" to="/profile/dashboard/">Profile</nuxt-link>
+            <span class="sign-popup-ul-item" @click="profile">Profile</span>
             <nuxt-link class="sign-popup-ul-item" to="/profile/notifications/">Notification</nuxt-link>
             <nuxt-link class="sign-popup-ul-item" to="/profile/settings/">Settings</nuxt-link>
             <nuxt-link class="sign-popup-ul-item" @click.native="logout" to="/">Logout</nuxt-link>
@@ -81,18 +81,79 @@ export default {
     return {
       showPopup: false,
       modalNotification: false,
+			data: [],
+			notifCount: String|Number
     };
   },
   computed: {
-    ...mapState(["loginModal"]),
-  },
+    ...mapState(["loginModal", "auth"]),
+	},
+	created() {
+		if(this.auth.loggedIn){
+			this.getNotificationsCount()
+		}
+	},
   methods: {
+    deleteNotif(id) {
+      this.data = this.data.filter((notif) => notif.id !== id);
+    },
     openLoginPopup(type) {
       let data = {
         open: true,
         type: type,
       };
       this.$store.commit("UPDATE_LOGIN_POPUP", data);
+    },
+    modalNotificationOpen() {
+      this.modalNotification = true;
+    },
+    modalNotificationClose() {
+      this.modalNotification = false;
+    },
+
+    getNotificationsCount() {
+      this.$axios
+        .$get(`/api/profile/notifications/count`)
+        .then((res) => {
+					this.notifCount = res.count;
+					this.getNotifications();
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
+    getNotifications() {
+      this.$axios
+        .$get(`/api/profile/notifications/header`)
+        .then((res) => {
+          this.data = res.data;
+          this.readNotif();
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
+    readNotif() {
+      let ids = [];
+      this.data.map((notif) => {
+        if (!notif.checked) {
+          ids.push(notif.id);
+        }
+      });
+      if (ids.length > 0) {
+        this.$axios
+          .$post(`/api/profile/notifications/read`, { ids: ids })
+          .then((res) => {
+            this.data.map((notif) => {
+              if (ids.includes(notif.id)) {
+                notif.checked = true;
+              }
+            });
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      }
     },
     getPopUp() {
       setTimeout(() => {
@@ -104,9 +165,19 @@ export default {
         this.showPopup = false;
       }, 200);
     },
+    profile() {
+      if (
+        ["editor", "trusted-author", "super-admin"].includes(
+          this.auth.user.group.name
+        )
+      ) {
+        this.$router.push({ path: "/profile/dashboard/" });
+      } else {
+        this.$router.push({ path: "/profile/posts/" });
+      }
+    },
     logout() {
       this.$auth.logout("local").then(() => {});
-
       this.$store.commit("CLEAR_LOGOUT");
     },
   },
