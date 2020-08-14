@@ -112,33 +112,31 @@
             <div class="row container-fluid string">
               <h5 class="col-12 col-xl-3 text-xl-right">Password</h5>
               <div class="col-12 col-sm-12 col-xl-9 block-change-password">
-                <!-- *ngIf="!changePasswordBlock"
-                (click)="visibleChangePasswordBlock()"-->
                 <button
                   class="col-12 text-left button-change"
                   v-if="!changePassword"
                   @click="visibleChangePasswordBlock"
                 >change password</button>
-                <div style="margin-top: 25px;" v-if="changePassword">
+                <div style="margin-top: 25px;" class="row mx-0" v-if="changePassword">
                   <input
-                    class="col-12 col-sm-4 col-xl-4"
+                    class="col-12 col-xl-3"
                     type="password"
                     placeholder="old password"
                     v-model="password"
                   />
                   <input
-                    class="col-12 col-sm-4 col-xl-4"
+                    class="col-12 col-xl-3"
                     type="password"
                     placeholder="new password"
                     v-model="newPassword"
                   />
                   <input
-                    class="col-12 col-sm-4 col-xl-4"
+                    class="col-12 col-xl-3"
                     type="password"
                     placeholder="repeat new password"
                     v-model="repeatNewPassword"
                   />
-                  <div class="block-button text-right">
+                  <div class="block-button text-right ml-auto">
                     <button class="cancel" @click="visibleChangePasswordBlock">cancel</button>
                     <button class="update" @click="updatePassword">update profile</button>
                   </div>
@@ -181,7 +179,6 @@
           style="text-transform: capitalize;"
         >
           <h5 class="col-12 col-xl-3 text-xl-right">{{profile}} Profile</h5>
-          <!-- formControlName="facebookProfile" -->
           <input
             class="input-social col-xl-3"
             type="text"
@@ -194,8 +191,6 @@
         <div class="row container-fluid string followingCategories px-0">
           <h4 class="col-12 col-xl-3 title-setting">Following Categories</h4>
           <div class="col-12 col-xl-9 px-0">
-            <!-- *ngFor="let category of profileStore.categoryList"
-            (click)="changeActive(category.id)"-->
             <label
               class="col-sm-4 col-md-4"
               v-for="category in followingCategories"
@@ -251,14 +246,14 @@
                 </div>
               </div>
             </div>
-            <h5 class="col-12 col-xl-3 text-xl-right pl-3">Send Admin notifications when</h5>
-            <div class="col-12 col-sm-12 col-xl-9">
+            <h5 class="col-12 col-xl-3 text-xl-right pl-3" v-if="$store.state.auth.loggedIn && ['super-admin', 'editor'].includes($store.state.auth.user.group.name)">Send Admin notifications when</h5>
+            <div class="col-12 col-sm-12 col-xl-9" v-if="$store.state.auth.loggedIn && ['super-admin', 'editor'].includes($store.state.auth.user.group.name)">
               <div class="row ml-0">
                 <h6 class="col-12 col-lg-5 col-xl-4 px-0">someone adds new post</h6>
                 <div
                   class="col-12 col-lg-7 col-xl-8 d-flex flex-column flex-sm-row justify-content-end align-items-sm-center px-0"
                 >
-                  <div>
+                  <div class="d-flex justify-conten-space-between" >
                     <label class="labelRadio radioBottom">
                       <span class="custom-radio">
                         <div class="active-radio" v-if="admin_email_new_post === '0'" />
@@ -302,20 +297,18 @@
         <h4>{{results.formattedNumber}}</h4>
       </div>
       <div class="form-wrap">
-        <!-- (click)="phoneVerify()" -->
+
         <span class="yes" @click="openModalCode">Yes</span>
-        <!-- (click)="profileStore.changeModal(false)" -->
+
         <span class="no" @click="closeModal">No</span>
       </div>
     </modal-window>
     <modal-window v-if="activeModal && typeModal === 'code modal'" @closeModal="closeModal">
       <div class="form-header">
         <h4>Enter Confirmation Code</h4>
-        <!-- (keyup)="onKey($event)" -->
         <input placeholder="Enter Code" @keyup.enter="phoneVerifyCode" v-model="code" />
       </div>
       <div class="form-wrap-confirm">
-        <!-- (click)="confirm()" -->
         <span class="confirm" @click="phoneVerifyCode">CONFIRM</span>
       </div>
     </modal-window>
@@ -323,8 +316,8 @@
 </template>
 
 <script>
-import MazPhoneNumberInput from "vue-phone-number-input";
 import "vue-phone-number-input/dist/vue-phone-number-input.css";
+import MazPhoneNumberInput from "vue-phone-number-input";
 import ModalWindow from "~/components/universal-components/modalWindow";
 
 export default {
@@ -440,7 +433,10 @@ export default {
         .catch((error) => console.error(error));
     },
     visibleChangePasswordBlock() {
-      this.changePassword = !this.changePassword;
+			this.changePassword = !this.changePassword;
+			this.password = '';
+			this.newPassword = '';
+			this.repeatNewPassword = '';
     },
     getFollowingCategories() {
       this.$axios
@@ -501,7 +497,7 @@ export default {
       this.$axios
         .post(`/api/auth/change-password`, params)
         .then((res) => {
-          this.$toasted.show(res.message);
+          this.$toasted.show(res.data.message);
         })
         .catch((error) => this.$toasted.error(error.response.message));
     },

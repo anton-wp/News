@@ -10,7 +10,7 @@
         :type="'comment'"
         :postReaction="data.postReaction"
       />
-      <div class="verdict" v-if="data.status !== 'Pending review'" @click="voteAdd">
+      <div class="verdict" v-if="data.status !== 'Pending review'" @click="auth.loggedIn ? voteAdd() : LogIn()">
         <svg v-if="!votes.includes(data.id)" width="40" height="40">
           <use xlink:href="#verdict-icon-custom" />
         </svg>
@@ -24,18 +24,18 @@
       </div>
       <div class="title-comment">
         <p>{{data.body}}</p>
-				<div class="notice" v-if="data.status === 'Pending review'">Pending</div>
+        <div class="notice" v-if="data.status === 'Pending review'">Pending</div>
         <p></p>
         <br />
       </div>
       <div class="buttons" v-if="data.status !== 'Pending review'">
-        <button @click="reply">
+        <button @click="auth.loggedIn ? reply() : LogIn()">
           <svg width="14" height="17">
             <use xlink:href="#reply" />
           </svg>
           Reply
         </button>
-        <button @click="openReport">
+        <button @click="auth.loggedIn ? openReport() : LogIn()">
           <svg width="14" height="17">
             <use xlink:href="#flag" />
           </svg>
@@ -153,7 +153,7 @@ export default {
     type: Boolean,
   },
   computed: {
-    ...mapState(["commentsReply", "votes"]),
+    ...mapState(["commentsReply", "votes", "auth"]),
   },
   created() {
     this.reportValue = this.reportArr[0];
@@ -162,22 +162,6 @@ export default {
     }
   },
   methods: {
-    voteAdd() {
-      if (!this.voteDisabled) {
-        this.voteDisabled = true;
-        this.$axios
-          .post(`/api/comments/${this.data.id}/vote`)
-          .then((res) => {
-            this.voteDisabled = false;
-            this.$emit("updateComment", res.data.data);
-            this.$toasted.show(res.data.message);
-            this.$store.commit("ADD_VOTE", this.data.id);
-          })
-          .catch((error) => {
-            this.$toasted.error(error.response.data.message);
-          });
-      }
-    },
     updateCommentReplies() {
       if (!this.data.children) {
         this.getCommentReplies();
@@ -208,9 +192,6 @@ export default {
           console.log(error);
         });
     },
-    openReport() {
-      this.report = true;
-    },
     closeReport() {
       this.report = false;
     },
@@ -231,12 +212,38 @@ export default {
           console.log(error);
         });
     },
+    voteAdd() {
+      if (!this.voteDisabled) {
+        this.voteDisabled = true;
+        this.$axios
+          .post(`/api/comments/${this.data.id}/vote`)
+          .then((res) => {
+            this.voteDisabled = false;
+            this.$emit("updateComment", res.data.data);
+            this.$toasted.show(res.data.message);
+            this.$store.commit("ADD_VOTE", this.data.id);
+          })
+          .catch((error) => {
+            this.$toasted.error(error.response.data.message);
+          });
+      }
+    },
+    openReport() {
+      this.report = true;
+    },
     reply() {
       if (this.data.id !== this.commentsReply) {
         this.$store.commit("ADD_COMMENT_REPLY", this.data.id);
       } else {
         this.$store.commit("ADD_COMMENT_REPLY", "");
       }
+    },
+    LogIn() {
+      let data = {
+        open: true,
+        type: "logIn",
+      };
+      this.$store.commit("UPDATE_LOGIN_POPUP", data);
     },
   },
 };

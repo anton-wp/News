@@ -5,7 +5,7 @@
     </div>
     <div class="row wrapper-side-post mx-n2 mx-md-0">
       <div
-        class="col-12 col-md-4 col-lg-12 px-0 sidebar__with__recent"
+        class="col-12 col-md-4 col-lg-12 px-0 px-md-3 px-lg-0 sidebar__with__recent"
         v-for="post in posts"
         :key="post.id"
       >

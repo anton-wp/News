@@ -3,18 +3,18 @@
     <author-block :author="data.user" :publishedAt="data.createdAt" :type="'comment-replies'" />
     <div class="title-comment">
       <p>{{data.body}}</p>
-			<div class="notice" v-if="data.status === 'Pending review'">Pending</div>
+      <div class="notice" v-if="data.status === 'Pending review'">Pending</div>
       <p></p>
       <br />
     </div>
     <div class="buttons" v-if="data.status !== 'Pending review'">
-      <button @click="reply">
+      <button @click="auth.loggedIn ? reply() : LogIn()">
         <svg width="14" height="17">
           <use xlink:href="#reply" />
         </svg>
         Reply
       </button>
-      <button @click="openReport">
+      <button @click="auth.loggedIn ? openReport : LogIn()">
         <svg width="14" height="17">
           <use xlink:href="#flag" />
         </svg>
@@ -81,7 +81,7 @@ export default {
     AuthorBlock,
     ReplyComment,
     CommentShare,
-    modalWindow
+    modalWindow,
   },
   data() {
     return {
@@ -96,22 +96,22 @@ export default {
         "sexually explicit or suggestive",
         "violent or dangerous",
         "hate speech, harassment, or bullying",
-        "something else"
-      ]
+        "something else",
+      ],
     };
   },
   props: {
     data: Object,
     postId: String,
     parenPostId: String,
-    index: Number
+    index: Number,
   },
   computed: {
-    ...mapState(["commentsReply"])
+    ...mapState(["commentsReply"]),
   },
   methods: {
     updateCommentReplies() {
-      this.$emit("updateCommentReplies");
+      this.$emit("updateCommentReplies", "auth");
     },
     createComments(data) {
       this.dataReplies.push(data);
@@ -137,12 +137,12 @@ export default {
         : { reportType: this.reportValue };
       this.$axios
         .$post(`/api/comments/${this.data.id}/reports`, data)
-        .then(res => {
+        .then((res) => {
           this.$toasted.show(res.message);
           this.closeReport();
           this.closeReportInput();
         })
-        .catch(error => {
+        .catch((error) => {
           console.log(error);
         });
     },
@@ -154,10 +154,17 @@ export default {
     },
     closeReportInput() {
       this.reportInput = false;
-    }
+    },
+    LogIn() {
+      let data = {
+        open: true,
+        type: "logIn",
+      };
+      this.$store.commit("UPDATE_LOGIN_POPUP", data);
+    },
   },
   created() {
     this.reportValue = this.reportArr[0];
-  }
+  },
 };
 </script>

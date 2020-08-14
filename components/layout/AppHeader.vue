@@ -73,7 +73,11 @@
               class="signup-btn d-none d-sm-block"
               @click="openLoginPopup('signUp')"
             >Sign Up</button>
-            <button v-if="$store.state.auth.loggedIn" class="signup-btn d-none d-sm-block">
+            <button
+              v-if="$store.state.auth.loggedIn"
+              class="signup-btn d-none d-sm-block"
+              @click="$store.state.auth.user.group.name === 'user' ? openModalVerif() : null"
+            >
               <nuxt-link class="link-button" to="/add">Add Post</nuxt-link>
             </button>
           </div>
@@ -106,6 +110,18 @@
         <transition name="modal">
           <login-popup v-if="loginModal.open" />
         </transition>
+        <transition name="modal">
+          <modal-window v-if="modalVerif" @closeModal="closeReportInput">
+            <div class="report">
+              To add your own posts
+              <nuxt-link
+                class="link-modal__verif"
+                @click="closeReportInput"
+                to="/profile/settings"
+              >verify your account by adding a phone number.</nuxt-link>
+            </div>
+          </modal-window>
+        </transition>
       </template>
     </header>
     <hot-news />
@@ -119,6 +135,7 @@ import LoginPopup from "~/components/layout/LoginPopup";
 import SocialBlock from "~/components/universal-components/socialBlock.vue";
 import { mapGetters } from "vuex";
 import HotNews from "~/components/layout/HotNews";
+import modalWindow from "~/components/universal-components/modalWindow.vue";
 
 export default {
   amp: "hybrid",
@@ -129,6 +146,7 @@ export default {
     LoginPopup,
     SocialBlock,
     HotNews,
+    modalWindow,
   },
   data() {
     return {
@@ -137,6 +155,7 @@ export default {
       windowWidth: 0,
       cropMenu: 0,
       SideBarMenu: false,
+      modalVerif: false,
     };
   },
   mounted() {
@@ -156,22 +175,12 @@ export default {
     ...mapState(["header", "bookmarks", "subscriptions", "loginModal"]),
   },
   methods: {
-    // getBookmarks() {
-    //   this.$axios
-    //     .$get(`/api/profile/bookmarks/ids`)
-    //     .then(res => {
-    // 			this.$store.dispatch("GET_BOOKMARK", res.data);
-    //     })
-    //     .catch(error => console.error(error));
-    // },
-    // getSubscriptions() {
-    //   this.$axios
-    //     .$get(`/api/profile/subscriptions/ids`)
-    //     .then(res => {
-    //       this.$store.dispatch("GET_SUBSCRIPTIONS", res.data);
-    //     })
-    //     .catch(error => console.error(error));
-    // },
+    openModalVerif() {
+      this.modalVerif = true;
+    },
+    closeReportInput() {
+      this.modalVerif = false;
+    },
     getMenu() {
       this.$axios
         .$get(`/api/menu/header`)

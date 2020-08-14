@@ -74,7 +74,7 @@
               <p class="vrep-count">{{$store.state.profile.points}}</p>
               <p class="vrep-title">V-rep</p>
             </div>
-            <div class="follow-block" v-if="slug">
+            <div class="follow-block" v-if="slug && $store.state.auth.loggedIn">
               <follow-buttons :full="true" :id="$store.state.profile.id" />
             </div>
           </div>
@@ -114,12 +114,12 @@
               <p
                 class="member-since"
               >{{$store.state.profile.rank}} since: {{ parse($store.state.profile.createdAt, 'MMMM DD,YYYY') }}</p>
-              <div class="mail-content">
+              <!-- <div class="mail-content">
                 <div class="mail-wrapper">
                   social
-                  <!-- <fa-icon [icon]="faEnvelope"></fa-icon> -->
-                </div>
-              </div>
+                  <fa-icon [icon]="faEnvelope"></fa-icon> -->
+                <!-- </div>
+              </div> -->
             </div>
             <div class="col-12 col-sm-auto ml-auto stat d-none d-md-block">
               <div class="wrapper-statistic">

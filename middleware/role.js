@@ -70,8 +70,6 @@ export default function ({ route, store, redirect }) {
 
 
 	// const admin = []
-	console.log(route)
-
 	if(store.$auth.$state.loggedIn && route.matched){
 		switch(store.$auth.$state.user.group.name) {
 			case 'user':

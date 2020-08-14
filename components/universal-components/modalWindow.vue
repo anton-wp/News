@@ -1,6 +1,6 @@
 <template>
   <div class="c_modal">
-    <div class="c_modal-wrapper opened">
+    <div class="c_modal-wrapper">
       <div class="c_modal-reveal delete-form-wrap opened">
         <!-- (click)="profileStore.changeModal(false)" -->
         <button class="close-modal" @click="closeModal">×</button>

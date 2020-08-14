@@ -3,6 +3,7 @@
     v-if="data"
     :data="data"
     tag
+		:preview="true"
     :slug="$route.params.slug"
     :term="term"
     :pagination="pagination"

@@ -40,9 +40,7 @@
 
       <div class="sing-post-source">source: {{data.featured.source}}</div>
 
-      <p class="text" v-html="data.body" :style="{fontSize: bodySize + '%'}">
-        {{data.body}}
-      </p>
+      <p class="text" v-html="data.body" :style="{fontSize: bodySize + '%'}">{{data.body}}</p>
 
       <div class="d-flex">
         <social-block v-if="data" :post="data" @changeFontSize="changeFontSize" />
@@ -159,7 +157,7 @@
                   </div>
                   <related-block />
                 </div>
-                <div v-if="!draft && !review" class="col-lg-12 px-0" ref="element">
+                <div v-if="!draft && !review && !preview" class="col-lg-12 px-0" ref="element">
                   <div class="comment-wrapper">
                     <span class="title">your verdict</span>
                     <span class="about" @mouseenter="message = true" @mouseleave="message = false">
@@ -174,7 +172,7 @@
                     class="aboutPopup"
                   >Verdict is top voted comment by all members. One vote per member. Verdict can change over time.</span>
                 </div>
-                <div v-if="!draft && !review" class="col-12 px-0">
+                <div v-if="!draft && !review && !preview" class="col-12 px-0">
                   <div>
                     <textarea class="form-input with-border mb-0" v-model="comment"></textarea>
                   </div>
@@ -189,8 +187,8 @@
                     </label>
                   </div>
                   <div class="blockButton">
-                    <button @click="createdComment(true)">agree</button>
-                    <button @click="createdComment(false)">disagree</button>
+                    <button @click="auth.loggedIn ? createdComment(true) : LogIn()">{{ buttonComment(0) }}</button>
+                    <button @click="auth.loggedIn ? createdComment(false) : LogIn()">{{ buttonComment(1) }}</button>
                   </div>
                   <div class="sort-comments mx-2" v-if="comments.length > 0">
                     <button
@@ -301,6 +299,7 @@ export default {
       default: null,
     },
     review: Boolean,
+    preview: Boolean,
     headerMenu: Array,
     type: String,
   },
@@ -379,6 +378,17 @@ export default {
   },
 
   methods: {
+    LogIn() {
+      let data = {
+        open: true,
+        type: "logIn",
+      };
+      this.$store.commit("UPDATE_LOGIN_POPUP", data);
+		},
+		buttonComment(number) {
+			let arr = this.data.verdictOption.split('/')
+			return arr[number]
+		},
     scrollToComment() {
       this.$refs.element.scrollIntoView({
         behavior: "smooth",
@@ -427,8 +437,8 @@ export default {
         .then((res) => {
           this.comments.push(res.data);
           this.comment = "";
-				})
-				.catch((error) => {
+        })
+        .catch((error) => {
           console.log(error);
         });
     },
@@ -482,7 +492,7 @@ export default {
   mounted() {
     if (this.type === "post") {
       this.$axios.post(`/api/posts/${this.data.id}/add-view`);
-    }
+		}
   },
 };
 </script>

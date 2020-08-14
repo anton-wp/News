@@ -1,4 +1,4 @@
-export default function ({ $axios, app }) {
+export default function ({ $axios, app, redirect }) {
 	$axios.interceptors.response.use(
 		(response) => {
 			return response;
@@ -8,8 +8,10 @@ export default function ({ $axios, app }) {
 
 			if (401 === +code) {
 				app.$auth.logout();
-
-			} else {
+			}else if([404, 500].includes(+code)){
+				redirect('/404')
+			}
+			else {
 				return Promise.reject(error);
 			}
 		}

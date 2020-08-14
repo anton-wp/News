@@ -20,7 +20,7 @@
       </label>
       Featured
     </div>
-    <div class="block-button text-right">
+    <div class="block-button text-right px-3">
       <button class="update" @click="updateTag">update</button>
       <button class="delete" @click="deleteTag">delete</button>
     </div>

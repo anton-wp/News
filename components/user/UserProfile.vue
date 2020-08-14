@@ -11,15 +11,23 @@
         </svg>
         <span v-if="notifCount" class="counter-notification">{{ notifCount }}</span>
       </div>
-      <div v-if="modalNotification && data.length > 0" class="notification">
+      <div v-if="modalNotification" class="notification">
         <div class="row blockNotification">
           <block-notification
-            v-for="(notif, index) in data"
-            :key="index"
+            v-for="notif in data"
+            :key="notif.id"
             :data="notif"
             @deleteNotif="deleteNotif"
             small
           />
+          <div class="cssload-container" v-if="data.length === 0">
+            <div class="lds-ellipsis">
+              <div></div>
+              <div></div>
+              <div></div>
+              <div></div>
+            </div>
+          </div>
           <div class="viewAll" @click="modalNotificationClose">
             <nuxt-link to="/profile/notifications">view all</nuxt-link>
           </div>
@@ -81,18 +89,20 @@ export default {
     return {
       showPopup: false,
       modalNotification: false,
-			data: [],
-			notifCount: String|Number
+      data: [],
+      notifCount: String | Number,
     };
   },
   computed: {
     ...mapState(["loginModal", "auth"]),
-	},
-	created() {
-		if(this.auth.loggedIn){
-			this.getNotificationsCount()
-		}
-	},
+  },
+  created() {
+    setInterval(() => {
+      if (this.auth.loggedIn) {
+        this.getNotificationsCount();
+      }
+    }, 10000);
+  },
   methods: {
     deleteNotif(id) {
       this.data = this.data.filter((notif) => notif.id !== id);
@@ -105,7 +115,10 @@ export default {
       this.$store.commit("UPDATE_LOGIN_POPUP", data);
     },
     modalNotificationOpen() {
-      this.modalNotification = true;
+      if (this.notifCount > 0) {
+        this.modalNotification = true;
+        this.getNotifications();
+      }
     },
     modalNotificationClose() {
       this.modalNotification = false;
@@ -115,8 +128,7 @@ export default {
       this.$axios
         .$get(`/api/profile/notifications/count`)
         .then((res) => {
-					this.notifCount = res.count;
-					this.getNotifications();
+          this.notifCount = res.count;
         })
         .catch((error) => {
           console.log(error);

@@ -128,6 +128,8 @@ export default {
 		state.dashboard.posts = [];
 		state.dashboard.paginations = Object;
 		state.tabs = [];
+		state.bookmarks = [];
+		state.votes = [];
 		state.profile = Object;
 	}
 }

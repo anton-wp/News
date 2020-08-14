@@ -77,6 +77,11 @@
 
 					.reCaptcha {
 						width: 304px;
+
+						@media (max-width: 480px) {
+							margin-left: -40px;
+						}
+
 					}
 
 					.is-invalid {
