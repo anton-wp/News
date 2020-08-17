@@ -157,7 +157,8 @@
                   </div>
                   <related-block />
                 </div>
-                <div v-if="!draft && !review && !preview" class="col-lg-12 px-0" ref="element">
+								<!-- <div ref="element">123</div> -->
+                <div v-if="!draft && !review && !preview && data.status === 'Publish'" class="col-lg-12 px-0" ref="element">
                   <div class="comment-wrapper">
                     <span class="title">your verdict</span>
                     <span class="about" @mouseenter="message = true" @mouseleave="message = false">
@@ -172,7 +173,7 @@
                     class="aboutPopup"
                   >Verdict is top voted comment by all members. One vote per member. Verdict can change over time.</span>
                 </div>
-                <div v-if="!draft && !review && !preview" class="col-12 px-0">
+                <div v-if="!draft && !review && !preview && data.status === 'Publish'" class="col-12 px-0">
                   <div>
                     <textarea class="form-input with-border mb-0" v-model="comment"></textarea>
                   </div>
@@ -187,8 +188,12 @@
                     </label>
                   </div>
                   <div class="blockButton">
-                    <button @click="auth.loggedIn ? createdComment(true) : LogIn()">{{ buttonComment(0) }}</button>
-                    <button @click="auth.loggedIn ? createdComment(false) : LogIn()">{{ buttonComment(1) }}</button>
+                    <button
+                      @click="auth.loggedIn ? createdComment(true) : LogIn()"
+                    >{{ buttonComment(0) }}</button>
+                    <button
+                      @click="auth.loggedIn ? createdComment(false) : LogIn()"
+                    >{{ buttonComment(1) }}</button>
                   </div>
                   <div class="sort-comments mx-2" v-if="comments.length > 0">
                     <button
@@ -384,16 +389,18 @@ export default {
         type: "logIn",
       };
       this.$store.commit("UPDATE_LOGIN_POPUP", data);
-		},
-		buttonComment(number) {
-			let arr = this.data.verdictOption.split('/')
-			return arr[number]
-		},
+    },
+    buttonComment(number) {
+      let arr = this.data.verdictOption.split("/");
+      return arr[number];
+    },
     scrollToComment() {
-      this.$refs.element.scrollIntoView({
+      if(this.$refs.element){
+				this.$refs.element.scrollIntoView({
         behavior: "smooth",
         inline: "nearest",
       });
+			}
     },
     updateComment(data) {
       this.comments = this.comments.map((comment) =>
@@ -468,7 +475,8 @@ export default {
         .catch((error) => {
           console.log(error);
         });
-    },
+		},
+
   },
   provide() {
     return {
@@ -476,6 +484,9 @@ export default {
     };
   },
   created() {
+		// if(this.data.status !== 'Publish'){
+		// 	this.$router.push({path: `/${ this.$route.params.slug}/preview`})
+		// }
     this.getComments();
     if (this.data.category) {
       this.$store.commit("SET_BREADCRUMBS", [
@@ -493,6 +504,7 @@ export default {
     if (this.type === "post") {
       this.$axios.post(`/api/posts/${this.data.id}/add-view`);
 		}
-  },
+	},
+
 };
 </script>

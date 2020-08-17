@@ -17,14 +17,19 @@
       :header="header"
       :links="links"
     />
-    <table-footer v-if="dashboard.posts.length > 0" class="action" :actionsBlock="actionsBlock" @aplly="aplly" />
+    <table-footer
+      v-if="dashboard.posts.length > 0"
+      class="action"
+      :actionsBlock="actionsBlock"
+      @aplly="aplly"
+    />
     <pagination
       class="pagination"
       v-if="dashboard.paginations && dashboard.posts.length > 0"
       :pagination="dashboard.paginations"
       @openPage="openPage"
     />
-		<not-found class="notFound" v-if="dashboard.posts.length === 0"/>
+    <not-found class="notFound" v-if="dashboard.posts.length === 0" />
   </div>
 </template>
 
@@ -45,34 +50,34 @@ export default {
     TableHeader,
     TableBlock,
     TableFooter,
-		Pagination,
-		NotFound
+    Pagination,
+    NotFound,
   },
   data() {
     return {
       page: 1,
       header: {
         title: "Title",
-        date: "Published At"
+        date: "Published At",
       },
       sort: {
         name: "",
-        type: ""
+        type: "",
       },
       search: {
         search: "",
-        author: ""
+        author: "",
       },
       searchProps: {
         search: true,
-        author: true
+        author: true,
       },
       links: {
         view: "view",
         edit: "edit",
-        delete: "delete"
+        delete: "delete",
       },
-      actionsBlock: ["Delete"]
+      actionsBlock: ["Delete"],
     };
   },
   created() {
@@ -80,37 +85,37 @@ export default {
     this.getPosts();
   },
   computed: {
-    ...mapState(["dashboard"])
+    ...mapState(["dashboard"]),
   },
   methods: {
     aplly() {
       this.$axios
         .$post(`/api/admin/posts/delete-multi`, { ids: this.dashboard.ids })
-        .then(res => {
-					this.$toasted.show(res.message);
-					this.$store.commit("DEL_POSTS_DASHBOARD", this.dashboard.ids);
+        .then((res) => {
+          this.$toasted.show(res.message);
+          this.$store.commit("DEL_POSTS_DASHBOARD", this.dashboard.ids);
           this.$store.commit("CLEAR_DASHBOARD_IDS");
         })
-        .catch(error => console.error(error));
+        .catch((error) => console.error(error));
     },
     view(slug) {
       this.$router.push({
-        path: `/draft/${slug}/preview/`
+        path: `/draft/${slug}/preview/`,
       });
     },
     edit(slug) {
       this.$router.push({
-        path: `/draft/${slug}/`
+        path: `/draft/${slug}/`,
       });
     },
     deletePosts(id) {
       this.$axios
         .$delete(`/api/posts/${id}`)
-        .then(res => {
+        .then((res) => {
           this.$toasted.show(res.message);
           this.$store.commit("DEL_POST_DASHBOARD", id);
         })
-        .catch(error => console.error(error));
+        .catch((error) => console.error(error));
     },
     getParams() {
       this.page = this.$route.query.page ? this.$route.query.page : 1;
@@ -120,33 +125,34 @@ export default {
       this.search.author = this.$route.query.author;
     },
     getPosts() {
-			this.updateRouter();
-			this.$store.commit("CLEAR_DASHBOARD_POSTS");
+      this.updateRouter();
+      this.$store.commit("CLEAR_DASHBOARD_POSTS");
       this.$axios
         .$get(
           `/api/admin/drafts?limit=20&page=${
             this.page
           }${this.updateSearch()}${this.sortUpdate()}`
         )
-        .then(res => {
-					this.$store.commit("CLEAR_DASHBOARD_IDS");
+        .then((res) => {
+          this.$store.commit("CLEAR_DASHBOARD_IDS");
           this.$store.commit("SET_DASHBOARD_POSTS", res.data);
           this.$store.commit("SET_DASHBOARD_PAGINATIONS", res.pagination);
-          if (this.dashboard.posts.length === 0) {
+          if (res.data.length === 0) {
             if (this.page > 1) {
               this.page = this.page - 1;
               this.getPosts();
-            } else {
+            } else if (this.page === 1){
+						}else {
               this.getPosts();
             }
           }
         })
-        .catch(error => console.error(error));
+        .catch((error) => console.error(error));
     },
     updateRouter() {
       this.$router.push({
         path: "/profile/dashboard/draft",
-        query: this.query()
+        query: this.query(),
       });
     },
     sortUpdate() {
@@ -193,8 +199,8 @@ export default {
         res["author"] = this.search.author;
       }
       return res;
-    }
-  }
+    },
+  },
 };
 </script>
 
@@ -215,7 +221,7 @@ export default {
   order: 6;
 }
 .notFound {
-	order: 4;
+  order: 4;
 }
 .table-block {
   order: 4;

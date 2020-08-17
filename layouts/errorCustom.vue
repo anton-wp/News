@@ -53,7 +53,7 @@
             <div
               class="col-12 col-md-6 col-lg-3 px-2 px-sm-3"
               v-for="post of posts.slice(0, 4)"
-              :key="post.title"
+              :key="post.id"
             >
               <default-news-card type="first-block" :post="post" :padding="true" />
             </div>

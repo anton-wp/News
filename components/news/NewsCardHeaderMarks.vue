@@ -1,32 +1,31 @@
 <template>
   <div class="marks-component-news ">
-    <span class="mark-news px-0">
+    <nuxt-link class="mark-news px-0" :to="`/${post.slug}#comment`">
       <svg width="15" height="15">
         <use xlink:href="#comment" />
       </svg>
       <span class="text">
-        <!-- TODO go to single post page -->
-        <a class="reviews-link" :class="colorScheme" href="#">{{ post.commentsCount }}</a>
+        <span class="reviews-link" :class="colorScheme" >{{ post.commentsCount }}</span>
       </span>
-    </span>
-    <span class="mark-news px-0">
+    </nuxt-link>
+    <nuxt-link class="mark-news px-0" :to="`/${post.slug}`">
       <svg width="15" height="15">
         <use xlink:href="#votes" />
       </svg>
       <!-- TODO go to single post page -->
       <span class="text">
-        <a class="reviews-link" :class="colorScheme" href="#">{{ post.votesCount }}</a>
+        <span class="reviews-link" :class="colorScheme">{{ post.votesCount }}</span>
       </span>
-    </span>
-    <span class="mark-news px-0">
+    </nuxt-link>
+    <nuxt-link class="mark-news px-0" :to="`/${post.slug}`">
       <svg width="15" height="15">
         <use xlink:href="#eye" />
       </svg>
       <!-- TODO go to single post page -->
       <span class="text">
-        <a class="reviews-link" :class="colorScheme" href="#">{{ post.viewsCount }}</a>
+        <span class="reviews-link" :class="colorScheme">{{ post.viewsCount }}</span>
       </span>
-    </span>
+    </nuxt-link>
     <span class="bookmark-news px-0">
       <!-- add function add this post to save -->
       <bookmark />
