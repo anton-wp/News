@@ -55,8 +55,8 @@
         <time class="date-created">{{ new Date(this.publishedAt).toDateString() }}</time>
       </div>
 			<div v-if="type === 'comment'" class="reactionBlock">
-				<p v-if="postReaction" class="agree">Agree</p>
-				<p v-if="!postReaction" class="disagree">Disagree</p>
+				<p v-if="postReaction" class="agree">{{ postReactionString }}</p>
+				<p v-if="!postReaction" class="disagree">{{ postReactionString }}</p>
 			</div>
     </div>
     <div class="element follow-me" v-if="!type">
@@ -78,7 +78,8 @@ export default {
     author: Object,
 		publishedAt: String,
 		type: '',
-		postReaction: Boolean
+		postReaction: Boolean,
+		postReactionString: String
   },
   data() {
     return {

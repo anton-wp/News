@@ -9,6 +9,7 @@
         :publishedAt="data.createdAt"
         :type="'comment'"
         :postReaction="data.postReaction"
+				:postReactionString="data.postReactionString"
       />
       <div class="verdict" v-if="data.status !== 'Pending review'" @click="auth.loggedIn ? voteAdd() : LogIn()">
         <svg v-if="!votes.includes(data.id)" width="40" height="40">

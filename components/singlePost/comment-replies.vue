@@ -1,6 +1,11 @@
 <template>
   <div class="comment">
-    <author-block :author="data.user" :publishedAt="data.createdAt" :type="'comment-replies'" />
+    <author-block
+      :author="data.user"
+      :publishedAt="data.createdAt"
+      :type="'comment-replies'"
+      :postReactionString="data.postReactionString"
+    />
     <div class="title-comment">
       <p>{{data.body}}</p>
       <div class="notice" v-if="data.status === 'Pending review'">Pending</div>
