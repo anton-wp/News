@@ -109,6 +109,17 @@ module.exports = {
 		linkActiveClass: 'active-link',
 		linkExactActiveClass: 'your-custom-exact-active-link',
 		middleware: 'role',
+		scrollBehavior(to) {
+			if (to.hash && document.querySelector(to.hash)) {
+				console.log(to.hash);
+				// console.log(document.querySelector(to.hash));
+				// return window.scrollTo({ top: document.querySelector(to.hash).offsetTop + window.innerHeight, behavior: 'smooth' });
+				return {
+					selector: to.hash
+				}
+      }
+      // return window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
 	},
 	env: {
 		baseUrl: process.env.BASE_URL || 'http://localhost:3000'

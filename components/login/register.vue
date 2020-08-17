@@ -11,7 +11,7 @@
       </div>
       <div class="row">
         <div class="col-12 px-0 px-md-3">
-          <h6 class="form-sub-title">Or by email</h6>
+          <h6 class="form-sub-title">Or Sign Up by email</h6>
           <span v-if="errorMessage.email" class="primary-error">{{errorMessage.email}}</span>
           <span v-if="errorMessage.password" class="primary-error">{{errorMessage.password}}</span>
           <span v-if="errorMessage.checkbox" class="primary-error">{{errorMessage.checkbox}}</span>

@@ -7,9 +7,12 @@
             <a href="/" class="footer-logo">
               <img class="footer-logo-icon" src="/image/logo-white.svg" />
             </a>
-            <h1
+            <h1 v-if="$route.path === '/'"
               class="text-block-after-logo"
             >your opinion on latest news, events, and society developments</h1>
+            <p v-else
+              class="text-block-after-logo"
+            >your opinion on latest news, events, and society developments</p>
           </div>
           <div class="second-block col-lg-8 col-xl-6 order-3 order-sm-3 order-md-3 order-lg-2">
             <div class="footer-general-icons-list">

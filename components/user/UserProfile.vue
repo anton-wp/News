@@ -96,12 +96,13 @@ export default {
   computed: {
     ...mapState(["loginModal", "auth"]),
   },
+  watch: {
+    "$route.path"() {
+      this.getNotificationsCount();
+    },
+  },
   created() {
-    setInterval(() => {
-      if (this.auth.loggedIn) {
-        this.getNotificationsCount();
-      }
-    }, 10000);
+    this.getNotificationsCount();
   },
   methods: {
     deleteNotif(id) {
@@ -139,7 +140,8 @@ export default {
         .$get(`/api/profile/notifications/header`)
         .then((res) => {
           this.data = res.data;
-          this.readNotif();
+					this.readNotif();
+					this.getNotificationsCount();
         })
         .catch((error) => {
           console.log(error);

@@ -95,8 +95,8 @@
                   :category="data.category"
                   :data="data"
                 />
-                <div class="col-lg-12 px-0">
-                  <h1 class="post-page-title mt-2">{{data.title}}</h1>
+                <div class="col-lg-12 px-0" style="font-size: 2.2em;">
+                  <h1 class="post-page-title mt-2" :style="{fontSize: bodySize + '%'}">{{data.title}}</h1>
                   <h2>{{data.subTitle}}</h2>
                 </div>
                 <div class="col-lg-12 px-0 px-md-3">
@@ -158,7 +158,7 @@
                   <related-block />
                 </div>
 								<!-- <div ref="element">123</div> -->
-                <div v-if="!draft && !review && !preview && data.status === 'Publish'" class="col-lg-12 px-0" ref="element">
+                <div v-if="!draft && !review && !preview && data.status === 'Published'" class="col-lg-12 px-0" ref="element" id="commentPost">
                   <div class="comment-wrapper">
                     <span class="title">your verdict</span>
                     <span class="about" @mouseenter="message = true" @mouseleave="message = false">
@@ -173,7 +173,8 @@
                     class="aboutPopup"
                   >Verdict is top voted comment by all members. One vote per member. Verdict can change over time.</span>
                 </div>
-                <div v-if="!draft && !review && !preview && data.status === 'Publish'" class="col-12 px-0">
+								<div ></div>
+                <div v-if="!draft && !review && !preview && data.status === 'Published'" class="col-12 px-0" >
                   <div>
                     <textarea class="form-input with-border mb-0" v-model="comment"></textarea>
                   </div>

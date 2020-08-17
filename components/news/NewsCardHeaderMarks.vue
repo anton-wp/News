@@ -1,6 +1,6 @@
 <template>
   <div class="marks-component-news ">
-    <nuxt-link class="mark-news px-0" :to="`/${post.slug}#comment`">
+    <nuxt-link class="mark-news px-0" :to="{ path:`/${post.slug}`, hash: `#commentPost`}">
       <svg width="15" height="15">
         <use xlink:href="#comment" />
       </svg>

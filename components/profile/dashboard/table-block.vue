@@ -9,7 +9,7 @@
     </div>
     <div class="col-lg active" v-if="title" @mouseleave="showPopup = false">
       <h6 class="header">{{header.title}}</h6>
-      <h6 class="title-dashboard__block">{{title}}</h6>
+      <h6 class="title-dashboard__block" @click="view">{{title}}</h6>
       <small class="author" @mouseenter="showPopup = true" v-if="author">
         <div v-if="showPopup" id="1" class="user-popup active">
           <div>
@@ -22,7 +22,7 @@
     <div class="col-lg" v-if="titleComment" @mouseleave="showPopup = false">
       <h6 class="header">{{header.title}}</h6>
       <small v-if="author" class="author" @mouseenter="showPopup = true">
-        <div v-if="showPopup" id="1" class="user-popup active">
+        <div v-if="showPopup" id="1" class="user-popup-head active" >
           <div>
             <popup-user-info :authorId="author.id" />
           </div>

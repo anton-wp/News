@@ -5,6 +5,7 @@
     <table-block
       class="table-block"
       v-for="(post, index) in dashboard.posts"
+      @view="view"
       @edit="edit"
       @deletePosts="deletePosts"
       :key="index"
@@ -85,6 +86,11 @@ export default {
     ...mapState(["dashboard"])
   },
   methods: {
+    view(id) {
+      this.$router.push({
+        path: `/l/${id}`
+      });
+    },
     edit(slug, id) {
       this.$router.push({
         path: `/profile/dashboard/tags/${id}/edit`
