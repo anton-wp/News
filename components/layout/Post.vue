@@ -158,7 +158,8 @@
                   <related-block />
                 </div>
 								<!-- <div ref="element">123</div> -->
-                <div v-if="!draft && !review && !preview && data.status === 'Published'" class="col-lg-12 px-0" ref="element" id="commentPost">
+								<div id="commentPost"></div>
+                <div v-if="!draft && !review && !preview && data.status === 'Published'" class="col-lg-12 px-0" ref="element" >
                   <div class="comment-wrapper">
                     <span class="title">your verdict</span>
                     <span class="about" @mouseenter="message = true" @mouseleave="message = false">

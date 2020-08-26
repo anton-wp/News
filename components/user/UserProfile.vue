@@ -98,11 +98,15 @@ export default {
   },
   watch: {
     "$route.path"() {
-      this.getNotificationsCount();
+      if(this.auth.loggedIn){
+        this.getNotificationsCount();
+      }
     },
   },
   created() {
-    this.getNotificationsCount();
+    if(this.auth.loggedIn){
+      this.getNotificationsCount();
+    }
   },
   methods: {
     deleteNotif(id) {

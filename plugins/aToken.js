@@ -4,7 +4,6 @@ export default function ({ $axios, app, redirect }) {
 			return response;
 		},
 		(error) => {
-			console.log(code)
 
 			const code = parseInt(error.response && error.response.status);
 
