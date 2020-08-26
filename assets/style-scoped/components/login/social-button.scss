@@ -1,0 +1,120 @@
+.login-social-button {
+	.social-button-block {
+		padding-right: 24px;
+		position: relative;
+		width: 100%;
+		flex: 0 0 50%;
+		max-width: 50%;
+
+		@media (max-width: 640px) {
+			flex: 0 0 100%;
+			max-width: 100%;
+			padding: 0;
+		}
+	}
+
+	.social-button1 {
+		border-radius: 4px;
+		background-color: $social_button_background_whiteF8;
+		margin: 0.6em 0 0 0;
+		overflow: hidden;
+		align-items: center;
+		transition: background-color 0.2s ease-in-out;
+		height: 45px;
+		cursor: pointer;
+		text-decoration: none;
+		display: block !important;
+
+		@media (max-width: 460px) {
+			height: 37px;
+		}
+
+		&:hover {
+			background-color: #f1f1f1;
+		}
+
+		a {
+			display: flex;
+			align-items: center;
+
+			&:hover {
+				text-decoration: none;
+			}
+		}
+
+		.icon {
+			text-align: center;
+			line-height: 45px;
+			width: 45px;
+			height: 45px;
+			margin-right: 10px;
+			border-radius: 4px;
+			color: $white;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			font-size: 25px;
+
+			@media (max-width: 460px) {
+				width: 37px;
+				height: 37px;
+			}
+
+			svg {
+				fill: $white;
+				width: 29px;
+				height: 29px;
+
+				@media (max-width: 460px) {
+					width: 21px;
+					height: 21px;
+				}
+			}
+		}
+
+
+
+		.social-name {
+			display: inline-block;
+			font-size: 14px;
+			font-weight: 600;
+			font-family: "Open Sans";
+			user-select: none;
+			text-size-adjust: 100%;
+			-webkit-box-direction: normal;
+			-webkit-font-smoothing: antialiased;
+		}
+
+		.facebook {
+			background: #3b5998;
+		}
+
+		.google {
+			background: #dc4e41;
+		}
+
+		.twitter {
+			background: #55acee;
+		}
+
+		.linkedin {
+			background: #0e76a8;
+		}
+
+		.facebook-color {
+			color: #3b5998;
+		}
+
+		.google-color {
+			color: #dc4e41;
+		}
+
+		.twitter-color {
+			color: #55acee;
+		}
+
+		.linkedin-color {
+			color: #0e76a8;
+		}
+	}
+}
